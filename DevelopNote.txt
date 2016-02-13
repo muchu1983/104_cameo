@@ -4,7 +4,7 @@
 使用 pip-win 安裝的第三方庫
 VCForPython27.msi
 lxml-3.5.0.win32-py2.7.exe
-pip install scrapy
+pip install scrapy pypiwin32
 
 Notepad++ 執行設定值
 CTRL + F7
