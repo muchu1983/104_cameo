@@ -9,8 +9,9 @@ This file is part of BSD license
 import unittest
 import logging
 import scrapy
+from subprocess import call
 """
-測試
+測試 操作 scrapy
 """
 class ScrapyTest(unittest.TestCase):
 
@@ -24,8 +25,9 @@ class ScrapyTest(unittest.TestCase):
         pass
 
     #測試 scrapy
-    def test_scrapy(self):
-        logging.info("ScrapyTest.test_scrapy")
+    def test_call_scrapy(self):
+        logging.info("ScrapyTest.test_call_scrapy")
+        call(["scrapy", "crawl", "yahoo"], cwd="cameo_scrapy")
 
 #測試開始
 if __name__ == "__main__":
