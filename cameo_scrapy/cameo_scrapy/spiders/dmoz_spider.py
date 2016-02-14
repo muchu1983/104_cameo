@@ -8,15 +8,9 @@ This file is part of BSD license
 """
 import scrapy
 
-class DmozSpider(scrapy.Spider):
-    name = "dmoz"
-    allowed_domains = ["dmoz.org"]
-    start_urls = [
-        "http://www.dmoz.org/Computers/Programming/Languages/Python/Books/",
-        "http://www.dmoz.org/Computers/Programming/Languages/Python/Resources/"
-    ]
-
+class YahooSpider(scrapy.Spider):
+    name = "yahoo"
+    start_urls = ["https://tw.yahoo.com/"]
     def parse(self, response):
-        filename = response.url.split("/")[-2] + '.html'
-        with open(filename, 'wb') as f:
-            f.write(response.body)
+        item = response.xpath("//body//div/ul/li/a[contains(@href, 'https://tw.bid.yahoo.com/')]/span/text()")[0].extract()
+        print(item)

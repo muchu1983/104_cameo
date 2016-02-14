@@ -19,7 +19,5 @@ class CameoScrapyItem(scrapy.Item):
     # name = scrapy.Field()
     pass
 
-class DmozItem(scrapy.Item):
-    title = scrapy.Field()
-    link = scrapy.Field()
-    desc = scrapy.Field()
+class YahooItem(scrapy.Item):
+    pass
