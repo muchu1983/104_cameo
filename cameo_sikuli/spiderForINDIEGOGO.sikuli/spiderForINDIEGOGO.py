@@ -20,17 +20,31 @@ def openAllProj():
         type(Key.END)
         type(Key.PAGE_UP)
         sleep(2)
-        
-# go to explore page
-def goExplorePage():
+#type url on chrome
+def typeUrlOnChrome(urlText=""):
     click("1455787143836.png")
     sleep(2)
     delOriginText()
-    type("https://www.indiegogo.com/explore")
+    type(urlText)
     sleep(2)
     type(Key.ENTER)
+# go to explore page
+def goExplorePage():
+    typeUrlOnChrome(urlText="https://www.indiegogo.com/explore")
     wait("1455771252801.png", 10)
     wait("1455773806049.png", 10)
+#ask chrome save current page
+def saveCurrentPage(filename="default.html"):
+    type("s", KeyModifier.CTRL)    
+    sleep(2)
+    click(Pattern("1455856522474.png").targetOffset(47,0))
+    sleep(2)
+    delOriginText()
+    sleep(2)
+    type(filename)
+    sleep(2)
+    click("1455856561966.png")
+    sleep(2)
 #download category pages
 def downloadCategoryPages():
     openChrome()
@@ -66,23 +80,29 @@ def downloadCategoryPages():
         wait("1455773609785.png", 10)
         openAllProj()
         sleep(2)
-        type("s", KeyModifier.CTRL)    
-        sleep(2)
-        click(Pattern("1455856522474.png").targetOffset(47,0))
-        sleep(2)
-        delOriginText()
-        sleep(2)
-        type(str(catId) + ".html")
-        sleep(2)
-        click("1455856561966.png")
-        sleep(2)
+        filename = str(catId) + ".html"
+        saveCurrentPage(filename)
         goExplorePage()
         sleep(2)
         catId = catId+1
 #download project pages
 def downloadProjectPages():
+    urlListFilePath = "E:\INDIEGOGO\Animals\proj_url_list.txt"        
     openChrome()
     goExplorePage()
+    urlListFile = open(urlListFilePath, "r")
+    projId = 0
+    for urlLine in urlListFile:
+        typeUrlOnChrome(urlText=urlLine)
+        waitVanish("1455810570110.png", 10)
+        while(exists("1455892865719.png") == None):
+            type(Key.PAGE_DOWN)
+            sleep(2)
+        click("1455892865719.png")
+        wait("1455893048429.png", 10)
+        saveCurrentPage(str(projId) + ".html")
+        projId = projId+1
+    urlListFile.close()
 #main entry point
 if __name__ == "__main__":
     #downloadCategoryPages()

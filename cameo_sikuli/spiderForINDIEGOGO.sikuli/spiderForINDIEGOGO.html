@@ -92,17 +92,31 @@
         <span class="skw">type</span>(Key.END)
         <span class="skw">type</span>(Key.PAGE_UP)
         <span class="skw">sleep</span>(<span class="dig">2</span>)
-
-<span class="cmt"># go to explore page
-</span><span class="kw">def</span> goExplorePage():
+<span class="cmt">#type url on chrome
+</span><span class="kw">def</span> typeUrlOnChrome(urlText=<span class="str">""</span>):
     <span class="skw">click</span>(<img src="1455787143836.png" />)
     <span class="skw">sleep</span>(<span class="dig">2</span>)
     delOriginText()
-    <span class="skw">type</span>(<span class="str">"https://www.indiegogo.com/explore"</span>)
+    <span class="skw">type</span>(urlText)
     <span class="skw">sleep</span>(<span class="dig">2</span>)
     <span class="skw">type</span>(Key.ENTER)
+<span class="cmt"># go to explore page
+</span><span class="kw">def</span> goExplorePage():
+    typeUrlOnChrome(urlText=<span class="str">"https://www.indiegogo.com/explore"</span>)
     <span class="skw">wait</span>(<img src="1455771252801.png" />, <span class="dig">10</span>)
     <span class="skw">wait</span>(<img src="1455773806049.png" />, <span class="dig">10</span>)
+<span class="cmt">#ask chrome save current page
+</span><span class="kw">def</span> saveCurrentPage(filename=<span class="str">"default.html"</span>):
+    <span class="skw">type</span>(<span class="str">"s"</span>, KeyModifier.CTRL)
+    <span class="skw">sleep</span>(<span class="dig">2</span>)
+    <span class="skw">click</span>(Pattern(<img src="1455856522474.png" />).targetOffset(<span class="dig">47</span>,<span class="dig">0</span>))
+    <span class="skw">sleep</span>(<span class="dig">2</span>)
+    delOriginText()
+    <span class="skw">sleep</span>(<span class="dig">2</span>)
+    <span class="skw">type</span>(filename)
+    <span class="skw">sleep</span>(<span class="dig">2</span>)
+    <span class="skw">click</span>(<img src="1455856561966.png" />)
+    <span class="skw">sleep</span>(<span class="dig">2</span>)
 <span class="cmt">#download category pages
 </span><span class="kw">def</span> downloadCategoryPages():
     openChrome()
@@ -138,23 +152,29 @@
         <span class="skw">wait</span>(<img src="1455773609785.png" />, <span class="dig">10</span>)
         openAllProj()
         <span class="skw">sleep</span>(<span class="dig">2</span>)
-        <span class="skw">type</span>(<span class="str">"s"</span>, KeyModifier.CTRL)
-        <span class="skw">sleep</span>(<span class="dig">2</span>)
-        <span class="skw">click</span>(Pattern(<img src="1455856522474.png" />).targetOffset(<span class="dig">47</span>,<span class="dig">0</span>))
-        <span class="skw">sleep</span>(<span class="dig">2</span>)
-        delOriginText()
-        <span class="skw">sleep</span>(<span class="dig">2</span>)
-        <span class="skw">type</span>(str(catId) + <span class="str">".html"</span>)
-        <span class="skw">sleep</span>(<span class="dig">2</span>)
-        <span class="skw">click</span>(<img src="1455856561966.png" />)
-        <span class="skw">sleep</span>(<span class="dig">2</span>)
+        filename = str(catId) + <span class="str">".html"</span>
+        saveCurrentPage(filename)
         goExplorePage()
         <span class="skw">sleep</span>(<span class="dig">2</span>)
         catId = catId+<span class="dig">1</span>
 <span class="cmt">#download project pages
 </span><span class="kw">def</span> downloadProjectPages():
+    urlListFilePath = <span class="str">"E:\INDIEGOGO\Animals\proj_url_list.txt"</span>
     openChrome()
     goExplorePage()
+    urlListFile = open(urlListFilePath, <span class="str">"r"</span>)
+    projId = <span class="dig">0</span>
+    <span class="kw">for</span> urlLine <span class="kw">in</span> urlListFile:
+        typeUrlOnChrome(urlText=urlLine)
+        waitVanish(<img src="1455810570110.png" />, <span class="dig">10</span>)
+        <span class="kw">while</span>(exists(<img src="1455892865719.png" />) == None):
+            <span class="skw">type</span>(Key.PAGE_DOWN)
+            <span class="skw">sleep</span>(<span class="dig">2</span>)
+        <span class="skw">click</span>(<img src="1455892865719.png" />)
+        <span class="skw">wait</span>(<img src="1455893048429.png" />, <span class="dig">10</span>)
+        saveCurrentPage(str(projId) + <span class="str">".html"</span>)
+        projId = projId+<span class="dig">1</span>
+    urlListFile.close()
 <span class="cmt">#main entry point
 </span><span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
     <span class="cmt">#downloadCategoryPages()
