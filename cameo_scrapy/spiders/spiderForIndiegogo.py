@@ -10,7 +10,7 @@ import scrapy
 import io
 
 class SpiderForIndiegogo(scrapy.Spider):
-    name = "sIndiegogo"
+    name = "spiderForIndiegogo"
     start_urls = ["https://www.indiegogo.com/explore#/browse/landing"]
     def parse(self, response):
         source = response.body

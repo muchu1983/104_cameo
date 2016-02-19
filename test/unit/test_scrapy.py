@@ -27,7 +27,7 @@ class ScrapyTest(unittest.TestCase):
     #測試 scrapy
     def test_call_scrapy(self):
         logging.info("ScrapyTest.test_call_scrapy")
-        call(["scrapy", "crawl", "sIndiegogo"], cwd=".")
+        call(["scrapy", "crawl", "spiderForIndiegogo"], cwd=".")
 
 #測試開始
 if __name__ == "__main__":
