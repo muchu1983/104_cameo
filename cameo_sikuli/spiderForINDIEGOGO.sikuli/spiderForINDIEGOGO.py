@@ -31,6 +31,8 @@ def goExplorePage():
     wait("1455771252801.png", 10)
     wait("1455773806049.png", 10)
 goExplorePage()
+catDict = {"1455774118219.png":"1455803858214.png"}
+"""
 catDict = {"catList.png":"1455782552937.png",
            "1455773410389.png":"1455802574909.png",
            "1455773420042.png":"1455802697089.png",
@@ -55,7 +57,8 @@ catDict = {"catList.png":"1455782552937.png",
            "1455774122818.png":"1455803877565.png",
            "1455774127133.png":"1455803897878.png",
            "1455774131360.png":"1455803925305.png"}
-catId = 0
+"""
+catId = 13
 #category loop    
 for catK in catDict:
     click(catK)
