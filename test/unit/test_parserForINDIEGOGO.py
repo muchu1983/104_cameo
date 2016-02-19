@@ -24,7 +24,7 @@ class ParserForINDIEGOGOTest(unittest.TestCase):
     def tearDown(self):
         pass
 
-    #測試XXX
+    #測試 解析 category 頁面
     def test_parseCategoryPage(self):
         logging.info("ParserForINDIEGOGOTest.test_parseCategoryPage")
         parser = ParserForINDIEGOGO()
