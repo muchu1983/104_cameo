@@ -1,8 +1,8 @@
 #open chrome
 def openChrome():
     type("d", KeyModifier.WIN)
-    click("1455787318229.png")
-    waitVanish("1455810570110.png", 10)
+    click("1455954509662.png")
+    waitVanish("1455954531674.png", 10)
 # delete origin text
 def delOriginText():
     type("a", KeyModifier.CTRL);
@@ -22,7 +22,7 @@ def openAllProj():
         sleep(2)
 #type url on chrome
 def typeUrlOnChrome(urlText=""):
-    click("1455787143836.png")
+    click("1455955040522.png")
     sleep(2)
     delOriginText()
     type(urlText)
@@ -32,18 +32,18 @@ def typeUrlOnChrome(urlText=""):
 def goExplorePage():
     typeUrlOnChrome(urlText="https://www.indiegogo.com/explore")
     wait("1455771252801.png", 10)
-    wait("1455773806049.png", 10)
+    wait("1455955117179.png", 10)
 #ask chrome save current page
 def saveCurrentPage(filename="default.html"):
     type("s", KeyModifier.CTRL)    
     sleep(2)
-    click(Pattern("1455856522474.png").targetOffset(47,0))
+    click(Pattern("1455955176756.png").targetOffset(38,0))
     sleep(2)
     delOriginText()
     sleep(2)
     type(filename)
     sleep(2)
-    click("1455856561966.png")
+    click("1455955227414.png")
     sleep(2)
 #download category pages
 def downloadCategoryPages():
@@ -95,12 +95,14 @@ def downloadProjectPages():
         urlListFile = open(urlListFilePath, "r")
         projId = 0
         for urlLine in urlListFile:
+            """
             if(projId < 245):
                 projId = projId+1
                 continue
+            """
             typeUrlOnChrome(urlText=urlLine)
             wait("1455944265378.png", 20)
-            click("1455943547435.png")
+            click("1455955269605.png")
             sleep(2)
             while(not exists("1455892865719.png")):
                 type(Key.PAGE_DOWN)
