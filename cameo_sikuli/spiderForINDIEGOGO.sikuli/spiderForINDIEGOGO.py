@@ -1,6 +1,6 @@
 #open chrome
 def openChrome():
-    click("1455771109852.png")
+    type("d", KeyModifier.WIN)
     click("1455787318229.png")
     waitVanish("1455810570110.png", 10)
 # delete origin text
