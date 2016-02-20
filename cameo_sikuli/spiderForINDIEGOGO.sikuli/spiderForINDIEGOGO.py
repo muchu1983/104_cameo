@@ -78,7 +78,7 @@ def downloadCategoryPages():
     for catK in catDict:
         click(catK)
         wait("1455773609785.png", 10)
-        openAllProj()
+        #openAllProj()
         sleep(2)
         filename = str(catId) + ".html"
         saveCurrentPage(filename)
@@ -87,22 +87,37 @@ def downloadCategoryPages():
         catId = catId+1
 #download project pages
 def downloadProjectPages():
-    urlListFilePath = "E:\INDIEGOGO\Animals\proj_url_list.txt"        
+    urlListFilePathList = ["E:\INDIEGOGO\Art\proj_url_list.txt"]
     openChrome()
     goExplorePage()
-    urlListFile = open(urlListFilePath, "r")
-    projId = 0
-    for urlLine in urlListFile:
-        typeUrlOnChrome(urlText=urlLine)
-        waitVanish("1455810570110.png", 10)
-        while(exists("1455892865719.png") == None):
-            type(Key.PAGE_DOWN)
+    for urlListFilePath in urlListFilePathList:
+        urlListFile = open(urlListFilePath, "r")
+        projId = 0
+        for urlLine in urlListFile:
+            if(projId < 245):
+                projId = projId+1
+                continue
+            typeUrlOnChrome(urlText=urlLine)
+            wait("1455944265378.png", 20)
+            click("1455943547435.png")
             sleep(2)
-        click("1455892865719.png")
-        wait("1455893048429.png", 10)
-        saveCurrentPage(str(projId) + ".html")
-        projId = projId+1
-    urlListFile.close()
+            while(not exists("1455892865719.png")):
+                type(Key.PAGE_DOWN)
+                sleep(2)
+            type(Key.DOWN)
+            sleep(2)
+            type(Key.DOWN)
+            sleep(2)
+            if(not exists("1455892865719.png")):
+                type(Key.UP)
+                sleep(2)
+                type(Key.UP)
+                sleep(2)
+            click("1455892865719.png")
+            wait("1455893048429.png", 10)
+            saveCurrentPage(str(projId) + ".html")
+            projId = projId+1
+        urlListFile.close()
 #main entry point
 if __name__ == "__main__":
     #downloadCategoryPages()

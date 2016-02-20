@@ -150,8 +150,8 @@
 </span>    <span class="kw">for</span> catK <span class="kw">in</span> catDict:
         <span class="skw">click</span>(catK)
         <span class="skw">wait</span>(<img src="1455773609785.png" />, <span class="dig">10</span>)
-        openAllProj()
-        <span class="skw">sleep</span>(<span class="dig">2</span>)
+        <span class="cmt">#openAllProj()
+</span>        <span class="skw">sleep</span>(<span class="dig">2</span>)
         filename = str(catId) + <span class="str">".html"</span>
         saveCurrentPage(filename)
         goExplorePage()
@@ -159,22 +159,37 @@
         catId = catId+<span class="dig">1</span>
 <span class="cmt">#download project pages
 </span><span class="kw">def</span> downloadProjectPages():
-    urlListFilePath = <span class="str">"E:\INDIEGOGO\Animals\proj_url_list.txt"</span>
+    urlListFilePathList = [<span class="str">"E:\INDIEGOGO\Art\proj_url_list.txt"</span>]
     openChrome()
     goExplorePage()
-    urlListFile = open(urlListFilePath, <span class="str">"r"</span>)
-    projId = <span class="dig">0</span>
-    <span class="kw">for</span> urlLine <span class="kw">in</span> urlListFile:
-        typeUrlOnChrome(urlText=urlLine)
-        waitVanish(<img src="1455810570110.png" />, <span class="dig">10</span>)
-        <span class="kw">while</span>(exists(<img src="1455892865719.png" />) == None):
-            <span class="skw">type</span>(Key.PAGE_DOWN)
+    <span class="kw">for</span> urlListFilePath <span class="kw">in</span> urlListFilePathList:
+        urlListFile = open(urlListFilePath, <span class="str">"r"</span>)
+        projId = <span class="dig">0</span>
+        <span class="kw">for</span> urlLine <span class="kw">in</span> urlListFile:
+            <span class="kw">if</span>(projId &lt; <span class="dig">245</span>):
+                projId = projId+<span class="dig">1</span>
+                <span class="kw">continue</span>
+            typeUrlOnChrome(urlText=urlLine)
+            <span class="skw">wait</span>(<img src="1455944265378.png" />, <span class="dig">20</span>)
+            <span class="skw">click</span>(<img src="1455943547435.png" />)
             <span class="skw">sleep</span>(<span class="dig">2</span>)
-        <span class="skw">click</span>(<img src="1455892865719.png" />)
-        <span class="skw">wait</span>(<img src="1455893048429.png" />, <span class="dig">10</span>)
-        saveCurrentPage(str(projId) + <span class="str">".html"</span>)
-        projId = projId+<span class="dig">1</span>
-    urlListFile.close()
+            <span class="kw">while</span>(<span class="kw">not</span> exists(<img src="1455892865719.png" />)):
+                <span class="skw">type</span>(Key.PAGE_DOWN)
+                <span class="skw">sleep</span>(<span class="dig">2</span>)
+            <span class="skw">type</span>(Key.DOWN)
+            <span class="skw">sleep</span>(<span class="dig">2</span>)
+            <span class="skw">type</span>(Key.DOWN)
+            <span class="skw">sleep</span>(<span class="dig">2</span>)
+            <span class="kw">if</span>(<span class="kw">not</span> exists(<img src="1455892865719.png" />)):
+                <span class="skw">type</span>(Key.UP)
+                <span class="skw">sleep</span>(<span class="dig">2</span>)
+                <span class="skw">type</span>(Key.UP)
+                <span class="skw">sleep</span>(<span class="dig">2</span>)
+            <span class="skw">click</span>(<img src="1455892865719.png" />)
+            <span class="skw">wait</span>(<img src="1455893048429.png" />, <span class="dig">10</span>)
+            saveCurrentPage(str(projId) + <span class="str">".html"</span>)
+            projId = projId+<span class="dig">1</span>
+        urlListFile.close()
 <span class="cmt">#main entry point
 </span><span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
     <span class="cmt">#downloadCategoryPages()
