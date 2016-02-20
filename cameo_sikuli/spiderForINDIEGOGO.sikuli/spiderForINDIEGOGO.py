@@ -87,7 +87,8 @@ def downloadCategoryPages():
         catId = catId+1
 #download project pages
 def downloadProjectPages():
-    urlListFilePathList = ["E:\INDIEGOGO\Art\proj_url_list.txt"]
+    #urlListFilePathList = ["E:\INDIEGOGO\Art\proj_url_list.txt"]
+    urlListFilePathList = ["C:\Users\Administrator\Desktop\pyWorkspace\INDIEGOGO\Art\proj_url_list.txt"]
     openChrome()
     goExplorePage()
     for urlListFilePath in urlListFilePathList:
