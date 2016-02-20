@@ -96,7 +96,7 @@ def downloadProjectPages():
         projId = 0
         for urlLine in urlListFile:
             
-            if(projId < 161):
+            if(projId < 164):
                 projId = projId+1
                 continue
             
@@ -117,7 +117,7 @@ def downloadProjectPages():
                 type(Key.UP)
                 sleep(2)
             click("1455892865719.png")
-            wait("1455971639641.png", 20)
+            wait("1455973105407.png", 20)
             saveCurrentPage(str(projId) + ".html")
             projId = projId+1
         urlListFile.close()
