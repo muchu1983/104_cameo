@@ -87,20 +87,20 @@ def downloadCategoryPages():
         catId = catId+1
 #download project pages
 def downloadProjectPages():
-    #urlListFilePathList = ["E:\INDIEGOGO\Art\proj_url_list.txt"]
-    urlListFilePathList = ["C:\Users\Administrator\Desktop\pyWorkspace\INDIEGOGO\Art\proj_url_list.txt"]
+    lstCategoryName = ["Comic"]
+    strUrlListFilePathTemplate = "C:\Users\Administrator\Desktop\pyWorkspace\cameo_res\parsed_result\INDIEGOGO\%s\%s_proj_url_list.txt"
     openChrome()
     goExplorePage()
-    for urlListFilePath in urlListFilePathList:
-        urlListFile = open(urlListFilePath, "r")
-        projId = 0
-        for urlLine in urlListFile:
-            
-            if(projId < 164):
-                projId = projId+1
+    for strCategoryName in lstCategoryName:
+        strUrlListFilePath = strUrlListFilePathTemplate % (strCategoryName, strCategoryName)
+        urlListFile = open(strUrlListFilePath, "r")
+        intProjId = 0
+        for strUrlLine in urlListFile:
+            #continue point 
+            if(projId < 0):
+                intProjId = intProjId+1 #skip
                 continue
-            
-            typeUrlOnChrome(urlText=urlLine)
+            typeUrlOnChrome(urlText=strUrlLine)
             wait("1455944265378.png", 20)
             click("1455955269605.png")
             sleep(2)
@@ -110,16 +110,16 @@ def downloadProjectPages():
             type(Key.DOWN)
             sleep(2)
             type(Key.DOWN)
-            sleep(2)
+            sleep(5)
             if(not exists("1455892865719.png")):
                 type(Key.UP)
                 sleep(2)
                 type(Key.UP)
-                sleep(2)
+                sleep(5)
             click("1455892865719.png")
             wait("1455973105407.png", 20)
-            saveCurrentPage(str(projId) + ".html")
-            projId = projId+1
+            saveCurrentPage(str(intProjId) + ".html")
+            intProjId = intProjId+1
         urlListFile.close()
 #main entry point
 if __name__ == "__main__":
