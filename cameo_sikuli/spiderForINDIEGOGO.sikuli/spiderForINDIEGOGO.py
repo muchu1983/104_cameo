@@ -88,7 +88,7 @@ def downloadCategoryPages():
 #download project pages
 def downloadProjectPages():
     lstCategoryName = ["Comic"]
-    strUrlListFilePathTemplate = "C:\Users\Administrator\Desktop\pyWorkspace\cameo_res\parsed_result\INDIEGOGO\%s\%s_proj_url_list.txt"
+    strUrlListFilePathTemplate = "C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res\parsed_result\INDIEGOGO\%s\%s_proj_url_list.txt"
     openChrome()
     goExplorePage()
     for strCategoryName in lstCategoryName:
