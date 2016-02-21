@@ -121,42 +121,42 @@
 </span><span class="kw">def</span> downloadCategoryPages():
     openChrome()
     goExplorePage()
-    catDict = {<img src="catList.png" />:<img src="1455782552937.png" />,
-               <img src="1455773410389.png" />:<img src="1455802574909.png" />,
-               <img src="1455773420042.png" />:<img src="1455802697089.png" />,
-               <img src="1455773426115.png" />:<img src="1455802726335.png" />,
-               <img src="1455773432582.png" />:<img src="1455802759583.png" />,
-               <img src="1455773966059.png" />:<img src="1455802933624.png" />,
-               <img src="1455773974586.png" />:<img src="1455802961069.png" />,
-               <img src="1455773984147.png" />:<img src="1455802992745.png" />,
-               <img src="1455773992388.png" />:<img src="1455803028529.png" />,
-               <img src="1455773998962.png" />:<img src="1455803059783.png" />,
-               <img src="1455774017612.png" />:<img src="1455803088086.png" />,
-               <img src="1455774023732.png" />:<img src="1455803115881.png" />,
-               <img src="1455774030264.png" />:<img src="1455803143027.png" />,
-               <img src="1455774035660.png" />:<img src="1455803611481.png" />,
-               <img src="1455774049342.png" />:<img src="1455803655661.png" />,
-               <img src="1455774082464.png" />:<img src="1455803693339.png" />,
-               <img src="1455774088058.png" />:<img src="1455803720282.png" />,
-               <img src="1455774094195.png" />:<img src="1455803782308.png" />,
-               <img src="1455774098534.png" />:<img src="1455803804366.png" />,
-               <img src="1455774104142.png" />:<img src="1455803830635.png" />,
-               <img src="1455774118219.png" />:<img src="1455803858214.png" />,
-               <img src="1455774122818.png" />:<img src="1455803877565.png" />,
-               <img src="1455774127133.png" />:<img src="1455803897878.png" />,
-               <img src="1455774131360.png" />:<img src="1455803925305.png" />}
-    catId = <span class="dig">0</span>
+    dicCategory = {<img src="catList.png" />:<img src="1455782552937.png" />,
+                   <img src="1455773410389.png" />:<img src="1455802574909.png" />,
+                   <img src="1455773420042.png" />:<img src="1455802697089.png" />,
+                   <img src="1455773426115.png" />:<img src="1455802726335.png" />,
+                   <img src="1455773432582.png" />:<img src="1455802759583.png" />,
+                   <img src="1455773966059.png" />:<img src="1455802933624.png" />,
+                   <img src="1455773974586.png" />:<img src="1455802961069.png" />,
+                   <img src="1455773984147.png" />:<img src="1455802992745.png" />,
+                   <img src="1455773992388.png" />:<img src="1455803028529.png" />,
+                   <img src="1455773998962.png" />:<img src="1455803059783.png" />,
+                   <img src="1455774017612.png" />:<img src="1455803088086.png" />,
+                   <img src="1455774023732.png" />:<img src="1455803115881.png" />,
+                   <img src="1455774030264.png" />:<img src="1455803143027.png" />,
+                   <img src="1455774035660.png" />:<img src="1455803611481.png" />,
+                   <img src="1455774049342.png" />:<img src="1455803655661.png" />,
+                   <img src="1455774082464.png" />:<img src="1455803693339.png" />,
+                   <img src="1455774088058.png" />:<img src="1455803720282.png" />,
+                   <img src="1455774094195.png" />:<img src="1455803782308.png" />,
+                   <img src="1455774098534.png" />:<img src="1455803804366.png" />,
+                   <img src="1455774104142.png" />:<img src="1455803830635.png" />,
+                   <img src="1455774118219.png" />:<img src="1455803858214.png" />,
+                   <img src="1455774122818.png" />:<img src="1455803877565.png" />,
+                   <img src="1455774127133.png" />:<img src="1455803897878.png" />,
+                   <img src="1455774131360.png" />:<img src="1455803925305.png" />}
+    intCatId = <span class="dig">0</span>
     <span class="cmt">#category loop    
-</span>    <span class="kw">for</span> catK <span class="kw">in</span> catDict:
-        <span class="skw">click</span>(catK)
+</span>    <span class="kw">for</span> keyCat <span class="kw">in</span> dicCategory:
+        <span class="skw">click</span>(keyCat)
         <span class="skw">wait</span>(<img src="1455773609785.png" />, <span class="dig">10</span>)
         <span class="cmt">#openAllProj()
 </span>        <span class="skw">sleep</span>(<span class="dig">2</span>)
-        filename = str(catId) + <span class="str">".html"</span>
-        saveCurrentPage(filename)
+        strFilename = str(intCatId) + <span class="str">".html"</span>
+        saveCurrentPage(strFilename)
         goExplorePage()
         <span class="skw">sleep</span>(<span class="dig">2</span>)
-        catId = catId+<span class="dig">1</span>
+        intCatId = intCatId+<span class="dig">1</span>
 <span class="cmt">#download project pages
 </span><span class="kw">def</span> downloadProjectPages():
     lstCategoryName = [<span class="str">"Comic"</span>]
@@ -169,7 +169,7 @@
         intProjId = <span class="dig">0</span>
         <span class="kw">for</span> strUrlLine <span class="kw">in</span> urlListFile:
             <span class="cmt">#continue point 
-</span>            <span class="kw">if</span>(projId &lt; <span class="dig">0</span>):
+</span>            <span class="kw">if</span>(intProjId &lt; <span class="dig">0</span>):
                 intProjId = intProjId+<span class="dig">1</span> <span class="cmt">#skip</span>
                 <span class="kw">continue</span>
             typeUrlOnChrome(urlText=strUrlLine)

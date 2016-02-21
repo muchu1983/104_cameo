@@ -49,42 +49,42 @@ def saveCurrentPage(filename="default.html"):
 def downloadCategoryPages():
     openChrome()
     goExplorePage()
-    catDict = {"catList.png":"1455782552937.png",
-               "1455773410389.png":"1455802574909.png",
-               "1455773420042.png":"1455802697089.png",
-               "1455773426115.png":"1455802726335.png",
-               "1455773432582.png":"1455802759583.png",
-               "1455773966059.png":"1455802933624.png",
-               "1455773974586.png":"1455802961069.png",
-               "1455773984147.png":"1455802992745.png",
-               "1455773992388.png":"1455803028529.png",
-               "1455773998962.png":"1455803059783.png",
-               "1455774017612.png":"1455803088086.png",
-               "1455774023732.png":"1455803115881.png",
-               "1455774030264.png":"1455803143027.png",
-               "1455774035660.png":"1455803611481.png",
-               "1455774049342.png":"1455803655661.png",
-               "1455774082464.png":"1455803693339.png",
-               "1455774088058.png":"1455803720282.png",
-               "1455774094195.png":"1455803782308.png",
-               "1455774098534.png":"1455803804366.png",
-               "1455774104142.png":"1455803830635.png",
-               "1455774118219.png":"1455803858214.png",
-               "1455774122818.png":"1455803877565.png",
-               "1455774127133.png":"1455803897878.png",
-               "1455774131360.png":"1455803925305.png"}
-    catId = 0
+    dicCategory = {"catList.png":"1455782552937.png",
+                   "1455773410389.png":"1455802574909.png",
+                   "1455773420042.png":"1455802697089.png",
+                   "1455773426115.png":"1455802726335.png",
+                   "1455773432582.png":"1455802759583.png",
+                   "1455773966059.png":"1455802933624.png",
+                   "1455773974586.png":"1455802961069.png",
+                   "1455773984147.png":"1455802992745.png",
+                   "1455773992388.png":"1455803028529.png",
+                   "1455773998962.png":"1455803059783.png",
+                   "1455774017612.png":"1455803088086.png",
+                   "1455774023732.png":"1455803115881.png",
+                   "1455774030264.png":"1455803143027.png",
+                   "1455774035660.png":"1455803611481.png",
+                   "1455774049342.png":"1455803655661.png",
+                   "1455774082464.png":"1455803693339.png",
+                   "1455774088058.png":"1455803720282.png",
+                   "1455774094195.png":"1455803782308.png",
+                   "1455774098534.png":"1455803804366.png",
+                   "1455774104142.png":"1455803830635.png",
+                   "1455774118219.png":"1455803858214.png",
+                   "1455774122818.png":"1455803877565.png",
+                   "1455774127133.png":"1455803897878.png",
+                   "1455774131360.png":"1455803925305.png"}
+    intCatId = 0
     #category loop    
-    for catK in catDict:
-        click(catK)
+    for keyCat in dicCategory:
+        click(keyCat)
         wait("1455773609785.png", 10)
         #openAllProj()
         sleep(2)
-        filename = str(catId) + ".html"
-        saveCurrentPage(filename)
+        strFilename = str(intCatId) + ".html"
+        saveCurrentPage(strFilename)
         goExplorePage()
         sleep(2)
-        catId = catId+1
+        intCatId = intCatId+1
 #download project pages
 def downloadProjectPages():
     lstCategoryName = ["Comic"]
@@ -97,7 +97,7 @@ def downloadProjectPages():
         intProjId = 0
         for strUrlLine in urlListFile:
             #continue point 
-            if(projId < 0):
+            if(intProjId < 0):
                 intProjId = intProjId+1 #skip
                 continue
             typeUrlOnChrome(urlText=strUrlLine)
