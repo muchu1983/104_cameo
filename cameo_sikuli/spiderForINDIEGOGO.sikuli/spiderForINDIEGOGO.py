@@ -136,7 +136,7 @@ def downloadProjectPages():
         urlListFile.close()
 #main entry point
 if __name__ == "__main__":
-    downloadCategoryPages()
-    #downloadProjectPages()
+    #downloadCategoryPages()
+    downloadProjectPages()
     
         
