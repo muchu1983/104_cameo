@@ -1,7 +1,7 @@
 開發使用的 python 版本
 2.7.11
 
-使用 pip-win 安裝的第三方庫
+使用 pip 安裝的第三方庫
 VCForPython27.msi
 lxml-3.5.0.win32-py2.7.exe
 pip install scrapy pypiwin32
@@ -13,3 +13,6 @@ cmd /k cd "C:\Users\muchu\Desktop\104Workspace\003-卡米爾scrapy\CAMEO_git_cod
 PyInstaller
 cmd shell cd 到 CAMEO_git_code目錄下
 pyinstaller -F -w -i cameo_res/icon.ico cameo/launcher.py
+
+sikuli(spider) 由 parsed_result/ 取得 url 抓取 html 存放到 source_html/
+scrapy(parser) 由 source_html/ 取得 html 解析 json/txt 存放到 parsed_result/
