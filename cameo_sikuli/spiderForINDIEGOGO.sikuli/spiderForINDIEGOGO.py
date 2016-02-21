@@ -1,3 +1,4 @@
+import os
 #open chrome
 def openChrome():
     type("d", KeyModifier.WIN)
@@ -33,15 +34,25 @@ def goExplorePage():
     typeUrlOnChrome(urlText="https://www.indiegogo.com/explore")
     wait("1455771252801.png", 20)
     wait("1455955117179.png", 20)
+#choose folder at save progress
+def typeFolderPath(strFolderPath):
+    click(Pattern("1456054857857.png").targetOffset(10,0))
+    sleep(2)
+    delOriginText()
+    type(strFolderPath)
+    sleep(2)
+    type(Key.ENTER)
 #ask chrome save current page
-def saveCurrentPage(filename="default.html"):
+def saveCurrentPage(strFolderPath=None, strFilename="default.html"):
     type("s", KeyModifier.CTRL)    
     sleep(2)
+    if strFolderPath != None:
+        typeFolderPath(strFolderPath)
     click(Pattern("1455959876192.png").targetOffset(36,0))
     sleep(2)
     delOriginText()
     sleep(2)
-    type(filename)
+    type(strFilename)
     sleep(2)
     click("1455955227414.png")
     sleep(2)
@@ -81,23 +92,29 @@ def downloadCategoryPages():
         #openAllProj()
         sleep(2)
         strFilename = str(intCatId) + ".html"
-        saveCurrentPage(strFilename)
+        saveCurrentPage(strFilename=strFilename)
         goExplorePage()
         sleep(2)
         intCatId = intCatId+1
 #download project pages
 def downloadProjectPages():
-    lstCategoryName = ["Comic"]
-    strUrlListFilePathTemplate = "C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res\parsed_result\INDIEGOGO\%s\%s_proj_url_list.txt"
+    lstCategoryName = ["Community", "Dance"]
+    strBaseResFolderPath = "C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res" 
+    strUrlListFilePathTemplate = strBaseResFolderPath + "\parsed_result\INDIEGOGO\%s\%s_proj_url_list.txt"
+    strCategoryPathTemplate = strBaseResFolderPath + "\source_html\INDIEGOGO\%s"
     openChrome()
     goExplorePage()
     for strCategoryName in lstCategoryName:
+        #mkdir
+        strCategoryPath = strCategoryPathTemplate % (strCategoryName)
+        if not os.path.exists(strCategoryPath):
+            os.mkdir(strCategoryPath)
         strUrlListFilePath = strUrlListFilePathTemplate % (strCategoryName, strCategoryName)
         urlListFile = open(strUrlListFilePath, "r")
         intProjId = 0
         for strUrlLine in urlListFile:
             #continue point 
-            if(intProjId < 99):
+            if(intProjId < 0):
                 intProjId = intProjId+1 #skip
                 continue
             typeUrlOnChrome(urlText=strUrlLine)
@@ -118,10 +135,12 @@ def downloadProjectPages():
                 sleep(5)
             click("1455892865719.png")
             wait("1455973105407.png", 20)
-            saveCurrentPage(str(intProjId) + ".html")
+            saveCurrentPage(strFolderPath=strCategoryPath, strFilename=str(intProjId) + ".html")
             intProjId = intProjId+1
         urlListFile.close()
 #main entry point
 if __name__ == "__main__":
-    #downloadCategoryPages()
-    downloadProjectPages()
+    downloadCategoryPages()
+    #downloadProjectPages()
+    
+        

@@ -70,6 +70,7 @@
 <h2>spiderForINDIEGOGO.sikuli</h2> <a href="spiderForINDIEGOGO.zip">(Download this script)</a>
 </div>
 <pre class="sikuli-code">
+<span class="kw">import</span> os
 <span class="cmt">#open chrome
 </span><span class="kw">def</span> openChrome():
     <span class="skw">type</span>(<span class="str">"d"</span>, KeyModifier.WIN)
@@ -105,15 +106,25 @@
     typeUrlOnChrome(urlText=<span class="str">"https://www.indiegogo.com/explore"</span>)
     <span class="skw">wait</span>(<img src="1455771252801.png" />, <span class="dig">20</span>)
     <span class="skw">wait</span>(<img src="1455955117179.png" />, <span class="dig">20</span>)
+<span class="cmt">#choose folder at save progress
+</span><span class="kw">def</span> typeFolderPath(strFolderPath):
+    <span class="skw">click</span>(Pattern(<img src="1456054857857.png" />).targetOffset(<span class="dig">10</span>,<span class="dig">0</span>))
+    <span class="skw">sleep</span>(<span class="dig">2</span>)
+    delOriginText()
+    <span class="skw">type</span>(strFolderPath)
+    <span class="skw">sleep</span>(<span class="dig">2</span>)
+    <span class="skw">type</span>(Key.ENTER)
 <span class="cmt">#ask chrome save current page
-</span><span class="kw">def</span> saveCurrentPage(filename=<span class="str">"default.html"</span>):
+</span><span class="kw">def</span> saveCurrentPage(strFolderPath=None, strFilename=<span class="str">"default.html"</span>):
     <span class="skw">type</span>(<span class="str">"s"</span>, KeyModifier.CTRL)
     <span class="skw">sleep</span>(<span class="dig">2</span>)
+    <span class="kw">if</span> strFolderPath != None:
+        typeFolderPath(strFolderPath)
     <span class="skw">click</span>(Pattern(<img src="1455959876192.png" />).targetOffset(<span class="dig">36</span>,<span class="dig">0</span>))
     <span class="skw">sleep</span>(<span class="dig">2</span>)
     delOriginText()
     <span class="skw">sleep</span>(<span class="dig">2</span>)
-    <span class="skw">type</span>(filename)
+    <span class="skw">type</span>(strFilename)
     <span class="skw">sleep</span>(<span class="dig">2</span>)
     <span class="skw">click</span>(<img src="1455955227414.png" />)
     <span class="skw">sleep</span>(<span class="dig">2</span>)
@@ -153,23 +164,29 @@
         <span class="cmt">#openAllProj()
 </span>        <span class="skw">sleep</span>(<span class="dig">2</span>)
         strFilename = str(intCatId) + <span class="str">".html"</span>
-        saveCurrentPage(strFilename)
+        saveCurrentPage(strFilename=strFilename)
         goExplorePage()
         <span class="skw">sleep</span>(<span class="dig">2</span>)
         intCatId = intCatId+<span class="dig">1</span>
 <span class="cmt">#download project pages
 </span><span class="kw">def</span> downloadProjectPages():
-    lstCategoryName = [<span class="str">"Comic"</span>]
-    strUrlListFilePathTemplate = <span class="str">"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res\parsed_result\INDIEGOGO\%s\%s_proj_url_list.txt"</span>
+    lstCategoryName = [<span class="str">"Community"</span>, <span class="str">"Dance"</span>]
+    strBaseResFolderPath = <span class="str">"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"</span>
+    strUrlListFilePathTemplate = strBaseResFolderPath + <span class="str">"\parsed_result\INDIEGOGO\%s\%s_proj_url_list.txt"</span>
+    strCategoryPathTemplate = strBaseResFolderPath + <span class="str">"\source_html\INDIEGOGO\%s"</span>
     openChrome()
     goExplorePage()
     <span class="kw">for</span> strCategoryName <span class="kw">in</span> lstCategoryName:
+        <span class="cmt">#mkdir
+</span>        strCategoryPath = strCategoryPathTemplate % (strCategoryName)
+        <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strCategoryPath):
+            os.mkdir(strCategoryPath)
         strUrlListFilePath = strUrlListFilePathTemplate % (strCategoryName, strCategoryName)
         urlListFile = open(strUrlListFilePath, <span class="str">"r"</span>)
         intProjId = <span class="dig">0</span>
         <span class="kw">for</span> strUrlLine <span class="kw">in</span> urlListFile:
             <span class="cmt">#continue point 
-</span>            <span class="kw">if</span>(intProjId &lt; <span class="dig">99</span>):
+</span>            <span class="kw">if</span>(intProjId &lt; <span class="dig">0</span>):
                 intProjId = intProjId+<span class="dig">1</span> <span class="cmt">#skip</span>
                 <span class="kw">continue</span>
             typeUrlOnChrome(urlText=strUrlLine)
@@ -190,13 +207,13 @@
                 <span class="skw">sleep</span>(<span class="dig">5</span>)
             <span class="skw">click</span>(<img src="1455892865719.png" />)
             <span class="skw">wait</span>(<img src="1455973105407.png" />, <span class="dig">20</span>)
-            saveCurrentPage(str(intProjId) + <span class="str">".html"</span>)
+            saveCurrentPage(strFolderPath=strCategoryPath, strFilename=str(intProjId) + <span class="str">".html"</span>)
             intProjId = intProjId+<span class="dig">1</span>
         urlListFile.close()
 <span class="cmt">#main entry point
 </span><span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
-    <span class="cmt">#downloadCategoryPages()
-</span>    downloadProjectPages()
+    downloadCategoryPages()
+    <span class="cmt">#downloadProjectPages()</span>
 </pre>
 </body>
 </html>
