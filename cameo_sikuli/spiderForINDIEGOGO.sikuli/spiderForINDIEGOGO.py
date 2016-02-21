@@ -33,7 +33,8 @@ def typeUrlOnChrome(urlText=""):
 def goExplorePage():
     typeUrlOnChrome(urlText="https://www.indiegogo.com/explore")
     wait("1455771252801.png", 20)
-    wait("1455955117179.png", 20)
+    wait("1456057892065.png", 20)
+    sleep(5)
 #choose folder at save progress
 def typeFolderPath(strFolderPath):
     click(Pattern("1456054857857.png").targetOffset(10,0))
@@ -42,6 +43,7 @@ def typeFolderPath(strFolderPath):
     type(strFolderPath)
     sleep(2)
     type(Key.ENTER)
+    sleep(2)
 #ask chrome save current page
 def saveCurrentPage(strFolderPath=None, strFilename="default.html"):
     type("s", KeyModifier.CTRL)    
@@ -60,48 +62,35 @@ def saveCurrentPage(strFolderPath=None, strFilename="default.html"):
 def downloadCategoryPages():
     openChrome()
     goExplorePage()
-    dicCategory = {"catList.png":"1455782552937.png",
-                   "1455773410389.png":"1455802574909.png",
-                   "1455773420042.png":"1455802697089.png",
-                   "1455773426115.png":"1455802726335.png",
-                   "1455773432582.png":"1455802759583.png",
-                   "1455773966059.png":"1455802933624.png",
-                   "1455773974586.png":"1455802961069.png",
-                   "1455773984147.png":"1455802992745.png",
-                   "1455773992388.png":"1455803028529.png",
-                   "1455773998962.png":"1455803059783.png",
-                   "1455774017612.png":"1455803088086.png",
-                   "1455774023732.png":"1455803115881.png",
-                   "1455774030264.png":"1455803143027.png",
-                   "1455774035660.png":"1455803611481.png",
-                   "1455774049342.png":"1455803655661.png",
-                   "1455774082464.png":"1455803693339.png",
-                   "1455774088058.png":"1455803720282.png",
-                   "1455774094195.png":"1455803782308.png",
-                   "1455774098534.png":"1455803804366.png",
-                   "1455774104142.png":"1455803830635.png",
-                   "1455774118219.png":"1455803858214.png",
-                   "1455774122818.png":"1455803877565.png",
-                   "1455774127133.png":"1455803897878.png",
-                   "1455774131360.png":"1455803925305.png"}
+    lstCategory = ["1456056808652.png", "1456056829765.png", "1456056869120.png", "1456056881941.png", "1456056899968.png", "1456056915334.png",
+                   "1456056944840.png", "1456056959389.png", "1456056975659.png", "1456057003039.png", "1456057017893.png",
+                   "1456057041383.png", "1456057054505.png", "1456057067400.png", "1456057080829.png", "1456057092683.png",
+                   "1456057109594.png", "1456057129967.png", "1456057146233.png", "1456057158719.png", "1456057181012.png",
+                   "1456057197956.png", "1456057210885.png", "1456057240923.png"]
     intCatId = 0
     #category loop    
-    for keyCat in dicCategory:
-        click(keyCat)
-        wait("1455773609785.png", 10)
+    for cat in lstCategory:
+        while(not exists(cat)):
+            click("1455955269605.png")
+            sleep(2)
+            type(Key.PAGE_DOWN)
+            sleep(5)
+        click(cat)
+        wait("1456057987950.png", 20)
         #openAllProj()
         sleep(2)
+        strFolder = r"C:\Users\Administrator\Downloads\test"
         strFilename = str(intCatId) + ".html"
-        saveCurrentPage(strFilename=strFilename)
+        saveCurrentPage(strFolderPath=strFolder, strFilename=strFilename)
         goExplorePage()
         sleep(2)
         intCatId = intCatId+1
 #download project pages
 def downloadProjectPages():
     lstCategoryName = ["Community", "Dance"]
-    strBaseResFolderPath = "C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res" 
-    strUrlListFilePathTemplate = strBaseResFolderPath + "\parsed_result\INDIEGOGO\%s\%s_proj_url_list.txt"
-    strCategoryPathTemplate = strBaseResFolderPath + "\source_html\INDIEGOGO\%s"
+    strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res" 
+    strUrlListFilePathTemplate = strBaseResFolderPath + r"\parsed_result\INDIEGOGO\%s\%s_proj_url_list.txt"
+    strCategoryPathTemplate = strBaseResFolderPath + r"\source_html\INDIEGOGO\%s"
     openChrome()
     goExplorePage()
     for strCategoryName in lstCategoryName:
