@@ -97,7 +97,7 @@ def downloadProjectPages():
         intProjId = 0
         for strUrlLine in urlListFile:
             #continue point 
-            if(intProjId < 0):
+            if(intProjId < 99):
                 intProjId = intProjId+1 #skip
                 continue
             typeUrlOnChrome(urlText=strUrlLine)
