@@ -16,3 +16,6 @@ pyinstaller -F -w -i cameo_res/icon.ico cameo/launcher.py
 
 sikuli(spider) 由 parsed_result/ 取得 url 抓取 html 存放到 source_html/
 scrapy(parser) 由 source_html/ 取得 html 解析 json/txt 存放到 parsed_result/
+
+sikuli 無IDE執行模式(command line)
+PATH-TO-SIKULIX/runsikulix.cmd -r,--run <PATH-TO-FOLDER.sikuli>

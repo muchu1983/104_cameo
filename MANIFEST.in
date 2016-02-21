@@ -1,3 +1,4 @@
 include LICENSE
 recursive-include cameo_res *
+recursive-include cameo_sikuli *
 recursive-exclude test *
