@@ -10,15 +10,20 @@ def delOriginText():
     sleep(2)
     type(Key.BACKSPACE);
     sleep(2)
-# open all project
-def openAllProj():
+#roll to page end
+def rollToPageEnd():
     type(Key.END)
+    sleep(2)
+    wait("1456062534102.png", 20)
+# open all project
+def unfoldCategoryPage():
+    rollToPageEnd()
     type(Key.PAGE_UP)
     sleep(2)
-    while(exists("1455785847618.png")): 
-        click("1455785847618.png")
-        sleep(5)
-        type(Key.END)
+    while(exists("1456064164365.png")):
+        click("1456064164365.png")
+        sleep(2)
+        rollToPageEnd()
         type(Key.PAGE_UP)
         sleep(2)
 #type url on chrome
@@ -37,6 +42,7 @@ def goExplorePage():
     sleep(5)
 #choose folder at save progress
 def typeFolderPath(strFolderPath):
+    wait(Pattern("1456054857857.png").targetOffset(10,0), 20)
     click(Pattern("1456054857857.png").targetOffset(10,0))
     sleep(2)
     delOriginText()
@@ -77,9 +83,10 @@ def downloadCategoryPages():
             sleep(5)
         click(cat)
         wait("1456057987950.png", 20)
-        #openAllProj()
+        wait("1456064495796.png", 20)
+        unfoldCategoryPage()
         sleep(2)
-        strFolder = r"C:\Users\Administrator\Downloads\test"
+        strFolder = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res\source_html\INDIEGOGO"
         strFilename = str(intCatId) + ".html"
         saveCurrentPage(strFolderPath=strFolder, strFilename=strFilename)
         goExplorePage()
