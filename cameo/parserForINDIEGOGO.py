@@ -9,27 +9,28 @@ This file is part of BSD license
 import os
 from scrapy import Selector
 """
-從 local HTML 檔案解析資料
+從 source HTML 檔案解析資料
 """
 class ParserForINDIEGOGO:
     
     def __init__(self):
-        self.LOCAL_HTML_CATEGORY_PAGE_PATH = u"./cameo_res/INDIEGOGO/"
-        self.LOCAL_HTML_EXT = u".html"
-        self.PROJ_URL_LIST_FILENAME = u"proj_url_list.txt"
+        self.SOURCE_HTML_CATEGORY_PAGE_PATH = u"./cameo_res/source_html/INDIEGOGO/"
+        self.PARSED_RESULT_PATH = u"./cameo_res/parsed_result/INDIEGOGO/"
+        self.SOURCE_HTML_EXT = u".html"
+        self.PROJ_URL_LIST_FILENAME = u"_proj_url_list.txt"
     
     def parseCategoryPage(self):
         for i in range(24):
-            strCategoryPageFilePath = self.LOCAL_HTML_CATEGORY_PAGE_PATH + str(i) + self.LOCAL_HTML_EXT
+            strCategoryPageFilePath = self.SOURCE_HTML_CATEGORY_PAGE_PATH + str(i) + self.SOURCE_HTML_EXT
             with open(strCategoryPageFilePath, "r") as catFile:
                 strPageSource = catFile.read()
             root = Selector(text=strPageSource)
             strCategoryName = root.css("explore-breadcrumbs span div div.exploreBreadcrumbs-breadcrumb-label.exploreBreadcrumbs-breadcrumb-category.ng-binding::text").extract_first().strip().replace("/", "")
             print(i, strCategoryName)
-            strCategoryFolderPath = self.LOCAL_HTML_CATEGORY_PAGE_PATH + strCategoryName + u"/"
-            if not os.path.exists(strCategoryFolderPath):
-                os.mkdir(strCategoryFolderPath)
-            with open(strCategoryFolderPath + self.PROJ_URL_LIST_FILENAME, "w+") as urlFile:
+            strParsedCategoryFolderPath = self.PARSED_RESULT_PATH + strCategoryName + u"/"
+            if not os.path.exists(strParsedCategoryFolderPath):
+                os.mkdir(strParsedCategoryFolderPath)
+            with open(strParsedCategoryFolderPath + strCategoryName + self.PROJ_URL_LIST_FILENAME, "w+") as urlFile:
                 lstStrUrls = root.css("a.discoveryCard::attr(href)").extract()
                 for strUrl in lstStrUrls:
                     urlFile.write(strUrl + u"\n")
