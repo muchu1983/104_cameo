@@ -53,7 +53,7 @@ def typeFolderPath(strFolderPath):
 #ask chrome save current page
 def saveCurrentPage(strFolderPath=None, strFilename="default.html"):
     type("s", KeyModifier.CTRL)    
-    sleep(2)
+    wait("1456076542071.png", 20)
     if strFolderPath != None:
         typeFolderPath(strFolderPath)
     click(Pattern("1455959876192.png").targetOffset(36,0))
@@ -110,7 +110,7 @@ def downloadProjectPages():
         intProjId = 0
         for strUrlLine in urlListFile:
             #continue point 
-            if(intProjId < 0):
+            if(intProjId < 96):
                 intProjId = intProjId+1 #skip
                 continue
             typeUrlOnChrome(urlText=strUrlLine)
