@@ -124,21 +124,24 @@ def downloadProjectPages(strTargetCategory=None):
         strProjStoryFilename = strProjName+"_story.html"
         saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjStoryFilename)
         #close details
-        click(X)
+        click("1456232782492.png")
+        wait("1456229579631.png", 20)
+        type(Key.HOME)
+        
         wait("1456229536809.png", 20)
         #save updates
-        click(updates)
-        wait(update, 20)
+        click("1456232941269.png")
+        wait("1456232962072.png", 20)
         strProjUpdatesFilename = strProjName+"_updates.html"
         saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjUpdatesFilename)
         #save comments
-        click(comments)
-        wait(comment, 20)
+        click("1456232986275.png")
+        wait("1456233002434.png", 20)
         strProjCommentsFilename = strProjName+"_comments.html"
         saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjCommentsFilename)
         #save backers
-        click(backers)
-        wait(backer, 20)
+        click("1456233023222.png")
+        wait("1456233041235.png", 20)
         strProjBackersFilename = strProjName+"_backers.html"
         saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjBackersFilename)
     projUrlListFile.close()
