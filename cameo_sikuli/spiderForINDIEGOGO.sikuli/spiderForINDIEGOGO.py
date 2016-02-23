@@ -81,20 +81,9 @@ def downloadCategoryPages():
     catUrlListFile = open(strCategoryUrlListFilePath)
     for strCategoryUrl in catUrlListFile:#category loop
         strCategoryName = r"" + re.search("^https://www.indiegogo.com/explore/(.*)$" ,strCategoryUrl).group(1)
-        strCategoryFolderPath = strBaseResFolderPath + r"\source_html\INDIEGOGO\" + strCategoryName
+        strCategoryFolderPath = strBaseResFolderPath + r"\source_html\INDIEGOGO\%s"%(strCategoryName)
         if not os.path.exists(strCategoryFolderPath):
             os.mkdir(strCategoryFolderPath)
-        """
-        openChrome()
-        typeUrlOnChrome(urlText=strCategoryUrl)
-        wait("1456057987950.png", 20)
-        wait("1456064495796.png", 20)
-        #unfoldCategoryPage()
-        sleep(2)
-        strFolder = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res\source_html\INDIEGOGO"
-        strFilename = str(intCatId) + ".html"
-        saveCurrentPage(strFolderPath=strFolder, strFilename=strFilename)
-        """
 #download project pages
 def downloadProjectPages():
     lstCategoryName = ["Community", "Dance"]

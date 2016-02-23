@@ -153,20 +153,9 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     catUrlListFile = open(strCategoryUrlListFilePath)
     <span class="kw">for</span> strCategoryUrl <span class="kw">in</span> catUrlListFile:<span class="cmt">#category loop</span>
         strCategoryName = <span class="str">r""</span> + re.search(<span class="str">"^https://www.indiegogo.com/explore/(.*)$"</span> ,strCategoryUrl).group(<span class="dig">1</span>)
-        strCategoryFolderPath = strBaseResFolderPath + r"\source_html\INDIEGOGO\" + strCategoryName
+        strCategoryFolderPath = strBaseResFolderPath + <span class="str">r"\source_html\INDIEGOGO\%s"</span>%(strCategoryName)
         <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strCategoryFolderPath):
             os.mkdir(strCategoryFolderPath)
-        <span class="str">"""
-        openChrome()
-        typeUrlOnChrome(urlText=strCategoryUrl)
-        wait("1456057987950.png", 20)
-        wait("1456064495796.png", 20)
-        #unfoldCategoryPage()
-        sleep(2)
-        strFolder = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res\source_html\INDIEGOGO"
-        strFilename = str(intCatId) + ".html"
-        saveCurrentPage(strFolderPath=strFolder, strFilename=strFilename)
-        """</span>
 <span class="cmt">#download project pages
 </span><span class="kw">def</span> downloadProjectPages():
     lstCategoryName = [<span class="str">"Community"</span>, <span class="str">"Dance"</span>]
