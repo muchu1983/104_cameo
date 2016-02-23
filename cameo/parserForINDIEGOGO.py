@@ -56,6 +56,7 @@ class ParserForINDIEGOGO:
                         for strProjUrl in lstStrProjUrls:
                             projUrlListFile.write(strProjUrl + u"\n")
                             
+    #parse project page(s)
     def parseProjectDetailsPage(self, strCategoryName):
         strProjectUrlListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/project_url_list.txt"%(strCategoryName))
         for strProjUrl in open(strProjectUrlListFilePath, "r"):
@@ -71,7 +72,6 @@ class ParserForINDIEGOGO:
                     with open(strIndividualUrlListFilePath, "a") as individualUrlListFile:
                         individualUrlListFile.write(strIndividualUrl + u"\n") #append url to individuals_url_list.txt
                     
-    #parse project page(s)
     def parseProjectStoryPage(self, strCategoryName):
         strProjectUrlListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/project_url_list.txt"%(strCategoryName))
         for strProjUrl in open(strProjectUrlListFilePath, "r"):
