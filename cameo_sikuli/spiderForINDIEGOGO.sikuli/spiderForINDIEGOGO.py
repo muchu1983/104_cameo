@@ -118,10 +118,10 @@ def downloadProjectPages(strTargetCategory=None):
                 sleep(2)
                 type(Key.UP)
                 sleep(5)
-            click("1456229579631.png")
-            wait("1456229635107.png", 20)
-            strProjStoryFilename = strProjName+"_story.html"
-            saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjStoryFilename)        
+        click("1456229579631.png")
+        wait("1456229635107.png", 20)
+        strProjStoryFilename = strProjName+"_story.html"
+        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjStoryFilename)        
     projUrlListFile.close()
 #download individuals pages
 def downloadIndividualsPages():
