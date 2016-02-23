@@ -120,8 +120,27 @@ def downloadProjectPages(strTargetCategory=None):
             sleep(5)
         click("1456229579631.png")
         wait("1456229635107.png", 20)
+        #save story with more details
         strProjStoryFilename = strProjName+"_story.html"
-        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjStoryFilename)        
+        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjStoryFilename)
+        #close details
+        click(X)
+        wait("1456229536809.png", 20)
+        #save updates
+        click(updates)
+        wait(update, 20)
+        strProjUpdatesFilename = strProjName+"_updates.html"
+        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjUpdatesFilename)
+        #save comments
+        click(comments)
+        wait(comment, 20)
+        strProjCommentsFilename = strProjName+"_comments.html"
+        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjCommentsFilename)
+        #save backers
+        click(backers)
+        wait(backer, 20)
+        strProjBackersFilename = strProjName+"_backers.html"
+        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjBackersFilename)
     projUrlListFile.close()
 #download individuals pages
 def downloadIndividualsPages():
