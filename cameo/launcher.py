@@ -48,12 +48,16 @@ def handleProjectPage(arg1=None):
 
 #下載及解析 individuals 頁面
 def handleIndividualsPage(arg1=None):
-    pass
+    call([r"cameo_sikuli\runsikulix.cmd",
+          r"-r", r"cameo_sikuli\spiderForINDIEGOGO.sikuli",
+          r"--args", r"individuals", arg1])
+    time.sleep(10) #wait download complete
+    parser.parseIndividualsPage(arg1)
 
 #進入點
 def entry_point():
     #lstStrArgs = sys.argv
-    lstStrArgs = ["launcher.py", "project", "animals"]
+    lstStrArgs = ["launcher.py", "individuals", "animals"]
     dicSubCommandHandler = {"explore":handleExplorePage,
                             "category":handleCategoryPage,
                             "project":handleProjectPage,

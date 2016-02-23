@@ -173,8 +173,12 @@ def downloadProjectPages(strTargetCategory=None):
         wait("1456247446257.png",60)#wait save complete
     projUrlListFile.close()
 #download individuals pages
-def downloadIndividualsPages():
-    pass
+def downloadIndividualsPages(strTargetCategory=None):
+    if strTargetCategory == "animals":
+        hover(Location(236, 292))
+        hover(Location(1061, 321))
+        hover(Location(527, 155))
+        hover(Location(524, 631))
 #main entry point
 if __name__ == "__main__":
     lstStrArgs = sys.argv
@@ -185,5 +189,6 @@ if __name__ == "__main__":
     if lstStrArgs[1] == "project": 
         #lstStrArgs[2] is target category arg
         downloadProjectPages(strTargetCategory=lstStrArgs[2])
-    if lstStrArgs[1] == "individuals": #need arg2
-        downloadIndividualsPages()
+    if lstStrArgs[1] == "individuals":
+        #lstStrArgs[2] is target category arg
+        downloadIndividualsPages(strTargetCategory=lstStrArgs[2])
