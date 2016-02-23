@@ -16,19 +16,18 @@ def delOriginText():
 #roll to page end
 def rollToPageEnd():
     type(Key.END)
-    sleep(2)
     wait("1456062534102.png", 20)
 # open all project
 def unfoldCategoryPage():
     rollToPageEnd()
     type(Key.PAGE_UP)
-    sleep(2)
+    wait("1456215300454.png", 20)
     while(exists("1456064164365.png")):
         click("1456064164365.png")
-        sleep(2)
+        waitVanish("1456215300454.png", 20)
         rollToPageEnd()
         type(Key.PAGE_UP)
-        sleep(2)
+        wait("1456215300454.png", 20)
 #type url on chrome
 def typeUrlOnChrome(urlText=""):
     click("1455955040522.png")
