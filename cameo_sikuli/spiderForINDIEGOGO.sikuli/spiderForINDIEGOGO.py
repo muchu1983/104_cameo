@@ -54,8 +54,8 @@ def typeFolderPath(strFolderPath):
     sleep(2)
 #ask chrome save current page
 def saveCurrentPage(strFolderPath=None, strFilename="default.html"):
-    type("s", KeyModifier.CTRL)    
-    wait("1456234033089.png", 20)
+    type("s", KeyModifier.CTRL)
+    wait("1455955227414.png", 20)
     if strFolderPath != None:
         typeFolderPath(strFolderPath)
     click(Pattern("1455959876192.png").targetOffset(36,0))
