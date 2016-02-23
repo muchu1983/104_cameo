@@ -172,9 +172,9 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         os.mkdir(strProjectsFolderPath)<span class="cmt">#mkdir source_html/INDIEGOGO/Category/pojects</span>
     strProjUrlListFilePath = strProjUrlListFilePathTemplate % (strTargetCategory)
     projUrlListFile = open(strProjUrlListFilePath, <span class="str">"r"</span>)
-    openChrome()
     <span class="kw">for</span> strProjUrl <span class="kw">in</span> projUrlListFile:
         strProjName = re.search(<span class="str">"^https://www.indiegogo.com/projects/(.*)/.{4}$"</span>, strProjUrl).group(<span class="dig">1</span>)
+        openChrome()
         typeUrlOnChrome(urlText=strProjUrl)
         <span class="skw">wait</span>(<img src="1456229536809.png" />, <span class="dig">20</span>)
         <span class="skw">sleep</span>(<span class="dig">5</span>)

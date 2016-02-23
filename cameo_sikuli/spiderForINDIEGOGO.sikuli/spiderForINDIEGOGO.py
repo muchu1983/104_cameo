@@ -99,10 +99,10 @@ def downloadProjectPages(strTargetCategory=None):
     if not os.path.exists(strProjectsFolderPath):
         os.mkdir(strProjectsFolderPath)#mkdir source_html/INDIEGOGO/Category/pojects
     strProjUrlListFilePath = strProjUrlListFilePathTemplate % (strTargetCategory)
-    projUrlListFile = open(strProjUrlListFilePath, "r")
-    openChrome()
+    projUrlListFile = open(strProjUrlListFilePath, "r") 
     for strProjUrl in projUrlListFile:
         strProjName = re.search("^https://www.indiegogo.com/projects/(.*)/.{4}$", strProjUrl).group(1)
+        openChrome()
         typeUrlOnChrome(urlText=strProjUrl)
         wait("1456229536809.png", 20)
         sleep(5)
