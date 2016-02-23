@@ -92,46 +92,13 @@ def downloadCategoryPages():
         saveCurrentPage(strFolderPath=strCategoryFolderPath, strFilename="category.html")
     catUrlListFile.close()
 #download project pages
-def downloadProjectPages():
-    lstCategoryName = ["Community", "Dance"]
-    strUrlListFilePathTemplate = strBaseResFolderPath + r"\parsed_result\INDIEGOGO\%s\%s_proj_url_list.txt"
-    strCategoryPathTemplate = strBaseResFolderPath + r"\source_html\INDIEGOGO\%s"
-    openChrome()
-    goExplorePage()
-    for strCategoryName in lstCategoryName:
-        #mkdir
-        strCategoryPath = strCategoryPathTemplate % (strCategoryName)
-        if not os.path.exists(strCategoryPath):
-            os.mkdir(strCategoryPath)
-        strUrlListFilePath = strUrlListFilePathTemplate % (strCategoryName, strCategoryName)
-        urlListFile = open(strUrlListFilePath, "r")
-        intProjId = 0
-        for strUrlLine in urlListFile:
-            #continue point 
-            if(intProjId < 261):
-                intProjId = intProjId+1 #skip
-                continue
-            typeUrlOnChrome(urlText=strUrlLine)
-            wait("1455944265378.png", 20)
-            click("1455955269605.png")
-            sleep(2)
-            while(not exists("1455892865719.png")):
-                type(Key.PAGE_DOWN)
-                sleep(2)
-            type(Key.DOWN)
-            sleep(2)
-            type(Key.DOWN)
-            sleep(5)
-            if(not exists("1455892865719.png")):
-                type(Key.UP)
-                sleep(2)
-                type(Key.UP)
-                sleep(5)
-            click("1455892865719.png")
-            wait("1455973105407.png", 20)
-            saveCurrentPage(strFolderPath=strCategoryPath, strFilename=str(intProjId) + ".html")
-            intProjId = intProjId+1
-        urlListFile.close()
+def downloadProjectPages(strTargetProject=None):
+    strProjectUrlListFilePathTemplate = strBaseResFolderPath + r"\parsed_result\INDIEGOGO\%s\proj_url_list.txt"
+    strProjectsFolderPathTemplate = strBaseResFolderPath + r"\source_html\INDIEGOGO\%s\projects"
+    #mkdir
+    strProjectsFolderPath = strProjectsFolderPathTemplate % (strTargetProject)
+    if not os.path.exists(strProjectsFolderPath):
+        os.mkdir(strProjectsFolderPath)
 #download individuals pages
 def downloadIndividualsPages():
     pass
@@ -142,7 +109,8 @@ if __name__ == "__main__":
         downloadExplorePages()
     if lstStrArgs[1] == "category":
         downloadCategoryPages()
-    if lstStrArgs[1] == "project": #need arg2
-        downloadProjectPages()
+    if lstStrArgs[1] == "project": 
+        #lstStrArgs[2] is target category arg
+        downloadProjectPages(strTargetProject=lstStrArgs[2])
     if lstStrArgs[1] == "individuals": #need arg2
         downloadIndividualsPages()

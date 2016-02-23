@@ -55,3 +55,15 @@ class ParserForINDIEGOGO:
                     with open(strProjectUrlListFilePath, "w+") as projUrlListFile: #write to project_url_list.txt
                         for strProjUrl in lstStrProjUrls:
                             projUrlListFile.write(strProjUrl + u"\n")
+                            
+    #parse project page(s)
+    def parseProjectStoryPage(self):
+        pass
+    def parseProjectUpdatesPage(self):
+        pass
+    def parseProjectCommentsPage(self):
+        pass
+    def parseProjectBackersPage(self):
+        pass
+    def parseProjectRewardPage(self):
+        pass
