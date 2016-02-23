@@ -164,13 +164,37 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
 </span>        saveCurrentPage(strFolderPath=strCategoryFolderPath, strFilename=<span class="str">"category.html"</span>)
     catUrlListFile.close()
 <span class="cmt">#download project pages
-</span><span class="kw">def</span> downloadProjectPages(strTargetProject=None):
-    strProjectUrlListFilePathTemplate = strBaseResFolderPath + <span class="str">r"\parsed_result\INDIEGOGO\%s\proj_url_list.txt"</span>
+</span><span class="kw">def</span> downloadProjectPages(strTargetCategory=None):
+    strProjUrlListFilePathTemplate = strBaseResFolderPath + <span class="str">r"\parsed_result\INDIEGOGO\%s\proj_url_list.txt"</span>
     strProjectsFolderPathTemplate = strBaseResFolderPath + <span class="str">r"\source_html\INDIEGOGO\%s\projects"</span>
-    <span class="cmt">#mkdir
-</span>    strProjectsFolderPath = strProjectsFolderPathTemplate % (strTargetProject)
+    strProjectsFolderPath = strProjectsFolderPathTemplate % (strTargetCategory)
     <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strProjectsFolderPath):
-        os.mkdir(strProjectsFolderPath)
+        os.mkdir(strProjectsFolderPath)<span class="cmt">#mkdir source_html/INDIEGOGO/Category/pojects</span>
+    strProjUrlListFilePath = strProjUrlListFilePathTemplate % (strTargetCategory)
+    projUrlListFile = open(strProjUrlListFilePath, <span class="str">"r"</span>)
+    openChrome()
+    <span class="kw">for</span> strProjUrl <span class="kw">in</span> projUrlListFile:
+        strProjName = re.search(<span class="str">"^https://www.indiegogo.com/projects/(.*)/.{4}$"</span>, strProjUrl).group(<span class="dig">1</span>)
+        typeUrlOnChrome(urlText=strProjUrl)
+        <span class="skw">wait</span>(story.png)
+        <span class="skw">sleep</span>(<span class="dig">5</span>)
+        <span class="kw">while</span>(<span class="kw">not</span> exists(see more.png)):
+            <span class="skw">type</span>(Key.PAGE_DOWN)
+            <span class="skw">sleep</span>(<span class="dig">2</span>)
+            <span class="skw">type</span>(Key.DOWN)
+            <span class="skw">sleep</span>(<span class="dig">2</span>)
+            <span class="skw">type</span>(Key.DOWN)
+            <span class="skw">sleep</span>(<span class="dig">5</span>)
+            <span class="kw">if</span>(<span class="kw">not</span> exists(see more.png)):
+                <span class="skw">type</span>(Key.UP)
+                <span class="skw">sleep</span>(<span class="dig">2</span>)
+                <span class="skw">type</span>(Key.UP)
+                <span class="skw">sleep</span>(<span class="dig">5</span>)
+            <span class="skw">click</span>(see more.png)
+            <span class="skw">wait</span>(about.png, <span class="dig">20</span>)
+            strProjStoryFilename = strProjName+<span class="str">"_story.html"</span>
+            saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjStoryFilename)
+    projUrlListFile.close()
 <span class="cmt">#download individuals pages
 </span><span class="kw">def</span> downloadIndividualsPages():
     <span class="kw">pass</span>
@@ -183,7 +207,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         downloadCategoryPages()
     <span class="kw">if</span> lstStrArgs[<span class="dig">1</span>] == <span class="str">"project"</span>:
         <span class="cmt">#lstStrArgs[2] is target category arg
-</span>        downloadProjectPages(strTargetProject=lstStrArgs[<span class="dig">2</span>])
+</span>        downloadProjectPages(strTargetCategory=lstStrArgs[<span class="dig">2</span>])
     <span class="kw">if</span> lstStrArgs[<span class="dig">1</span>] == <span class="str">"individuals"</span>: <span class="cmt">#need arg2</span>
         downloadIndividualsPages()
 </pre>

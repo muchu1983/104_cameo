@@ -92,13 +92,37 @@ def downloadCategoryPages():
         saveCurrentPage(strFolderPath=strCategoryFolderPath, strFilename="category.html")
     catUrlListFile.close()
 #download project pages
-def downloadProjectPages(strTargetProject=None):
-    strProjectUrlListFilePathTemplate = strBaseResFolderPath + r"\parsed_result\INDIEGOGO\%s\proj_url_list.txt"
-    strProjectsFolderPathTemplate = strBaseResFolderPath + r"\source_html\INDIEGOGO\%s\projects"
-    #mkdir
-    strProjectsFolderPath = strProjectsFolderPathTemplate % (strTargetProject)
+def downloadProjectPages(strTargetCategory=None):
+    strProjUrlListFilePathTemplate = strBaseResFolderPath + r"\parsed_result\INDIEGOGO\%s\proj_url_list.txt"
+    strProjectsFolderPathTemplate = strBaseResFolderPath + r"\source_html\INDIEGOGO\%s\projects"   
+    strProjectsFolderPath = strProjectsFolderPathTemplate % (strTargetCategory)
     if not os.path.exists(strProjectsFolderPath):
-        os.mkdir(strProjectsFolderPath)
+        os.mkdir(strProjectsFolderPath)#mkdir source_html/INDIEGOGO/Category/pojects
+    strProjUrlListFilePath = strProjUrlListFilePathTemplate % (strTargetCategory)
+    projUrlListFile = open(strProjUrlListFilePath, "r")
+    openChrome()
+    for strProjUrl in projUrlListFile:
+        strProjName = re.search("^https://www.indiegogo.com/projects/(.*)/.{4}$", strProjUrl).group(1)
+        typeUrlOnChrome(urlText=strProjUrl)
+        wait(story.png)
+        sleep(5)
+        while(not exists(see more.png)):
+            type(Key.PAGE_DOWN)
+            sleep(2)
+            type(Key.DOWN)
+            sleep(2)
+            type(Key.DOWN)
+            sleep(5)
+            if(not exists(see more.png)):
+                type(Key.UP)
+                sleep(2)
+                type(Key.UP)
+                sleep(5)
+            click(see more.png)
+            wait(about.png, 20)
+            strProjStoryFilename = strProjName+"_story.html"
+            saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjStoryFilename)        
+    projUrlListFile.close()
 #download individuals pages
 def downloadIndividualsPages():
     pass
@@ -111,6 +135,6 @@ if __name__ == "__main__":
         downloadCategoryPages()
     if lstStrArgs[1] == "project": 
         #lstStrArgs[2] is target category arg
-        downloadProjectPages(strTargetProject=lstStrArgs[2])
+        downloadProjectPages(strTargetCategory=lstStrArgs[2])
     if lstStrArgs[1] == "individuals": #need arg2
         downloadIndividualsPages()
