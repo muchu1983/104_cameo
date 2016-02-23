@@ -1,5 +1,6 @@
 import os
 import sys
+import re
 strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res" 
 #open chrome
 def openChrome():
@@ -66,34 +67,34 @@ def saveCurrentPage(strFolderPath=None, strFilename="default.html"):
     sleep(2)
     click("1455955227414.png")
     sleep(2)
-#download category pages
-def downloadCategoryPages():
+#download explore pages
+def downloadExplorePages():
     openChrome()
     goExplorePage()
-    lstCategory = ["1456056808652.png", "1456056829765.png", "1456056869120.png", "1456056881941.png", "1456056899968.png", "1456056915334.png",
-                   "1456056944840.png", "1456056959389.png", "1456056975659.png", "1456057003039.png", "1456057017893.png",
-                   "1456057041383.png", "1456057054505.png", "1456057067400.png", "1456057080829.png", "1456057092683.png",
-                   "1456057109594.png", "1456057129967.png", "1456057146233.png", "1456057158719.png", "1456057181012.png",
-                   "1456057197956.png", "1456057210885.png", "1456057240923.png"]
-    intCatId = 0
-    #category loop    
-    for cat in lstCategory:
-        while(not exists(cat)):
-            click("1455955269605.png")
-            sleep(2)
-            type(Key.PAGE_DOWN)
-            sleep(5)
-        click(cat)
+    strExploreFolderPath = strBaseResFolderPath + r"\source_html\INDIEGOGO"
+    if not os.path.exists(strExploreFolderPath):
+            os.mkdir(strExploreFolderPath)
+    saveCurrentPage(strFolderPath=strExploreFolderPath, strFilename="explore.html")
+#download category pages
+def downloadCategoryPages():
+    strCategoryUrlListFilePath = strBaseResFolderPath + r"\parsed_result\INDIEGOGO\category_url_list.txt"
+    catUrlListFile = open(strCategoryUrlListFilePath)
+    for strCategoryUrl in catUrlListFile:#category loop
+        strCategoryName = re.search("^https://www.indiegogo.com/explore/(.*)$" ,strCategoryUrl).group(0)
+        strCategoryFolderPath = strBaseResFolderPath + r"\source_html\INDIEGOGO\" + strCategoryName
+        if not os.path.exists(strCategoryFolderPath):
+            os.mkdir(strCategoryFolderPath)
+"""
+        openChrome()
+        typeUrlOnChrome(urlText=strCategoryUrl)
         wait("1456057987950.png", 20)
         wait("1456064495796.png", 20)
-        unfoldCategoryPage()
+        #unfoldCategoryPage()
         sleep(2)
         strFolder = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res\source_html\INDIEGOGO"
         strFilename = str(intCatId) + ".html"
         saveCurrentPage(strFolderPath=strFolder, strFilename=strFilename)
-        goExplorePage()
-        sleep(2)
-        intCatId = intCatId+1
+"""
 #download project pages
 def downloadProjectPages():
     lstCategoryName = ["Community", "Dance"]
@@ -138,14 +139,6 @@ def downloadProjectPages():
 #download individuals pages
 def downloadIndividualsPages():
     pass
-#download explore pages
-def downloadExplorePages():
-    openChrome()
-    goExplorePage()
-    strExploreFolderPath = strBaseResFolderPath + r"\source_html\INDIEGOGO"
-    if not os.path.exists(strExploreFolderPath):
-            os.mkdir(strExploreFolderPath)
-    saveCurrentPage(strFolderPath=strExploreFolderPath, strFilename="explore.html")
 #main entry point
 if __name__ == "__main__":
     lstStrArgs = sys.argv
