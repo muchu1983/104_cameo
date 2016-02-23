@@ -1,4 +1,6 @@
 import os
+import sys
+strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res" 
 #open chrome
 def openChrome():
     type("d", KeyModifier.WIN)
@@ -95,7 +97,6 @@ def downloadCategoryPages():
 #download project pages
 def downloadProjectPages():
     lstCategoryName = ["Community", "Dance"]
-    strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res" 
     strUrlListFilePathTemplate = strBaseResFolderPath + r"\parsed_result\INDIEGOGO\%s\%s_proj_url_list.txt"
     strCategoryPathTemplate = strBaseResFolderPath + r"\source_html\INDIEGOGO\%s"
     openChrome()
@@ -134,9 +135,23 @@ def downloadProjectPages():
             saveCurrentPage(strFolderPath=strCategoryPath, strFilename=str(intProjId) + ".html")
             intProjId = intProjId+1
         urlListFile.close()
+#download individuals pages
+def downloadIndividualsPages():
+    pass
+#download explore pages
+def downloadExplorePages():
+    openChrome()
+    goExplorePage()
+    saveCurrentPage(strFolderPath=, strFilename="explore.html")
+    
 #main entry point
 if __name__ == "__main__":
-    #downloadCategoryPages()
-    downloadProjectPages()
-    
-        
+    lstStrArgs = sys.argv
+    if lstStrArgs[1] == "explore":
+        downloadExplorePages()
+    if lstStrArgs[1] == "category":
+        downloadCategoryPages()
+    if lstStrArgs[1] == "project": #need arg2
+        downloadProjectPages()
+    if lstStrArgs[1] == "individuals": #need arg2
+        downloadIndividualsPages()

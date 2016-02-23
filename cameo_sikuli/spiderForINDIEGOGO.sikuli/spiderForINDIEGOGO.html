@@ -71,6 +71,8 @@
 </div>
 <pre class="sikuli-code">
 <span class="kw">import</span> os
+<span class="kw">import</span> sys
+strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"</span>
 <span class="cmt">#open chrome
 </span><span class="kw">def</span> openChrome():
     <span class="skw">type</span>(<span class="str">"d"</span>, KeyModifier.WIN)
@@ -167,7 +169,6 @@
 <span class="cmt">#download project pages
 </span><span class="kw">def</span> downloadProjectPages():
     lstCategoryName = [<span class="str">"Community"</span>, <span class="str">"Dance"</span>]
-    strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"</span>
     strUrlListFilePathTemplate = strBaseResFolderPath + <span class="str">r"\parsed_result\INDIEGOGO\%s\%s_proj_url_list.txt"</span>
     strCategoryPathTemplate = strBaseResFolderPath + <span class="str">r"\source_html\INDIEGOGO\%s"</span>
     openChrome()
@@ -206,10 +207,26 @@
             saveCurrentPage(strFolderPath=strCategoryPath, strFilename=str(intProjId) + <span class="str">".html"</span>)
             intProjId = intProjId+<span class="dig">1</span>
         urlListFile.close()
+<span class="cmt">#download individuals pages
+</span><span class="kw">def</span> downloadIndividualsPages():
+    <span class="kw">pass</span>
+<span class="cmt">#download explore pages
+</span><span class="kw">def</span> downloadExplorePages():
+    openChrome()
+    goExplorePage()
+    saveCurrentPage(strFolderPath=, strFilename=<span class="str">"explore.html"</span>)
+
 <span class="cmt">#main entry point
 </span><span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
-    <span class="cmt">#downloadCategoryPages()
-</span>    downloadProjectPages()
+    lstStrArgs = sys.argv
+    <span class="kw">if</span> lstStrArgs[<span class="dig">1</span>] == <span class="str">"explore"</span>:
+        downloadExplorePages()
+    <span class="kw">if</span> lstStrArgs[<span class="dig">1</span>] == <span class="str">"category"</span>:
+        downloadCategoryPages()
+    <span class="kw">if</span> lstStrArgs[<span class="dig">1</span>] == <span class="str">"project"</span>: <span class="cmt">#need arg2</span>
+        downloadProjectPages()
+    <span class="kw">if</span> lstStrArgs[<span class="dig">1</span>] == <span class="str">"individuals"</span>: <span class="cmt">#need arg2</span>
+        downloadIndividualsPages()
 </pre>
 </body>
 </html>
