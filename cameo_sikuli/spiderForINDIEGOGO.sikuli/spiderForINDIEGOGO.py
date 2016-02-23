@@ -151,18 +151,21 @@ def downloadProjectPages(strTargetCategory=None):
         saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjStoryFilename)
         wait("1456247446257.png",60)#wait save complete
         #save updates
+        wait("1456232941269.png", 20)
         click("1456232941269.png")
         wait("1456232962072.png", 20)
         strProjUpdatesFilename = strProjName+"_updates.html"
         saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjUpdatesFilename)
         wait("1456247446257.png",60)#wait save complete
         #save comments
+        wait("1456232986275.png", 20)
         click("1456232986275.png")
         wait("1456233002434.png", 20)
         strProjCommentsFilename = strProjName+"_comments.html"
         saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjCommentsFilename)
         wait("1456247446257.png",60)#wait save complete
         #save backers
+        wait("1456233023222.png", 20)
         click("1456233023222.png")
         wait("1456233041235.png", 20)
         strProjBackersFilename = strProjName+"_backers.html"
