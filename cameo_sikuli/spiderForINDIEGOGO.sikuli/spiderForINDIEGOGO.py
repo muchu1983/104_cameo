@@ -113,11 +113,11 @@ def downloadProjectPages(strTargetCategory=None):
             sleep(2)
             type(Key.DOWN)
             sleep(5)
-            if(not exists("1456229579631.png")):
-                type(Key.UP)
-                sleep(2)
-                type(Key.UP)
-                sleep(5)
+        if(not exists("1456229579631.png")):
+            type(Key.UP)
+            sleep(2)
+            type(Key.UP)
+            sleep(5)
         click("1456229579631.png")
         wait("1456229635107.png", 20)
         strProjStoryFilename = strProjName+"_story.html"
