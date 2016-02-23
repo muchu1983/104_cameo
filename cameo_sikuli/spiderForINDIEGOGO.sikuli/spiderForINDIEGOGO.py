@@ -104,22 +104,22 @@ def downloadProjectPages(strTargetCategory=None):
     for strProjUrl in projUrlListFile:
         strProjName = re.search("^https://www.indiegogo.com/projects/(.*)/.{4}$", strProjUrl).group(1)
         typeUrlOnChrome(urlText=strProjUrl)
-        wait(story.png)
+        wait("1456229536809.png")
         sleep(5)
-        while(not exists(see more.png)):
+        while(not exists("1456229579631.png")):
             type(Key.PAGE_DOWN)
             sleep(2)
             type(Key.DOWN)
             sleep(2)
             type(Key.DOWN)
             sleep(5)
-            if(not exists(see more.png)):
+            if(not exists("1456229579631.png")):
                 type(Key.UP)
                 sleep(2)
                 type(Key.UP)
                 sleep(5)
-            click(see more.png)
-            wait(about.png, 20)
+            click("1456229579631.png")
+            wait("1456229635107.png", 20)
             strProjStoryFilename = strProjName+"_story.html"
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjStoryFilename)        
     projUrlListFile.close()

@@ -176,22 +176,22 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     <span class="kw">for</span> strProjUrl <span class="kw">in</span> projUrlListFile:
         strProjName = re.search(<span class="str">"^https://www.indiegogo.com/projects/(.*)/.{4}$"</span>, strProjUrl).group(<span class="dig">1</span>)
         typeUrlOnChrome(urlText=strProjUrl)
-        <span class="skw">wait</span>(story.png)
+        <span class="skw">wait</span>(<img src="1456229536809.png" />)
         <span class="skw">sleep</span>(<span class="dig">5</span>)
-        <span class="kw">while</span>(<span class="kw">not</span> exists(see more.png)):
+        <span class="kw">while</span>(<span class="kw">not</span> exists(<img src="1456229579631.png" />)):
             <span class="skw">type</span>(Key.PAGE_DOWN)
             <span class="skw">sleep</span>(<span class="dig">2</span>)
             <span class="skw">type</span>(Key.DOWN)
             <span class="skw">sleep</span>(<span class="dig">2</span>)
             <span class="skw">type</span>(Key.DOWN)
             <span class="skw">sleep</span>(<span class="dig">5</span>)
-            <span class="kw">if</span>(<span class="kw">not</span> exists(see more.png)):
+            <span class="kw">if</span>(<span class="kw">not</span> exists(<img src="1456229579631.png" />)):
                 <span class="skw">type</span>(Key.UP)
                 <span class="skw">sleep</span>(<span class="dig">2</span>)
                 <span class="skw">type</span>(Key.UP)
                 <span class="skw">sleep</span>(<span class="dig">5</span>)
-            <span class="skw">click</span>(see more.png)
-            <span class="skw">wait</span>(about.png, <span class="dig">20</span>)
+            <span class="skw">click</span>(<img src="1456229579631.png" />)
+            <span class="skw">wait</span>(<img src="1456229635107.png" />, <span class="dig">20</span>)
             strProjStoryFilename = strProjName+<span class="str">"_story.html"</span>
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjStoryFilename)
     projUrlListFile.close()
