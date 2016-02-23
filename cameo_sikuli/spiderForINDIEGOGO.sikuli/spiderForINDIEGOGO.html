@@ -127,8 +127,8 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
 <span class="cmt">#rightclick on image to save current page
 </span><span class="kw">def</span> rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=<span class="str">"default.html"</span>):
     <span class="skw">rightClick</span>(onImage)
-    <span class="skw">wait</span>(<img src="1456240491513.png" />)
-    <span class="skw">click</span>(<img src="1456240491513.png" />)
+    <span class="skw">wait</span>(save selection)
+    <span class="skw">click</span>(save selection)
     <span class="skw">wait</span>(<img src="1455955227414.png" />, <span class="dig">20</span>)
     <span class="kw">if</span> strFolderPath != None:
         typeFolderPath(strFolderPath)
@@ -211,6 +211,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         <span class="cmt">#save see more details
 </span>        strProjDetailsFilename = strProjName+<span class="str">"_details.html"</span>
         rightClickSaveCurrentPage(onImage=<img src="1456229635107.png" />, strFolderPath=strProjectsFolderPath, strFilename=strProjDetailsFilename)
+        <span class="skw">sleep</span>(<span class="dig">10</span>)<span class="cmt">#wait save complete</span>
         <span class="cmt">#close details
 </span>        <span class="skw">click</span>(<img src="1456232782492.png" />)
         <span class="skw">wait</span>(<img src="1456229579631.png" />, <span class="dig">20</span>)
@@ -220,21 +221,25 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         <span class="cmt">#save story
 </span>        strProjStoryFilename = strProjName+<span class="str">"_story.html"</span>
         saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjStoryFilename)
+        <span class="skw">sleep</span>(<span class="dig">10</span>)<span class="cmt">#wait save complete</span>
         <span class="cmt">#save updates
 </span>        <span class="skw">click</span>(<img src="1456232941269.png" />)
         <span class="skw">wait</span>(<img src="1456232962072.png" />, <span class="dig">20</span>)
         strProjUpdatesFilename = strProjName+<span class="str">"_updates.html"</span>
         saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjUpdatesFilename)
+        <span class="skw">sleep</span>(<span class="dig">10</span>)<span class="cmt">#wait save complete</span>
         <span class="cmt">#save comments
 </span>        <span class="skw">click</span>(<img src="1456232986275.png" />)
         <span class="skw">wait</span>(<img src="1456233002434.png" />, <span class="dig">20</span>)
         strProjCommentsFilename = strProjName+<span class="str">"_comments.html"</span>
         saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjCommentsFilename)
+        <span class="skw">sleep</span>(<span class="dig">10</span>)<span class="cmt">#wait save complete</span>
         <span class="cmt">#save backers
 </span>        <span class="skw">click</span>(<img src="1456233023222.png" />)
         <span class="skw">wait</span>(<img src="1456233041235.png" />, <span class="dig">20</span>)
         strProjBackersFilename = strProjName+<span class="str">"_backers.html"</span>
         saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjBackersFilename)
+        <span class="skw">sleep</span>(<span class="dig">10</span>)<span class="cmt">#wait save complete</span>
     projUrlListFile.close()
 <span class="cmt">#download individuals pages
 </span><span class="kw">def</span> downloadIndividualsPages():
