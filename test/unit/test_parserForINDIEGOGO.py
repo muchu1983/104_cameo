@@ -23,13 +23,19 @@ class ParserForINDIEGOGOTest(unittest.TestCase):
     #收尾
     def tearDown(self):
         pass
-
+        
+    #測試 解析 explore 頁面
+    def test_parseExplorePage(self):
+        logging.info("ParserForINDIEGOGOTest.test_parseExplorePage")
+        parser = ParserForINDIEGOGO()
+        parser.parseExplorePage()
+"""
     #測試 解析 category 頁面
     def test_parseCategoryPage(self):
         logging.info("ParserForINDIEGOGOTest.test_parseCategoryPage")
         parser = ParserForINDIEGOGO()
         parser.parseCategoryPage()
-
+"""
 
 #測試開始
 if __name__ == "__main__":

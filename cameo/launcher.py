@@ -11,11 +11,15 @@ from subprocess import call
 """
 程式進入點 (main)
 """
+parser = ParserForINDIEGOGO()
 #下載及解析 explore 頁面
 def handleExplorePage(arg1=None):
+    #download html
     call([r"cameo_sikuli\runsikulix.cmd",
           r"-r", r"cameo_sikuli\spiderForINDIEGOGO.sikuli",
           r"--args", r"explore"])
+    #parse html
+    parser.parseExplorePage()
     
 #下載及解析 category 頁面
 def handleCategoryPage(arg1=None):
