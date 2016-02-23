@@ -8,6 +8,7 @@ This file is part of BSD license
 """
 import sys
 from subprocess import call
+from cameo.parserForINDIEGOGO import ParserForINDIEGOGO
 """
 程式進入點 (main)
 """
