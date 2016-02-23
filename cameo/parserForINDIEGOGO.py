@@ -58,15 +58,34 @@ class ParserForINDIEGOGO:
                             
     #parse project page(s)
     def parseProjectStoryPage(self, strCategoryName):
-        strProjectUrlListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"/INDIEGOGO/" + strCategoryName + u"/project_url_list.txt"
+        strProjectUrlListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/project_url_list.txt"%(strCategoryName))
         for strProjUrl in open(strProjectUrlListFilePath, "r"):
             strProjectName = re.search("^https://www.indiegogo.com/projects/(.*)/....$" ,strProjUrl).group(1)
-            strProjectStoryHtmlPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"/INDIEGOGO/%s/projects/%s_story.html"%(strCategoryName, strProjectName)
+            strProjectStoryHtmlPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/projects/%s_story.html"%(strCategoryName, strProjectName))
             if os.path.exists(strProjectStoryHtmlPath):#check *_story.html exists
                 strProjectsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/projects"%strCategoryName)
                 if not os.path.exists(strProjectsResultFolderPath):
                     os.mkdir(strProjectsResultFolderPath) #mkdir parsed_result/INDIEGOGO/category/projects/
-                #start parse *_story.html then save json to parsed_result/*/projects/
+                with open(strProjectStoryHtmlPath, "r") as projStoryHtmlFile: #open *_story.html
+                    strPageSource = projStoryHtmlFile.read()
+                    root = Selector(text=strPageSource)
+                    #parse *_story.html then save json to parsed_result/*/projects/
+                    pass #TODO
+                    #parse individual url append to /INDIEGOGO/category/individuals_url_list.txt
+                    strIndividualUrlListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/individuals_url_list.txt"%(strCategoryName))
+                    lstStrIndividualUrls = root.css("a.ng-binding::attr(href)").extract() #parse individuals urls
+                    for strIndividualUrl in lstStrIndividualUrls:
+                        print(strIndividualUrl)
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
     def parseProjectUpdatesPage(self):
         pass
     def parseProjectCommentsPage(self):

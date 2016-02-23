@@ -52,6 +52,22 @@ def typeFolderPath(strFolderPath):
     sleep(2)
     type(Key.ENTER)
     sleep(2)
+#rightclick on image to save current page
+def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename="default.html"):
+    rightClick(onImage)
+    wait(save selection)
+    click(save selection)
+    wait("1455955227414.png", 20)
+    if strFolderPath != None:
+        typeFolderPath(strFolderPath)
+    click(Pattern("1455959876192.png").targetOffset(36,0))
+    sleep(2)
+    delOriginText()
+    sleep(2)
+    type(strFilename)
+    sleep(2)
+    click("1455955227414.png")
+    sleep(2)
 #ask chrome save current page
 def saveCurrentPage(strFolderPath=None, strFilename="default.html"):
     type("s", KeyModifier.CTRL)
@@ -120,15 +136,18 @@ def downloadProjectPages(strTargetCategory=None):
             sleep(5)
         click("1456229579631.png")
         wait("1456229635107.png", 20)
-        #save story with more details
-        strProjStoryFilename = strProjName+"_story.html"
-        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjStoryFilename)
+        #save see more details
+        strProjDetailsFilename = strProjName+"_details.html"
+        rightClickSaveCurrentPage(onImage="1456229635107.png", strFolderPath=strProjectsFolderPath, strFilename=strProjDetailsFilename)
         #close details
         click("1456232782492.png")
         wait("1456229579631.png", 20)
         type(Key.HOME)
         
         wait("1456229536809.png", 20)
+        #save story
+        strProjStoryFilename = strProjName+"_story.html"
+        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjStoryFilename)
         #save updates
         click("1456232941269.png")
         wait("1456232962072.png", 20)
