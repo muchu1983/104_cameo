@@ -86,9 +86,9 @@ def downloadCategoryPages():
             os.mkdir(strCategoryFolderPath) #mkdir category
         openChrome()
         typeUrlOnChrome(urlText=strCategoryUrl)
-        wait(,20)
-        wait(,20)
-        wait(,20)
+        wait("1456214032899.png", 20)
+        waitVanish("1456214096530.png", 20)
+        wait("1456214122362.png", 20)
 #download project pages
 def downloadProjectPages():
     lstCategoryName = ["Community", "Dance"]
