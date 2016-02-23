@@ -7,6 +7,7 @@ This file is part of BSD license
 <https://opensource.org/licenses/BSD-3-Clause>
 """
 import sys
+import time
 from subprocess import call
 from cameo.parserForINDIEGOGO import ParserForINDIEGOGO
 """
@@ -19,12 +20,15 @@ def handleExplorePage(arg1=None):
     call([r"cameo_sikuli\runsikulix.cmd",
           r"-r", r"cameo_sikuli\spiderForINDIEGOGO.sikuli",
           r"--args", r"explore"])
+    time.sleep(10) #wait download complete
     #parse html
     parser.parseExplorePage()
     
 #下載及解析 category 頁面
 def handleCategoryPage(arg1=None):
-    pass
+    call([r"cameo_sikuli\runsikulix.cmd",
+          r"-r", r"cameo_sikuli\spiderForINDIEGOGO.sikuli",
+          r"--args", r"category"])
 
 #下載及解析 project 頁面
 def handleProjectPage(arg1=None):
@@ -37,7 +41,7 @@ def handleIndividualsPage(arg1=None):
 #進入點
 def entry_point():
     #lstStrArgs = sys.argv
-    lstStrArgs = ["launcher.py", "explore"]
+    lstStrArgs = ["launcher.py", "category"]
     dicSubCommandHandler = {"explore":handleExplorePage,
                             "category":handleCategoryPage,
                             "project":handleProjectPage,
