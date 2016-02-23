@@ -153,6 +153,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     catUrlListFile = open(strCategoryUrlListFilePath)
     <span class="kw">for</span> strCategoryUrl <span class="kw">in</span> catUrlListFile:<span class="cmt">#category loop</span>
         strCategoryName = re.search(<span class="str">"^https://www.indiegogo.com/explore/(.*)$"</span> ,strCategoryUrl).group(<span class="dig">0</span>)
+        <span class="kw">print</span>(strCategoryName)
         strCategoryFolderPath = strBaseResFolderPath + r"\source_html\INDIEGOGO\" + strCategoryName
         <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strCategoryFolderPath):
             os.mkdir(strCategoryFolderPath)

@@ -81,6 +81,7 @@ def downloadCategoryPages():
     catUrlListFile = open(strCategoryUrlListFilePath)
     for strCategoryUrl in catUrlListFile:#category loop
         strCategoryName = re.search("^https://www.indiegogo.com/explore/(.*)$" ,strCategoryUrl).group(0)
+        print(strCategoryName)
         strCategoryFolderPath = strBaseResFolderPath + r"\source_html\INDIEGOGO\" + strCategoryName
         if not os.path.exists(strCategoryFolderPath):
             os.mkdir(strCategoryFolderPath)
