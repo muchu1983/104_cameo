@@ -83,7 +83,12 @@ def downloadCategoryPages():
         strCategoryName = r"" + re.search("^https://www.indiegogo.com/explore/(.*)$" ,strCategoryUrl).group(1)
         strCategoryFolderPath = strBaseResFolderPath + r"\source_html\INDIEGOGO\%s"%(strCategoryName)
         if not os.path.exists(strCategoryFolderPath):
-            os.mkdir(strCategoryFolderPath)
+            os.mkdir(strCategoryFolderPath) #mkdir category
+        openChrome()
+        typeUrlOnChrome(urlText=strCategoryUrl)
+        wait(,20)
+        wait(,20)
+        wait(,20)
 #download project pages
 def downloadProjectPages():
     lstCategoryName = ["Community", "Dance"]

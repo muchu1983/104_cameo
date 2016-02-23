@@ -155,7 +155,12 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         strCategoryName = <span class="str">r""</span> + re.search(<span class="str">"^https://www.indiegogo.com/explore/(.*)$"</span> ,strCategoryUrl).group(<span class="dig">1</span>)
         strCategoryFolderPath = strBaseResFolderPath + <span class="str">r"\source_html\INDIEGOGO\%s"</span>%(strCategoryName)
         <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strCategoryFolderPath):
-            os.mkdir(strCategoryFolderPath)
+            os.mkdir(strCategoryFolderPath) <span class="cmt">#mkdir category</span>
+        openChrome()
+        typeUrlOnChrome(urlText=strCategoryUrl)
+        <span class="skw">wait</span>(,<span class="dig">20</span>)
+        <span class="skw">wait</span>(,<span class="dig">20</span>)
+        <span class="skw">wait</span>(,<span class="dig">20</span>)
 <span class="cmt">#download project pages
 </span><span class="kw">def</span> downloadProjectPages():
     lstCategoryName = [<span class="str">"Community"</span>, <span class="str">"Dance"</span>]
