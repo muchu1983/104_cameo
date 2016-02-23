@@ -139,7 +139,7 @@ def downloadProjectPages(strTargetCategory=None):
         #save see more details
         strProjDetailsFilename = strProjName+"_details.html"
         rightClickSaveCurrentPage(onImage="1456229635107.png", strFolderPath=strProjectsFolderPath, strFilename=strProjDetailsFilename)
-        wait("1456246615161.png" ,30)#wait save complete
+        wait("1456247446257.png",30)#wait save complete
         #close details
         click("1456232782492.png")
         wait("1456229579631.png", 20)
@@ -149,25 +149,25 @@ def downloadProjectPages(strTargetCategory=None):
         #save story
         strProjStoryFilename = strProjName+"_story.html"
         saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjStoryFilename)
-        wait("1456246615161.png" ,30)#wait save complete
+        wait("1456247446257.png",30)#wait save complete
         #save updates
         click("1456232941269.png")
         wait("1456232962072.png", 20)
         strProjUpdatesFilename = strProjName+"_updates.html"
         saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjUpdatesFilename)
-        wait("1456246615161.png" ,30)#wait save complete
+        wait("1456247446257.png",30)#wait save complete
         #save comments
         click("1456232986275.png")
         wait("1456233002434.png", 20)
         strProjCommentsFilename = strProjName+"_comments.html"
         saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjCommentsFilename)
-        wait("1456246615161.png" ,30)#wait save complete
+        wait("1456247446257.png",30)#wait save complete
         #save backers
         click("1456233023222.png")
         wait("1456233041235.png", 20)
         strProjBackersFilename = strProjName+"_backers.html"
         saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjBackersFilename)
-        wait("1456246615161.png" ,30)#wait save complete
+        wait("1456247446257.png",30)#wait save complete
     projUrlListFile.close()
 #download individuals pages
 def downloadIndividualsPages():
