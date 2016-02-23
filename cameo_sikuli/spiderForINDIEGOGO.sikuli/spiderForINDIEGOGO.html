@@ -183,7 +183,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         intProjId = <span class="dig">0</span>
         <span class="kw">for</span> strUrlLine <span class="kw">in</span> urlListFile:
             <span class="cmt">#continue point 
-</span>            <span class="kw">if</span>(intProjId &lt; <span class="dig">391</span>):
+</span>            <span class="kw">if</span>(intProjId &lt; <span class="dig">261</span>):
                 intProjId = intProjId+<span class="dig">1</span> <span class="cmt">#skip</span>
                 <span class="kw">continue</span>
             typeUrlOnChrome(urlText=strUrlLine)
@@ -214,8 +214,10 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
 </span><span class="kw">def</span> downloadExplorePages():
     openChrome()
     goExplorePage()
-    saveCurrentPage(strFolderPath=, strFilename=<span class="str">"explore.html"</span>)
-
+    strExploreFolderPath = strBaseResFolderPath + <span class="str">r"\source_html\INDIEGOGO"</span>
+    <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strExploreFolderPath):
+            os.mkdir(strExploreFolderPath)
+    saveCurrentPage(strFolderPath=strExploreFolderPath, strFilename=<span class="str">"explore.html"</span>)
 <span class="cmt">#main entry point
 </span><span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
     lstStrArgs = sys.argv

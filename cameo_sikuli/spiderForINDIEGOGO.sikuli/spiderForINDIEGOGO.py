@@ -111,7 +111,7 @@ def downloadProjectPages():
         intProjId = 0
         for strUrlLine in urlListFile:
             #continue point 
-            if(intProjId < 391):
+            if(intProjId < 261):
                 intProjId = intProjId+1 #skip
                 continue
             typeUrlOnChrome(urlText=strUrlLine)
@@ -142,8 +142,10 @@ def downloadIndividualsPages():
 def downloadExplorePages():
     openChrome()
     goExplorePage()
-    saveCurrentPage(strFolderPath=, strFilename="explore.html")
-    
+    strExploreFolderPath = strBaseResFolderPath + r"\source_html\INDIEGOGO"
+    if not os.path.exists(strExploreFolderPath):
+            os.mkdir(strExploreFolderPath)
+    saveCurrentPage(strFolderPath=strExploreFolderPath, strFilename="explore.html")
 #main entry point
 if __name__ == "__main__":
     lstStrArgs = sys.argv
