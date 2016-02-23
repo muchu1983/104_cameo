@@ -89,6 +89,8 @@ def downloadCategoryPages():
         wait("1456214032899.png", 20)
         waitVanish("1456214096530.png", 20)
         wait("1456214122362.png", 20)
+        unfoldCategoryPage()
+        saveCurrentPage(strFolderPath=strCategoryFolderPath, strFilename="category.html")
 #download project pages
 def downloadProjectPages():
     lstCategoryName = ["Community", "Dance"]
