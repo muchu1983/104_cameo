@@ -55,8 +55,8 @@ def typeFolderPath(strFolderPath):
 #rightclick on image to save current page
 def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename="default.html"):
     rightClick(onImage)
-    wait(save selection)
-    click(save selection)
+    wait("1456245315336.png")
+    click("1456245315336.png")
     wait("1455955227414.png", 20)
     if strFolderPath != None:
         typeFolderPath(strFolderPath)
