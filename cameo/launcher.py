@@ -21,7 +21,7 @@ def handleExplorePage(arg1=None):
           r"-r", r"cameo_sikuli\spiderForINDIEGOGO.sikuli",
           r"--args", r"explore"])
     time.sleep(10) #wait download complete
-    #parse html
+    #parse explore.html
     parser.parseExplorePage()
     
 #下載及解析 category 頁面
@@ -29,6 +29,9 @@ def handleCategoryPage(arg1=None):
     call([r"cameo_sikuli\runsikulix.cmd",
           r"-r", r"cameo_sikuli\spiderForINDIEGOGO.sikuli",
           r"--args", r"category"])
+    time.sleep(10) #wait download complete
+    #parse category.html
+    parser.parseCategoryPage()
 
 #下載及解析 project 頁面
 def handleProjectPage(arg1=None):
