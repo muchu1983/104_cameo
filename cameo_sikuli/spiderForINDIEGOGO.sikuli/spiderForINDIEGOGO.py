@@ -109,10 +109,10 @@ def downloadProjectPages(strTargetCategory=None):
         while(not exists("1456229579631.png")):
             type(Key.PAGE_DOWN)
             sleep(2)
-            type(Key.DOWN)
-            sleep(2)
-            type(Key.DOWN)
-            sleep(5)
+        type(Key.DOWN)
+        sleep(2)
+        type(Key.DOWN)
+        sleep(5)
         if(not exists("1456229579631.png")):
             type(Key.UP)
             sleep(2)
