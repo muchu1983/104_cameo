@@ -93,7 +93,7 @@ def downloadCategoryPages():
     catUrlListFile.close()
 #download project pages
 def downloadProjectPages(strTargetCategory=None):
-    strProjUrlListFilePathTemplate = strBaseResFolderPath + r"\parsed_result\INDIEGOGO\%s\proj_url_list.txt"
+    strProjUrlListFilePathTemplate = strBaseResFolderPath + r"\parsed_result\INDIEGOGO\%s\project_url_list.txt"
     strProjectsFolderPathTemplate = strBaseResFolderPath + r"\source_html\INDIEGOGO\%s\projects"   
     strProjectsFolderPath = strProjectsFolderPathTemplate % (strTargetCategory)
     if not os.path.exists(strProjectsFolderPath):

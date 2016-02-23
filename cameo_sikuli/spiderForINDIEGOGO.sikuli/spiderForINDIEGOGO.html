@@ -165,7 +165,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     catUrlListFile.close()
 <span class="cmt">#download project pages
 </span><span class="kw">def</span> downloadProjectPages(strTargetCategory=None):
-    strProjUrlListFilePathTemplate = strBaseResFolderPath + <span class="str">r"\parsed_result\INDIEGOGO\%s\proj_url_list.txt"</span>
+    strProjUrlListFilePathTemplate = strBaseResFolderPath + <span class="str">r"\parsed_result\INDIEGOGO\%s\project_url_list.txt"</span>
     strProjectsFolderPathTemplate = strBaseResFolderPath + <span class="str">r"\source_html\INDIEGOGO\%s\projects"</span>
     strProjectsFolderPath = strProjectsFolderPathTemplate % (strTargetCategory)
     <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strProjectsFolderPath):
