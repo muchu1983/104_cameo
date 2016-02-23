@@ -39,6 +39,7 @@ def handleProjectPage(arg1=None):
           r"-r", r"cameo_sikuli\spiderForINDIEGOGO.sikuli",
           r"--args", r"project", arg1])
     time.sleep(10) #wait download complete
+    parser.parseProjectDetailsPage()
     parser.parseProjectStoryPage()
     parser.parseProjectUpdatesPage()
     parser.parseProjectCommentsPage()

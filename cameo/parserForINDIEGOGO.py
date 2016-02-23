@@ -56,6 +56,21 @@ class ParserForINDIEGOGO:
                         for strProjUrl in lstStrProjUrls:
                             projUrlListFile.write(strProjUrl + u"\n")
                             
+    def parseProjectDetailsPage(self, strCategoryName):
+        strProjectUrlListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/project_url_list.txt"%(strCategoryName))
+        for strProjUrl in open(strProjectUrlListFilePath, "r"):
+            strProjectName = re.search("^https://www.indiegogo.com/projects/(.*)/....$" ,strProjUrl).group(1)
+            strProjectDetailsHtmlPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/projects/%s_details.html"%(strCategoryName, strProjectName))
+            if os.path.exists(strProjectDetailsHtmlPath):#check *_details.html exists
+                with open(strProjectDetailsHtmlPath, "r") as projDetailsHtmlFile: #open *_details.html
+                    strPageSource = projDetailsHtmlFile.read()
+                    root = Selector(text=strPageSource)
+                    #parse *_details.html then append url to parsed_result/*/category/individuals_url_list.txt
+                    strIndividualUrlListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/individuals_url_list.txt"%(strCategoryName))
+                    strIndividualUrl = root.css("div.campaignTrustPassportDesktop-ownerInfo a.ng-binding[href*='individuals']::attr(href)").extract_first() #parse individuals url
+                    with open(strIndividualUrlListFilePath, "a") as individualUrlListFile:
+                        individualUrlListFile.write(strIndividualUrl + u"\n") #append url to individuals_url_list.txt
+                    
     #parse project page(s)
     def parseProjectStoryPage(self, strCategoryName):
         strProjectUrlListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/project_url_list.txt"%(strCategoryName))
@@ -71,20 +86,6 @@ class ParserForINDIEGOGO:
                     root = Selector(text=strPageSource)
                     #parse *_story.html then save json to parsed_result/*/projects/
                     pass #TODO
-                    #parse individual url append to /INDIEGOGO/category/individuals_url_list.txt
-                    strIndividualUrlListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/individuals_url_list.txt"%(strCategoryName))
-                    lstStrIndividualUrls = root.css("a.ng-binding::attr(href)").extract() #parse individuals urls
-                    for strIndividualUrl in lstStrIndividualUrls:
-                        print(strIndividualUrl)
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
                     
     def parseProjectUpdatesPage(self):
         pass

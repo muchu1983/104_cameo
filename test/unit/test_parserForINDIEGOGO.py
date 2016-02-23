@@ -36,6 +36,12 @@ class ParserForINDIEGOGOTest(unittest.TestCase):
         parser = ParserForINDIEGOGO()
         parser.parseCategoryPage()
         
+    #測試 解析 project_details 頁面
+    def test_parseProjectDetailsPage(self):
+        logging.info("ParserForINDIEGOGOTest.test_parseProjectDetailsPage")
+        parser = ParserForINDIEGOGO()
+        parser.parseProjectDetailsPage("animals")
+        
     #測試 解析 project_story 頁面
     def test_parseProjectStoryPage(self):
         logging.info("ParserForINDIEGOGOTest.test_parseProjectStoryPage")
