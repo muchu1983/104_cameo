@@ -103,7 +103,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         <span class="skw">type</span>(Key.PAGE_UP)
         <span class="skw">wait</span>(<img src="1456215300454.png" />, <span class="dig">20</span>)
 <span class="cmt">#type url on chrome
-</span><span class="kw">def</span> typeUrlOnChrome(urlText=<span class="str">""</span>):
+</span><span class="kw">def</span> typeUrlOnChrome(urlText=None):
     <span class="skw">click</span>(<img src="1455955040522.png" />)
     <span class="skw">sleep</span>(<span class="dig">1</span>)
     delOriginText()
@@ -115,9 +115,10 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     typeUrlOnChrome(urlText=<span class="str">"https://www.indiegogo.com/explore"</span>)
     <span class="skw">wait</span>(<img src="1455771252801.png" />, <span class="dig">20</span>)
     <span class="skw">wait</span>(<img src="1456057892065.png" />, <span class="dig">20</span>)
-    <span class="skw">sleep</span>(<span class="dig">5</span>)
+    waitVanish(<img src="1456214096530.png" />, <span class="dig">20</span>)
+    <span class="skw">wait</span>(<img src="1456214122362.png" />, <span class="dig">20</span>)
 <span class="cmt">#choose folder at save progress
-</span><span class="kw">def</span> typeFolderPath(strFolderPath):
+</span><span class="kw">def</span> typeFolderPath(strFolderPath=None):
     <span class="skw">wait</span>(Pattern(<img src="1456054857857.png" />).targetOffset(<span class="dig">10</span>,<span class="dig">0</span>), <span class="dig">20</span>)
     <span class="skw">click</span>(Pattern(<img src="1456054857857.png" />).targetOffset(<span class="dig">10</span>,<span class="dig">0</span>))
     <span class="skw">sleep</span>(<span class="dig">1</span>)
@@ -127,7 +128,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     <span class="skw">type</span>(Key.ENTER)
     <span class="skw">sleep</span>(<span class="dig">1</span>)
 <span class="cmt">#rightclick on image to save current page
-</span><span class="kw">def</span> rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=<span class="str">"default.html"</span>):
+</span><span class="kw">def</span> rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None):
     waitVanish(<img src="1456214096530.png" />, <span class="dig">20</span>)
     <span class="skw">wait</span>(<img src="1456214122362.png" />, <span class="dig">20</span>)
     <span class="skw">rightClick</span>(onImage)
@@ -166,7 +167,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     goExplorePage()
     strExploreFolderPath = strBaseResFolderPath + <span class="str">r"\source_html\INDIEGOGO"</span>
     <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strExploreFolderPath):
-            os.mkdir(strExploreFolderPath)
+        os.mkdir(strExploreFolderPath)
     saveCurrentPage(strFolderPath=strExploreFolderPath, strFilename=<span class="str">"explore.html"</span>)
 <span class="cmt">#download category pages
 </span><span class="kw">def</span> downloadCategoryPages():

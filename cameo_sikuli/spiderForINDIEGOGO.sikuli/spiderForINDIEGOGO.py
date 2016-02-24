@@ -31,7 +31,7 @@ def unfoldCategoryPage():
         type(Key.PAGE_UP)
         wait("1456215300454.png", 20)
 #type url on chrome
-def typeUrlOnChrome(urlText=""):
+def typeUrlOnChrome(urlText=None):
     click("1455955040522.png")
     sleep(1)
     delOriginText()
@@ -43,9 +43,10 @@ def goExplorePage():
     typeUrlOnChrome(urlText="https://www.indiegogo.com/explore")
     wait("1455771252801.png", 20)
     wait("1456057892065.png", 20)
-    sleep(5)
+    waitVanish("1456214096530.png", 20)
+    wait("1456214122362.png", 20)
 #choose folder at save progress
-def typeFolderPath(strFolderPath):
+def typeFolderPath(strFolderPath=None):
     wait(Pattern("1456054857857.png").targetOffset(10,0), 20)
     click(Pattern("1456054857857.png").targetOffset(10,0))
     sleep(1)
@@ -55,7 +56,7 @@ def typeFolderPath(strFolderPath):
     type(Key.ENTER)
     sleep(1)
 #rightclick on image to save current page
-def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename="default.html"):
+def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None):
     waitVanish("1456214096530.png", 20)
     wait("1456214122362.png", 20)
     rightClick(onImage)
@@ -94,7 +95,7 @@ def downloadExplorePages():
     goExplorePage()
     strExploreFolderPath = strBaseResFolderPath + r"\source_html\INDIEGOGO"
     if not os.path.exists(strExploreFolderPath):
-            os.mkdir(strExploreFolderPath)
+        os.mkdir(strExploreFolderPath)
     saveCurrentPage(strFolderPath=strExploreFolderPath, strFilename="explore.html")
 #download category pages
 def downloadCategoryPages():
