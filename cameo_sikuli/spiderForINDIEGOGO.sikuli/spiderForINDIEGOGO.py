@@ -187,13 +187,13 @@ def downloadIndividualsPages(strTargetCategory=None):
         strIndividualsId = re.search("^https://www.indiegogo.com/individuals/(.*)$", strIndividualsUrl).group(1)
         openChrome()
         typeUrlOnChrome(urlText=strIndividualsUrl)
-        wait(profile png)
+        wait("1456297470021.png")
         strIndividualsProfileFilename = strIndividualsId+"_profile.html"
         saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsProfileFilename)
         wait("1456247446257.png",60)#wait save complete
-        wait(campaigns, 20)
-        click(cmpaigns)
-        wait(red campaigns, 20)
+        wait("1456297490082.png", 20)
+        click("1456297490082.png")
+        wait("1456297519988.png", 20)
         strIndividualsCampaignsFilename = strIndividualsId+"_campaigns.html"
         saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsCampaignsFilename)
         wait("1456247446257.png",60)#wait save complete
