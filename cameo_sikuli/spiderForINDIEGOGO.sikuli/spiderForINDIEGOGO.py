@@ -56,6 +56,8 @@ def typeFolderPath(strFolderPath):
     sleep(1)
 #rightclick on image to save current page
 def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename="default.html"):
+    waitVanish("1456214096530.png", 20)
+    wait("1456214122362.png", 20)
     rightClick(onImage)
     wait("1456245315336.png")
     click("1456245315336.png")
@@ -72,6 +74,8 @@ def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename="def
     sleep(1)
 #ask chrome save current page
 def saveCurrentPage(strFolderPath=None, strFilename="default.html"):
+    waitVanish("1456214096530.png", 20)
+    wait("1456214122362.png", 20)
     type("s", KeyModifier.CTRL)
     wait("1455955227414.png", 20)
     if strFolderPath != None:
@@ -188,14 +192,12 @@ def downloadIndividualsPages(strTargetCategory=None):
         openChrome()
         typeUrlOnChrome(urlText=strIndividualsUrl)
         wait("1456297470021.png", 20)
-        wait("1456214122362.png", 20)
         strIndividualsProfileFilename = strIndividualsId+"_profile.html"
         saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsProfileFilename)
         wait("1456247446257.png",60)#wait save complete
         wait("1456297490082.png", 20)
         click("1456297490082.png")
         wait("1456297519988.png", 20)
-        wait("1456214122362.png", 20)
         strIndividualsCampaignsFilename = strIndividualsId+"_campaigns.html"
         saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsCampaignsFilename)
         wait("1456247446257.png",60)#wait save complete
