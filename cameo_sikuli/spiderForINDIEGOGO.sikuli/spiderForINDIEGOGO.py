@@ -5,16 +5,16 @@ strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_co
 #open chrome
 def openChrome():
     type("d", KeyModifier.WIN)
-    wait("1456281338394.png")
+    wait("1456281338394.png", 20)
     click("1456281338394.png")
     waitVanish("1456214096530.png", 20)
     wait("1456214122362.png", 20)
 # delete origin text
 def delOriginText():
     type("a", KeyModifier.CTRL);
-    sleep(2)
+    sleep(1)
     type(Key.BACKSPACE);
-    sleep(2)
+    sleep(1)
 #roll to page end
 def rollToPageEnd():
     type(Key.END)
@@ -33,10 +33,10 @@ def unfoldCategoryPage():
 #type url on chrome
 def typeUrlOnChrome(urlText=""):
     click("1455955040522.png")
-    sleep(2)
+    sleep(1)
     delOriginText()
     type(urlText)
-    sleep(2)
+    sleep(1)
     type(Key.ENTER)
 # go to explore page
 def goExplorePage():
@@ -48,12 +48,12 @@ def goExplorePage():
 def typeFolderPath(strFolderPath):
     wait(Pattern("1456054857857.png").targetOffset(10,0), 20)
     click(Pattern("1456054857857.png").targetOffset(10,0))
-    sleep(2)
+    sleep(1)
     delOriginText()
     type(strFolderPath)
-    sleep(2)
+    sleep(1)
     type(Key.ENTER)
-    sleep(2)
+    sleep(1)
 #rightclick on image to save current page
 def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename="default.html"):
     rightClick(onImage)
@@ -63,13 +63,13 @@ def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename="def
     if strFolderPath != None:
         typeFolderPath(strFolderPath)
     click(Pattern("1455959876192.png").targetOffset(36,0))
-    sleep(2)
+    sleep(1)
     delOriginText()
-    sleep(2)
+    sleep(1)
     type(strFilename)
-    sleep(2)
+    sleep(1)
     click("1455955227414.png")
-    sleep(2)
+    sleep(1)
 #ask chrome save current page
 def saveCurrentPage(strFolderPath=None, strFilename="default.html"):
     type("s", KeyModifier.CTRL)
@@ -77,13 +77,13 @@ def saveCurrentPage(strFolderPath=None, strFilename="default.html"):
     if strFolderPath != None:
         typeFolderPath(strFolderPath)
     click(Pattern("1455959876192.png").targetOffset(36,0))
-    sleep(2)
+    sleep(1)
     delOriginText()
-    sleep(2)
+    sleep(1)
     type(strFilename)
-    sleep(2)
+    sleep(1)
     click("1455955227414.png")
-    sleep(2)
+    sleep(1)
 #download explore pages
 def downloadExplorePages():
     openChrome()
