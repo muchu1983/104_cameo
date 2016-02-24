@@ -5,8 +5,10 @@ strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_co
 #open chrome
 def openChrome():
     type("d", KeyModifier.WIN)
-    click("1455954509662.png")
-    waitVanish("1455954531674.png", 20)
+    wait("1456281338394.png")
+    click("1456281338394.png")
+    waitVanish("1456214096530.png", 20)
+    wait("1456214122362.png", 20)
 # delete origin text
 def delOriginText():
     type("a", KeyModifier.CTRL);
