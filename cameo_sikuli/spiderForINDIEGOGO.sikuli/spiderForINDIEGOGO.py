@@ -115,7 +115,7 @@ def downloadProjectPages(strTargetCategory=None):
     strProjectsFolderPathTemplate = strBaseResFolderPath + r"\source_html\INDIEGOGO\%s\projects"   
     strProjectsFolderPath = strProjectsFolderPathTemplate % (strTargetCategory)
     if not os.path.exists(strProjectsFolderPath):
-        os.mkdir(strProjectsFolderPath)#mkdir source_html/INDIEGOGO/Category/pojects
+        os.mkdir(strProjectsFolderPath)#mkdir source_html/INDIEGOGO/Category/pojects/
     strProjUrlListFilePath = strProjUrlListFilePathTemplate % (strTargetCategory)
     projUrlListFile = open(strProjUrlListFilePath, "r") 
     for strProjUrl in projUrlListFile:
@@ -176,11 +176,17 @@ def downloadProjectPages(strTargetCategory=None):
     projUrlListFile.close()
 #download individuals pages
 def downloadIndividualsPages(strTargetCategory=None):
-    if strTargetCategory == "animals":
-        hover(Location(236, 292))
-        hover(Location(1061, 321))
-        hover(Location(527, 155))
-        hover(Location(524, 631))
+    strIndividualsUrlListFilePathTemplate = strBaseResFolderPath + r"\parsed_result\INDIEGOGO\%s\individuals_url_list.txt"
+    strIndividualsFolderPathTemplate = strBaseResFolderPath + r"\source_html\INDIEGOGO\%s\profiles"
+    strIndividualsFolderPath = strIndividualsFolderPathTemplate % (strTargetCategory)
+    if not os.path.exists(strIndividualsFolderPath):
+        os.mkdir(strIndividualsFolderPath)#mkdir source_html/INDIEGOGO/Category/profiles/
+    strIndividualsUrlListFilePath = strIndividualsUrlListFilePathTemplate % (strTargetCategory)
+    individualsUrlListFile = open(strIndividualsUrlListFilePath, "r") 
+    for strIndividualsUrl in individualsUrlListFile:
+        openChrome()
+        typeUrlOnChrome(urlText=strIndividualsUrl)
+    individualsUrlListFile.close()
 #main entry point
 if __name__ == "__main__":
     lstStrArgs = sys.argv

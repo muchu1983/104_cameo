@@ -187,7 +187,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     strProjectsFolderPathTemplate = strBaseResFolderPath + <span class="str">r"\source_html\INDIEGOGO\%s\projects"</span>
     strProjectsFolderPath = strProjectsFolderPathTemplate % (strTargetCategory)
     <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strProjectsFolderPath):
-        os.mkdir(strProjectsFolderPath)<span class="cmt">#mkdir source_html/INDIEGOGO/Category/pojects</span>
+        os.mkdir(strProjectsFolderPath)<span class="cmt">#mkdir source_html/INDIEGOGO/Category/pojects/</span>
     strProjUrlListFilePath = strProjUrlListFilePathTemplate % (strTargetCategory)
     projUrlListFile = open(strProjUrlListFilePath, <span class="str">"r"</span>)
     <span class="kw">for</span> strProjUrl <span class="kw">in</span> projUrlListFile:
@@ -248,11 +248,17 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     projUrlListFile.close()
 <span class="cmt">#download individuals pages
 </span><span class="kw">def</span> downloadIndividualsPages(strTargetCategory=None):
-    <span class="kw">if</span> strTargetCategory == <span class="str">"animals"</span>:
-        hover(Location(<span class="dig">236</span>, <span class="dig">292</span>))
-        hover(Location(<span class="dig">1061</span>, <span class="dig">321</span>))
-        hover(Location(<span class="dig">527</span>, <span class="dig">155</span>))
-        hover(Location(<span class="dig">524</span>, <span class="dig">631</span>))
+    strIndividualsUrlListFilePathTemplate = strBaseResFolderPath + <span class="str">r"\parsed_result\INDIEGOGO\%s\individuals_url_list.txt"</span>
+    strIndividualsFolderPathTemplate = strBaseResFolderPath + <span class="str">r"\source_html\INDIEGOGO\%s\profiles"</span>
+    strIndividualsFolderPath = strIndividualsFolderPathTemplate % (strTargetCategory)
+    <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strIndividualsFolderPath):
+        os.mkdir(strIndividualsFolderPath)<span class="cmt">#mkdir source_html/INDIEGOGO/Category/profiles/</span>
+    strIndividualsUrlListFilePath = strIndividualsUrlListFilePathTemplate % (strTargetCategory)
+    individualsUrlListFile = open(strIndividualsUrlListFilePath, <span class="str">"r"</span>)
+    <span class="kw">for</span> strIndividualsUrl <span class="kw">in</span> individualsUrlListFile:
+        openChrome()
+        typeUrlOnChrome(urlText=strIndividualsUrl)
+    individualsUrlListFile.close()
 <span class="cmt">#main entry point
 </span><span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
     lstStrArgs = sys.argv
