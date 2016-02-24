@@ -256,8 +256,19 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     strIndividualsUrlListFilePath = strIndividualsUrlListFilePathTemplate % (strTargetCategory)
     individualsUrlListFile = open(strIndividualsUrlListFilePath, <span class="str">"r"</span>)
     <span class="kw">for</span> strIndividualsUrl <span class="kw">in</span> individualsUrlListFile:
+        strIndividualsId = re.search(<span class="str">"^https://www.indiegogo.com/individuals/(.*)$"</span>, strIndividualsUrl).group(<span class="dig">1</span>)
         openChrome()
         typeUrlOnChrome(urlText=strIndividualsUrl)
+        <span class="skw">wait</span>(profile png)
+        strIndividualsProfileFilename = strIndividualsId+<span class="str">"_profile.html"</span>
+        saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsProfileFilename)
+        <span class="skw">wait</span>(<img src="1456247446257.png" />,<span class="dig">60</span>)<span class="cmt">#wait save complete</span>
+        <span class="skw">wait</span>(campaigns, <span class="dig">20</span>)
+        <span class="skw">click</span>(cmpaigns)
+        <span class="skw">wait</span>(red campaigns, <span class="dig">20</span>)
+        strIndividualsCampaignsFilename = strIndividualsId+<span class="str">"_campaigns.html"</span>
+        saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsCampaignsFilename)
+        <span class="skw">wait</span>(<img src="1456247446257.png" />,<span class="dig">60</span>)<span class="cmt">#wait save complete</span>
     individualsUrlListFile.close()
 <span class="cmt">#main entry point
 </span><span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:

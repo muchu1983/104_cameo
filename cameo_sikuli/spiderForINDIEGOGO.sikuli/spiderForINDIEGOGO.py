@@ -184,8 +184,19 @@ def downloadIndividualsPages(strTargetCategory=None):
     strIndividualsUrlListFilePath = strIndividualsUrlListFilePathTemplate % (strTargetCategory)
     individualsUrlListFile = open(strIndividualsUrlListFilePath, "r") 
     for strIndividualsUrl in individualsUrlListFile:
+        strIndividualsId = re.search("^https://www.indiegogo.com/individuals/(.*)$", strIndividualsUrl).group(1)
         openChrome()
         typeUrlOnChrome(urlText=strIndividualsUrl)
+        wait(profile png)
+        strIndividualsProfileFilename = strIndividualsId+"_profile.html"
+        saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsProfileFilename)
+        wait("1456247446257.png",60)#wait save complete
+        wait(campaigns, 20)
+        click(cmpaigns)
+        wait(red campaigns, 20)
+        strIndividualsCampaignsFilename = strIndividualsId+"_campaigns.html"
+        saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsCampaignsFilename)
+        wait("1456247446257.png",60)#wait save complete
     individualsUrlListFile.close()
 #main entry point
 if __name__ == "__main__":
