@@ -74,6 +74,7 @@
 <span class="kw">import</span> sys
 <span class="kw">import</span> re
 <span class="kw">from</span> java.awt <span class="kw">import</span> Toolkit
+<span class="kw">from</span> java.awt.datatransfer <span class="kw">import</span> StringSelection
 strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"</span>
 <span class="cmt">#open chrome
 </span><span class="kw">def</span> openChrome():
@@ -92,7 +93,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
 </span><span class="kw">def</span> pasteClipboardText(strText=None):
     toolkit = Toolkit.getDefaultToolkit()
     clipboard = toolkit.getSystemClipboard()
-    clipboard.setContents(<span class="str">u""</span>+strText, None)
+    clipboard.setContents(StringSelection(<span class="str">u""</span>+strText), None)
     <span class="skw">sleep</span>(<span class="dig">1</span>)
     <span class="skw">type</span>(<span class="str">"v"</span>, KeyModifier.CTRL)
     <span class="skw">sleep</span>(<span class="dig">1</span>)
