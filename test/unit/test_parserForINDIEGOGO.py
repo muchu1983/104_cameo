@@ -29,7 +29,7 @@ class ParserForINDIEGOGOTest(unittest.TestCase):
         logging.info("ParserForINDIEGOGOTest.test_parseExplorePage")
         parser = ParserForINDIEGOGO()
         parser.parseExplorePage()
-
+        
     #測試 解析 category 頁面
     def test_parseCategoryPage(self):
         logging.info("ParserForINDIEGOGOTest.test_parseCategoryPage")

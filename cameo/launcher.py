@@ -57,7 +57,7 @@ def handleIndividualsPage(arg1=None):
 #進入點
 def entry_point():
     #lstStrArgs = sys.argv
-    lstStrArgs = ["launcher.py", "project", "art"]
+    lstStrArgs = ["launcher.py", "individuals", "art"]
     dicSubCommandHandler = {"explore":handleExplorePage,
                             "category":handleCategoryPage,
                             "project":handleProjectPage,

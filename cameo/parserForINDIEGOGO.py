@@ -67,10 +67,15 @@ class ParserForINDIEGOGO:
                     strPageSource = projDetailsHtmlFile.read()
                     root = Selector(text=strPageSource)
                     #parse *_details.html then append url to parsed_result/*/category/individuals_url_list.txt
-                    strIndividualUrlListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/individuals_url_list.txt"%(strCategoryName))
-                    strIndividualUrl = root.css("div.campaignTrustPassportDesktop-ownerInfo a.ng-binding[href*='individuals']::attr(href)").extract_first() #parse individuals url
-                    with open(strIndividualUrlListFilePath, "a") as individualUrlListFile:
-                        individualUrlListFile.write(strIndividualUrl + u"\n") #append url to individuals_url_list.txt
+                    strIndividualsUrlListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/individuals_url_list.txt"%(strCategoryName))
+                    lstStrExistsIndividualsUrl = []
+                    if os.path.exists(strIndividualsUrlListFilePath):
+                        with open(strIndividualsUrlListFilePath, "r") as individualsUrlListFile:
+                            lstStrExistsIndividualsUrl = individualsUrlListFile.readlines()
+                    strIndividualsUrl = root.css("div.campaignTrustPassportDesktop-ownerInfo a.ng-binding[href*='individuals']::attr(href)").extract_first() #parse individuals url
+                    if strIndividualsUrl+u"\n" not in lstStrExistsIndividualsUrl:#檢查有無重覆的 individuals url
+                        with open(strIndividualsUrlListFilePath, "a") as individualsUrlListFile:
+                            individualsUrlListFile.write(strIndividualsUrl + u"\n") #append url to individuals_url_list.txt
                     
     def parseProjectStoryPage(self, strCategoryName):
         strProjectUrlListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/project_url_list.txt"%(strCategoryName))
