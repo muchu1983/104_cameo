@@ -211,55 +211,59 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         typeUrlOnChrome(strUrlText=strProjUrl)
         <span class="skw">wait</span>(<img src="1456229536809.png" />, <span class="dig">20</span>)
         <span class="skw">sleep</span>(<span class="dig">5</span>)
-        <span class="kw">while</span>(<span class="kw">not</span> exists(<img src="1456229579631.png" />)):
-            <span class="skw">type</span>(Key.PAGE_DOWN)
+        strProjDetailsFilename = strProjName+<span class="str">"_details.html"</span>
+        <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strProjDetailsFilename):<span class="cmt">#check detail.html</span>
+            <span class="kw">while</span>(<span class="kw">not</span> exists(<img src="1456229579631.png" />)):
+                <span class="skw">type</span>(Key.PAGE_DOWN)
+                <span class="skw">sleep</span>(<span class="dig">2</span>)
+            <span class="skw">type</span>(Key.DOWN)
             <span class="skw">sleep</span>(<span class="dig">2</span>)
-        <span class="skw">type</span>(Key.DOWN)
-        <span class="skw">sleep</span>(<span class="dig">2</span>)
-        <span class="skw">type</span>(Key.DOWN)
-        <span class="skw">sleep</span>(<span class="dig">5</span>)
-        <span class="kw">if</span>(<span class="kw">not</span> exists(<img src="1456229579631.png" />)):
-            <span class="skw">type</span>(Key.UP)
-            <span class="skw">sleep</span>(<span class="dig">2</span>)
-            <span class="skw">type</span>(Key.UP)
+            <span class="skw">type</span>(Key.DOWN)
             <span class="skw">sleep</span>(<span class="dig">5</span>)
-        <span class="skw">click</span>(<img src="1456229579631.png" />)
-        <span class="skw">wait</span>(<img src="1456229635107.png" />, <span class="dig">20</span>)
-        <span class="cmt">#save see more details
-</span>        strProjDetailsFilename = strProjName+<span class="str">"_details.html"</span>
-        rightClickSaveCurrentPage(onImage=<img src="1456229635107.png" />, strFolderPath=strProjectsFolderPath, strFilename=strProjDetailsFilename)
-        <span class="skw">wait</span>(<img src="1456247446257.png" />,<span class="dig">60</span>)<span class="cmt">#wait save complete</span>
-        <span class="cmt">#close details
-</span>        <span class="skw">click</span>(<img src="1456232782492.png" />)
-        <span class="skw">wait</span>(<img src="1456229579631.png" />, <span class="dig">20</span>)
-        <span class="skw">type</span>(Key.HOME)
-
-        <span class="skw">wait</span>(<img src="1456229536809.png" />, <span class="dig">20</span>)
-        <span class="cmt">#save story
-</span>        strProjStoryFilename = strProjName+<span class="str">"_story.html"</span>
-        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjStoryFilename)
-        <span class="skw">wait</span>(<img src="1456247446257.png" />,<span class="dig">60</span>)<span class="cmt">#wait save complete</span>
-        <span class="cmt">#save updates
-</span>        <span class="skw">wait</span>(<img src="1456232941269.png" />, <span class="dig">20</span>)
-        <span class="skw">click</span>(<img src="1456232941269.png" />)
-        <span class="skw">wait</span>(<img src="1456232962072.png" />, <span class="dig">20</span>)
+            <span class="kw">if</span>(<span class="kw">not</span> exists(<img src="1456229579631.png" />)):
+                <span class="skw">type</span>(Key.UP)
+                <span class="skw">sleep</span>(<span class="dig">2</span>)
+                <span class="skw">type</span>(Key.UP)
+                <span class="skw">sleep</span>(<span class="dig">5</span>)
+            <span class="skw">click</span>(<img src="1456229579631.png" />)
+            <span class="skw">wait</span>(<img src="1456229635107.png" />, <span class="dig">20</span>)
+            <span class="cmt">#save see more details
+</span>            rightClickSaveCurrentPage(onImage=<img src="1456229635107.png" />, strFolderPath=strProjectsFolderPath, strFilename=strProjDetailsFilename)
+            <span class="skw">wait</span>(<img src="1456247446257.png" />,<span class="dig">60</span>)<span class="cmt">#wait save complete</span>
+            <span class="cmt">#close details
+</span>            <span class="skw">click</span>(<img src="1456232782492.png" />)
+            <span class="skw">wait</span>(<img src="1456229579631.png" />, <span class="dig">20</span>)
+            <span class="skw">type</span>(Key.HOME)
+            <span class="skw">wait</span>(<img src="1456229536809.png" />, <span class="dig">20</span>)
+        strProjStoryFilename = strProjName+<span class="str">"_story.html"</span>
+        <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strProjStoryFilename):<span class="cmt">#check story.html</span>
+            <span class="cmt">#save story
+</span>            saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjStoryFilename)
+            <span class="skw">wait</span>(<img src="1456247446257.png" />,<span class="dig">60</span>)<span class="cmt">#wait save complete</span>
         strProjUpdatesFilename = strProjName+<span class="str">"_updates.html"</span>
-        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjUpdatesFilename)
-        <span class="skw">wait</span>(<img src="1456247446257.png" />,<span class="dig">60</span>)<span class="cmt">#wait save complete</span>
-        <span class="cmt">#save comments
-</span>        <span class="skw">wait</span>(<img src="1456232986275.png" />, <span class="dig">20</span>)
-        <span class="skw">click</span>(<img src="1456232986275.png" />)
-        <span class="skw">wait</span>(<img src="1456233002434.png" />, <span class="dig">20</span>)
+        <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strProjUpdatesFilename):<span class="cmt">#check updates.html</span>
+            <span class="cmt">#save updates
+</span>            <span class="skw">wait</span>(<img src="1456232941269.png" />, <span class="dig">20</span>)
+            <span class="skw">click</span>(<img src="1456232941269.png" />)
+            <span class="skw">wait</span>(<img src="1456232962072.png" />, <span class="dig">20</span>)
+            saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjUpdatesFilename)
+            <span class="skw">wait</span>(<img src="1456247446257.png" />,<span class="dig">60</span>)<span class="cmt">#wait save complete</span>
         strProjCommentsFilename = strProjName+<span class="str">"_comments.html"</span>
-        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjCommentsFilename)
-        <span class="skw">wait</span>(<img src="1456247446257.png" />,<span class="dig">60</span>)<span class="cmt">#wait save complete</span>
-        <span class="cmt">#save backers
-</span>        <span class="skw">wait</span>(<img src="1456233023222.png" />, <span class="dig">20</span>)
-        <span class="skw">click</span>(<img src="1456233023222.png" />)
-        <span class="skw">wait</span>(<img src="1456233041235.png" />, <span class="dig">20</span>)
+        <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strProjCommentsFilename):<span class="cmt">#check comments.html</span>
+            <span class="cmt">#save comments
+</span>            <span class="skw">wait</span>(<img src="1456232986275.png" />, <span class="dig">20</span>)
+            <span class="skw">click</span>(<img src="1456232986275.png" />)
+            <span class="skw">wait</span>(<img src="1456233002434.png" />, <span class="dig">20</span>)
+            saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjCommentsFilename)
+            <span class="skw">wait</span>(<img src="1456247446257.png" />,<span class="dig">60</span>)<span class="cmt">#wait save complete</span>
         strProjBackersFilename = strProjName+<span class="str">"_backers.html"</span>
-        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjBackersFilename)
-        <span class="skw">wait</span>(<img src="1456247446257.png" />,<span class="dig">60</span>)<span class="cmt">#wait save complete</span>
+        <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strProjBackersFilename):<span class="cmt">#check backers.html</span>
+            <span class="cmt">#save backers
+</span>            <span class="skw">wait</span>(<img src="1456233023222.png" />, <span class="dig">20</span>)
+            <span class="skw">click</span>(<img src="1456233023222.png" />)
+            <span class="skw">wait</span>(<img src="1456233041235.png" />, <span class="dig">20</span>)
+            saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjBackersFilename)
+            <span class="skw">wait</span>(<img src="1456247446257.png" />,<span class="dig">60</span>)<span class="cmt">#wait save complete</span>
     projUrlListFile.close()
 <span class="cmt">#download individuals pages
 </span><span class="kw">def</span> downloadIndividualsPages(strTargetCategory=None):
@@ -276,14 +280,16 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         typeUrlOnChrome(strUrlText=strIndividualsUrl)
         <span class="skw">wait</span>(<img src="1456297470021.png" />, <span class="dig">20</span>)
         strIndividualsProfileFilename = strIndividualsId+<span class="str">"_profile.html"</span>
-        saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsProfileFilename)
-        <span class="skw">wait</span>(<img src="1456247446257.png" />,<span class="dig">60</span>)<span class="cmt">#wait save complete</span>
-        <span class="skw">wait</span>(<img src="1456297490082.png" />, <span class="dig">20</span>)
-        <span class="skw">click</span>(<img src="1456297490082.png" />)
-        <span class="skw">wait</span>(<img src="1456297519988.png" />, <span class="dig">20</span>)
+        <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strIndividualsProfileFilename):<span class="cmt">#check profile.html</span>
+            saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsProfileFilename)
+            <span class="skw">wait</span>(<img src="1456247446257.png" />,<span class="dig">60</span>)<span class="cmt">#wait save complete</span>
         strIndividualsCampaignsFilename = strIndividualsId+<span class="str">"_campaigns.html"</span>
-        saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsCampaignsFilename)
-        <span class="skw">wait</span>(<img src="1456247446257.png" />,<span class="dig">60</span>)<span class="cmt">#wait save complete</span>
+        <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strIndividualsCampaignsFilename):<span class="cmt">#check campaigns.html        </span>
+            <span class="skw">wait</span>(<img src="1456297490082.png" />, <span class="dig">20</span>)
+            <span class="skw">click</span>(<img src="1456297490082.png" />)
+            <span class="skw">wait</span>(<img src="1456297519988.png" />, <span class="dig">20</span>)
+            saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsCampaignsFilename)
+            <span class="skw">wait</span>(<img src="1456247446257.png" />,<span class="dig">60</span>)<span class="cmt">#wait save complete</span>
     individualsUrlListFile.close()
 <span class="cmt">#main entry point
 </span><span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
