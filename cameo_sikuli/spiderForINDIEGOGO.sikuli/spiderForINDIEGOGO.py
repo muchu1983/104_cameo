@@ -1,7 +1,9 @@
 import os
 import sys
 import re
-strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res" 
+from cameo.clipboardtool import ClipboardTool
+strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"
+clipboard = ClipboardTool()
 #open chrome
 def openChrome():
     type("d", KeyModifier.WIN)
@@ -11,9 +13,14 @@ def openChrome():
     wait("1456214122362.png", 20)
 # delete origin text
 def delOriginText():
-    type("a", KeyModifier.CTRL);
+    type("a", KeyModifier.CTRL)
     sleep(1)
-    type(Key.BACKSPACE);
+    type(Key.BACKSPACE)
+    sleep(1)
+# paste text by using clipboard
+def pasteClipboardText(strText=None):
+    clipboard.setUnicodeText(u"" + strText)
+    type("v", KeyModifier.CTRL)
     sleep(1)
 #roll to page end
 def rollToPageEnd():
@@ -31,16 +38,16 @@ def unfoldCategoryPage():
         type(Key.PAGE_UP)
         wait("1456215300454.png", 20)
 #type url on chrome
-def typeUrlOnChrome(urlText=None):
+def typeUrlOnChrome(strUrlText=None):
     click("1455955040522.png")
     sleep(1)
     delOriginText()
-    type(urlText)
+    pasteClipboardText(strText=strUrlText)
     sleep(1)
     type(Key.ENTER)
 # go to explore page
 def goExplorePage():
-    typeUrlOnChrome(urlText="https://www.indiegogo.com/explore")
+    typeUrlOnChrome(strUrlText="https://www.indiegogo.com/explore")
     wait("1455771252801.png", 20)
     wait("1456057892065.png", 20)
     waitVanish("1456214096530.png", 20)
@@ -51,7 +58,7 @@ def typeFolderPath(strFolderPath=None):
     click(Pattern("1456054857857.png").targetOffset(10,0))
     sleep(1)
     delOriginText()
-    type(strFolderPath)
+    pasteClipboardText(strText=strFolderPath)
     sleep(1)
     type(Key.ENTER)
     sleep(1)
@@ -69,7 +76,7 @@ def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None
     sleep(1)
     delOriginText()
     sleep(1)
-    type(strFilename)
+    pasteClipboardText(strText=strFilename)
     sleep(1)
     click("1455955227414.png")
     sleep(1)
@@ -85,7 +92,7 @@ def saveCurrentPage(strFolderPath=None, strFilename="default.html"):
     sleep(1)
     delOriginText()
     sleep(1)
-    type(strFilename)
+    pasteClipboardText(strText=strFilename)
     sleep(1)
     click("1455955227414.png")
     sleep(1)
@@ -107,7 +114,7 @@ def downloadCategoryPages():
         if not os.path.exists(strCategoryFolderPath):
             os.mkdir(strCategoryFolderPath) #mkdir category
         openChrome()
-        typeUrlOnChrome(urlText=strCategoryUrl)
+        typeUrlOnChrome(strUrlText=strCategoryUrl)
         wait("1456214032899.png", 20)
         waitVanish("1456214096530.png", 20)
         wait("1456214122362.png", 20)
@@ -126,7 +133,7 @@ def downloadProjectPages(strTargetCategory=None):
     for strProjUrl in projUrlListFile:
         strProjName = re.search("^https://www.indiegogo.com/projects/(.*)/.{4}$", strProjUrl).group(1)
         openChrome()
-        typeUrlOnChrome(urlText=strProjUrl)
+        typeUrlOnChrome(strUrlText=strProjUrl)
         wait("1456229536809.png", 20)
         sleep(5)
         while(not exists("1456229579631.png")):
@@ -191,7 +198,7 @@ def downloadIndividualsPages(strTargetCategory=None):
     for strIndividualsUrl in individualsUrlListFile:
         strIndividualsId = re.search("^https://www.indiegogo.com/individuals/(.*)$", strIndividualsUrl).group(1)
         openChrome()
-        typeUrlOnChrome(urlText=strIndividualsUrl)
+        typeUrlOnChrome(strUrlText=strIndividualsUrl)
         wait("1456297470021.png", 20)
         strIndividualsProfileFilename = strIndividualsId+"_profile.html"
         saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsProfileFilename)
