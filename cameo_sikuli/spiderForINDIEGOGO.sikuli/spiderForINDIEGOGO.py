@@ -1,9 +1,8 @@
 import os
 import sys
 import re
-from cameo.clipboardtool import ClipboardTool
+from java.awt import Toolkit
 strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"
-clipboard = ClipboardTool()
 #open chrome
 def openChrome():
     type("d", KeyModifier.WIN)
@@ -19,7 +18,10 @@ def delOriginText():
     sleep(1)
 # paste text by using clipboard
 def pasteClipboardText(strText=None):
-    clipboard.setUnicodeText(u"" + strText)
+    toolkit = Toolkit.getDefaultToolkit()
+    clipboard = toolkit.getSystemClipboard()
+    clipboard.setContents(u""+strText, None)
+    sleep(1)
     type("v", KeyModifier.CTRL)
     sleep(1)
 #roll to page end

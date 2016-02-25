@@ -73,9 +73,8 @@
 <span class="kw">import</span> os
 <span class="kw">import</span> sys
 <span class="kw">import</span> re
-<span class="kw">from</span> cameo.clipboardtool <span class="kw">import</span> ClipboardTool
+<span class="kw">from</span> java.awt <span class="kw">import</span> Toolkit
 strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"</span>
-clipboard = ClipboardTool()
 <span class="cmt">#open chrome
 </span><span class="kw">def</span> openChrome():
     <span class="skw">type</span>(<span class="str">"d"</span>, KeyModifier.WIN)
@@ -91,7 +90,10 @@ clipboard = ClipboardTool()
     <span class="skw">sleep</span>(<span class="dig">1</span>)
 <span class="cmt"># paste text by using clipboard
 </span><span class="kw">def</span> pasteClipboardText(strText=None):
-    clipboard.setUnicodeText(<span class="str">u""</span> + strText)
+    toolkit = Toolkit.getDefaultToolkit()
+    clipboard = toolkit.getSystemClipboard()
+    clipboard.setContents(<span class="str">u""</span>+strText, None)
+    <span class="skw">sleep</span>(<span class="dig">1</span>)
     <span class="skw">type</span>(<span class="str">"v"</span>, KeyModifier.CTRL)
     <span class="skw">sleep</span>(<span class="dig">1</span>)
 <span class="cmt">#roll to page end
