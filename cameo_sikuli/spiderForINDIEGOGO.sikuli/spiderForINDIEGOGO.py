@@ -140,7 +140,8 @@ def downloadProjectPages(strTargetCategory=None):
         wait("1456229536809.png", 20)
         sleep(5)
         strProjDetailsFilename = strProjName+"_details.html"
-        if not os.path.exists(strProjDetailsFilename):#check detail.html
+        strProjDetailsFilePath = strProjectsFolderPath + r"/" + strProjDetailsFilename
+        if not os.path.exists(strProjDetailsFilePath):#check detail.html
             while(not exists("1456229579631.png")):
                 type(Key.PAGE_DOWN)
                 sleep(2)
@@ -163,21 +164,24 @@ def downloadProjectPages(strTargetCategory=None):
             wait("1456229579631.png", 20)
             type(Key.HOME)       
             wait("1456229536809.png", 20)
-        strProjStoryFilename = strProjName+"_story.html"        
-        if not os.path.exists(strProjStoryFilename):#check story.html
+        strProjStoryFilename = strProjName+"_story.html"
+        strProjStroyFilePath = strProjectsFolderPath + r"/" + strProjStoryFilename
+        if not os.path.exists(strProjStroyFilePath):#check story.html
             #save story
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjStoryFilename)
             wait("1456247446257.png",60)#wait save complete
         strProjUpdatesFilename = strProjName+"_updates.html"
-        if not os.path.exists(strProjUpdatesFilename):#check updates.html
+        strProjUpdatesFilePath = strProjectsFolderPath + r"/" + strProjUpdatesFilename        
+        if not os.path.exists(strProjUpdatesFilePath):#check updates.html
             #save updates
             wait("1456232941269.png", 20)
             click("1456232941269.png")
             wait("1456232962072.png", 20)       
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjUpdatesFilename)
             wait("1456247446257.png",60)#wait save complete
-        strProjCommentsFilename = strProjName+"_comments.html"        
-        if not os.path.exists(strProjCommentsFilename):#check comments.html
+        strProjCommentsFilename = strProjName+"_comments.html"
+        strProjCommentsFilePath = strProjectsFolderPath + r"/" + strProjCommentsFilename                
+        if not os.path.exists(strProjCommentsFilePath):#check comments.html
             #save comments
             wait("1456232986275.png", 20)
             click("1456232986275.png")
@@ -185,7 +189,8 @@ def downloadProjectPages(strTargetCategory=None):
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjCommentsFilename)
             wait("1456247446257.png",60)#wait save complete
         strProjBackersFilename = strProjName+"_backers.html"
-        if not os.path.exists(strProjBackersFilename):#check backers.html
+        strProjBackersFilePath = strProjectsFolderPath + r"/" + strProjBackersFilename                        
+        if not os.path.exists(strProjBackersFilePath):#check backers.html
             #save backers
             wait("1456233023222.png", 20)
             click("1456233023222.png")
@@ -208,11 +213,13 @@ def downloadIndividualsPages(strTargetCategory=None):
         typeUrlOnChrome(strUrlText=strIndividualsUrl)
         wait("1456297470021.png", 20)
         strIndividualsProfileFilename = strIndividualsId+"_profile.html"
-        if not os.path.exists(strIndividualsProfileFilename):#check profile.html
+        strIndividualsProfileFilePath = strIndividualsFolderPath + r"/" + strIndividualsProfileFilename
+        if not os.path.exists(strIndividualsProfileFilePath):#check profile.html
             saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsProfileFilename)
             wait("1456247446257.png",60)#wait save complete
         strIndividualsCampaignsFilename = strIndividualsId+"_campaigns.html"       
-        if not os.path.exists(strIndividualsCampaignsFilename):#check campaigns.html        
+        strIndividualsCampaignsFilePath = strIndividualsFolderPath + r"/" + strIndividualsCampaignsFilename        
+        if not os.path.exists(strIndividualsCampaignsFilePath):#check campaigns.html        
             wait("1456297490082.png", 20)
             click("1456297490082.png")
             wait("1456297519988.png", 20)        
