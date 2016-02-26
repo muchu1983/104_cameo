@@ -154,6 +154,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     <span class="skw">sleep</span>(<span class="dig">1</span>)
     <span class="skw">click</span>(<img src="1455955227414.png" />)
     <span class="skw">sleep</span>(<span class="dig">1</span>)
+    <span class="skw">wait</span>(<img src="1456247446257.png" />,<span class="dig">60</span>)<span class="cmt">#wait save complete</span>
 <span class="cmt">#ask chrome save current page
 </span><span class="kw">def</span> saveCurrentPage(strFolderPath=None, strFilename=<span class="str">"default.html"</span>):
     waitVanish(<img src="1456214096530.png" />, <span class="dig">20</span>)
@@ -170,6 +171,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     <span class="skw">sleep</span>(<span class="dig">1</span>)
     <span class="skw">click</span>(<img src="1455955227414.png" />)
     <span class="skw">sleep</span>(<span class="dig">1</span>)
+    <span class="skw">wait</span>(<img src="1456247446257.png" />,<span class="dig">60</span>)<span class="cmt">#wait save complete</span>
 <span class="cmt">#download explore pages
 </span><span class="kw">def</span> downloadExplorePages():
     openChrome()
@@ -228,7 +230,6 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
             <span class="skw">wait</span>(<img src="1456229635107.png" />, <span class="dig">20</span>)
             <span class="cmt">#save see more details
 </span>            rightClickSaveCurrentPage(onImage=<img src="1456229635107.png" />, strFolderPath=strProjectsFolderPath, strFilename=strProjDetailsFilename)
-            <span class="skw">wait</span>(<img src="1456247446257.png" />,<span class="dig">60</span>)<span class="cmt">#wait save complete</span>
             <span class="cmt">#close details
 </span>            <span class="skw">click</span>(<img src="1456232782492.png" />)
             <span class="skw">wait</span>(<img src="1456229579631.png" />, <span class="dig">20</span>)
@@ -239,7 +240,6 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strProjStroyFilePath):<span class="cmt">#check story.html</span>
             <span class="cmt">#save story
 </span>            saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjStoryFilename)
-            <span class="skw">wait</span>(<img src="1456247446257.png" />,<span class="dig">60</span>)<span class="cmt">#wait save complete</span>
         strProjUpdatesFilename = strProjName+<span class="str">"_updates.html"</span>
         strProjUpdatesFilePath = strProjectsFolderPath + <span class="str">r"/"</span> + strProjUpdatesFilename
         <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strProjUpdatesFilePath):<span class="cmt">#check updates.html</span>
@@ -248,7 +248,6 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
             <span class="skw">click</span>(<img src="1456232941269.png" />)
             <span class="skw">wait</span>(<img src="1456232962072.png" />, <span class="dig">20</span>)
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjUpdatesFilename)
-            <span class="skw">wait</span>(<img src="1456247446257.png" />,<span class="dig">60</span>)<span class="cmt">#wait save complete</span>
         strProjCommentsFilename = strProjName+<span class="str">"_comments.html"</span>
         strProjCommentsFilePath = strProjectsFolderPath + <span class="str">r"/"</span> + strProjCommentsFilename
         <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strProjCommentsFilePath):<span class="cmt">#check comments.html</span>
@@ -257,7 +256,6 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
             <span class="skw">click</span>(<img src="1456232986275.png" />)
             <span class="skw">wait</span>(<img src="1456233002434.png" />, <span class="dig">20</span>)
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjCommentsFilename)
-            <span class="skw">wait</span>(<img src="1456247446257.png" />,<span class="dig">60</span>)<span class="cmt">#wait save complete</span>
         strProjBackersFilename = strProjName+<span class="str">"_backers.html"</span>
         strProjBackersFilePath = strProjectsFolderPath + <span class="str">r"/"</span> + strProjBackersFilename
         <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strProjBackersFilePath):<span class="cmt">#check backers.html</span>
@@ -266,7 +264,6 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
             <span class="skw">click</span>(<img src="1456233023222.png" />)
             <span class="skw">wait</span>(<img src="1456233041235.png" />, <span class="dig">20</span>)
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjBackersFilename)
-            <span class="skw">wait</span>(<img src="1456247446257.png" />,<span class="dig">60</span>)<span class="cmt">#wait save complete</span>
     projUrlListFile.close()
 <span class="cmt">#download individuals pages
 </span><span class="kw">def</span> downloadIndividualsPages(strTargetCategory=None):
@@ -286,7 +283,6 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         strIndividualsProfileFilePath = strIndividualsFolderPath + <span class="str">r"/"</span> + strIndividualsProfileFilename
         <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strIndividualsProfileFilePath):<span class="cmt">#check profile.html</span>
             saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsProfileFilename)
-            <span class="skw">wait</span>(<img src="1456247446257.png" />,<span class="dig">60</span>)<span class="cmt">#wait save complete</span>
         strIndividualsCampaignsFilename = strIndividualsId+<span class="str">"_campaigns.html"</span>
         strIndividualsCampaignsFilePath = strIndividualsFolderPath + <span class="str">r"/"</span> + strIndividualsCampaignsFilename
         <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strIndividualsCampaignsFilePath):<span class="cmt">#check campaigns.html        </span>
@@ -294,7 +290,6 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
             <span class="skw">click</span>(<img src="1456297490082.png" />)
             <span class="skw">wait</span>(<img src="1456297519988.png" />, <span class="dig">20</span>)
             saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsCampaignsFilename)
-            <span class="skw">wait</span>(<img src="1456247446257.png" />,<span class="dig">60</span>)<span class="cmt">#wait save complete</span>
     individualsUrlListFile.close()
 <span class="cmt">#main entry point
 </span><span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:

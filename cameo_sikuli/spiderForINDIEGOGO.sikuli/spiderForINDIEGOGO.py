@@ -82,6 +82,7 @@ def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None
     sleep(1)
     click("1455955227414.png")
     sleep(1)
+    wait("1456247446257.png",60)#wait save complete
 #ask chrome save current page
 def saveCurrentPage(strFolderPath=None, strFilename="default.html"):
     waitVanish("1456214096530.png", 20)
@@ -98,6 +99,7 @@ def saveCurrentPage(strFolderPath=None, strFilename="default.html"):
     sleep(1)
     click("1455955227414.png")
     sleep(1)
+    wait("1456247446257.png",60)#wait save complete
 #download explore pages
 def downloadExplorePages():
     openChrome()
@@ -156,7 +158,6 @@ def downloadProjectPages(strTargetCategory=None):
             wait("1456229635107.png", 20)
             #save see more details
             rightClickSaveCurrentPage(onImage="1456229635107.png", strFolderPath=strProjectsFolderPath, strFilename=strProjDetailsFilename)
-            wait("1456247446257.png",60)#wait save complete
             #close details
             click("1456232782492.png")
             wait("1456229579631.png", 20)
@@ -167,7 +168,6 @@ def downloadProjectPages(strTargetCategory=None):
         if not os.path.exists(strProjStroyFilePath):#check story.html
             #save story
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjStoryFilename)
-            wait("1456247446257.png",60)#wait save complete
         strProjUpdatesFilename = strProjName+"_updates.html"
         strProjUpdatesFilePath = strProjectsFolderPath + r"/" + strProjUpdatesFilename        
         if not os.path.exists(strProjUpdatesFilePath):#check updates.html
@@ -176,7 +176,6 @@ def downloadProjectPages(strTargetCategory=None):
             click("1456232941269.png")
             wait("1456232962072.png", 20)       
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjUpdatesFilename)
-            wait("1456247446257.png",60)#wait save complete
         strProjCommentsFilename = strProjName+"_comments.html"
         strProjCommentsFilePath = strProjectsFolderPath + r"/" + strProjCommentsFilename                
         if not os.path.exists(strProjCommentsFilePath):#check comments.html
@@ -185,7 +184,6 @@ def downloadProjectPages(strTargetCategory=None):
             click("1456232986275.png")
             wait("1456233002434.png", 20)
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjCommentsFilename)
-            wait("1456247446257.png",60)#wait save complete
         strProjBackersFilename = strProjName+"_backers.html"
         strProjBackersFilePath = strProjectsFolderPath + r"/" + strProjBackersFilename                        
         if not os.path.exists(strProjBackersFilePath):#check backers.html
@@ -194,7 +192,6 @@ def downloadProjectPages(strTargetCategory=None):
             click("1456233023222.png")
             wait("1456233041235.png", 20)       
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjBackersFilename)
-            wait("1456247446257.png",60)#wait save complete
     projUrlListFile.close()
 #download individuals pages
 def downloadIndividualsPages(strTargetCategory=None):
@@ -214,7 +211,6 @@ def downloadIndividualsPages(strTargetCategory=None):
         strIndividualsProfileFilePath = strIndividualsFolderPath + r"/" + strIndividualsProfileFilename
         if not os.path.exists(strIndividualsProfileFilePath):#check profile.html
             saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsProfileFilename)
-            wait("1456247446257.png",60)#wait save complete
         strIndividualsCampaignsFilename = strIndividualsId+"_campaigns.html"       
         strIndividualsCampaignsFilePath = strIndividualsFolderPath + r"/" + strIndividualsCampaignsFilename        
         if not os.path.exists(strIndividualsCampaignsFilePath):#check campaigns.html        
@@ -222,7 +218,6 @@ def downloadIndividualsPages(strTargetCategory=None):
             click("1456297490082.png")
             wait("1456297519988.png", 20)        
             saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsCampaignsFilename)
-            wait("1456247446257.png",60)#wait save complete
     individualsUrlListFile.close()
 #main entry point
 if __name__ == "__main__":
