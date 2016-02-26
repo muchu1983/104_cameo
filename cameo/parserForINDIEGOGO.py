@@ -66,7 +66,12 @@ individuals category - parse individuals.html of category then create xxx.json
         strCategoryUrlListFilePath = strExploreResultFolderPath + u"/" + self.CATEGORY_URL_LIST_FILENAME
         with open(strCategoryUrlListFilePath, "w+") as catUrlListFile:
             for strCategoryUrl in lstStrCategoryUrls:
-                catUrlListFile.write(strCategoryUrl + u"\n")
+                strCategoryUrl = re.sub("#/browse", "", strCategoryUrl)
+                strCategoryUrl = re.search("^(https://www.indiegogo.com/explore/[a-z]*)\??.*$" ,strCategoryUrl).group(1)
+                if strCategoryUrl == "https://www.indiegogo.com/explore/all":
+                    continue
+                else:
+                    catUrlListFile.write(strCategoryUrl + u"\n")
         
     #解析 category.html
     def parseCategoryPage(self, uselessArg1=None):
