@@ -16,13 +16,43 @@ from scrapy import Selector
 class ParserForINDIEGOGO:
     #建構子
     def __init__(self):
+        self.dicSubCommandHandler = {"explore":[self.parseExplorePage],
+                                     "category":[self.parseCategoryPage],
+                                     "project":[self.parseProjectDetailsPage,
+                                                self.parseProjectStoryPage,
+                                                self.parseProjectUpdatesPage,
+                                                self.parseProjectCommentsPage,
+                                                self.parseProjectBackersPage,
+                                                self.parseProjectRewardPage],
+                                     "individuals":[self.parseIndividualsPage],}
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"./cameo_res/source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"./cameo_res/parsed_result"
         self.CATEGORY_URL_LIST_FILENAME = u"category_url_list.txt"
         self.PROJ_URL_LIST_FILENAME = u"_proj_url_list.txt"
         
+    #取得 parser 使用資訊
+    def getUseageMessage(self):
+        return """- INDIEGOGO -
+useage:
+explore - parse explore.html then create category_url_list.txt
+category - parse category.html then create xxx_proj_url_list.txt
+project category - parse project.html of category then create xxx.json
+individuals category - parse individuals.html of category then create xxx.json
+"""
+
+    #執行 parser
+    def runParser(self, lstSubcommand=[]):
+        strSubcommand = lstSubcommand[0]
+        strArg1 = None
+        if len(lstSubcommand) == 2:
+            strArg1 = lstSubcommand[1]
+        for handler in self.dicSubCommandHandler[strSubcommand]:
+            print("INDIEGOGO parser [%s] starting..."%strSubcommand)
+            handler(strArg1)
+            print("INDIEGOGO parser [%s] finished."%strSubcommand)
+        
     #解析 explore.html
-    def parseExplorePage(self):
+    def parseExplorePage(self, uselessArg1=None):
         strExploreHtmlPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"/INDIEGOGO/explore.html"
         strExploreResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"/INDIEGOGO"
         if not os.path.exists(strExploreResultFolderPath):
@@ -37,7 +67,7 @@ class ParserForINDIEGOGO:
                 catUrlListFile.write(strCategoryUrl + u"\n")
         
     #解析 category.html
-    def parseCategoryPage(self):
+    def parseCategoryPage(self, uselessArg1=None):
         strCategoryUrlListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"/INDIEGOGO/category_url_list.txt"
         catUrlListFile = open(strCategoryUrlListFilePath)
         for strCategoryUrl in catUrlListFile:#category loop
@@ -57,7 +87,7 @@ class ParserForINDIEGOGO:
                             projUrlListFile.write(strProjUrl + u"\n")
                             
     #解析 project page(s)
-    def parseProjectDetailsPage(self, strCategoryName):
+    def parseProjectDetailsPage(self, strCategoryName=None):
         strProjectUrlListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/project_url_list.txt"%(strCategoryName))
         for strProjUrl in open(strProjectUrlListFilePath, "r"):
             strProjectName = re.search("^https://www.indiegogo.com/projects/(.*)/....$" ,strProjUrl).group(1)
@@ -77,7 +107,7 @@ class ParserForINDIEGOGO:
                         with open(strIndividualsUrlListFilePath, "a") as individualsUrlListFile:
                             individualsUrlListFile.write(strIndividualsUrl + u"\n") #append url to individuals_url_list.txt
                     
-    def parseProjectStoryPage(self, strCategoryName):
+    def parseProjectStoryPage(self, strCategoryName=None):
         strProjectUrlListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/project_url_list.txt"%(strCategoryName))
         for strProjUrl in open(strProjectUrlListFilePath, "r"):
             strProjectName = re.search("^https://www.indiegogo.com/projects/(.*)/....$" ,strProjUrl).group(1)
@@ -92,15 +122,15 @@ class ParserForINDIEGOGO:
                     #parse *_story.html then save json to parsed_result/*/projects/
                     pass #TODO
                     
-    def parseProjectUpdatesPage(self):
+    def parseProjectUpdatesPage(self, strCategoryName=None):
         pass
-    def parseProjectCommentsPage(self):
+    def parseProjectCommentsPage(self, strCategoryName=None):
         pass
-    def parseProjectBackersPage(self):
+    def parseProjectBackersPage(self, strCategoryName=None):
         pass
-    def parseProjectRewardPage(self):
+    def parseProjectRewardPage(self, strCategoryName=None):
         pass
         
     #解析 individuals.html
-    def parseIndividualsPage(self, strCategoryName):
+    def parseIndividualsPage(self, strCategoryName=None):
         pass
