@@ -117,7 +117,6 @@ def downloadCategoryPages():
             os.mkdir(strCategoryFolderPath) #mkdir category
         openChrome()
         typeUrlOnChrome(strUrlText=strCategoryUrl)
-        wait("1456214032899.png", 20)
         waitVanish("1456214096530.png", 20)
         wait("1456214122362.png", 20)
         #unfoldCategoryPage()
