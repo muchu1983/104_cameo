@@ -61,6 +61,8 @@ individuals category - parse individuals.html of category then create xxx.json
             strPageSource = expHtmlFile.read()
         root = Selector(text=strPageSource)
         lstStrCategoryUrls = root.css("explore-category-link-www a.i-uncolored-link::attr(href)").extract()
+        if len(lstStrCategoryUrls) == 0:
+            lstStrCategoryUrls = root.css("ul.exploreCategories-list li.ng-scope a.ng-binding::attr(href)").extract()
         strCategoryUrlListFilePath = strExploreResultFolderPath + u"/" + self.CATEGORY_URL_LIST_FILENAME
         with open(strCategoryUrlListFilePath, "w+") as catUrlListFile:
             for strCategoryUrl in lstStrCategoryUrls:
