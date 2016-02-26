@@ -52,7 +52,6 @@ def typeUrlOnChrome(strUrlText=None):
 def goExplorePage():
     typeUrlOnChrome(strUrlText="https://www.indiegogo.com/explore")
     wait("1455771252801.png", 20)
-    wait("1456057892065.png", 20)
     waitVanish("1456214096530.png", 20)
     wait("1456214122362.png", 20)
 #choose folder at save progress
