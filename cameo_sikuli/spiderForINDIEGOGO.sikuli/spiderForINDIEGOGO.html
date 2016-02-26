@@ -193,8 +193,8 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         typeUrlOnChrome(strUrlText=strCategoryUrl)
         waitVanish(<img src="1456214096530.png" />, <span class="dig">20</span>)
         <span class="skw">wait</span>(<img src="1456214122362.png" />, <span class="dig">20</span>)
-        <span class="cmt">#unfoldCategoryPage()
-</span>        saveCurrentPage(strFolderPath=strCategoryFolderPath, strFilename=<span class="str">"category.html"</span>)
+        unfoldCategoryPage()
+        saveCurrentPage(strFolderPath=strCategoryFolderPath, strFilename=<span class="str">"category.html"</span>)
     catUrlListFile.close()
 <span class="cmt">#download project pages
 </span><span class="kw">def</span> downloadProjectPages(strTargetCategory=None):
