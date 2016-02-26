@@ -67,7 +67,7 @@ individuals category - parse individuals.html of category then create xxx.json
         with open(strCategoryUrlListFilePath, "w+") as catUrlListFile:
             for strCategoryUrl in lstStrCategoryUrls:
                 strCategoryUrl = re.sub("#/browse", "", strCategoryUrl)
-                strCategoryUrl = re.search("^(https://www.indiegogo.com/explore/[a-z]*)\??.*$" ,strCategoryUrl).group(1)
+                strCategoryUrl = re.search("^(https://www.indiegogo.com/explore/[a-z_]*)\??.*$" ,strCategoryUrl).group(1)
                 if strCategoryUrl == "https://www.indiegogo.com/explore/all":
                     continue
                 else:
