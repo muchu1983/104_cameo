@@ -7,10 +7,10 @@ strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_co
 #open chrome
 def openChrome():
     type("d", KeyModifier.WIN)
-    wait("1456281338394.png", 20)
+    wait("1456281338394.png", 300)
     click("1456281338394.png")
-    waitVanish("1456214096530.png", 20)
-    wait("1456214122362.png", 20)
+    waitVanish("1456214096530.png", 300)
+    wait("1456214122362.png", 300)
 # delete origin text
 def delOriginText():
     type("a", KeyModifier.CTRL)
@@ -28,19 +28,19 @@ def pasteClipboardText(strText=None):
 #roll to page end
 def rollToPageEnd():
     type(Key.END)
-    wait("1456062534102.png", 20)
+    wait("1456062534102.png", 300)
 # open all project
 def unfoldCategoryPage():
     rollToPageEnd()
     type(Key.PAGE_UP)
-    wait("1456215300454.png", 20)
+    wait("1456215300454.png", 300)
     while(exists("1456064164365.png")):
         click("1456064164365.png")
-        waitVanish("1456215300454.png", 20)
+        waitVanish("1456215300454.png", 300)
         sleep(5)
         rollToPageEnd()
         type(Key.PAGE_UP)
-        wait("1456215300454.png", 20)
+        wait("1456215300454.png", 300)
 #type url on chrome
 def typeUrlOnChrome(strUrlText=None):
     click("1455955040522.png")
@@ -52,12 +52,12 @@ def typeUrlOnChrome(strUrlText=None):
 # go to explore page
 def goExplorePage():
     typeUrlOnChrome(strUrlText="https://www.indiegogo.com/explore")
-    wait("1455771252801.png", 20)
-    waitVanish("1456214096530.png", 20)
-    wait("1456214122362.png", 20)
+    wait("1455771252801.png", 300)
+    waitVanish("1456214096530.png", 300)
+    wait("1456214122362.png", 300)
 #choose folder at save progress
 def typeFolderPath(strFolderPath=None):
-    wait(Pattern("1456054857857.png").targetOffset(10,0), 20)
+    wait(Pattern("1456054857857.png").targetOffset(10,0), 300)
     click(Pattern("1456054857857.png").targetOffset(10,0))
     sleep(1)
     delOriginText()
@@ -67,12 +67,12 @@ def typeFolderPath(strFolderPath=None):
     sleep(1)
 #rightclick on image to save current page
 def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None):
-    waitVanish("1456214096530.png", 20)
-    wait("1456214122362.png", 20)
+    waitVanish("1456214096530.png", 300)
+    wait("1456214122362.png", 300)
     rightClick(onImage)
-    wait("1456245315336.png")
+    wait("1456245315336.png", 300)
     click("1456245315336.png")
-    wait("1455955227414.png", 20)
+    wait("1455955227414.png", 300)
     if strFolderPath != None:
         typeFolderPath(strFolderPath)
     click(Pattern("1455959876192.png").targetOffset(36,0))
@@ -83,13 +83,13 @@ def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None
     sleep(1)
     click("1455955227414.png")
     sleep(1)
-    wait("1456247446257.png",60)#wait save complete
+    wait("1456247446257.png", 300)#wait save complete
 #ask chrome save current page
 def saveCurrentPage(strFolderPath=None, strFilename="default.html"):
-    waitVanish("1456214096530.png", 20)
-    wait("1456214122362.png", 20)
+    waitVanish("1456214096530.png", 300)
+    wait("1456214122362.png", 300)
     type("s", KeyModifier.CTRL)
-    wait("1455955227414.png", 20)
+    wait("1455955227414.png", 300)
     if strFolderPath != None:
         typeFolderPath(strFolderPath)
     click(Pattern("1455959876192.png").targetOffset(36,0))
@@ -100,7 +100,7 @@ def saveCurrentPage(strFolderPath=None, strFilename="default.html"):
     sleep(1)
     click("1455955227414.png")
     sleep(1)
-    wait("1456247446257.png",60)#wait save complete
+    wait("1456247446257.png", 300)#wait save complete
 #download explore pages
 def downloadExplorePages():
     openChrome()
@@ -120,8 +120,8 @@ def downloadCategoryPages():
             os.mkdir(strCategoryFolderPath) #mkdir category
         openChrome()
         typeUrlOnChrome(strUrlText=strCategoryUrl)
-        waitVanish("1456214096530.png", 20)
-        wait("1456214122362.png", 20)
+        waitVanish("1456214096530.png", 300)
+        wait("1456214122362.png", 300)
         unfoldCategoryPage()
         saveCurrentPage(strFolderPath=strCategoryFolderPath, strFilename="category.html")
     catUrlListFile.close()
@@ -138,7 +138,7 @@ def downloadProjectPages(strTargetCategory=None):
         strProjName = re.search("^https://www.indiegogo.com/projects/(.*)/.{4}$", strProjUrl).group(1)
         openChrome()
         typeUrlOnChrome(strUrlText=strProjUrl)
-        wait("1456229536809.png", 20)
+        wait("1456229536809.png", 300)
         sleep(5)
         strProjDetailsFilename = strProjName+"_details.html"
         strProjDetailsFilePath = strProjectsFolderPath + r"/" + strProjDetailsFilename
@@ -156,14 +156,14 @@ def downloadProjectPages(strTargetCategory=None):
                 type(Key.UP)
                 sleep(5)
             click("1456229579631.png")
-            wait("1456229635107.png", 20)
+            wait("1456229635107.png", 300)
             #save see more details
             rightClickSaveCurrentPage(onImage="1456229635107.png", strFolderPath=strProjectsFolderPath, strFilename=strProjDetailsFilename)
             #close details
             click("1456232782492.png")
-            wait("1456229579631.png", 20)
+            wait("1456229579631.png", 300)
             type(Key.HOME)       
-            wait("1456229536809.png", 20)
+            wait("1456229536809.png", 300)
         strProjStoryFilename = strProjName+"_story.html"
         strProjStroyFilePath = strProjectsFolderPath + r"/" + strProjStoryFilename
         if not os.path.exists(strProjStroyFilePath):#check story.html
@@ -173,25 +173,25 @@ def downloadProjectPages(strTargetCategory=None):
         strProjUpdatesFilePath = strProjectsFolderPath + r"/" + strProjUpdatesFilename        
         if not os.path.exists(strProjUpdatesFilePath):#check updates.html
             #save updates
-            wait("1456232941269.png", 20)
+            wait("1456232941269.png", 300)
             click("1456232941269.png")
-            wait("1456232962072.png", 20)       
+            wait("1456232962072.png", 300)       
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjUpdatesFilename)
         strProjCommentsFilename = strProjName+"_comments.html"
         strProjCommentsFilePath = strProjectsFolderPath + r"/" + strProjCommentsFilename                
         if not os.path.exists(strProjCommentsFilePath):#check comments.html
             #save comments
-            wait("1456232986275.png", 20)
+            wait("1456232986275.png", 300)
             click("1456232986275.png")
-            wait("1456233002434.png", 20)
+            wait("1456233002434.png", 300)
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjCommentsFilename)
         strProjBackersFilename = strProjName+"_backers.html"
         strProjBackersFilePath = strProjectsFolderPath + r"/" + strProjBackersFilename                        
         if not os.path.exists(strProjBackersFilePath):#check backers.html
             #save backers
-            wait("1456233023222.png", 20)
+            wait("1456233023222.png", 300)
             click("1456233023222.png")
-            wait("1456233041235.png", 20)       
+            wait("1456233041235.png", 300)       
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjBackersFilename)
     projUrlListFile.close()
 #download individuals pages
@@ -207,7 +207,7 @@ def downloadIndividualsPages(strTargetCategory=None):
         strIndividualsId = re.search("^https://www.indiegogo.com/individuals/(.*)$", strIndividualsUrl).group(1)
         openChrome()
         typeUrlOnChrome(strUrlText=strIndividualsUrl)
-        wait("1456297470021.png", 20)
+        wait("1456297470021.png", 300)
         strIndividualsProfileFilename = strIndividualsId+"_profile.html"
         strIndividualsProfileFilePath = strIndividualsFolderPath + r"/" + strIndividualsProfileFilename
         if not os.path.exists(strIndividualsProfileFilePath):#check profile.html
@@ -215,9 +215,9 @@ def downloadIndividualsPages(strTargetCategory=None):
         strIndividualsCampaignsFilename = strIndividualsId+"_campaigns.html"       
         strIndividualsCampaignsFilePath = strIndividualsFolderPath + r"/" + strIndividualsCampaignsFilename        
         if not os.path.exists(strIndividualsCampaignsFilePath):#check campaigns.html        
-            wait("1456297490082.png", 20)
+            wait("1456297490082.png", 300)
             click("1456297490082.png")
-            wait("1456297519988.png", 20)        
+            wait("1456297519988.png", 300)        
             saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsCampaignsFilename)
     individualsUrlListFile.close()
 #main entry point

@@ -79,10 +79,10 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
 <span class="cmt">#open chrome
 </span><span class="kw">def</span> openChrome():
     <span class="skw">type</span>(<span class="str">"d"</span>, KeyModifier.WIN)
-    <span class="skw">wait</span>(<img src="1456281338394.png" />, <span class="dig">20</span>)
+    <span class="skw">wait</span>(<img src="1456281338394.png" />, <span class="dig">300</span>)
     <span class="skw">click</span>(<img src="1456281338394.png" />)
-    waitVanish(<img src="1456214096530.png" />, <span class="dig">20</span>)
-    <span class="skw">wait</span>(<img src="1456214122362.png" />, <span class="dig">20</span>)
+    waitVanish(<img src="1456214096530.png" />, <span class="dig">300</span>)
+    <span class="skw">wait</span>(<img src="1456214122362.png" />, <span class="dig">300</span>)
 <span class="cmt"># delete origin text
 </span><span class="kw">def</span> delOriginText():
     <span class="skw">type</span>(<span class="str">"a"</span>, KeyModifier.CTRL)
@@ -100,19 +100,19 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
 <span class="cmt">#roll to page end
 </span><span class="kw">def</span> rollToPageEnd():
     <span class="skw">type</span>(Key.END)
-    <span class="skw">wait</span>(<img src="1456062534102.png" />, <span class="dig">20</span>)
+    <span class="skw">wait</span>(<img src="1456062534102.png" />, <span class="dig">300</span>)
 <span class="cmt"># open all project
 </span><span class="kw">def</span> unfoldCategoryPage():
     rollToPageEnd()
     <span class="skw">type</span>(Key.PAGE_UP)
-    <span class="skw">wait</span>(<img src="1456215300454.png" />, <span class="dig">20</span>)
+    <span class="skw">wait</span>(<img src="1456215300454.png" />, <span class="dig">300</span>)
     <span class="kw">while</span>(exists(<img src="1456064164365.png" />)):
         <span class="skw">click</span>(<img src="1456064164365.png" />)
-        waitVanish(<img src="1456215300454.png" />, <span class="dig">20</span>)
+        waitVanish(<img src="1456215300454.png" />, <span class="dig">300</span>)
         <span class="skw">sleep</span>(<span class="dig">5</span>)
         rollToPageEnd()
         <span class="skw">type</span>(Key.PAGE_UP)
-        <span class="skw">wait</span>(<img src="1456215300454.png" />, <span class="dig">20</span>)
+        <span class="skw">wait</span>(<img src="1456215300454.png" />, <span class="dig">300</span>)
 <span class="cmt">#type url on chrome
 </span><span class="kw">def</span> typeUrlOnChrome(strUrlText=None):
     <span class="skw">click</span>(<img src="1455955040522.png" />)
@@ -124,12 +124,12 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
 <span class="cmt"># go to explore page
 </span><span class="kw">def</span> goExplorePage():
     typeUrlOnChrome(strUrlText=<span class="str">"https://www.indiegogo.com/explore"</span>)
-    <span class="skw">wait</span>(<img src="1455771252801.png" />, <span class="dig">20</span>)
-    waitVanish(<img src="1456214096530.png" />, <span class="dig">20</span>)
-    <span class="skw">wait</span>(<img src="1456214122362.png" />, <span class="dig">20</span>)
+    <span class="skw">wait</span>(<img src="1455771252801.png" />, <span class="dig">300</span>)
+    waitVanish(<img src="1456214096530.png" />, <span class="dig">300</span>)
+    <span class="skw">wait</span>(<img src="1456214122362.png" />, <span class="dig">300</span>)
 <span class="cmt">#choose folder at save progress
 </span><span class="kw">def</span> typeFolderPath(strFolderPath=None):
-    <span class="skw">wait</span>(Pattern(<img src="1456054857857.png" />).targetOffset(<span class="dig">10</span>,<span class="dig">0</span>), <span class="dig">20</span>)
+    <span class="skw">wait</span>(Pattern(<img src="1456054857857.png" />).targetOffset(<span class="dig">10</span>,<span class="dig">0</span>), <span class="dig">300</span>)
     <span class="skw">click</span>(Pattern(<img src="1456054857857.png" />).targetOffset(<span class="dig">10</span>,<span class="dig">0</span>))
     <span class="skw">sleep</span>(<span class="dig">1</span>)
     delOriginText()
@@ -139,12 +139,12 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     <span class="skw">sleep</span>(<span class="dig">1</span>)
 <span class="cmt">#rightclick on image to save current page
 </span><span class="kw">def</span> rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None):
-    waitVanish(<img src="1456214096530.png" />, <span class="dig">20</span>)
-    <span class="skw">wait</span>(<img src="1456214122362.png" />, <span class="dig">20</span>)
+    waitVanish(<img src="1456214096530.png" />, <span class="dig">300</span>)
+    <span class="skw">wait</span>(<img src="1456214122362.png" />, <span class="dig">300</span>)
     <span class="skw">rightClick</span>(onImage)
-    <span class="skw">wait</span>(<img src="1456245315336.png" />)
+    <span class="skw">wait</span>(<img src="1456245315336.png" />, <span class="dig">300</span>)
     <span class="skw">click</span>(<img src="1456245315336.png" />)
-    <span class="skw">wait</span>(<img src="1455955227414.png" />, <span class="dig">20</span>)
+    <span class="skw">wait</span>(<img src="1455955227414.png" />, <span class="dig">300</span>)
     <span class="kw">if</span> strFolderPath != None:
         typeFolderPath(strFolderPath)
     <span class="skw">click</span>(Pattern(<img src="1455959876192.png" />).targetOffset(<span class="dig">36</span>,<span class="dig">0</span>))
@@ -155,13 +155,13 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     <span class="skw">sleep</span>(<span class="dig">1</span>)
     <span class="skw">click</span>(<img src="1455955227414.png" />)
     <span class="skw">sleep</span>(<span class="dig">1</span>)
-    <span class="skw">wait</span>(<img src="1456247446257.png" />,<span class="dig">60</span>)<span class="cmt">#wait save complete</span>
+    <span class="skw">wait</span>(<img src="1456247446257.png" />, <span class="dig">300</span>)<span class="cmt">#wait save complete</span>
 <span class="cmt">#ask chrome save current page
 </span><span class="kw">def</span> saveCurrentPage(strFolderPath=None, strFilename=<span class="str">"default.html"</span>):
-    waitVanish(<img src="1456214096530.png" />, <span class="dig">20</span>)
-    <span class="skw">wait</span>(<img src="1456214122362.png" />, <span class="dig">20</span>)
+    waitVanish(<img src="1456214096530.png" />, <span class="dig">300</span>)
+    <span class="skw">wait</span>(<img src="1456214122362.png" />, <span class="dig">300</span>)
     <span class="skw">type</span>(<span class="str">"s"</span>, KeyModifier.CTRL)
-    <span class="skw">wait</span>(<img src="1455955227414.png" />, <span class="dig">20</span>)
+    <span class="skw">wait</span>(<img src="1455955227414.png" />, <span class="dig">300</span>)
     <span class="kw">if</span> strFolderPath != None:
         typeFolderPath(strFolderPath)
     <span class="skw">click</span>(Pattern(<img src="1455959876192.png" />).targetOffset(<span class="dig">36</span>,<span class="dig">0</span>))
@@ -172,7 +172,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     <span class="skw">sleep</span>(<span class="dig">1</span>)
     <span class="skw">click</span>(<img src="1455955227414.png" />)
     <span class="skw">sleep</span>(<span class="dig">1</span>)
-    <span class="skw">wait</span>(<img src="1456247446257.png" />,<span class="dig">60</span>)<span class="cmt">#wait save complete</span>
+    <span class="skw">wait</span>(<img src="1456247446257.png" />, <span class="dig">300</span>)<span class="cmt">#wait save complete</span>
 <span class="cmt">#download explore pages
 </span><span class="kw">def</span> downloadExplorePages():
     openChrome()
@@ -192,8 +192,8 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
             os.mkdir(strCategoryFolderPath) <span class="cmt">#mkdir category</span>
         openChrome()
         typeUrlOnChrome(strUrlText=strCategoryUrl)
-        waitVanish(<img src="1456214096530.png" />, <span class="dig">20</span>)
-        <span class="skw">wait</span>(<img src="1456214122362.png" />, <span class="dig">20</span>)
+        waitVanish(<img src="1456214096530.png" />, <span class="dig">300</span>)
+        <span class="skw">wait</span>(<img src="1456214122362.png" />, <span class="dig">300</span>)
         unfoldCategoryPage()
         saveCurrentPage(strFolderPath=strCategoryFolderPath, strFilename=<span class="str">"category.html"</span>)
     catUrlListFile.close()
@@ -210,7 +210,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         strProjName = re.search(<span class="str">"^https://www.indiegogo.com/projects/(.*)/.{4}$"</span>, strProjUrl).group(<span class="dig">1</span>)
         openChrome()
         typeUrlOnChrome(strUrlText=strProjUrl)
-        <span class="skw">wait</span>(<img src="1456229536809.png" />, <span class="dig">20</span>)
+        <span class="skw">wait</span>(<img src="1456229536809.png" />, <span class="dig">300</span>)
         <span class="skw">sleep</span>(<span class="dig">5</span>)
         strProjDetailsFilename = strProjName+<span class="str">"_details.html"</span>
         strProjDetailsFilePath = strProjectsFolderPath + <span class="str">r"/"</span> + strProjDetailsFilename
@@ -228,14 +228,14 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
                 <span class="skw">type</span>(Key.UP)
                 <span class="skw">sleep</span>(<span class="dig">5</span>)
             <span class="skw">click</span>(<img src="1456229579631.png" />)
-            <span class="skw">wait</span>(<img src="1456229635107.png" />, <span class="dig">20</span>)
+            <span class="skw">wait</span>(<img src="1456229635107.png" />, <span class="dig">300</span>)
             <span class="cmt">#save see more details
 </span>            rightClickSaveCurrentPage(onImage=<img src="1456229635107.png" />, strFolderPath=strProjectsFolderPath, strFilename=strProjDetailsFilename)
             <span class="cmt">#close details
 </span>            <span class="skw">click</span>(<img src="1456232782492.png" />)
-            <span class="skw">wait</span>(<img src="1456229579631.png" />, <span class="dig">20</span>)
+            <span class="skw">wait</span>(<img src="1456229579631.png" />, <span class="dig">300</span>)
             <span class="skw">type</span>(Key.HOME)
-            <span class="skw">wait</span>(<img src="1456229536809.png" />, <span class="dig">20</span>)
+            <span class="skw">wait</span>(<img src="1456229536809.png" />, <span class="dig">300</span>)
         strProjStoryFilename = strProjName+<span class="str">"_story.html"</span>
         strProjStroyFilePath = strProjectsFolderPath + <span class="str">r"/"</span> + strProjStoryFilename
         <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strProjStroyFilePath):<span class="cmt">#check story.html</span>
@@ -245,25 +245,25 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         strProjUpdatesFilePath = strProjectsFolderPath + <span class="str">r"/"</span> + strProjUpdatesFilename
         <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strProjUpdatesFilePath):<span class="cmt">#check updates.html</span>
             <span class="cmt">#save updates
-</span>            <span class="skw">wait</span>(<img src="1456232941269.png" />, <span class="dig">20</span>)
+</span>            <span class="skw">wait</span>(<img src="1456232941269.png" />, <span class="dig">300</span>)
             <span class="skw">click</span>(<img src="1456232941269.png" />)
-            <span class="skw">wait</span>(<img src="1456232962072.png" />, <span class="dig">20</span>)
+            <span class="skw">wait</span>(<img src="1456232962072.png" />, <span class="dig">300</span>)
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjUpdatesFilename)
         strProjCommentsFilename = strProjName+<span class="str">"_comments.html"</span>
         strProjCommentsFilePath = strProjectsFolderPath + <span class="str">r"/"</span> + strProjCommentsFilename
         <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strProjCommentsFilePath):<span class="cmt">#check comments.html</span>
             <span class="cmt">#save comments
-</span>            <span class="skw">wait</span>(<img src="1456232986275.png" />, <span class="dig">20</span>)
+</span>            <span class="skw">wait</span>(<img src="1456232986275.png" />, <span class="dig">300</span>)
             <span class="skw">click</span>(<img src="1456232986275.png" />)
-            <span class="skw">wait</span>(<img src="1456233002434.png" />, <span class="dig">20</span>)
+            <span class="skw">wait</span>(<img src="1456233002434.png" />, <span class="dig">300</span>)
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjCommentsFilename)
         strProjBackersFilename = strProjName+<span class="str">"_backers.html"</span>
         strProjBackersFilePath = strProjectsFolderPath + <span class="str">r"/"</span> + strProjBackersFilename
         <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strProjBackersFilePath):<span class="cmt">#check backers.html</span>
             <span class="cmt">#save backers
-</span>            <span class="skw">wait</span>(<img src="1456233023222.png" />, <span class="dig">20</span>)
+</span>            <span class="skw">wait</span>(<img src="1456233023222.png" />, <span class="dig">300</span>)
             <span class="skw">click</span>(<img src="1456233023222.png" />)
-            <span class="skw">wait</span>(<img src="1456233041235.png" />, <span class="dig">20</span>)
+            <span class="skw">wait</span>(<img src="1456233041235.png" />, <span class="dig">300</span>)
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjBackersFilename)
     projUrlListFile.close()
 <span class="cmt">#download individuals pages
@@ -279,7 +279,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         strIndividualsId = re.search(<span class="str">"^https://www.indiegogo.com/individuals/(.*)$"</span>, strIndividualsUrl).group(<span class="dig">1</span>)
         openChrome()
         typeUrlOnChrome(strUrlText=strIndividualsUrl)
-        <span class="skw">wait</span>(<img src="1456297470021.png" />, <span class="dig">20</span>)
+        <span class="skw">wait</span>(<img src="1456297470021.png" />, <span class="dig">300</span>)
         strIndividualsProfileFilename = strIndividualsId+<span class="str">"_profile.html"</span>
         strIndividualsProfileFilePath = strIndividualsFolderPath + <span class="str">r"/"</span> + strIndividualsProfileFilename
         <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strIndividualsProfileFilePath):<span class="cmt">#check profile.html</span>
@@ -287,9 +287,9 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         strIndividualsCampaignsFilename = strIndividualsId+<span class="str">"_campaigns.html"</span>
         strIndividualsCampaignsFilePath = strIndividualsFolderPath + <span class="str">r"/"</span> + strIndividualsCampaignsFilename
         <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strIndividualsCampaignsFilePath):<span class="cmt">#check campaigns.html        </span>
-            <span class="skw">wait</span>(<img src="1456297490082.png" />, <span class="dig">20</span>)
+            <span class="skw">wait</span>(<img src="1456297490082.png" />, <span class="dig">300</span>)
             <span class="skw">click</span>(<img src="1456297490082.png" />)
-            <span class="skw">wait</span>(<img src="1456297519988.png" />, <span class="dig">20</span>)
+            <span class="skw">wait</span>(<img src="1456297519988.png" />, <span class="dig">300</span>)
             saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsCampaignsFilename)
     individualsUrlListFile.close()
 <span class="cmt">#main entry point
