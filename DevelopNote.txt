@@ -19,3 +19,6 @@ scrapy(parser) 由 source_html/ 取得 html 解析 json/txt 存放到 parsed_res
 
 sikuli 無IDE執行模式(command line)
 PATH-TO-SIKULIX/runsikulix.cmd -r,--run <PATH-TO-FOLDER.sikuli>
+
+分開 *.html 與 *_file 資料夾 的連結
+HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\NoFileFolderConnection DWORD 1
