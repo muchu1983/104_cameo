@@ -24,7 +24,8 @@ class ParserForINDIEGOGO:
                                                 self.parseProjectCommentsPage,
                                                 self.parseProjectBackersPage,
                                                 self.parseProjectRewardPage],
-                                     "individuals":[self.parseIndividualsPage],}
+                                     "individuals":[self.parseIndividualsProfilePage,
+                                                    self.parseIndividualsCampaignsPage],}
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"./cameo_res/source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"./cameo_res/parsed_result"
         self.CATEGORY_URL_LIST_FILENAME = u"category_url_list.txt"
@@ -138,6 +139,8 @@ individuals category - parse individuals.html of category then create xxx.json
     def parseProjectRewardPage(self, strCategoryName=None):
         pass
         
-    #解析 individuals.html
-    def parseIndividualsPage(self, strCategoryName=None):
+    #解析 individuals page(s)
+    def parseIndividualsProfilePage(self, strCategoryName=None):
+        pass
+    def parseIndividualsCampaignsPage(self, strCategoryName=None):
         pass
