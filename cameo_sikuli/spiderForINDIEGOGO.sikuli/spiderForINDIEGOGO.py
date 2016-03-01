@@ -46,12 +46,12 @@ def unfoldUCBShowmore():
     while(not exists("1456062534102.png")):
         type(Key.PAGE_DOWN)
         sleep(1)
-        if exists(showmore):
-            click(showmore)
-            waitVanish(showmore, 300)
+        if exists("1456873668385.png"):
+            click("1456873668385.png")
+            waitVanish("1456873668385.png", 300)
             sleep(2)
     type(Key.HOME)
-    wait(black story, 300)
+    wait("1456873739809.png", 300)
 #type url on chrome
 def typeUrlOnChrome(strUrlText=None):
     click("1455955040522.png")
