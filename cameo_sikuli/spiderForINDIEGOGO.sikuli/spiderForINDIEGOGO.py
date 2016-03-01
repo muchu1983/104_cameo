@@ -41,6 +41,17 @@ def unfoldCategoryPage():
         rollToPageEnd()
         type(Key.PAGE_UP)
         wait("1456215300454.png", 300)
+#unfold (updates comments backers) showmore
+def unfoldUCBShowmore():
+    while(not exists("1456062534102.png")):
+        type(Key.PAGE_DOWN)
+        sleep(1)
+        if exists(showmore):
+            click(showmore)
+            waitVanish(showmore, 300)
+            sleep(2)
+    type(Key.HOME)
+    wait(black story, 300)
 #type url on chrome
 def typeUrlOnChrome(strUrlText=None):
     click("1455955040522.png")
@@ -175,7 +186,8 @@ def downloadProjectPages(strTargetCategory=None):
             #save updates
             wait("1456232941269.png", 300)
             click("1456232941269.png")
-            wait("1456232962072.png", 300)       
+            wait("1456232962072.png", 300)
+            unfoldUCBShowmore()
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjUpdatesFilename)
         strProjCommentsFilename = strProjName+"_comments.html"
         strProjCommentsFilePath = strProjectsFolderPath + r"/" + strProjCommentsFilename                
@@ -184,6 +196,7 @@ def downloadProjectPages(strTargetCategory=None):
             wait("1456232986275.png", 300)
             click("1456232986275.png")
             wait("1456233002434.png", 300)
+            unfoldUCBShowmore()
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjCommentsFilename)
         strProjBackersFilename = strProjName+"_backers.html"
         strProjBackersFilePath = strProjectsFolderPath + r"/" + strProjBackersFilename                        
@@ -191,7 +204,8 @@ def downloadProjectPages(strTargetCategory=None):
             #save backers
             wait("1456233023222.png", 300)
             click("1456233023222.png")
-            wait("1456233041235.png", 300)       
+            wait("1456233041235.png", 300)
+            unfoldUCBShowmore()
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjBackersFilename)
         strProjGalleryFilename = strProjName+"_gallery.html"
         strProjGalleryFilePath = strProjectsFolderPath + r"/" + strProjGalleryFilename
