@@ -195,7 +195,7 @@ def downloadProjectPages(strTargetCategory=None):
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjBackersFilename)
         strProjGalleryFilename = strProjName+"_gallery.html"
         strProjGalleryFilePath = strProjectsFolderPath + r"/" + strProjGalleryFilename
-        if not os.path.exists(strProjGalleryFilePath):#check gallery.html
+        if (not os.path.exists(strProjGalleryFilePath)) and exists("1456828715470.png"):#check gallery.html
             #save gallery
             wait("1456828715470.png", 300)
             click("1456828715470.png")
