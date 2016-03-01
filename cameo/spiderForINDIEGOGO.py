@@ -53,7 +53,7 @@ useage:
 explore - get explore.html
 category - get category.html
 project category - get all project.html of category
-individuals - get all individuals.html of category
+individuals category - get all individuals.html of category
 """
     #執行 spider
     def runSpider(self, lstSubcommand=[]):
