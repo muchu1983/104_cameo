@@ -193,6 +193,14 @@ def downloadProjectPages(strTargetCategory=None):
             click("1456233023222.png")
             wait("1456233041235.png", 300)       
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjBackersFilename)
+        strProjGalleryFilename = strProjName+"_gallery.html"
+        strProjGalleryFilePath = strProjectsFolderPath + r"/" + strProjGalleryFilename
+        if not os.path.exists(strProjGalleryFilePath):#check gallery.html
+            #save backers
+            wait(gallery, 300)
+            click(gallery)
+            wait(red gallery, 300)       
+            saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjGalleryFilename)
     projUrlListFile.close()
 #download individuals pages
 def downloadIndividualsPages(strTargetCategory=None):

@@ -265,6 +265,14 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
             <span class="skw">click</span>(<img src="1456233023222.png" />)
             <span class="skw">wait</span>(<img src="1456233041235.png" />, <span class="dig">300</span>)
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjBackersFilename)
+        strProjGalleryFilename = strProjName+<span class="str">"_gallery.html"</span>
+        strProjGalleryFilePath = strProjectsFolderPath + <span class="str">r"/"</span> + strProjGalleryFilename
+        <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strProjGalleryFilePath):<span class="cmt">#check gallery.html</span>
+            <span class="cmt">#save backers
+</span>            <span class="skw">wait</span>(gallery, <span class="dig">300</span>)
+            <span class="skw">click</span>(gallery)
+            <span class="skw">wait</span>(red gallery, <span class="dig">300</span>)
+            saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjGalleryFilename)
     projUrlListFile.close()
 <span class="cmt">#download individuals pages
 </span><span class="kw">def</span> downloadIndividualsPages(strTargetCategory=None):
