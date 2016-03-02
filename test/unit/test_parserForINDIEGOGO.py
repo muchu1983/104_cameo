@@ -46,6 +46,7 @@ class ParserForINDIEGOGOTest(unittest.TestCase):
     def test_parseProjectStoryPage(self):
         logging.info("ParserForINDIEGOGOTest.test_parseProjectStoryPage")
         parser = ParserForINDIEGOGO()
+        parser.beforeParseProjectPage("animals")
         parser.parseProjectStoryPage("animals")
 
 #測試開始

@@ -18,13 +18,15 @@ class ParserForINDIEGOGO:
     def __init__(self):
         self.dicSubCommandHandler = {"explore":[self.parseExplorePage],
                                      "category":[self.parseCategoryPage],
-                                     "project":[self.parseProjectDetailsPage,
+                                     "project":[self.beforeParseProjectPage,
+                                                self.parseProjectDetailsPage,
                                                 self.parseProjectStoryPage,
                                                 self.parseProjectUpdatesPage,
                                                 self.parseProjectCommentsPage,
                                                 self.parseProjectBackersPage,
                                                 self.parseProjectRewardPage],
-                                     "individuals":[self.parseIndividualsProfilePage,
+                                     "individuals":[self.beforeParseIndividualsPage,
+                                                    self.parseIndividualsProfilePage,
                                                     self.parseIndividualsCampaignsPage],}
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"./cameo_res/source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"./cameo_res/parsed_result"
@@ -94,7 +96,13 @@ individuals category - parse individuals.html of category then create xxx.json
                         for strProjUrl in lstStrProjUrls:
                             projUrlListFile.write(strProjUrl + u"\n")
                             
-    #解析 project page(s)
+    #解析 project page(s) 之前
+    def beforeParseProjectPage(self, strCategoryName=None):
+        strProjectsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/projects"%strCategoryName)
+        if not os.path.exists(strProjectsResultFolderPath):
+            os.mkdir(strProjectsResultFolderPath) #mkdir parsed_result/INDIEGOGO/category/projects/
+            
+    #解析 _details.html
     def parseProjectDetailsPage(self, strCategoryName=None):
         strProjectUrlListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/project_url_list.txt"%(strCategoryName))
         for strProjUrl in open(strProjectUrlListFilePath, "r"):
@@ -115,32 +123,41 @@ individuals category - parse individuals.html of category then create xxx.json
                         with open(strIndividualsUrlListFilePath, "a") as individualsUrlListFile:
                             individualsUrlListFile.write(strIndividualsUrl + u"\n") #append url to individuals_url_list.txt
                     
+    #解析 _story.html
     def parseProjectStoryPage(self, strCategoryName=None):
-        strProjectUrlListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/project_url_list.txt"%(strCategoryName))
-        for strProjUrl in open(strProjectUrlListFilePath, "r"):
-            strProjectName = re.search("^https://www.indiegogo.com/projects/(.*)/....$" ,strProjUrl).group(1)
-            strProjectStoryHtmlPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/projects/%s_story.html"%(strCategoryName, strProjectName))
-            if os.path.exists(strProjectStoryHtmlPath):#check *_story.html exists
-                strProjectsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/projects"%strCategoryName)
-                if not os.path.exists(strProjectsResultFolderPath):
-                    os.mkdir(strProjectsResultFolderPath) #mkdir parsed_result/INDIEGOGO/category/projects/
-                with open(strProjectStoryHtmlPath, "r") as projStoryHtmlFile: #open *_story.html
-                    strPageSource = projStoryHtmlFile.read()
-                    root = Selector(text=strPageSource)
-                    #parse *_story.html then save json to parsed_result/*/projects/
-                    pass #TODO
-                    
+        strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/projects"%strCategoryName)
+        for base, dirs, files in os.walk(strProjectsHtmlFolderPath): 
+            if base == strProjectsHtmlFolderPath:#just check projects dir
+                for strProjHtmlFileName in files:
+                    if strProjHtmlFileName.endswith("_story.html"):#find _story.html file
+                        strProjStoryFilePath = os.path.join(base, strProjHtmlFileName)
+                        with open(strProjStoryFilePath, "r") as projStoryHtmlFile:
+                            strPageSource = projStoryHtmlFile.read()
+                            root = Selector(text=strPageSource)
+                            #parse *_story.html then save json to parsed_result/*/projects/
+                            strProjTitle = root.css("h1.campaignHeader-title::text").extract()
+                            print(strProjTitle)
+                            
+    #解析 _updates.html
     def parseProjectUpdatesPage(self, strCategoryName=None):
         pass
+        
+    #解析 _comments.html
     def parseProjectCommentsPage(self, strCategoryName=None):
         pass
+    #解析 _backers.html
     def parseProjectBackersPage(self, strCategoryName=None):
         pass
+    #解析 _reward.html (INDIEGOGO 的 reward 資料置於 _story.html)
     def parseProjectRewardPage(self, strCategoryName=None):
         pass
         
-    #解析 individuals page(s)
+    #解析 individuals page(s) 之前
+    def beforeParseIndividualsPage(self, strCategoryName=None):
+        pass
+    #解析 _profile.html
     def parseIndividualsProfilePage(self, strCategoryName=None):
         pass
+    #解析 _campaigns.html
     def parseIndividualsCampaignsPage(self, strCategoryName=None):
         pass
