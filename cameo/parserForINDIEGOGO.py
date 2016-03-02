@@ -8,7 +8,9 @@ This file is part of BSD license
 """
 import os
 import re
+import json
 from scrapy import Selector
+from cameo.utility import Utility
 """
 從 source_html 的 HTML 檔案解析資料
 結果放置於 parsed_result 下
@@ -16,6 +18,7 @@ from scrapy import Selector
 class ParserForINDIEGOGO:
     #建構子
     def __init__(self):
+        self.utility = Utility()
         self.dicSubCommandHandler = {"explore":[self.parseExplorePage],
                                      "category":[self.parseCategoryPage],
                                      "project":[self.beforeParseProjectPage,
@@ -24,7 +27,8 @@ class ParserForINDIEGOGO:
                                                 self.parseProjectUpdatesPage,
                                                 self.parseProjectCommentsPage,
                                                 self.parseProjectBackersPage,
-                                                self.parseProjectRewardPage],
+                                                self.parseProjectRewardPage,
+                                                self.parseProjectGalleryPage],
                                      "individuals":[self.beforeParseIndividualsPage,
                                                     self.parseIndividualsProfilePage,
                                                     self.parseIndividualsCampaignsPage],}
@@ -32,6 +36,10 @@ class ParserForINDIEGOGO:
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"./cameo_res/parsed_result"
         self.CATEGORY_URL_LIST_FILENAME = u"category_url_list.txt"
         self.PROJ_URL_LIST_FILENAME = u"_proj_url_list.txt"
+        self.dicParsedResultOfProject = {}
+        self.dicParsedResultOfUpdate = {}
+        self.dicParsedResultOfReward = {}
+        self.dicParsedResultOfProfile = {}
         
     #取得 parser 使用資訊
     def getUseageMessage(self):
@@ -104,67 +112,80 @@ individuals category - parse individuals.html of category then create xxx.json
             
     #解析 _details.html
     def parseProjectDetailsPage(self, strCategoryName=None):
-        strProjectUrlListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/project_url_list.txt"%(strCategoryName))
-        for strProjUrl in open(strProjectUrlListFilePath, "r"):
-            strProjectName = re.search("^https://www.indiegogo.com/projects/(.*)/....$" ,strProjUrl).group(1)
-            strProjectDetailsHtmlPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/projects/%s_details.html"%(strCategoryName, strProjectName))
-            if os.path.exists(strProjectDetailsHtmlPath):#check *_details.html exists
-                with open(strProjectDetailsHtmlPath, "r") as projDetailsHtmlFile: #open *_details.html
-                    strPageSource = projDetailsHtmlFile.read()
-                    root = Selector(text=strPageSource)
-                    #parse *_details.html then append url to parsed_result/*/category/individuals_url_list.txt
-                    strIndividualsUrlListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/individuals_url_list.txt"%(strCategoryName))
-                    lstStrExistsIndividualsUrl = []
-                    if os.path.exists(strIndividualsUrlListFilePath):
-                        with open(strIndividualsUrlListFilePath, "r") as individualsUrlListFile:
-                            lstStrExistsIndividualsUrl = individualsUrlListFile.readlines()
-                    strIndividualsUrl = root.css("div.campaignTrustPassportDesktop-ownerInfo a.ng-binding[href*='individuals']::attr(href)").extract_first() #parse individuals url
-                    if strIndividualsUrl+u"\n" not in lstStrExistsIndividualsUrl:#檢查有無重覆的 individuals url
-                        with open(strIndividualsUrlListFilePath, "a") as individualsUrlListFile:
-                            individualsUrlListFile.write(strIndividualsUrl + u"\n") #append url to individuals_url_list.txt
+        strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/projects"%strCategoryName)
+        lstStrDetailsHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strProjectsHtmlFolderPath, strSuffixes="_details.html")
+        for strProjectDetailsHtmlPath in lstStrDetailsHtmlFilePath:
+            with open(strProjectDetailsHtmlPath, "r") as projDetailsHtmlFile: #open *_details.html
+                strProjHtmlFileName = os.path.basename(projDetailsHtmlFile.name)
+                strProjUrl = "https://www.indiegogo.com/projects/" + re.search("^(.*)_details.html$", strProjHtmlFileName).group(1)
+                if strProjUrl not in self.dicParsedResultOfProject:
+                    self.dicParsedResultOfProject[strProjUrl] = {}
+                strPageSource = projDetailsHtmlFile.read()
+                root = Selector(text=strPageSource)
+                #parse *_details.html
+                strIndividualsUrl = root.css("div.campaignTrustPassportDesktop-ownerInfo a.ng-binding[href*='individuals']::attr(href)").extract_first() #parse individuals url
+                self.dicParsedResultOfProject[strProjUrl]["strCreatorUrl"] = strIndividualsUrl
+                # append url to parsed_result/*/category/individuals_url_list.txt
+                strIndividualsUrlListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/individuals_url_list.txt"%(strCategoryName))
+                lstStrExistsIndividualsUrl = []
+                if os.path.exists(strIndividualsUrlListFilePath):
+                    with open(strIndividualsUrlListFilePath, "r") as individualsUrlListFile:
+                        lstStrExistsIndividualsUrl = individualsUrlListFile.readlines()
+                if strIndividualsUrl+u"\n" not in lstStrExistsIndividualsUrl:#檢查有無重覆的 individuals url
+                    with open(strIndividualsUrlListFilePath, "a") as individualsUrlListFile:
+                        individualsUrlListFile.write(strIndividualsUrl + u"\n") #append url to individuals_url_list.txt
                     
     #解析 _story.html
     def parseProjectStoryPage(self, strCategoryName=None):
         strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/projects"%strCategoryName)
-        for base, dirs, files in os.walk(strProjectsHtmlFolderPath): 
-            if base == strProjectsHtmlFolderPath:#just check projects dir
-                for strProjHtmlFileName in files:
-                    if strProjHtmlFileName.endswith("_story.html"):#find _story.html file
-                        strProjStoryFilePath = os.path.join(base, strProjHtmlFileName)
-                        with open(strProjStoryFilePath, "r") as projStoryHtmlFile:
-                            strPageSource = projStoryHtmlFile.read()
-                            root = Selector(text=strPageSource)
-                            #parse *_story.html then save json to parsed_result/*/projects/
-                            strSource = "INDIEGOGO"
-                            strUrl = "https://www.indiegogo.com/projects/" + re.search("^(.*)_story.html$", strProjHtmlFileName).group(1)
-                            strProjectName = root.css("h1.campaignHeader-title::text").extract()
-                            strLocation = root.css("div.campaignHeader-location a.ng-binding::text").extract_first().strip()
-                            strCountry = root.css("div.campaignTrustTeaser-item:nth-of-type(2) div.campaignTrustTeaser-text div.ng-binding:nth-of-type(3)::text").extract_first().strip()
-                            strContinent = root.css("div.campaignTrustTeaser-item:nth-of-type(2) div.campaignTrustTeaser-text div.ng-binding:nth-of-type(2)::text").extract_first().split(",")[1].strip()
-                            strDescription = ""
-                            strIntroduction = ""
-                            strCreator = root.css("div.campaignTrustTeaser-item:nth-of-type(1) div.campaignTrustTeaser-text div.campaignTrustTeaser-text-title::text").extract_first().strip()
-                            strCreatorUrl = ""
-                            intVideoCount = ""
-                            intImageCount = ""
-                            isPMSelect = ""
-                            intStatus = ""
-                            strCategory = ""
-                            strSubCategory = ""
-                            fFundProgress = ""
-                            intFundTarget = ""
-                            intRaisedMoney = ""
-                            strCurrency = ""
-                            intBacker = ""
-                            intRemainDays = ""
-                            intUpdate = ""
-                            intComment = ""
-                            strEndDate = ""
-                            strStartDate = ""
-                            intFbLike = ""
-                            lstStrBacker = ""
-                            isDemand = ""
-                            isAON = ""
+        lstStrStoryHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strProjectsHtmlFolderPath, strSuffixes="_story.html")
+        for strProjStoryFilePath in lstStrStoryHtmlFilePath:
+            with open(strProjStoryFilePath, "r") as projStoryHtmlFile:
+                strProjHtmlFileName = os.path.basename(projStoryHtmlFile.name)
+                strProjUrl = "https://www.indiegogo.com/projects/" + re.search("^(.*)_story.html$", strProjHtmlFileName).group(1)
+                if strProjUrl not in self.dicParsedResultOfProject:
+                    self.dicParsedResultOfProject[strProjUrl] = {}
+                strPageSource = projStoryHtmlFile.read()
+                root = Selector(text=strPageSource)
+                #parse *_story.html then save json to parsed_result/*/projects/
+                self.dicParsedResultOfProject[strProjUrl]["strSource"] = \
+                    "INDIEGOGO"
+                self.dicParsedResultOfProject[strProjUrl]["strUrl"] = \
+                    strProjUrl
+                self.dicParsedResultOfProject[strProjUrl]["strProjectName"] = \
+                    root.css("h1.campaignHeader-title::text").extract_first().strip()
+                self.dicParsedResultOfProject[strProjUrl]["strLocation"] = \
+                    root.css("div.campaignHeader-location a.ng-binding::text").extract_first().strip()
+                self.dicParsedResultOfProject[strProjUrl]["strCountry"] = \
+                    root.css("div.campaignTrustTeaser-item:nth-of-type(2) div.campaignTrustTeaser-text div.ng-binding:nth-of-type(3)::text").extract_first().strip()
+                self.dicParsedResultOfProject[strProjUrl]["strContinent"] = \
+                    root.css("div.campaignTrustTeaser-item:nth-of-type(2) div.campaignTrustTeaser-text div.ng-binding:nth-of-type(2)::text").extract_first().split(",")[1].strip()
+                #strDescription = ""
+                #strIntroduction = ""
+                self.dicParsedResultOfProject[strProjUrl]["strCreator"] = \
+                    root.css("div.campaignTrustTeaser-item:nth-of-type(1) div.campaignTrustTeaser-text div.campaignTrustTeaser-text-title::text").extract_first().strip()
+                #strCreatorUrl = "" 由 parseProjectDetailsPage 取得
+                #intVideoCount = "" 由 parseProjectGalleryPage 取得
+                #intImageCount = "" 由 parseProjectGalleryPage 取得
+                #isPMSelect = "" 無法取得
+                #intStatus = "" 
+                #strCategory = ""
+                #strSubCategory = ""
+                #fFundProgress = ""
+                #intFundTarget = ""
+                #intRaisedMoney = ""
+                #strCurrency = ""
+                #intBacker = ""
+                #intRemainDays = ""
+                #intUpdate = ""
+                #intComment = ""
+                #strEndDate = ""
+                #strStartDate = ""
+                #intFbLike = ""
+                #lstStrBacker = ""
+                #isDemand = ""
+                #isAON = ""
+                            
                             
     #解析 _updates.html
     def parseProjectUpdatesPage(self, strCategoryName=None):
@@ -173,11 +194,17 @@ individuals category - parse individuals.html of category then create xxx.json
     #解析 _comments.html
     def parseProjectCommentsPage(self, strCategoryName=None):
         pass
+        
     #解析 _backers.html
     def parseProjectBackersPage(self, strCategoryName=None):
         pass
+        
     #解析 _reward.html (INDIEGOGO 的 reward 資料置於 _story.html)
     def parseProjectRewardPage(self, strCategoryName=None):
+        pass
+        
+    #解析 _gallery.html
+    def parseProjectGalleryPage(self, strCategoryName=None):
         pass
         
     #解析 individuals page(s) 之前

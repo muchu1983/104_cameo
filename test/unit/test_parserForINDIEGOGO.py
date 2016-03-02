@@ -8,6 +8,7 @@ This file is part of BSD license
 """
 import unittest
 import logging
+import json
 from cameo.parserForINDIEGOGO import ParserForINDIEGOGO
 """
 測試
@@ -36,18 +37,14 @@ class ParserForINDIEGOGOTest(unittest.TestCase):
         parser = ParserForINDIEGOGO()
         parser.parseCategoryPage()
         
-    #測試 解析 project_details 頁面
-    def test_parseProjectDetailsPage(self):
-        logging.info("ParserForINDIEGOGOTest.test_parseProjectDetailsPage")
-        parser = ParserForINDIEGOGO()
-        parser.parseProjectDetailsPage("animals")
-        
-    #測試 解析 project_story 頁面
-    def test_parseProjectStoryPage(self):
-        logging.info("ParserForINDIEGOGOTest.test_parseProjectStoryPage")
+    #測試 解析 project 頁面
+    def test_parseProjectPage(self):
+        logging.info("ParserForINDIEGOGOTest.test_parseProjectPage")
         parser = ParserForINDIEGOGO()
         parser.beforeParseProjectPage("animals")
+        parser.parseProjectDetailsPage("animals")
         parser.parseProjectStoryPage("animals")
+        print(json.dumps(parser.dicParsedResultOfProject))
 
 #測試開始
 if __name__ == "__main__":
