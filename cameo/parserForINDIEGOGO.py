@@ -148,32 +148,58 @@ individuals category - parse individuals.html of category then create xxx.json
                 strPageSource = projStoryHtmlFile.read()
                 root = Selector(text=strPageSource)
                 #parse *_story.html then save json to parsed_result/*/projects/
+                #strSource
                 self.dicParsedResultOfProject[strProjUrl]["strSource"] = \
                     "INDIEGOGO"
+                #strUrl
                 self.dicParsedResultOfProject[strProjUrl]["strUrl"] = \
                     strProjUrl
+                #strProjectName
                 self.dicParsedResultOfProject[strProjUrl]["strProjectName"] = \
                     root.css("h1.campaignHeader-title::text").extract_first().strip()
+                #strLocation
                 self.dicParsedResultOfProject[strProjUrl]["strLocation"] = \
                     root.css("div.campaignHeader-location a.ng-binding::text").extract_first().strip()
+                #strCountry
                 self.dicParsedResultOfProject[strProjUrl]["strCountry"] = \
                     root.css("div.campaignTrustTeaser-item:nth-of-type(2) div.campaignTrustTeaser-text div.ng-binding:nth-of-type(3)::text").extract_first().strip()
+                #strContinent
                 self.dicParsedResultOfProject[strProjUrl]["strContinent"] = \
                     root.css("div.campaignTrustTeaser-item:nth-of-type(2) div.campaignTrustTeaser-text div.ng-binding:nth-of-type(2)::text").extract_first().split(",")[1].strip()
                 #strDescription = ""
                 #strIntroduction = ""
+                #strCreator
                 self.dicParsedResultOfProject[strProjUrl]["strCreator"] = \
                     root.css("div.campaignTrustTeaser-item:nth-of-type(1) div.campaignTrustTeaser-text div.campaignTrustTeaser-text-title::text").extract_first().strip()
                 #strCreatorUrl = "" 由 parseProjectDetailsPage 取得
                 #intVideoCount = "" 由 parseProjectGalleryPage 取得
                 #intImageCount = "" 由 parseProjectGalleryPage 取得
                 #isPMSelect = "" 無法取得
-                #intStatus = "" 
-                #strCategory = ""
-                #strSubCategory = ""
-                #fFundProgress = ""
-                #intFundTarget = ""
+                #intStatus
+                isIndemand = False
+                if len(root.css("div.indemandSidebar-banner").extract()) > 0:
+                    isIndemand = True
+                if isIndemand:
+                    strIndemandBlurbText = root.css("div.preOrder-fundingBlurb::text").extract_first().strip()
+                    intIndemandFundedPersentage = int(re.search("^Original campaign was ([0-9\.]*)% funded on .*$", strIndemandBlurbText).group(1))
+                    if intIndemandFundedPersentage >= 100:
+                        self.dicParsedResultOfProject[strProjUrl]["intStatus"] = 3
+                    else:
+                        self.dicParsedResultOfProject[strProjUrl]["intStatus"] = 4
+                else:
+                    strMetaFundingText = root.css("div.campaignGoal-barMetaFunding em::text").extract_first().strip()
+                    intFundingPersentage = int(re.search("([0-9\.]*)%", strMetaFundingText).group(1))
+                    if intFundingPersentage >= 100:
+                        self.dicParsedResultOfProject[strProjUrl]["intStatus"] = 1
+                    else:
+                        self.dicParsedResultOfProject[strProjUrl]["intStatus"] = 0
+                #strCategory
+                self.dicParsedResultOfProject[strProjUrl]["strCategory"] = \
+                    root.css("div.campaignTrustTeaser-item:nth-of-type(2) div.campaignTrustTeaser-text-title::text").extract_first().strip()
+                #strSubCategory = "" 無法取得
                 #intRaisedMoney = ""
+                #intFundTarget = ""
+                #fFundProgress = ""
                 #strCurrency = ""
                 #intBacker = ""
                 #intRemainDays = ""
