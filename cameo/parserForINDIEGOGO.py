@@ -135,8 +135,36 @@ individuals category - parse individuals.html of category then create xxx.json
                             strPageSource = projStoryHtmlFile.read()
                             root = Selector(text=strPageSource)
                             #parse *_story.html then save json to parsed_result/*/projects/
-                            strProjTitle = root.css("h1.campaignHeader-title::text").extract()
-                            print(strProjTitle)
+                            strSource = "INDIEGOGO"
+                            strUrl = "https://www.indiegogo.com/projects/" + re.search("^(.*)_story.html$", strProjHtmlFileName).group(1)
+                            strProjectName = root.css("h1.campaignHeader-title::text").extract()
+                            strLocation = root.css("div.campaignHeader-location a.ng-binding::text").extract_first().strip()
+                            strCountry = root.css("div.campaignTrustTeaser-item:nth-of-type(2) div.campaignTrustTeaser-text div.ng-binding:nth-of-type(3)::text").extract_first().strip()
+                            strContinent = root.css("div.campaignTrustTeaser-item:nth-of-type(2) div.campaignTrustTeaser-text div.ng-binding:nth-of-type(2)::text").extract_first().split(",")[1].strip()
+                            strDescription = ""
+                            strIntroduction = ""
+                            strCreator = root.css("div.campaignTrustTeaser-item:nth-of-type(1) div.campaignTrustTeaser-text div.campaignTrustTeaser-text-title::text").extract_first().strip()
+                            strCreatorUrl = ""
+                            intVideoCount = ""
+                            intImageCount = ""
+                            isPMSelect = ""
+                            intStatus = ""
+                            strCategory = ""
+                            strSubCategory = ""
+                            fFundProgress = ""
+                            intFundTarget = ""
+                            intRaisedMoney = ""
+                            strCurrency = ""
+                            intBacker = ""
+                            intRemainDays = ""
+                            intUpdate = ""
+                            intComment = ""
+                            strEndDate = ""
+                            strStartDate = ""
+                            intFbLike = ""
+                            lstStrBacker = ""
+                            isDemand = ""
+                            isAON = ""
                             
     #解析 _updates.html
     def parseProjectUpdatesPage(self, strCategoryName=None):
