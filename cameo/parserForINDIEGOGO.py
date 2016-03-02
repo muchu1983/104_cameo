@@ -197,7 +197,13 @@ individuals category - parse individuals.html of category then create xxx.json
                 self.dicParsedResultOfProject[strProjUrl]["strCategory"] = \
                     root.css("div.campaignTrustTeaser-item:nth-of-type(2) div.campaignTrustTeaser-text-title::text").extract_first().strip()
                 #strSubCategory = "" 無法取得
-                #intRaisedMoney = ""
+                #intRaisedMoney
+                if isIndemand:
+                    strFundsAmountText = root.css("div.preOrder-combinedBalance div.ng-binding span.currency span::text").extract_first().strip()
+                else:
+                    strFundsAmountText = root.css("div.campaignGoal-funds span.campaignGoal-fundsAmount span.currency span::text").extract_first().strip()
+                self.dicParsedResultOfProject[strProjUrl]["intRaisedMoney"] = \
+                    int(re.sub("[^0-9]", "", strFundsAmountText))
                 #intFundTarget = ""
                 #fFundProgress = ""
                 #strCurrency = ""
