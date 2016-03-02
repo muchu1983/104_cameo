@@ -179,6 +179,8 @@ individuals category - parse individuals.html of category then create xxx.json
                 isIndemand = False
                 if len(root.css("div.indemandSidebar-banner").extract()) > 0:
                     isIndemand = True
+                intIndemandFundedPersentage = 0
+                intFundingPersentage = 0
                 if isIndemand:
                     strIndemandBlurbText = root.css("div.preOrder-fundingBlurb::text").extract_first().strip()
                     intIndemandFundedPersentage = int(re.search("^Original campaign was ([0-9\.]*)% funded on .*$", strIndemandBlurbText).group(1))
@@ -194,30 +196,64 @@ individuals category - parse individuals.html of category then create xxx.json
                     else:
                         self.dicParsedResultOfProject[strProjUrl]["intStatus"] = 0
                 #strCategory
+                strCategory = root.css("div.campaignTrustTeaser-item:nth-of-type(2) div.campaignTrustTeaser-text-title::text").extract_first().strip()
                 self.dicParsedResultOfProject[strProjUrl]["strCategory"] = \
-                    root.css("div.campaignTrustTeaser-item:nth-of-type(2) div.campaignTrustTeaser-text-title::text").extract_first().strip()
-                #strSubCategory = "" 無法取得
+                    strCategory
+                #strSubCategory 與 strCategory 相同
+                self.dicParsedResultOfProject[strProjUrl]["strSubCategory"] = \
+                    strCategory
                 #intRaisedMoney
+                intRaisedMoney = 0
                 if isIndemand:
                     strFundsAmountText = root.css("div.preOrder-combinedBalance div.ng-binding span.currency span::text").extract_first().strip()
                 else:
                     strFundsAmountText = root.css("div.campaignGoal-funds span.campaignGoal-fundsAmount span.currency span::text").extract_first().strip()
+                intRaisedMoney = int(re.sub("[^0-9]", "", strFundsAmountText))
                 self.dicParsedResultOfProject[strProjUrl]["intRaisedMoney"] = \
-                    int(re.sub("[^0-9]", "", strFundsAmountText))
-                #intFundTarget = ""
-                #fFundProgress = ""
-                #strCurrency = ""
-                #intBacker = ""
-                #intRemainDays = ""
-                #intUpdate = ""
-                #intComment = ""
-                #strEndDate = ""
-                #strStartDate = ""
-                #intFbLike = ""
-                #lstStrBacker = ""
-                #isDemand = ""
-                #isAON = ""
-                            
+                    intRaisedMoney
+                #intFundTarget
+                if isIndemand:
+                    intFundTarget = int(float(intRaisedMoney) / (float(intIndemandFundedPersentage) / 100 ))
+                else:
+                    strRaisedGoalText = root.css("span.campaignGoal-fundsRaisedGoal span.numeral::text").extract_first().strip()
+                    intFundTarget = int(re.sub("[^0-9]", "", strRaisedGoalText))
+                self.dicParsedResultOfProject[strProjUrl]["intFundTarget"] = intFundTarget
+                #fFundProgress
+                if isIndemand:
+                    self.dicParsedResultOfProject[strProjUrl]["fFundProgress"] = float(intIndemandFundedPersentage) / 100
+                else:
+                    self.dicParsedResultOfProject[strProjUrl]["fFundProgress"] = float(intFundingPersentage) / 100
+                #strCurrency
+                if isIndemand:
+                    strCurrencyText = root.css("div.preOrder-combinedBalance div.ng-binding span.currency em::text").extract_first().strip()
+                else:
+                    strCurrencyText = root.css("div.campaignGoal-funds span.campaignGoal-fundsAmount span.currency em::text").extract_first().strip()
+                self.dicParsedResultOfProject[strProjUrl]["strCurrency"] = strCurrencyText
+                #intBacker
+                self.dicParsedResultOfProject[strProjUrl]["intBacker"] = \
+                    int(root.css("span.i-tab:nth-of-type(4) span span::text").extract_first().strip())
+                #intRemainDays = "" 由 parseCategoryPage 取得 ??
+                #intUpdate
+                self.dicParsedResultOfProject[strProjUrl]["intUpdate"] = \
+                    int(root.css("span.i-tab:nth-of-type(2) span span::text").extract_first().strip())
+                #intComment
+                self.dicParsedResultOfProject[strProjUrl]["intComment"] = \
+                    int(root.css("span.i-tab:nth-of-type(3) span span::text").extract_first().strip())
+                #strEndDate = "" 由 parseCategoryPage 取得 ??
+                #strStartDate = "" 無法取得
+                #intFbLike = "" 無法取得
+                #lstStrBacker = "" 由 parseProjectBackersPage 取得
+                #isDemand
+                if isIndemand:
+                    self.dicParsedResultOfProject[strProjUrl]["isDemand"] = True
+                else:
+                    self.dicParsedResultOfProject[strProjUrl]["isDemand"] = False
+                #isAON
+                strIStatusText = root.css("div.campaignGoal-goalFundingType span.i-status::text").extract_first()
+                if strIStatusText != None and strIStatusText.strip() == "Flexible Funding":
+                    self.dicParsedResultOfProject[strProjUrl]["isAON"] = True
+                else:
+                    self.dicParsedResultOfProject[strProjUrl]["isAON"] = False
                             
     #解析 _updates.html
     def parseProjectUpdatesPage(self, strCategoryName=None):
