@@ -166,12 +166,14 @@ individuals category - parse individuals.html of category then create xxx.json
                 #strContinent
                 self.dicParsedResultOfProject[strProjUrl]["strContinent"] = \
                     root.css("div.campaignTrustTeaser-item:nth-of-type(2) div.campaignTrustTeaser-text div.ng-binding:nth-of-type(2)::text").extract_first().split(",")[1].strip()
-                #strDescription = ""
-                #strIntroduction = ""
+                #strDescription = "" 多段落取得困難
+                #strIntroduction
+                self.dicParsedResultOfProject[strProjUrl]["strIntroduction"] = \
+                    root.css("div.i-musty-background div:nth-of-type(1)::text").extract_first().strip()
                 #strCreator
                 self.dicParsedResultOfProject[strProjUrl]["strCreator"] = \
                     root.css("div.campaignTrustTeaser-item:nth-of-type(1) div.campaignTrustTeaser-text div.campaignTrustTeaser-text-title::text").extract_first().strip()
-                #strCreatorUrl = "" 由 parseProjectDetailsPage 取得
+                #strCreatorUrl = "" 已由 parseProjectDetailsPage 取得
                 #intVideoCount = "" 由 parseProjectGalleryPage 取得
                 #intImageCount = "" 由 parseProjectGalleryPage 取得
                 #isPMSelect = "" 無法取得
