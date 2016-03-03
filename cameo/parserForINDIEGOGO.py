@@ -123,6 +123,7 @@ individuals category - parse individuals.html of category then create xxx.json
                 strPageSource = projDetailsHtmlFile.read()
                 root = Selector(text=strPageSource)
                 #parse *_details.html
+                #strCreatorUrl
                 strIndividualsUrl = root.css("div.campaignTrustPassportDesktop-ownerInfo a.ng-binding[href*='individuals']::attr(href)").extract_first() #parse individuals url
                 self.dicParsedResultOfProject[strProjUrl]["strCreatorUrl"] = strIndividualsUrl
                 # append url to parsed_result/*/category/individuals_url_list.txt
@@ -147,7 +148,7 @@ individuals category - parse individuals.html of category then create xxx.json
                     self.dicParsedResultOfProject[strProjUrl] = {}
                 strPageSource = projStoryHtmlFile.read()
                 root = Selector(text=strPageSource)
-                #parse *_story.html then save json to parsed_result/*/projects/
+                #parse *_story.html
                 #strSource
                 self.dicParsedResultOfProject[strProjUrl]["strSource"] = \
                     "INDIEGOGO"
@@ -164,8 +165,11 @@ individuals category - parse individuals.html of category then create xxx.json
                 self.dicParsedResultOfProject[strProjUrl]["strCountry"] = \
                     root.css("div.campaignTrustTeaser-item:nth-of-type(2) div.campaignTrustTeaser-text div.ng-binding:nth-of-type(3)::text").extract_first().strip()
                 #strContinent
-                self.dicParsedResultOfProject[strProjUrl]["strContinent"] = \
-                    root.css("div.campaignTrustTeaser-item:nth-of-type(2) div.campaignTrustTeaser-text div.ng-binding:nth-of-type(2)::text").extract_first().split(",")[1].strip()
+                strTrustTeaserText = root.css("div.campaignTrustTeaser-item:nth-of-type(2) div.campaignTrustTeaser-text div.ng-binding:nth-of-type(2)::text").extract_first()
+                strContinent = None
+                if "," in strTrustTeaserText:
+                    strContinent = strTrustTeaserText.split(",")[1].strip()
+                self.dicParsedResultOfProject[strProjUrl]["strContinent"] = strContinent
                 #strDescription = "" 多段落取得困難
                 #strIntroduction
                 self.dicParsedResultOfProject[strProjUrl]["strIntroduction"] = \
@@ -175,7 +179,12 @@ individuals category - parse individuals.html of category then create xxx.json
                     root.css("div.campaignTrustTeaser-item:nth-of-type(1) div.campaignTrustTeaser-text div.campaignTrustTeaser-text-title::text").extract_first().strip()
                 #strCreatorUrl = "" 已由 parseProjectDetailsPage 取得
                 #intVideoCount = "" 由 parseProjectGalleryPage 取得
-                #intImageCount = "" 由 parseProjectGalleryPage 取得
+                #intImageCount
+                strGalleryCountText = root.css("span.i-tab:nth-of-type(5) span span::text").extract_first()
+                intImageCount = 0
+                if strGalleryCountText != None:
+                    intImageCount = int(strGalleryCountText.strip())
+                self.dicParsedResultOfProject[strProjUrl]["intImageCount"] = intImageCount
                 #isPMSelect = "" 無法取得
                 #intStatus
                 isIndemand = False
@@ -244,7 +253,7 @@ individuals category - parse individuals.html of category then create xxx.json
                 #strEndDate = "" 由 parseCategoryPage 取得 ??
                 #strStartDate = "" 無法取得
                 #intFbLike = "" 無法取得
-                #lstStrBacker = "" 由 parseProjectBackersPage 取得
+                #lstStrBacker = "" 已由 parseProjectBackersPage 取得
                 #isDemand
                 if isIndemand:
                     self.dicParsedResultOfProject[strProjUrl]["isDemand"] = True
@@ -267,7 +276,22 @@ individuals category - parse individuals.html of category then create xxx.json
         
     #解析 _backers.html
     def parseProjectBackersPage(self, strCategoryName=None):
-        pass
+        strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/projects"%strCategoryName)
+        lstStrBackersHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strProjectsHtmlFolderPath, strSuffixes="_backers.html")
+        for strProjBackersFilePath in lstStrBackersHtmlFilePath:
+            with open(strProjBackersFilePath, "r") as projBackersHtmlFile:
+                strProjHtmlFileName = os.path.basename(projBackersHtmlFile.name)
+                strProjUrl = "https://www.indiegogo.com/projects/" + re.search("^(.*)_backers.html$", strProjHtmlFileName).group(1)
+                if strProjUrl not in self.dicParsedResultOfProject:
+                    self.dicParsedResultOfProject[strProjUrl] = {}
+                strPageSource = projBackersHtmlFile.read()
+                root = Selector(text=strPageSource)
+                #parse *_backers.html
+                #lstStrBacker
+                lstStrBacker = root.css("div.i-funder-row div.i-name-col div.i-name div.i-details-name::text,a.i-details-name::text").extract()
+                self.dicParsedResultOfProject[strProjUrl]["lstStrBacker"] = lstStrBacker
+                
+                
         
     #解析 _reward.html (INDIEGOGO 的 reward 資料置於 _story.html)
     def parseProjectRewardPage(self, strCategoryName=None):

@@ -44,7 +44,8 @@ class ParserForINDIEGOGOTest(unittest.TestCase):
         parser.beforeParseProjectPage("animals")
         parser.parseProjectDetailsPage("animals")
         parser.parseProjectStoryPage("animals")
-        print(json.dumps(parser.dicParsedResultOfProject))
+        parser.parseProjectBackersPage("animals")
+        print(json.dumps(parser.dicParsedResultOfProject, indent=2, sort_keys=True))
 
 #測試開始
 if __name__ == "__main__":
