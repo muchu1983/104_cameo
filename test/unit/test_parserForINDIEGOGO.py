@@ -45,7 +45,11 @@ class ParserForINDIEGOGOTest(unittest.TestCase):
         parser.parseProjectDetailsPage("animals")
         parser.parseProjectStoryPage("animals")
         parser.parseProjectBackersPage("animals")
-        print(json.dumps(parser.dicParsedResultOfProject, indent=4, sort_keys=True))
+        parser.parseProjectUpdatesPage("animals")
+        parser.parseProjectCommentsPage("animals")
+        #print(json.dumps(parser.dicParsedResultOfProject, indent=4, sort_keys=True))
+        print(json.dumps(parser.dicParsedResultOfUpdate, indent=4, sort_keys=True))
+        print(json.dumps(parser.dicParsedResultOfComment, indent=4, sort_keys=True))
 
 #測試開始
 if __name__ == "__main__":

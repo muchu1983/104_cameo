@@ -28,7 +28,8 @@ class ParserForINDIEGOGO:
                                                 self.parseProjectCommentsPage,
                                                 self.parseProjectBackersPage,
                                                 self.parseProjectRewardPage,
-                                                self.parseProjectGalleryPage],
+                                                self.parseProjectGalleryPage,
+                                                self.afterParseProjectPage],
                                      "individuals":[self.beforeParseIndividualsPage,
                                                     self.parseIndividualsProfilePage,
                                                     self.parseIndividualsCampaignsPage],}
@@ -38,6 +39,7 @@ class ParserForINDIEGOGO:
         self.PROJ_URL_LIST_FILENAME = u"_proj_url_list.txt"
         self.dicParsedResultOfProject = {}
         self.dicParsedResultOfUpdate = {}
+        self.dicParsedResultOfComment = {}
         self.dicParsedResultOfReward = {}
         self.dicParsedResultOfProfile = {}
         
@@ -110,6 +112,10 @@ individuals category - parse individuals.html of category then create xxx.json
         if not os.path.exists(strProjectsResultFolderPath):
             os.mkdir(strProjectsResultFolderPath) #mkdir parsed_result/INDIEGOGO/category/projects/
             
+    #解析 project page(s) 之後
+    def afterParseProjectPage(self, strCategoryName=None):
+        pass #TODO write dict to json file
+            
     #解析 _details.html
     def parseProjectDetailsPage(self, strCategoryName=None):
         strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/projects"%strCategoryName)
@@ -178,7 +184,7 @@ individuals category - parse individuals.html of category then create xxx.json
                 self.dicParsedResultOfProject[strProjUrl]["strCreator"] = \
                     root.css("div.campaignTrustTeaser-item:nth-of-type(1) div.campaignTrustTeaser-text div.campaignTrustTeaser-text-title::text").extract_first().strip()
                 #strCreatorUrl = "" 已由 parseProjectDetailsPage 取得
-                #intVideoCount = "" 由 parseProjectGalleryPage 取得
+                #intVideoCount = "" 由 parseProjectGalleryPage 取得??
                 #intImageCount
                 strGalleryCountText = root.css("span.i-tab:nth-of-type(5) span span::text").extract_first()
                 intImageCount = 0
@@ -268,12 +274,49 @@ individuals category - parse individuals.html of category then create xxx.json
                             
     #解析 _updates.html
     def parseProjectUpdatesPage(self, strCategoryName=None):
-        pass
+        strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/projects"%strCategoryName)
+        lstStrUpdatesHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strProjectsHtmlFolderPath, strSuffixes="_updates.html")
+        for strProjUpdatesFilePath in lstStrUpdatesHtmlFilePath:
+            with open(strProjUpdatesFilePath, "r") as projUpdatesHtmlFile:
+                strProjHtmlFileName = os.path.basename(projUpdatesHtmlFile.name)
+                strProjUrl = "https://www.indiegogo.com/projects/" + re.search("^(.*)_updates.html$", strProjHtmlFileName).group(1)
+                if strProjUrl not in self.dicParsedResultOfUpdate:
+                    self.dicParsedResultOfUpdate[strProjUrl] = {}
+                strPageSource = projUpdatesHtmlFile.read()
+                root = Selector(text=strPageSource)
+                #parse *_updates.html
+                lstDicUpdateData = []
+                #loop of append update data to lstDicUpdateData
+                    #strUrl
+                    #strUpdateTitle
+                    #strUpdateContent
+                    #strUpdateDate
+                    #intComment
+                    #intLike
+                self.dicParsedResultOfUpdate[strProjUrl] = lstDicUpdateData
         
     #解析 _comments.html
     def parseProjectCommentsPage(self, strCategoryName=None):
-        pass
-        
+        strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/projects"%strCategoryName)
+        lstStrCommentsHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strProjectsHtmlFolderPath, strSuffixes="_comments.html")
+        for strProjCommentsFilePath in lstStrCommentsHtmlFilePath:
+            with open(strProjCommentsFilePath, "r") as projCommentsHtmlFile:
+                strProjHtmlFileName = os.path.basename(projCommentsHtmlFile.name)
+                strProjUrl = "https://www.indiegogo.com/projects/" + re.search("^(.*)_comments.html$", strProjHtmlFileName).group(1)
+                if strProjUrl not in self.dicParsedResultOfComment:
+                    self.dicParsedResultOfComment[strProjUrl] = {}
+                strPageSource = projCommentsHtmlFile.read()
+                root = Selector(text=strPageSource)
+                #parse *_comments.html
+                lstDicCommentData = []
+                #loop of append comment data to lstDicCommentData
+                    #strUrl
+                    #strCommentName
+                    #strIsCreator
+                    #strCommentContent
+                    #strCommentDate
+                self.dicParsedResultOfComment[strProjUrl] = lstDicCommentData
+                
     #解析 _backers.html
     def parseProjectBackersPage(self, strCategoryName=None):
         strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/projects"%strCategoryName)
@@ -291,8 +334,6 @@ individuals category - parse individuals.html of category then create xxx.json
                 lstStrBacker = root.css("div.i-funder-row div.i-name-col div.i-name div.i-details-name::text,a.i-details-name::text").extract()
                 self.dicParsedResultOfProject[strProjUrl]["lstStrBacker"] = lstStrBacker
                 
-                
-        
     #解析 _reward.html (INDIEGOGO 的 reward 資料置於 _story.html)
     def parseProjectRewardPage(self, strCategoryName=None):
         pass
