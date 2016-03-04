@@ -176,7 +176,7 @@ individuals category - parse individuals.html of category then create xxx.json
                 if "," in strTrustTeaserText:
                     strContinent = strTrustTeaserText.split(",")[1].strip()
                 self.dicParsedResultOfProject[strProjUrl]["strContinent"] = strContinent
-                #strDescription = "" 多段落取得困難
+                #strDescription = "" TODO
                 #strIntroduction
                 self.dicParsedResultOfProject[strProjUrl]["strIntroduction"] = \
                     root.css("div.i-musty-background div:nth-of-type(1)::text").extract_first().strip()
@@ -258,7 +258,7 @@ individuals category - parse individuals.html of category then create xxx.json
                     int(root.css("span.i-tab:nth-of-type(3) span span::text").extract_first().strip())
                 #strEndDate = "" 由 parseCategoryPage 取得 ??
                 #strStartDate = "" 無法取得
-                #intFbLike = "" 無法取得
+                #intFbLike = "" TODO
                 #lstStrBacker = "" 已由 parseProjectBackersPage 取得
                 #isDemand
                 if isIndemand:
