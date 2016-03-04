@@ -280,8 +280,6 @@ individuals category - parse individuals.html of category then create xxx.json
             with open(strProjUpdatesFilePath, "r") as projUpdatesHtmlFile:
                 strProjHtmlFileName = os.path.basename(projUpdatesHtmlFile.name)
                 strProjUrl = "https://www.indiegogo.com/projects/" + re.search("^(.*)_updates.html$", strProjHtmlFileName).group(1)
-                if strProjUrl not in self.dicParsedResultOfUpdate:
-                    self.dicParsedResultOfUpdate[strProjUrl] = {}
                 strPageSource = projUpdatesHtmlFile.read()
                 root = Selector(text=strPageSource)
                 #parse *_updates.html
@@ -314,8 +312,6 @@ individuals category - parse individuals.html of category then create xxx.json
             with open(strProjCommentsFilePath, "r") as projCommentsHtmlFile:
                 strProjHtmlFileName = os.path.basename(projCommentsHtmlFile.name)
                 strProjUrl = "https://www.indiegogo.com/projects/" + re.search("^(.*)_comments.html$", strProjHtmlFileName).group(1)
-                if strProjUrl not in self.dicParsedResultOfComment:
-                    self.dicParsedResultOfComment[strProjUrl] = {}
                 strPageSource = projCommentsHtmlFile.read()
                 root = Selector(text=strPageSource)
                 #parse *_comments.html
@@ -363,9 +359,58 @@ individuals category - parse individuals.html of category then create xxx.json
                 lstStrBacker = root.css("div.i-funder-row div.i-name-col div.i-name div.i-details-name::text,a.i-details-name::text").extract()
                 self.dicParsedResultOfProject[strProjUrl]["lstStrBacker"] = lstStrBacker
                 
-    #解析 _reward.html (INDIEGOGO 的 reward 資料置於 _story.html)
+    #解析 _story.html (INDIEGOGO 的 reward 資料置於 _story.html)
     def parseProjectRewardPage(self, strCategoryName=None):
-        pass
+        strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/projects"%strCategoryName)
+        lstStrStoryHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strProjectsHtmlFolderPath, strSuffixes="_story.html")
+        for strProjStoryFilePath in lstStrStoryHtmlFilePath:
+            with open(strProjStoryFilePath, "r") as projStoryHtmlFile:
+                strProjHtmlFileName = os.path.basename(projStoryHtmlFile.name)
+                strProjUrl = "https://www.indiegogo.com/projects/" + re.search("^(.*)_story.html$", strProjHtmlFileName).group(1)
+                strPageSource = projStoryHtmlFile.read()
+                root = Selector(text=strPageSource)
+                #parse *_story.html (for reward data)
+                lstDicRewardData = []
+                #loop of append reward data to lstDicRewardData
+                for elementReward in root.css("div.perkItem-campaignPerkContainer"):
+                    dicRewardData = {}
+                    #strUrl
+                    dicRewardData["strUrl"] = strProjUrl
+                    #strRewardContent
+                    strPerkTitleText = elementReward.css("perk-title div.perkItem-title::text").extract_first().strip()
+                    strPerkDescriptionText = elementReward.css("perk-description div.perkItem-description::text").extract_first().strip()
+                    strRewardContent = strPerkTitleText + "\n" + strPerkDescriptionText
+                    dicRewardData["strRewardContent"] = strRewardContent
+                    #intRewardMoney
+                    strPerkAmountText = elementReward.css("amount-with-currency span.perkItem-perkAmount::text").extract_first().strip()
+                    dicRewardData["intRewardMoney"] = \
+                        int(re.sub("[^0-9]", "", strPerkAmountText))
+                    #intRewardBacker and intRewardLimit
+                    elementAvailability = elementReward.css("span.availability")
+                    #intRewardBacker
+                    dicRewardData["intRewardBacker"] = \
+                        int(elementAvailability.css("b:nth-of-type(1)::text").extract_first().strip())
+                    #intRewardLimit
+                    intRewardLimit = 0
+                    if len(elementAvailability.css("b").extract()) == 2:
+                        intRewardLimit = int(elementAvailability.css("b:nth-of-type(2)::text").extract_first().strip())
+                    dicRewardData["intRewardLimit"] = intRewardLimit
+                    #strRewardShipTo
+                    strShipsToText = elementReward.css("ships-to-countries span.shipsTo-label::text").extract_first()
+                    strRewardShipTo = None
+                    if strShipsToText != None:
+                        strRewardShipTo = re.search("^Ships (.*)$", strShipsToText.strip()).group(1)
+                    dicRewardData["strRewardShipTo"] = strRewardShipTo
+                    #strRewardDeliveryDate
+                    strRewardDeliveryDate = None
+                    lstStrEstimateDeliveryText = elementReward.css("perk-description div[ng-if*=estimated_delivery_date] span::text").extract()
+                    if len(lstStrEstimateDeliveryText) == 2 and lstStrEstimateDeliveryText[0].strip() == "Estimated delivery:":
+                        strRewardDeliveryDate = lstStrEstimateDeliveryText[1].strip()
+                    dicRewardData["strRewardDeliveryDate"] = strRewardDeliveryDate
+                    #intRewardRetailPrice 無法取得
+                    lstDicRewardData.append(dicRewardData)
+                self.dicParsedResultOfReward[strProjUrl] = lstDicRewardData
+                
         
     #解析 _gallery.html
     def parseProjectGalleryPage(self, strCategoryName=None):
