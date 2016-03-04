@@ -321,11 +321,29 @@ individuals category - parse individuals.html of category then create xxx.json
                 #parse *_comments.html
                 lstDicCommentData = []
                 #loop of append comment data to lstDicCommentData
+                for elementComment in root.css("div.i-comments desktop-comment"):
+                    dicCommentData = {}
                     #strUrl
+                    dicCommentData["strUrl"] = strProjUrl
                     #strCommentName
-                    #strIsCreator
+                    dicCommentData["strCommentName"] = \
+                        elementComment.css("div.commentLayout-header:nth-of-type(1) a.commentLayout-account::text").extract_first()
+                    #isCreator
+                    strPillText = elementComment.css("div.commentLayout-header:nth-of-type(1) span.i-annotation-pill::text").extract_first()
+                    isCreator = False
+                    if strPillText != None and strPillText.strip() == "Campaigner":
+                        isCreator = True
+                    dicCommentData["isCreator"] = isCreator
                     #strCommentContent
+                    strCommentContent = u""
+                    lstStrCommentContentParagraph = elementComment.css("div.commentLayout-text:nth-of-type(2) *::text").extract()
+                    for strCommentContentParagraph in lstStrCommentContentParagraph:
+                        strCommentContent = strCommentContent + strCommentContentParagraph.strip()
+                    dicCommentData["strCommentContent"] = strCommentContent
                     #strCommentDate
+                    dicCommentData["strCommentDate"] = \
+                        elementComment.css("div.commentLayout-header:nth-of-type(1) span.commentNote::text").extract_first().strip()
+                    lstDicCommentData.append(dicCommentData)
                 self.dicParsedResultOfComment[strProjUrl] = lstDicCommentData
                 
     #解析 _backers.html
