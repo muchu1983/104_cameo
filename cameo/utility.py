@@ -8,8 +8,14 @@ This file is part of BSD license
 """
 import os
 import re
+import json
 #共用工具程式
 class Utility:
+    
+    #將 dict 物件的內容寫入到 json 檔案內
+    def writeObjectToJsonFile(self, dicData=None, strJsonFilePath=None):
+        with open(strJsonFilePath, "w+") as jsonFile:
+            jsonFile.write(json.dumps(dicData, ensure_ascii=False, indent=4, sort_keys=True).encode("utf-8"))
     
     #取得 strBasedir 目錄中，檔名以 strSuffixes 結尾的檔案路徑
     def getFilePathListWithSuffixes(self, strBasedir=None, strSuffixes=None):

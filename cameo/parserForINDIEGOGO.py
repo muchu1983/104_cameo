@@ -114,7 +114,12 @@ individuals category - parse individuals.html of category then create xxx.json
             
     #解析 project page(s) 之後
     def afterParseProjectPage(self, strCategoryName=None):
-        pass #TODO write dict to json file
+        strProjectsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/projects"%strCategoryName)
+        #將 parse 結果寫入 json 檔案
+        self.utility.writeObjectToJsonFile(self.dicParsedResultOfProject, strProjectsResultFolderPath + u"/project.json")
+        self.utility.writeObjectToJsonFile(self.dicParsedResultOfUpdate, strProjectsResultFolderPath + u"/update.json")
+        self.utility.writeObjectToJsonFile(self.dicParsedResultOfComment, strProjectsResultFolderPath + u"/comment.json")
+        self.utility.writeObjectToJsonFile(self.dicParsedResultOfReward, strProjectsResultFolderPath + u"/reward.json")
             
     #解析 _details.html
     def parseProjectDetailsPage(self, strCategoryName=None):
