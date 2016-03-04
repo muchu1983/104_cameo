@@ -258,7 +258,10 @@ individuals category - parse individuals.html of category then create xxx.json
                     int(root.css("span.i-tab:nth-of-type(3) span span::text").extract_first().strip())
                 #strEndDate = "" 由 parseCategoryPage 取得 ??
                 #strStartDate = "" 無法取得
-                #intFbLike = "" TODO
+                #intFbLike
+                strShareBannerText = root.css("div.shareBanner div.shareBanner-label div.shareBanner-labelText::text").extract_first().strip()
+                intFbLike = self.utility.translateNumTextToPureNum(strShareBannerText)
+                self.dicParsedResultOfProject[strProjUrl]["intFbLike"] = intFbLike
                 #lstStrBacker = "" 已由 parseProjectBackersPage 取得
                 #isDemand
                 if isIndemand:
