@@ -287,12 +287,23 @@ individuals category - parse individuals.html of category then create xxx.json
                 #parse *_updates.html
                 lstDicUpdateData = []
                 #loop of append update data to lstDicUpdateData
+                for elementUpdate in root.css("desktop-updates div.activityUpdate"):
+                    dicUpdateData = {}
                     #strUrl
-                    #strUpdateTitle
+                    dicUpdateData["strUrl"] = strProjUrl
+                    #strUpdateTitle 無法取得
                     #strUpdateContent
+                    strUpdateContent = u""
+                    lstStrUpdateContentParagraph = elementUpdate.css("div.ugcContent *::text").extract()
+                    for strUpdateContentParagraph in lstStrUpdateContentParagraph:
+                        strUpdateContent = strUpdateContent + strUpdateContentParagraph.strip()
+                    dicUpdateData["strUpdateContent"] = strUpdateContent
                     #strUpdateDate
-                    #intComment
-                    #intLike
+                    dicUpdateData["strUpdateDate"] = \
+                        elementUpdate.css("h2.activityUpdate-timestamp::text").extract_first().strip()
+                    #intComment 無法取得
+                    #intLike 無法取得
+                    lstDicUpdateData.append(dicUpdateData)
                 self.dicParsedResultOfUpdate[strProjUrl] = lstDicUpdateData
         
     #解析 _comments.html
