@@ -37,11 +37,11 @@ class ParserForINDIEGOGO:
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"./cameo_res/parsed_result"
         self.CATEGORY_URL_LIST_FILENAME = u"category_url_list.txt"
         self.PROJ_URL_LIST_FILENAME = u"_proj_url_list.txt"
-        self.dicParsedResultOfProject = {}
-        self.dicParsedResultOfUpdate = {}
-        self.dicParsedResultOfComment = {}
-        self.dicParsedResultOfReward = {}
-        self.dicParsedResultOfProfile = {}
+        self.dicParsedResultOfProject = {} #project.json 資料
+        self.dicParsedResultOfUpdate = {} #update.json 資料
+        self.dicParsedResultOfComment = {} #comment.json 資料
+        self.dicParsedResultOfReward = {} #reward.json 資料
+        self.dicParsedResultOfProfile = {} #profile.json 資料
         
     #取得 parser 使用資訊
     def getUseageMessage(self):
@@ -189,15 +189,12 @@ individuals category - parse individuals.html of category then create xxx.json
                 #strCreator
                 self.dicParsedResultOfProject[strProjUrl]["strCreator"] = \
                     root.css("div.campaignTrustTeaser-item:nth-of-type(1) div.campaignTrustTeaser-text div.campaignTrustTeaser-text-title::text").extract_first().strip()
-                #strCreatorUrl = "" 已由 parseProjectDetailsPage 取得
-                #intVideoCount = "" 由 parseProjectGalleryPage 取得??
                 #intImageCount
                 strGalleryCountText = root.css("span.i-tab:nth-of-type(5) span span::text").extract_first()
                 intImageCount = 0
                 if strGalleryCountText != None:
                     intImageCount = int(strGalleryCountText.strip())
                 self.dicParsedResultOfProject[strProjUrl]["intImageCount"] = intImageCount
-                #isPMSelect = "" 無法取得
                 #intStatus
                 isIndemand = False
                 if len(root.css("div.indemandSidebar-banner").extract()) > 0:
@@ -255,20 +252,16 @@ individuals category - parse individuals.html of category then create xxx.json
                 #intBacker
                 self.dicParsedResultOfProject[strProjUrl]["intBacker"] = \
                     int(root.css("span.i-tab:nth-of-type(4) span span::text").extract_first().strip())
-                #intRemainDays = "" 由 parseCategoryPage 取得 ??
                 #intUpdate
                 self.dicParsedResultOfProject[strProjUrl]["intUpdate"] = \
                     int(root.css("span.i-tab:nth-of-type(2) span span::text").extract_first().strip())
                 #intComment
                 self.dicParsedResultOfProject[strProjUrl]["intComment"] = \
                     int(root.css("span.i-tab:nth-of-type(3) span span::text").extract_first().strip())
-                #strEndDate = "" 由 parseCategoryPage 取得 ??
-                #strStartDate = "" 無法取得
                 #intFbLike
                 strShareBannerText = root.css("div.shareBanner div.shareBanner-label div.shareBanner-labelText::text").extract_first().strip()
                 intFbLike = self.utility.translateNumTextToPureNum(strShareBannerText)
                 self.dicParsedResultOfProject[strProjUrl]["intFbLike"] = intFbLike
-                #lstStrBacker = "" 已由 parseProjectBackersPage 取得
                 #isDemand
                 if isIndemand:
                     self.dicParsedResultOfProject[strProjUrl]["isDemand"] = True
@@ -280,7 +273,14 @@ individuals category - parse individuals.html of category then create xxx.json
                     self.dicParsedResultOfProject[strProjUrl]["isAON"] = True
                 else:
                     self.dicParsedResultOfProject[strProjUrl]["isAON"] = False
-                            
+                #strCreatorUrl = "" 已由 parseProjectDetailsPage 取得
+                #lstStrBacker = "" 已由 parseProjectBackersPage 取得
+                #strStartDate = "" 無法取得
+                #isPMSelect = "" 無法取得
+                #intVideoCount = "" 取得困難??
+                #intRemainDays = "" 取得困難??
+                #strEndDate = "" 取得困難??
+                
     #解析 _updates.html
     def parseProjectUpdatesPage(self, strCategoryName=None):
         strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/projects"%strCategoryName)
@@ -298,7 +298,6 @@ individuals category - parse individuals.html of category then create xxx.json
                     dicUpdateData = {}
                     #strUrl
                     dicUpdateData["strUrl"] = strProjUrl
-                    #strUpdateTitle 無法取得
                     #strUpdateContent
                     strUpdateContent = u""
                     lstStrUpdateContentParagraph = elementUpdate.css("div.ugcContent *::text").extract()
@@ -310,6 +309,7 @@ individuals category - parse individuals.html of category then create xxx.json
                         elementUpdate.css("h2.activityUpdate-timestamp::text").extract_first().strip()
                     #intComment 無法取得
                     #intLike 無法取得
+                    #strUpdateTitle 無法取得
                     lstDicUpdateData.append(dicUpdateData)
                 self.dicParsedResultOfUpdate[strProjUrl] = lstDicUpdateData
         
@@ -416,12 +416,11 @@ individuals category - parse individuals.html of category then create xxx.json
                     if len(lstStrEstimateDeliveryText) == 2 and lstStrEstimateDeliveryText[0].strip() == "Estimated delivery:":
                         strRewardDeliveryDate = lstStrEstimateDeliveryText[1].strip()
                     dicRewardData["strRewardDeliveryDate"] = strRewardDeliveryDate
-                    #intRewardRetailPrice 無法取得
+                    #intRewardRetailPrice 取得困難??
                     lstDicRewardData.append(dicRewardData)
                 self.dicParsedResultOfReward[strProjUrl] = lstDicRewardData
                 
-        
-    #解析 _gallery.html
+    #解析 _gallery.html (暫無用處，備用)
     def parseProjectGalleryPage(self, strCategoryName=None):
         pass
         
