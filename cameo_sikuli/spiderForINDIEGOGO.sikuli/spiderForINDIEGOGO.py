@@ -195,7 +195,7 @@ def downloadProjectPages(strTargetCategory=None):
             #save backers
             wait("1456233023222.png", 300)
             click("1456233023222.png")
-            wait("1456233041235.png", 300)
+            wait("1457063099388.png", 300)
             unfoldUCBShowmore()
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjBackersFilename)
         strProjGalleryFilename = strProjName+"_gallery.html"
