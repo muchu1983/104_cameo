@@ -176,7 +176,13 @@ individuals category - parse individuals.html of category then create xxx.json
                 if "," in strTrustTeaserText:
                     strContinent = strTrustTeaserText.split(",")[1].strip()
                 self.dicParsedResultOfProject[strProjUrl]["strContinent"] = strContinent
-                #strDescription = "" TODO
+                #strDescription
+                strDescription = u""
+                lstStrDescriptionParagraph = root.css("div.i-description  campaign-description *::text").extract()
+                for strDescriptionParagraph in lstStrDescriptionParagraph:
+                    strDescription = strDescription + strDescriptionParagraph.strip()
+                self.dicParsedResultOfProject[strProjUrl]["strDescription"] = \
+                    strDescription
                 #strIntroduction
                 self.dicParsedResultOfProject[strProjUrl]["strIntroduction"] = \
                     root.css("div.i-musty-background div:nth-of-type(1)::text").extract_first().strip()
