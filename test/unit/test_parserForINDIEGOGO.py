@@ -49,6 +49,12 @@ class ParserForINDIEGOGOTest(unittest.TestCase):
         parser.parseProjectCommentsPage("animals")
         parser.parseProjectRewardPage("animals")
         parser.afterParseProjectPage("animals")
+        
+    #測試 解析 individuals 頁面
+    def test_parseIndividualsPage(self):
+        logging.info("ParserForINDIEGOGOTest.test_parseIndividualsPage")
+        parser = ParserForINDIEGOGO()
+        parser.beforeParseIndividualsPage("animals")
 
 #測試開始
 if __name__ == "__main__":

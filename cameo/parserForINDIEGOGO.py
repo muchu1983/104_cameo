@@ -32,7 +32,8 @@ class ParserForINDIEGOGO:
                                                 self.afterParseProjectPage],
                                      "individuals":[self.beforeParseIndividualsPage,
                                                     self.parseIndividualsProfilePage,
-                                                    self.parseIndividualsCampaignsPage],}
+                                                    self.parseIndividualsCampaignsPage,
+                                                    self.afterParseIndividualsPage],}
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"./cameo_res/source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"./cameo_res/parsed_result"
         self.CATEGORY_URL_LIST_FILENAME = u"category_url_list.txt"
@@ -63,7 +64,7 @@ individuals category - parse individuals.html of category then create xxx.json
             print("INDIEGOGO parser [%s] starting..."%strSubcommand)
             handler(strArg1)
             print("INDIEGOGO parser [%s] finished."%strSubcommand)
-        
+#explore #####################################################################################
     #解析 explore.html
     def parseExplorePage(self, uselessArg1=None):
         strExploreHtmlPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"/INDIEGOGO/explore.html"
@@ -85,7 +86,7 @@ individuals category - parse individuals.html of category then create xxx.json
                     continue
                 else:
                     catUrlListFile.write(strCategoryUrl + u"\n")
-        
+#category #####################################################################################
     #解析 category.html
     def parseCategoryPage(self, uselessArg1=None):
         strCategoryUrlListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"/INDIEGOGO/category_url_list.txt"
@@ -105,12 +106,13 @@ individuals category - parse individuals.html of category then create xxx.json
                     with open(strProjectUrlListFilePath, "w+") as projUrlListFile: #write to project_url_list.txt
                         for strProjUrl in lstStrProjUrls:
                             projUrlListFile.write(strProjUrl + u"\n")
-                            
+#project #####################################################################################
     #解析 project page(s) 之前
     def beforeParseProjectPage(self, strCategoryName=None):
         strProjectsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/projects"%strCategoryName)
         if not os.path.exists(strProjectsResultFolderPath):
-            os.mkdir(strProjectsResultFolderPath) #mkdir parsed_result/INDIEGOGO/category/projects/
+            #mkdir parsed_result/INDIEGOGO/category/projects/
+            os.mkdir(strProjectsResultFolderPath)
             
     #解析 project page(s) 之後
     def afterParseProjectPage(self, strCategoryName=None):
@@ -428,13 +430,22 @@ individuals category - parse individuals.html of category then create xxx.json
     #解析 _gallery.html (暫無用處，備用)
     def parseProjectGalleryPage(self, strCategoryName=None):
         pass
-        
+#individuals #####################################################################################
     #解析 individuals page(s) 之前
     def beforeParseIndividualsPage(self, strCategoryName=None):
+        strIndividualsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/profiles"%strCategoryName)
+        if not os.path.exists(strIndividualsResultFolderPath):
+            #mkdir parsed_result/INDIEGOGO/category/profiles/
+            os.mkdir(strIndividualsResultFolderPath) 
+            
+    #解析 individuals page(s) 之後
+    def afterParseIndividualsPage(self, strCategoryName=None):
         pass
+        
     #解析 _profile.html
     def parseIndividualsProfilePage(self, strCategoryName=None):
         pass
+        
     #解析 _campaigns.html
     def parseIndividualsCampaignsPage(self, strCategoryName=None):
         pass
