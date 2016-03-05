@@ -444,8 +444,49 @@ individuals category - parse individuals.html of category then create xxx.json
         
     #解析 _profile.html
     def parseIndividualsProfilePage(self, strCategoryName=None):
-        pass
+        strIndividualsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/profiles"%strCategoryName)
+        lstStrProfileHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strIndividualsHtmlFolderPath, strSuffixes="_profile.html")
+        for strIndividualsProfileFilePath in lstStrProfileHtmlFilePath:
+            with open(strIndividualsProfileFilePath, "r") as individualsProfileHtmlFile:
+                strIndividualsHtmlFileName = os.path.basename(individualsProfileHtmlFile.name)
+                strIndividualsUrl = "https://www.indiegogo.com/individuals/" + re.search("^(.*)_profile.html$", strIndividualsHtmlFileName).group(1)
+                if strIndividualsUrl not in self.dicParsedResultOfProfile:
+                    self.dicParsedResultOfProfile[strIndividualsUrl] = {}
+                strPageSource = individualsProfileHtmlFile.read()
+                root = Selector(text=strPageSource)
+                #parse *_profile.html
+                #strUrl
+                self.dicParsedResultOfProfile[strIndividualsUrl]["strUrl"] = \
+                    strIndividualsUrl
+                #strName
+                #strDescription
+                #strLocation
+                #strCountry
+                #strContinent
+                #isBacker
+                #lstStrBackedProject
+                #lstStrBackedProjectUrl
+                #isCreator
+                #lstStrCreatedProject
+                #lstStrCreatedProjectUrl
+                #intLiveProject
+                #intSuccessProject
+                #intFailedProject
+                #strIdentityName
+                #intFbFriend
+                #intBackedCount
+                #intCreatedCount
         
     #解析 _campaigns.html
     def parseIndividualsCampaignsPage(self, strCategoryName=None):
-        pass
+        strIndividualsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/profiles"%strCategoryName)
+        lstStrCampaignsHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strIndividualsHtmlFolderPath, strSuffixes="_campaigns.html")
+        for strIndividualsCampaignFilePath in lstStrCampaignsHtmlFilePath:
+            with open(strIndividualsCampaignFilePath, "r") as individualsCampaignHtmlFile:
+                strIndividualsHtmlFileName = os.path.basename(individualsCampaignHtmlFile.name)
+                strIndividualsUrl = "https://www.indiegogo.com/individuals/" + re.search("^(.*)_campaigns.html$", strIndividualsHtmlFileName).group(1)
+                if strIndividualsUrl not in self.dicParsedResultOfProfile:
+                    self.dicParsedResultOfProfile[strIndividualsUrl] = {}
+                strPageSource = individualsCampaignHtmlFile.read()
+                root = Selector(text=strPageSource)
+                #parse *_campaigns.html
