@@ -9,6 +9,7 @@ This file is part of BSD license
 import os
 import re
 import json
+import logging
 from scrapy import Selector
 from cameo.utility import Utility
 """
@@ -18,6 +19,7 @@ from cameo.utility import Utility
 class ParserForINDIEGOGO:
     #建構子
     def __init__(self):
+        logging.basicConfig(level=logging.INFO)
         self.utility = Utility()
         self.dicSubCommandHandler = {"explore":[self.parseExplorePage],
                                      "category":[self.parseCategoryPage],
@@ -128,6 +130,7 @@ individuals category - parse individuals.html of category then create xxx.json
         strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/projects"%strCategoryName)
         lstStrDetailsHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strProjectsHtmlFolderPath, strSuffixes="_details.html")
         for strProjectDetailsHtmlPath in lstStrDetailsHtmlFilePath:
+            logging.info("parsing %s"%strProjectDetailsHtmlPath)
             with open(strProjectDetailsHtmlPath, "r") as projDetailsHtmlFile: #open *_details.html
                 strProjHtmlFileName = os.path.basename(projDetailsHtmlFile.name)
                 strProjUrl = "https://www.indiegogo.com/projects/" + re.search("^(.*)_details.html$", strProjHtmlFileName).group(1)
@@ -154,6 +157,7 @@ individuals category - parse individuals.html of category then create xxx.json
         strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/projects"%strCategoryName)
         lstStrStoryHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strProjectsHtmlFolderPath, strSuffixes="_story.html")
         for strProjStoryFilePath in lstStrStoryHtmlFilePath:
+            logging.info("parsing %s"%strProjStoryFilePath)
             with open(strProjStoryFilePath, "r") as projStoryHtmlFile:
                 strProjHtmlFileName = os.path.basename(projStoryHtmlFile.name)
                 strProjUrl = "https://www.indiegogo.com/projects/" + re.search("^(.*)_story.html$", strProjHtmlFileName).group(1)
@@ -293,6 +297,7 @@ individuals category - parse individuals.html of category then create xxx.json
         strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/projects"%strCategoryName)
         lstStrUpdatesHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strProjectsHtmlFolderPath, strSuffixes="_updates.html")
         for strProjUpdatesFilePath in lstStrUpdatesHtmlFilePath:
+            logging.info("parsing %s"%strProjUpdatesFilePath)
             with open(strProjUpdatesFilePath, "r") as projUpdatesHtmlFile:
                 strProjHtmlFileName = os.path.basename(projUpdatesHtmlFile.name)
                 strProjUrl = "https://www.indiegogo.com/projects/" + re.search("^(.*)_updates.html$", strProjHtmlFileName).group(1)
@@ -325,6 +330,7 @@ individuals category - parse individuals.html of category then create xxx.json
         strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/projects"%strCategoryName)
         lstStrCommentsHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strProjectsHtmlFolderPath, strSuffixes="_comments.html")
         for strProjCommentsFilePath in lstStrCommentsHtmlFilePath:
+            logging.info("parsing %s"%strProjCommentsFilePath)
             with open(strProjCommentsFilePath, "r") as projCommentsHtmlFile:
                 strProjHtmlFileName = os.path.basename(projCommentsHtmlFile.name)
                 strProjUrl = "https://www.indiegogo.com/projects/" + re.search("^(.*)_comments.html$", strProjHtmlFileName).group(1)
@@ -363,6 +369,7 @@ individuals category - parse individuals.html of category then create xxx.json
         strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/projects"%strCategoryName)
         lstStrBackersHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strProjectsHtmlFolderPath, strSuffixes="_backers.html")
         for strProjBackersFilePath in lstStrBackersHtmlFilePath:
+            logging.info("parsing %s"%strProjBackersFilePath)
             with open(strProjBackersFilePath, "r") as projBackersHtmlFile:
                 strProjHtmlFileName = os.path.basename(projBackersHtmlFile.name)
                 strProjUrl = "https://www.indiegogo.com/projects/" + re.search("^(.*)_backers.html$", strProjHtmlFileName).group(1)
@@ -380,6 +387,7 @@ individuals category - parse individuals.html of category then create xxx.json
         strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/projects"%strCategoryName)
         lstStrStoryHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strProjectsHtmlFolderPath, strSuffixes="_story.html")
         for strProjStoryFilePath in lstStrStoryHtmlFilePath:
+            logging.info("parsing %s"%strProjStoryFilePath)
             with open(strProjStoryFilePath, "r") as projStoryHtmlFile:
                 strProjHtmlFileName = os.path.basename(projStoryHtmlFile.name)
                 strProjUrl = "https://www.indiegogo.com/projects/" + re.search("^(.*)_story.html$", strProjHtmlFileName).group(1)
@@ -449,6 +457,7 @@ individuals category - parse individuals.html of category then create xxx.json
         strIndividualsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/profiles"%strCategoryName)
         lstStrProfileHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strIndividualsHtmlFolderPath, strSuffixes="_profile.html")
         for strIndividualsProfileFilePath in lstStrProfileHtmlFilePath:
+            logging.info("parsing %s"%strIndividualsProfileFilePath)
             with open(strIndividualsProfileFilePath, "r") as individualsProfileHtmlFile:
                 strIndividualsHtmlFileName = os.path.basename(individualsProfileHtmlFile.name)
                 strIndividualsUrl = "https://www.indiegogo.com/individuals/" + re.search("^(.*)_profile.html$", strIndividualsHtmlFileName).group(1)
@@ -517,6 +526,7 @@ individuals category - parse individuals.html of category then create xxx.json
         strIndividualsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/profiles"%strCategoryName)
         lstStrCampaignsHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strIndividualsHtmlFolderPath, strSuffixes="_campaigns.html")
         for strIndividualsCampaignFilePath in lstStrCampaignsHtmlFilePath:
+            logging.info("parsing %s"%strIndividualsCampaignFilePath)
             with open(strIndividualsCampaignFilePath, "r") as individualsCampaignHtmlFile:
                 strIndividualsHtmlFileName = os.path.basename(individualsCampaignHtmlFile.name)
                 strIndividualsUrl = "https://www.indiegogo.com/individuals/" + re.search("^(.*)_campaigns.html$", strIndividualsHtmlFileName).group(1)
