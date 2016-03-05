@@ -57,7 +57,7 @@ class ParserForINDIEGOGOTest(unittest.TestCase):
         parser.beforeParseIndividualsPage("animals")
         parser.parseIndividualsProfilePage("animals")
         parser.parseIndividualsCampaignsPage("animals")
-        print(json.dumps(parser.dicParsedResultOfProfile, ensure_ascii=False, indent=4, sort_keys=True))
+        parser.afterParseIndividualsPage("animals")
 
 #測試開始
 if __name__ == "__main__":

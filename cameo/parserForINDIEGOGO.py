@@ -440,7 +440,9 @@ individuals category - parse individuals.html of category then create xxx.json
             
     #解析 individuals page(s) 之後
     def afterParseIndividualsPage(self, strCategoryName=None):
-        pass
+        strIndividualsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/profiles"%strCategoryName)
+        #將 parse 結果寫入 json 檔案
+        self.utility.writeObjectToJsonFile(self.dicParsedResultOfProfile, strIndividualsResultFolderPath + u"/profile.json")
         
     #解析 _profile.html
     def parseIndividualsProfilePage(self, strCategoryName=None):
@@ -523,7 +525,20 @@ individuals category - parse individuals.html of category then create xxx.json
                 strPageSource = individualsCampaignHtmlFile.read()
                 root = Selector(text=strPageSource)
                 #parse *_campaigns.html
-                #lstStrBackedProject
-                #lstStrBackedProjectUrl
-                #lstStrCreatedProject
-                #lstStrCreatedProjectUrl
+                #lstStrCreatedProject and lstStrCreatedProjectUrl
+                elementCreatedProj = root.css("div.i-profile-container div.i-profile-campaigns-section:nth-of-type(1)")
+                lstStrCreatedProject = elementCreatedProj.css("ul li.i-profile-list-item-campaigns_on div.i-campaign a::text").extract()
+                lstStrCreatedProjectUrl = elementCreatedProj.css("ul li.i-profile-list-item-campaigns_on div.i-campaign a::attr(href)").extract()
+                self.dicParsedResultOfProfile[strIndividualsUrl]["lstStrCreatedProject"] = \
+                    lstStrCreatedProject
+                self.dicParsedResultOfProfile[strIndividualsUrl]["lstStrCreatedProjectUrl"] = \
+                    lstStrCreatedProjectUrl
+                #lstStrBackedProject and lstStrBackedProjectUrl
+                elementBackedProj = root.css("div.i-profile-container div.i-profile-campaigns-section:nth-of-type(2)")
+                lstStrBackedProject = elementBackedProj.css("ul li.i-profile-list-item-campaigns_funded div.i-campaign a::text").extract()
+                lstStrBackedProjectUrl = elementBackedProj.css("ul li.i-profile-list-item-campaigns_funded div.i-campaign a::attr(href)").extract()
+                self.dicParsedResultOfProfile[strIndividualsUrl]["lstStrBackedProject"] = \
+                    lstStrBackedProject
+                self.dicParsedResultOfProfile[strIndividualsUrl]["lstStrBackedProjectUrl"] = \
+                    lstStrBackedProjectUrl
+                    
