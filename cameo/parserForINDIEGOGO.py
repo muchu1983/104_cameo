@@ -459,23 +459,56 @@ individuals category - parse individuals.html of category then create xxx.json
                 self.dicParsedResultOfProfile[strIndividualsUrl]["strUrl"] = \
                     strIndividualsUrl
                 #strName
+                self.dicParsedResultOfProfile[strIndividualsUrl]["strName"] = \
+                    root.css("h1.i-profileHeader-accountName::text").extract_first().strip()
                 #strDescription
-                #strLocation
-                #strCountry
-                #strContinent
-                #isBacker
-                #lstStrBackedProject
-                #lstStrBackedProjectUrl
+                self.dicParsedResultOfProfile[strIndividualsUrl]["strDescription"] = \
+                    root.css("div.i-profile-show-content p.i-description::text").extract_first().strip()
+                #strLocation and strContinent and strCountry
+                strLocationSpanText = root.css("div.i-profileHeader-location span::text").extract_first()
+                strLocation = u"N/A"
+                strContinent = u"N/A"
+                strCountry = u"N/A"
+                if strLocationSpanText != None:
+                    lstStrLocationPart = strLocationSpanText.split(",")
+                    if len(lstStrLocationPart) == 3:
+                        strLocation = lstStrLocationPart[0].strip()
+                        strContinent = lstStrLocationPart[1].strip()
+                        strCountry = lstStrLocationPart[2].strip()
+                    elif len(lstStrLocationPart) == 1:
+                        strCountry = lstStrLocationPart[0].strip()
+                self.dicParsedResultOfProfile[strIndividualsUrl]["strLocation"] = \
+                    strLocation
+                self.dicParsedResultOfProfile[strIndividualsUrl]["strContinent"] = \
+                    strContinent
+                self.dicParsedResultOfProfile[strIndividualsUrl]["strCountry"] = \
+                    strCountry
+                #intBackedCount and intCreatedCount
+                lstStrStatsEmText = root.css("ul.i-stats li em::text").extract()
+                intCreatedCount = 0
+                intBackedCount = 0
+                if len(lstStrStatsEmText) == 3:
+                    intCreatedCount = int(lstStrStatsEmText[0].strip())
+                    intBackedCount = int(lstStrStatsEmText[2].strip())
+                self.dicParsedResultOfProfile[strIndividualsUrl]["intCreatedCount"] = \
+                    intCreatedCount
+                self.dicParsedResultOfProfile[strIndividualsUrl]["intBackedCount"] = \
+                    intBackedCount
                 #isCreator
-                #lstStrCreatedProject
-                #lstStrCreatedProjectUrl
-                #intLiveProject
-                #intSuccessProject
-                #intFailedProject
-                #strIdentityName
-                #intFbFriend
-                #intBackedCount
-                #intCreatedCount
+                isCreator = False
+                if intCreatedCount > 0:
+                    isCreator = True
+                self.dicParsedResultOfProfile[strIndividualsUrl]["isCreator"] = isCreator
+                #isBacker
+                isBacker = False
+                if intBackedCount > 0:
+                    isBacker = True
+                self.dicParsedResultOfProfile[strIndividualsUrl]["isBacker"] = isBacker
+                #strIdentityName ??
+                #intFbFriend ??
+                #intLiveProject 無法取得
+                #intSuccessProject 無法取得
+                #intFailedProject 無法取得
         
     #解析 _campaigns.html
     def parseIndividualsCampaignsPage(self, strCategoryName=None):
@@ -490,3 +523,7 @@ individuals category - parse individuals.html of category then create xxx.json
                 strPageSource = individualsCampaignHtmlFile.read()
                 root = Selector(text=strPageSource)
                 #parse *_campaigns.html
+                #lstStrBackedProject
+                #lstStrBackedProjectUrl
+                #lstStrCreatedProject
+                #lstStrCreatedProjectUrl
