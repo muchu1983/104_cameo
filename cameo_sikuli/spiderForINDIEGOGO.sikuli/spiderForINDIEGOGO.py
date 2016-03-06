@@ -14,17 +14,17 @@ def openChrome():
 # delete origin text
 def delOriginText():
     type("a", KeyModifier.CTRL)
-    sleep(1)
+    wait(0.5)
     type(Key.BACKSPACE)
-    sleep(1)
+    wait(0.5)
 # paste text by using clipboard
 def pasteClipboardText(strText=None):
     toolkit = Toolkit.getDefaultToolkit()
     clipboard = toolkit.getSystemClipboard()
     clipboard.setContents(StringSelection(u""+strText), None)
-    sleep(1)
+    wait(0.5)
     type("v", KeyModifier.CTRL)
-    sleep(1)
+    wait(0.5)
 #roll to page end
 def rollToPageEnd():
     type(Key.END)
@@ -38,30 +38,30 @@ def unfoldCategoryPage():
     while(exists("1457250780994.png")):
         click("1457250780994.png")
         waitVanish("1456215300454.png", 300)
-        sleep(5)
+        wait(5)
         rollToPageEnd()
         for uptime in range(6):
             type(Key.UP)
-            sleep(1)
+            wait(0.5)
         wait("1456215300454.png", 300)
 #unfold (updates comments backers) showmore
 def unfoldUCBShowmore():
     while(not exists("1456062534102.png")):
         type(Key.PAGE_DOWN)
-        sleep(1)
+        wait(0.5)
         if exists("1456873668385.png"):
             click("1456873668385.png")
             waitVanish("1456873668385.png", 300)
-            sleep(2)
+            wait(2)
     type(Key.HOME)
     wait("1456873739809.png", 300)
 #type url on chrome
 def typeUrlOnChrome(strUrlText=None):
     click("1455955040522.png")
-    sleep(1)
+    wait(0.5)
     delOriginText()
     pasteClipboardText(strText=strUrlText)
-    sleep(1)
+    wait(0.5)
     type(Key.ENTER)
 # go to explore page
 def goExplorePage():
@@ -73,12 +73,12 @@ def goExplorePage():
 def typeFolderPath(strFolderPath=None):
     wait(Pattern("1456054857857.png").targetOffset(10,0), 300)
     click(Pattern("1456054857857.png").targetOffset(10,0))
-    sleep(1)
+    wait(0.5)
     delOriginText()
     pasteClipboardText(strText=strFolderPath)
-    sleep(1)
+    wait(0.5)
     type(Key.ENTER)
-    sleep(1)
+    wait(0.5)
 #rightclick on image to save current page
 def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None):
     waitVanish("1456214096530.png", 300)
@@ -90,13 +90,13 @@ def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None
     if strFolderPath != None:
         typeFolderPath(strFolderPath)
     click(Pattern("1455959876192.png").targetOffset(36,0))
-    sleep(1)
+    wait(0.5)
     delOriginText()
-    sleep(1)
+    wait(0.5)
     pasteClipboardText(strText=strFilename)
-    sleep(1)
+    wait(0.5)
     click("1455955227414.png")
-    sleep(1)
+    wait(0.5)
     wait("1456247446257.png", 300)#wait save complete
 #ask chrome save current page
 def saveCurrentPage(strFolderPath=None, strFilename="default.html"):
@@ -107,13 +107,13 @@ def saveCurrentPage(strFolderPath=None, strFilename="default.html"):
     if strFolderPath != None:
         typeFolderPath(strFolderPath)
     click(Pattern("1455959876192.png").targetOffset(36,0))
-    sleep(1)
+    wait(0.5)
     delOriginText()
-    sleep(1)
+    wait(0.5)
     pasteClipboardText(strText=strFilename)
-    sleep(1)
+    wait(0.5)
     click("1455955227414.png")
-    sleep(1)
+    wait(0.5)
     wait("1456247446257.png", 300)#wait save complete
 #download explore pages
 def downloadExplorePages():
@@ -155,13 +155,13 @@ def downloadProjectPages(strTargetCategory=None):
         openChrome()
         typeUrlOnChrome(strUrlText=strProjUrl)
         wait("1456229536809.png", 300)
-        sleep(5)
+        wait(5)
         strProjDetailsFilename = strProjName+"_details.html"
         strProjDetailsFilePath = strProjectsFolderPath + r"/" + strProjDetailsFilename
         if not os.path.exists(strProjDetailsFilePath):#check detail.html
             while(not exists("1456229579631.png")):
                 type(Key.PAGE_DOWN)
-                sleep(1)
+                wait(0.5)
             click("1456229579631.png")
             wait("1456229635107.png", 300)
             #save see more details

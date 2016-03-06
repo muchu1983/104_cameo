@@ -86,17 +86,17 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
 <span class="cmt"># delete origin text
 </span><span class="kw">def</span> delOriginText():
     <span class="skw">type</span>(<span class="str">"a"</span>, KeyModifier.CTRL)
-    <span class="skw">sleep</span>(<span class="dig">1</span>)
+    <span class="skw">wait</span>(<span class="dig">0.5</span>)
     <span class="skw">type</span>(Key.BACKSPACE)
-    <span class="skw">sleep</span>(<span class="dig">1</span>)
+    <span class="skw">wait</span>(<span class="dig">0.5</span>)
 <span class="cmt"># paste text by using clipboard
 </span><span class="kw">def</span> pasteClipboardText(strText=None):
     toolkit = Toolkit.getDefaultToolkit()
     clipboard = toolkit.getSystemClipboard()
     clipboard.setContents(StringSelection(<span class="str">u""</span>+strText), None)
-    <span class="skw">sleep</span>(<span class="dig">1</span>)
+    <span class="skw">wait</span>(<span class="dig">0.5</span>)
     <span class="skw">type</span>(<span class="str">"v"</span>, KeyModifier.CTRL)
-    <span class="skw">sleep</span>(<span class="dig">1</span>)
+    <span class="skw">wait</span>(<span class="dig">0.5</span>)
 <span class="cmt">#roll to page end
 </span><span class="kw">def</span> rollToPageEnd():
     <span class="skw">type</span>(Key.END)
@@ -110,30 +110,30 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     <span class="kw">while</span>(exists(<img src="1457250780994.png" />)):
         <span class="skw">click</span>(<img src="1457250780994.png" />)
         waitVanish(<img src="1456215300454.png" />, <span class="dig">300</span>)
-        <span class="skw">sleep</span>(<span class="dig">5</span>)
+        <span class="skw">wait</span>(<span class="dig">5</span>)
         rollToPageEnd()
         <span class="kw">for</span> uptime <span class="kw">in</span> range(<span class="dig">6</span>):
             <span class="skw">type</span>(Key.UP)
-            <span class="skw">sleep</span>(<span class="dig">1</span>)
+            <span class="skw">wait</span>(<span class="dig">0.5</span>)
         <span class="skw">wait</span>(<img src="1456215300454.png" />, <span class="dig">300</span>)
 <span class="cmt">#unfold (updates comments backers) showmore
 </span><span class="kw">def</span> unfoldUCBShowmore():
     <span class="kw">while</span>(<span class="kw">not</span> exists(<img src="1456062534102.png" />)):
         <span class="skw">type</span>(Key.PAGE_DOWN)
-        <span class="skw">sleep</span>(<span class="dig">1</span>)
+        <span class="skw">wait</span>(<span class="dig">0.5</span>)
         <span class="kw">if</span> exists(<img src="1456873668385.png" />):
             <span class="skw">click</span>(<img src="1456873668385.png" />)
             waitVanish(<img src="1456873668385.png" />, <span class="dig">300</span>)
-            <span class="skw">sleep</span>(<span class="dig">2</span>)
+            <span class="skw">wait</span>(<span class="dig">2</span>)
     <span class="skw">type</span>(Key.HOME)
     <span class="skw">wait</span>(<img src="1456873739809.png" />, <span class="dig">300</span>)
 <span class="cmt">#type url on chrome
 </span><span class="kw">def</span> typeUrlOnChrome(strUrlText=None):
     <span class="skw">click</span>(<img src="1455955040522.png" />)
-    <span class="skw">sleep</span>(<span class="dig">1</span>)
+    <span class="skw">wait</span>(<span class="dig">0.5</span>)
     delOriginText()
     pasteClipboardText(strText=strUrlText)
-    <span class="skw">sleep</span>(<span class="dig">1</span>)
+    <span class="skw">wait</span>(<span class="dig">0.5</span>)
     <span class="skw">type</span>(Key.ENTER)
 <span class="cmt"># go to explore page
 </span><span class="kw">def</span> goExplorePage():
@@ -145,12 +145,12 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
 </span><span class="kw">def</span> typeFolderPath(strFolderPath=None):
     <span class="skw">wait</span>(Pattern(<img src="1456054857857.png" />).targetOffset(<span class="dig">10</span>,<span class="dig">0</span>), <span class="dig">300</span>)
     <span class="skw">click</span>(Pattern(<img src="1456054857857.png" />).targetOffset(<span class="dig">10</span>,<span class="dig">0</span>))
-    <span class="skw">sleep</span>(<span class="dig">1</span>)
+    <span class="skw">wait</span>(<span class="dig">0.5</span>)
     delOriginText()
     pasteClipboardText(strText=strFolderPath)
-    <span class="skw">sleep</span>(<span class="dig">1</span>)
+    <span class="skw">wait</span>(<span class="dig">0.5</span>)
     <span class="skw">type</span>(Key.ENTER)
-    <span class="skw">sleep</span>(<span class="dig">1</span>)
+    <span class="skw">wait</span>(<span class="dig">0.5</span>)
 <span class="cmt">#rightclick on image to save current page
 </span><span class="kw">def</span> rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None):
     waitVanish(<img src="1456214096530.png" />, <span class="dig">300</span>)
@@ -162,13 +162,13 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     <span class="kw">if</span> strFolderPath != None:
         typeFolderPath(strFolderPath)
     <span class="skw">click</span>(Pattern(<img src="1455959876192.png" />).targetOffset(<span class="dig">36</span>,<span class="dig">0</span>))
-    <span class="skw">sleep</span>(<span class="dig">1</span>)
+    <span class="skw">wait</span>(<span class="dig">0.5</span>)
     delOriginText()
-    <span class="skw">sleep</span>(<span class="dig">1</span>)
+    <span class="skw">wait</span>(<span class="dig">0.5</span>)
     pasteClipboardText(strText=strFilename)
-    <span class="skw">sleep</span>(<span class="dig">1</span>)
+    <span class="skw">wait</span>(<span class="dig">0.5</span>)
     <span class="skw">click</span>(<img src="1455955227414.png" />)
-    <span class="skw">sleep</span>(<span class="dig">1</span>)
+    <span class="skw">wait</span>(<span class="dig">0.5</span>)
     <span class="skw">wait</span>(<img src="1456247446257.png" />, <span class="dig">300</span>)<span class="cmt">#wait save complete</span>
 <span class="cmt">#ask chrome save current page
 </span><span class="kw">def</span> saveCurrentPage(strFolderPath=None, strFilename=<span class="str">"default.html"</span>):
@@ -179,13 +179,13 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     <span class="kw">if</span> strFolderPath != None:
         typeFolderPath(strFolderPath)
     <span class="skw">click</span>(Pattern(<img src="1455959876192.png" />).targetOffset(<span class="dig">36</span>,<span class="dig">0</span>))
-    <span class="skw">sleep</span>(<span class="dig">1</span>)
+    <span class="skw">wait</span>(<span class="dig">0.5</span>)
     delOriginText()
-    <span class="skw">sleep</span>(<span class="dig">1</span>)
+    <span class="skw">wait</span>(<span class="dig">0.5</span>)
     pasteClipboardText(strText=strFilename)
-    <span class="skw">sleep</span>(<span class="dig">1</span>)
+    <span class="skw">wait</span>(<span class="dig">0.5</span>)
     <span class="skw">click</span>(<img src="1455955227414.png" />)
-    <span class="skw">sleep</span>(<span class="dig">1</span>)
+    <span class="skw">wait</span>(<span class="dig">0.5</span>)
     <span class="skw">wait</span>(<img src="1456247446257.png" />, <span class="dig">300</span>)<span class="cmt">#wait save complete</span>
 <span class="cmt">#download explore pages
 </span><span class="kw">def</span> downloadExplorePages():
@@ -227,13 +227,13 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         openChrome()
         typeUrlOnChrome(strUrlText=strProjUrl)
         <span class="skw">wait</span>(<img src="1456229536809.png" />, <span class="dig">300</span>)
-        <span class="skw">sleep</span>(<span class="dig">5</span>)
+        <span class="skw">wait</span>(<span class="dig">5</span>)
         strProjDetailsFilename = strProjName+<span class="str">"_details.html"</span>
         strProjDetailsFilePath = strProjectsFolderPath + <span class="str">r"/"</span> + strProjDetailsFilename
         <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strProjDetailsFilePath):<span class="cmt">#check detail.html</span>
             <span class="kw">while</span>(<span class="kw">not</span> exists(<img src="1456229579631.png" />)):
                 <span class="skw">type</span>(Key.PAGE_DOWN)
-                <span class="skw">sleep</span>(<span class="dig">1</span>)
+                <span class="skw">wait</span>(<span class="dig">0.5</span>)
             <span class="skw">click</span>(<img src="1456229579631.png" />)
             <span class="skw">wait</span>(<img src="1456229635107.png" />, <span class="dig">300</span>)
             <span class="cmt">#save see more details
