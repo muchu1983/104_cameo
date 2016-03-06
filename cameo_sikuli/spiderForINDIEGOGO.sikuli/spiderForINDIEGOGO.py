@@ -131,12 +131,14 @@ def downloadCategoryPages():
         strCategoryFolderPath = strBaseResFolderPath + r"\source_html\INDIEGOGO\%s"%(strCategoryName)
         if not os.path.exists(strCategoryFolderPath):
             os.mkdir(strCategoryFolderPath) #mkdir category
-        openChrome()
-        typeUrlOnChrome(strUrlText=strCategoryUrl)
-        waitVanish("1456214096530.png", 300)
-        wait("1456214122362.png", 300)
-        unfoldCategoryPage()
-        saveCurrentPage(strFolderPath=strCategoryFolderPath, strFilename="category.html")
+        strCategoryFilePath = strCategoryFolderPath + r"\category.html"
+        if not os.path.exists(strCategoryFilePath):#check category.html
+            openChrome()
+            typeUrlOnChrome(strUrlText=strCategoryUrl)
+            waitVanish("1456214096530.png", 300)
+            wait("1456214122362.png", 300)
+            unfoldCategoryPage()
+            saveCurrentPage(strFolderPath=strCategoryFolderPath, strFilename="category.html")
     catUrlListFile.close()
 #download project pages
 def downloadProjectPages(strTargetCategory=None):
