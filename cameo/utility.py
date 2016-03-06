@@ -32,12 +32,14 @@ class Utility:
     def translateNumTextToPureNum(self, strNumText=None):
         strNumText = strNumText.lower()
         fPureNum = 0.0
-        fFloatPartText = re.match("([0-9\.]*)", strNumText).group(1)
-        if strNumText.endswith("k"):
-            fPureNum = float(fFloatPartText) * 1000
-        elif strNumText.endswith("m"):
-            fPureNum = float(fFloatPartText) * 1000000
-        else:
-            fPureNum = float(fFloatPartText) * 1
+        fFloatPartText = re.match("^([0-9\.]*)k?m?$", strNumText)
+        if fFloatPartText != None:
+            fFloatPartText = fFloatPartText.group(1)
+            if strNumText.endswith("k"):
+                fPureNum = float(fFloatPartText) * 1000
+            elif strNumText.endswith("m"):
+                fPureNum = float(fFloatPartText) * 1000000
+            else:
+                fPureNum = float(fFloatPartText) * 1
         return int(fPureNum)
         

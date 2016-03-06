@@ -40,24 +40,26 @@ class ParserForINDIEGOGOTest(unittest.TestCase):
     #測試 解析 project 頁面
     def test_parseProjectPage(self):
         logging.info("ParserForINDIEGOGOTest.test_parseProjectPage")
+        strCategory = "comic"
         parser = ParserForINDIEGOGO()
-        parser.beforeParseProjectPage("animals")
-        parser.parseProjectDetailsPage("animals")
-        parser.parseProjectStoryPage("animals")
-        parser.parseProjectBackersPage("animals")
-        parser.parseProjectUpdatesPage("animals")
-        parser.parseProjectCommentsPage("animals")
-        parser.parseProjectRewardPage("animals")
-        parser.afterParseProjectPage("animals")
+        parser.beforeParseProjectPage(strCategory)
+        parser.parseProjectDetailsPage(strCategory)
+        parser.parseProjectStoryPage(strCategory)
+        parser.parseProjectBackersPage(strCategory)
+        parser.parseProjectUpdatesPage(strCategory)
+        parser.parseProjectCommentsPage(strCategory)
+        parser.parseProjectRewardPage(strCategory)
+        parser.afterParseProjectPage(strCategory)
         
     #測試 解析 individuals 頁面
     def test_parseIndividualsPage(self):
         logging.info("ParserForINDIEGOGOTest.test_parseIndividualsPage")
+        strCategory = "comic"
         parser = ParserForINDIEGOGO()
-        parser.beforeParseIndividualsPage("animals")
-        parser.parseIndividualsProfilePage("animals")
-        parser.parseIndividualsCampaignsPage("animals")
-        parser.afterParseIndividualsPage("animals")
+        parser.beforeParseIndividualsPage(strCategory)
+        parser.parseIndividualsProfilePage(strCategory)
+        parser.parseIndividualsCampaignsPage(strCategory)
+        parser.afterParseIndividualsPage(strCategory)
 
 #測試開始
 if __name__ == "__main__":
