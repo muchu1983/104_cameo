@@ -34,8 +34,8 @@ def unfoldCategoryPage():
     rollToPageEnd()
     type(Key.PAGE_UP)
     wait("1456215300454.png", 300)
-    while(exists("1456064164365.png")):
-        click("1456064164365.png")
+    while(exists("1457250780994.png")):
+        click("1457250780994.png")
         waitVanish("1456215300454.png", 300)
         sleep(5)
         rollToPageEnd()
