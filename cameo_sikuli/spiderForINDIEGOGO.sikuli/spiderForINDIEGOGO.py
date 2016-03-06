@@ -32,7 +32,8 @@ def rollToPageEnd():
 # open all project
 def unfoldCategoryPage():
     rollToPageEnd()
-    type(Key.PAGE_UP)
+    for uptime in range(6):
+        type(Key.UP)
     wait("1456215300454.png", 300)
     while(exists("1457250780994.png")):
         click("1457250780994.png")
