@@ -40,7 +40,8 @@ def unfoldCategoryPage():
         waitVanish("1456215300454.png", 300)
         sleep(5)
         rollToPageEnd()
-        type(Key.PAGE_UP)
+        for uptime in range(6):
+            type(Key.UP)
         wait("1456215300454.png", 300)
 #unfold (updates comments backers) showmore
 def unfoldUCBShowmore():
