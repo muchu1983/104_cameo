@@ -161,7 +161,7 @@ def downloadProjectPages(strTargetCategory=None):
         if not os.path.exists(strProjDetailsFilePath):#check detail.html
             while(not exists("1456229579631.png")):
                 type(Key.PAGE_DOWN)
-                sleep(2)
+                sleep(1)
             click("1456229579631.png")
             wait("1456229635107.png", 300)
             #save see more details
