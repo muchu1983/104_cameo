@@ -14,12 +14,12 @@ import os
 class CleanerForINDIEGOGO:
     
     def __init__(self):
-        self.strBasedir = r"./cameo_res/source_html/INDIEGOGO"
+        self.strBasedir = "cameo_res\\source_html\\INDIEGOGO"
     
     def clean(self):
         for base, dirs, files in os.walk(self.strBasedir):
             if base.endswith("projects") or base.endswith("profiles"):
                 for dir in dirs:
                     if dir.endswith("_files"):
-                        strDirPath = base + "/" + dir
+                        strDirPath = base + "\\" + dir
                         shutil.rmtree(strDirPath)
