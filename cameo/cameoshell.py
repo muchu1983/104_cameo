@@ -8,6 +8,7 @@ This file is part of BSD license
 """
 from cameo.parserForINDIEGOGO import ParserForINDIEGOGO
 from cameo.spiderForINDIEGOGO import SpiderForINDIEGOGO
+from cameo.cleaner import CleanerForINDIEGOGO
 """
 shell 操作介面
 """
@@ -19,6 +20,7 @@ class CameoShell:
         self.strTargetSite = None
         self.dicSpiders = {"indiegogo":SpiderForINDIEGOGO()}
         self.dicParsers = {"indiegogo":ParserForINDIEGOGO()}
+        self.dicCleaners = {"indiegogo":CleanerForINDIEGOGO()}
         
     #顯示目前的目標網站
     def listSiteMessage(self):
@@ -27,6 +29,7 @@ class CameoShell:
             print("use chsite to select one.")
         else:
             print("current target site: %s"%self.strTargetSite)
+            
     #選擇目標網站
     def changeSiteMessage(self):
         print("type one of site name below:\n")
@@ -50,22 +53,33 @@ exit - close shell
 lssite - list current site
 chsite - change site
 spider - run spider
-parser - run parser"""
+parser - run parser
+clean - clean _files dirs"""
         print(strHelpText)
         
     #顯示 spider 訊息
     def printSpiderMessage(self):
         self.listSiteMessage()
-        print(self.dicSpiders[self.strTargetSite].getUseageMessage())
-        lstStrInputCommand = raw_input("spider[%s]>>>"%self.strTargetSite).split(" ")
-        self.dicSpiders[self.strTargetSite].runSpider(lstStrInputCommand)
+        if self.strTargetSite != None:
+            print(self.dicSpiders[self.strTargetSite].getUseageMessage())
+            lstStrInputCommand = raw_input("spider[%s]>>>"%self.strTargetSite).split(" ")
+            self.dicSpiders[self.strTargetSite].runSpider(lstStrInputCommand)
         
     #顯示 parser 訊息
     def printParserMessage(self):
         self.listSiteMessage()
-        print(self.dicParsers[self.strTargetSite].getUseageMessage())
-        lstStrInputCommand = raw_input("parser[%s]>>>"%self.strTargetSite).split(" ")
-        self.dicParsers[self.strTargetSite].runParser(lstStrInputCommand)
+        if self.strTargetSite != None:
+            print(self.dicParsers[self.strTargetSite].getUseageMessage())
+            lstStrInputCommand = raw_input("parser[%s]>>>"%self.strTargetSite).split(" ")
+            self.dicParsers[self.strTargetSite].runParser(lstStrInputCommand)
+        
+    #顯示 cleaner 訊息
+    def printCleanerMessage(self):
+        self.listSiteMessage()
+        if self.strTargetSite != None:
+            print("cleaning... [%s]"%self.strTargetSite)
+            self.dicCleaners[self.strTargetSite].clean()
+            print("[%s] cleaned"%self.strTargetSite)
         
     #開啟 shell
     def openShell(self):
@@ -86,6 +100,8 @@ parser - run parser"""
                 self.printSpiderMessage()
             elif input == "parser":
                 self.printParserMessage()
+            elif input == "clean":
+                self.printCleanerMessage()
             elif input == "exit":
                 self.intShellStateCode = 0
         
