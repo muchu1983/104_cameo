@@ -254,3 +254,4 @@ if __name__ == "__main__":
     if lstStrArgs[1] == "individuals":
         #lstStrArgs[2] is target category arg
         downloadIndividualsPages(strTargetCategory=lstStrArgs[2])
+    popup(u"spider action completed")
