@@ -36,8 +36,8 @@ class ParserForINDIEGOGO:
                                                     self.parseIndividualsProfilePage,
                                                     self.parseIndividualsCampaignsPage,
                                                     self.afterParseIndividualsPage],}
-        self.SOURCE_HTML_BASE_FOLDER_PATH = u"./cameo_res/source_html"
-        self.PARSED_RESULT_BASE_FOLDER_PATH = u"./cameo_res/parsed_result"
+        self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
+        self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
         self.CATEGORY_URL_LIST_FILENAME = u"category_url_list.txt"
         self.PROJ_URL_LIST_FILENAME = u"_proj_url_list.txt"
         self.dicParsedResultOfProject = {} #project.json 資料
@@ -69,8 +69,8 @@ individuals category - parse individuals.html of category then create xxx.json
 #explore #####################################################################################
     #解析 explore.html
     def parseExplorePage(self, uselessArg1=None):
-        strExploreHtmlPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"/INDIEGOGO/explore.html"
-        strExploreResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"/INDIEGOGO"
+        strExploreHtmlPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\INDIEGOGO\\explore.html"
+        strExploreResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\INDIEGOGO"
         if not os.path.exists(strExploreResultFolderPath):
             os.mkdir(strExploreResultFolderPath) #mkdir parsed_result/INDIEGOGO/
         with open(strExploreHtmlPath, "r") as expHtmlFile:
@@ -79,7 +79,7 @@ individuals category - parse individuals.html of category then create xxx.json
         lstStrCategoryUrls = root.css("explore-category-link-www a.i-uncolored-link::attr(href)").extract()
         if len(lstStrCategoryUrls) == 0:
             lstStrCategoryUrls = root.css("ul.exploreCategories-list li.ng-scope a.ng-binding::attr(href)").extract()
-        strCategoryUrlListFilePath = strExploreResultFolderPath + u"/" + self.CATEGORY_URL_LIST_FILENAME
+        strCategoryUrlListFilePath = strExploreResultFolderPath + u"\\" + self.CATEGORY_URL_LIST_FILENAME
         with open(strCategoryUrlListFilePath, "w+") as catUrlListFile:
             for strCategoryUrl in lstStrCategoryUrls:
                 strCategoryUrl = re.sub("#/browse", "", strCategoryUrl)
@@ -91,43 +91,43 @@ individuals category - parse individuals.html of category then create xxx.json
 #category #####################################################################################
     #解析 category.html
     def parseCategoryPage(self, uselessArg1=None):
-        strCategoryUrlListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"/INDIEGOGO/category_url_list.txt"
+        strCategoryUrlListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\INDIEGOGO\\category_url_list.txt"
         catUrlListFile = open(strCategoryUrlListFilePath)
         for strCategoryUrl in catUrlListFile:#category loop
             strCategoryName = re.search("^https://www.indiegogo.com/explore/(.*)$" ,strCategoryUrl).group(1)
-            strCategoryHtmlPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"/INDIEGOGO/%s/category.html"%(strCategoryName)
+            strCategoryHtmlPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\INDIEGOGO\\%s\\category.html"%(strCategoryName)
             if os.path.exists(strCategoryHtmlPath):#check category.html exists
-                strCategoryResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"/INDIEGOGO/" + strCategoryName
+                strCategoryResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\INDIEGOGO\\" + strCategoryName
                 if not os.path.exists(strCategoryResultFolderPath):
                     os.mkdir(strCategoryResultFolderPath) #mkdir parsed_result/INDIEGOGO/category/
                 with open(strCategoryHtmlPath, "r") as catHtmlFile: #open category.html
                     strPageSource = catHtmlFile.read()
                     root = Selector(text=strPageSource)
                     lstStrProjUrls = root.css("a.discoveryCard::attr(href)").extract() #parse proj urls
-                    strProjectUrlListFilePath = strCategoryResultFolderPath + u"/project_url_list.txt"
+                    strProjectUrlListFilePath = strCategoryResultFolderPath + u"\\project_url_list.txt"
                     with open(strProjectUrlListFilePath, "w+") as projUrlListFile: #write to project_url_list.txt
                         for strProjUrl in lstStrProjUrls:
                             projUrlListFile.write(strProjUrl + u"\n")
 #project #####################################################################################
     #解析 project page(s) 之前
     def beforeParseProjectPage(self, strCategoryName=None):
-        strProjectsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/projects"%strCategoryName)
+        strProjectsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\INDIEGOGO\\%s\\projects"%strCategoryName)
         if not os.path.exists(strProjectsResultFolderPath):
             #mkdir parsed_result/INDIEGOGO/category/projects/
             os.mkdir(strProjectsResultFolderPath)
             
     #解析 project page(s) 之後
     def afterParseProjectPage(self, strCategoryName=None):
-        strProjectsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/projects"%strCategoryName)
+        strProjectsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\INDIEGOGO\\%s\\projects"%strCategoryName)
         #將 parse 結果寫入 json 檔案
-        self.utility.writeObjectToJsonFile(self.dicParsedResultOfProject, strProjectsResultFolderPath + u"/project.json")
-        self.utility.writeObjectToJsonFile(self.dicParsedResultOfUpdate, strProjectsResultFolderPath + u"/update.json")
-        self.utility.writeObjectToJsonFile(self.dicParsedResultOfComment, strProjectsResultFolderPath + u"/comment.json")
-        self.utility.writeObjectToJsonFile(self.dicParsedResultOfReward, strProjectsResultFolderPath + u"/reward.json")
+        self.utility.writeObjectToJsonFile(self.dicParsedResultOfProject, strProjectsResultFolderPath + u"\\project.json")
+        self.utility.writeObjectToJsonFile(self.dicParsedResultOfUpdate, strProjectsResultFolderPath + u"\\update.json")
+        self.utility.writeObjectToJsonFile(self.dicParsedResultOfComment, strProjectsResultFolderPath + u"\\comment.json")
+        self.utility.writeObjectToJsonFile(self.dicParsedResultOfReward, strProjectsResultFolderPath + u"\\reward.json")
             
     #解析 _details.html
     def parseProjectDetailsPage(self, strCategoryName=None):
-        strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/projects"%strCategoryName)
+        strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"\\INDIEGOGO\\%s\\projects"%strCategoryName)
         lstStrDetailsHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strProjectsHtmlFolderPath, strSuffixes="_details.html")
         for strProjectDetailsHtmlPath in lstStrDetailsHtmlFilePath:
             logging.info("parsing %s"%strProjectDetailsHtmlPath)
@@ -143,7 +143,7 @@ individuals category - parse individuals.html of category then create xxx.json
                 strIndividualsUrl = root.css("div.campaignTrustPassportDesktop-ownerInfo a.ng-binding[href*='individuals']::attr(href)").extract_first() #parse individuals url
                 self.dicParsedResultOfProject[strProjUrl]["strCreatorUrl"] = strIndividualsUrl
                 # append url to parsed_result/*/category/individuals_url_list.txt
-                strIndividualsUrlListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/individuals_url_list.txt"%(strCategoryName))
+                strIndividualsUrlListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\INDIEGOGO\\%s\\individuals_url_list.txt"%(strCategoryName))
                 lstStrExistsIndividualsUrl = []
                 if os.path.exists(strIndividualsUrlListFilePath):
                     with open(strIndividualsUrlListFilePath, "r") as individualsUrlListFile:
@@ -154,7 +154,7 @@ individuals category - parse individuals.html of category then create xxx.json
                     
     #解析 _story.html
     def parseProjectStoryPage(self, strCategoryName=None):
-        strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/projects"%strCategoryName)
+        strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"\\INDIEGOGO\\%s\\projects"%strCategoryName)
         lstStrStoryHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strProjectsHtmlFolderPath, strSuffixes="_story.html")
         for strProjStoryFilePath in lstStrStoryHtmlFilePath:
             logging.info("parsing %s"%strProjStoryFilePath)
@@ -294,7 +294,7 @@ individuals category - parse individuals.html of category then create xxx.json
                 
     #解析 _updates.html
     def parseProjectUpdatesPage(self, strCategoryName=None):
-        strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/projects"%strCategoryName)
+        strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"\\INDIEGOGO\\%s\\projects"%strCategoryName)
         lstStrUpdatesHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strProjectsHtmlFolderPath, strSuffixes="_updates.html")
         for strProjUpdatesFilePath in lstStrUpdatesHtmlFilePath:
             logging.info("parsing %s"%strProjUpdatesFilePath)
@@ -327,7 +327,7 @@ individuals category - parse individuals.html of category then create xxx.json
         
     #解析 _comments.html
     def parseProjectCommentsPage(self, strCategoryName=None):
-        strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/projects"%strCategoryName)
+        strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"\\INDIEGOGO\\%s\\projects"%strCategoryName)
         lstStrCommentsHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strProjectsHtmlFolderPath, strSuffixes="_comments.html")
         for strProjCommentsFilePath in lstStrCommentsHtmlFilePath:
             logging.info("parsing %s"%strProjCommentsFilePath)
@@ -366,7 +366,7 @@ individuals category - parse individuals.html of category then create xxx.json
                 
     #解析 _backers.html
     def parseProjectBackersPage(self, strCategoryName=None):
-        strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/projects"%strCategoryName)
+        strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"\\INDIEGOGO\\%s\\projects"%strCategoryName)
         lstStrBackersHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strProjectsHtmlFolderPath, strSuffixes="_backers.html")
         for strProjBackersFilePath in lstStrBackersHtmlFilePath:
             logging.info("parsing %s"%strProjBackersFilePath)
@@ -384,7 +384,7 @@ individuals category - parse individuals.html of category then create xxx.json
                 
     #解析 _story.html (INDIEGOGO 的 reward 資料置於 _story.html)
     def parseProjectRewardPage(self, strCategoryName=None):
-        strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/projects"%strCategoryName)
+        strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"\\INDIEGOGO\\%s\\projects"%strCategoryName)
         lstStrStoryHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strProjectsHtmlFolderPath, strSuffixes="_story.html")
         for strProjStoryFilePath in lstStrStoryHtmlFilePath:
             logging.info("parsing %s"%strProjStoryFilePath)
@@ -441,20 +441,20 @@ individuals category - parse individuals.html of category then create xxx.json
 #individuals #####################################################################################
     #解析 individuals page(s) 之前
     def beforeParseIndividualsPage(self, strCategoryName=None):
-        strIndividualsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/profiles"%strCategoryName)
+        strIndividualsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\INDIEGOGO\\%s\\profiles"%strCategoryName)
         if not os.path.exists(strIndividualsResultFolderPath):
             #mkdir parsed_result/INDIEGOGO/category/profiles/
             os.mkdir(strIndividualsResultFolderPath) 
             
     #解析 individuals page(s) 之後
     def afterParseIndividualsPage(self, strCategoryName=None):
-        strIndividualsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/profiles"%strCategoryName)
+        strIndividualsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\INDIEGOGO\\%s\\profiles"%strCategoryName)
         #將 parse 結果寫入 json 檔案
-        self.utility.writeObjectToJsonFile(self.dicParsedResultOfProfile, strIndividualsResultFolderPath + u"/profile.json")
+        self.utility.writeObjectToJsonFile(self.dicParsedResultOfProfile, strIndividualsResultFolderPath + u"\\profile.json")
         
     #解析 _profile.html
     def parseIndividualsProfilePage(self, strCategoryName=None):
-        strIndividualsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/profiles"%strCategoryName)
+        strIndividualsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"\\INDIEGOGO\\%s\\profiles"%strCategoryName)
         lstStrProfileHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strIndividualsHtmlFolderPath, strSuffixes="_profile.html")
         for strIndividualsProfileFilePath in lstStrProfileHtmlFilePath:
             logging.info("parsing %s"%strIndividualsProfileFilePath)
@@ -523,7 +523,7 @@ individuals category - parse individuals.html of category then create xxx.json
         
     #解析 _campaigns.html
     def parseIndividualsCampaignsPage(self, strCategoryName=None):
-        strIndividualsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"/INDIEGOGO/%s/profiles"%strCategoryName)
+        strIndividualsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"\\INDIEGOGO\\%s\\profiles"%strCategoryName)
         lstStrCampaignsHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strIndividualsHtmlFolderPath, strSuffixes="_campaigns.html")
         for strIndividualsCampaignFilePath in lstStrCampaignsHtmlFilePath:
             logging.info("parsing %s"%strIndividualsCampaignFilePath)

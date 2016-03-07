@@ -24,7 +24,7 @@ class Utility:
             if base == strBasedir:#just check base dir
                 for strFilename in files:
                     if strFilename.endswith(strSuffixes):#find target files
-                        strFilePath = base + "/" + strFilename
+                        strFilePath = base + "\\" + strFilename
                         lstStrFilePathWithSuffixes.append(strFilePath)
         return lstStrFilePathWithSuffixes
         
