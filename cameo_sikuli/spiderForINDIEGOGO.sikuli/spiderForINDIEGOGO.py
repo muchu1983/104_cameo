@@ -157,7 +157,7 @@ def downloadProjectPages(strTargetCategory=None):
         wait("1456229536809.png", 300)
         wait(5)
         strProjDetailsFilename = strProjName+"_details.html"
-        strProjDetailsFilePath = strProjectsFolderPath + r"/" + strProjDetailsFilename
+        strProjDetailsFilePath = strProjectsFolderPath + "\\" + strProjDetailsFilename
         if not os.path.exists(strProjDetailsFilePath):#check detail.html
             while(not exists("1456229579631.png")):
                 type(Key.PAGE_DOWN)
@@ -172,12 +172,12 @@ def downloadProjectPages(strTargetCategory=None):
             type(Key.HOME)       
             wait("1456229536809.png", 300)
         strProjStoryFilename = strProjName+"_story.html"
-        strProjStroyFilePath = strProjectsFolderPath + r"/" + strProjStoryFilename
+        strProjStroyFilePath = strProjectsFolderPath + "\\" + strProjStoryFilename
         if not os.path.exists(strProjStroyFilePath):#check story.html
             #save story
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjStoryFilename)
         strProjUpdatesFilename = strProjName+"_updates.html"
-        strProjUpdatesFilePath = strProjectsFolderPath + r"/" + strProjUpdatesFilename        
+        strProjUpdatesFilePath = strProjectsFolderPath + "\\" + strProjUpdatesFilename        
         if not os.path.exists(strProjUpdatesFilePath):#check updates.html
             #save updates
             wait("1456232941269.png", 300)
@@ -186,7 +186,7 @@ def downloadProjectPages(strTargetCategory=None):
             unfoldUCBShowmore()
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjUpdatesFilename)
         strProjCommentsFilename = strProjName+"_comments.html"
-        strProjCommentsFilePath = strProjectsFolderPath + r"/" + strProjCommentsFilename                
+        strProjCommentsFilePath = strProjectsFolderPath + "\\" + strProjCommentsFilename                
         if not os.path.exists(strProjCommentsFilePath):#check comments.html
             #save comments
             wait("1456232986275.png", 300)
@@ -195,7 +195,7 @@ def downloadProjectPages(strTargetCategory=None):
             unfoldUCBShowmore()
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjCommentsFilename)
         strProjBackersFilename = strProjName+"_backers.html"
-        strProjBackersFilePath = strProjectsFolderPath + r"/" + strProjBackersFilename                        
+        strProjBackersFilePath = strProjectsFolderPath + "\\" + strProjBackersFilename                        
         if not os.path.exists(strProjBackersFilePath):#check backers.html
             #save backers
             wait("1456233023222.png", 300)
@@ -204,7 +204,7 @@ def downloadProjectPages(strTargetCategory=None):
             unfoldUCBShowmore()
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjBackersFilename)
         strProjGalleryFilename = strProjName+"_gallery.html"
-        strProjGalleryFilePath = strProjectsFolderPath + r"/" + strProjGalleryFilename
+        strProjGalleryFilePath = strProjectsFolderPath + "\\" + strProjGalleryFilename
         if (not os.path.exists(strProjGalleryFilePath)) and exists("1456828715470.png"):#check gallery.html
             #save gallery
             wait("1456828715470.png", 300)
@@ -227,11 +227,11 @@ def downloadIndividualsPages(strTargetCategory=None):
         typeUrlOnChrome(strUrlText=strIndividualsUrl)
         wait("1456297470021.png", 300)
         strIndividualsProfileFilename = strIndividualsId+"_profile.html"
-        strIndividualsProfileFilePath = strIndividualsFolderPath + r"/" + strIndividualsProfileFilename
+        strIndividualsProfileFilePath = strIndividualsFolderPath + "\\" + strIndividualsProfileFilename
         if not os.path.exists(strIndividualsProfileFilePath):#check profile.html
             saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsProfileFilename)
         strIndividualsCampaignsFilename = strIndividualsId+"_campaigns.html"       
-        strIndividualsCampaignsFilePath = strIndividualsFolderPath + r"/" + strIndividualsCampaignsFilename        
+        strIndividualsCampaignsFilePath = strIndividualsFolderPath + "\\" + strIndividualsCampaignsFilename        
         if not os.path.exists(strIndividualsCampaignsFilePath):#check campaigns.html        
             wait("1456297490082.png", 300)
             click("1456297490082.png")
