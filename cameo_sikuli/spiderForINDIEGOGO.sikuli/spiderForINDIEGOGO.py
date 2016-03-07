@@ -63,6 +63,9 @@ def typeUrlOnChrome(strUrlText=None):
     pasteClipboardText(strText=strUrlText)
     wait(0.5)
     type(Key.ENTER)
+    wait(0.5)
+    waitVanish("1456214096530.png", 300)
+    wait("1456214122362.png", 300)
 # go to explore page
 def goExplorePage():
     typeUrlOnChrome(strUrlText="https://www.indiegogo.com/explore")
@@ -155,7 +158,7 @@ def downloadProjectPages(strTargetCategory=None):
         openChrome()
         typeUrlOnChrome(strUrlText=strProjUrl)
         wait("1456229536809.png", 300)
-        wait(5)
+        wait(0.5)
         strProjDetailsFilename = strProjName+"_details.html"
         strProjDetailsFilePath = strProjectsFolderPath + "\\" + strProjDetailsFilename
         if not os.path.exists(strProjDetailsFilePath):#check detail.html
