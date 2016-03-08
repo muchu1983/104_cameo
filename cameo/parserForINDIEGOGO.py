@@ -177,6 +177,11 @@ individuals category - parse individuals.html of category then create xxx.json
                 #strUrl
                 self.dicParsedResultOfProject[strProjUrl]["strUrl"] = \
                     strProjUrl
+                #strCrawlTime local story.html的建立時間
+                fCTimeStamp = os.path.getctime(strProjStoryFilePath)
+                dtCrawlTime = datetime.datetime.fromtimestamp(fCTimeStamp)
+                strCrawlTime = dtCrawlTime.strftime("%Y-%m-%d")
+                self.dicParsedResultOfProject[strProjUrl]["strCrawlTime"] = strCrawlTime
                 #strProjectName
                 self.dicParsedResultOfProject[strProjUrl]["strProjectName"] = \
                     root.css("h1.campaignHeader-title::text").extract_first().strip()
@@ -193,15 +198,15 @@ individuals category - parse individuals.html of category then create xxx.json
                     strContinent = strTrustTeaserText.split(",")[1].strip()
                 self.dicParsedResultOfProject[strProjUrl]["strContinent"] = strContinent
                 #strDescription
-                strDescription = u""
-                lstStrDescriptionParagraph = root.css("div.i-description  campaign-description *::text").extract()
-                for strDescriptionParagraph in lstStrDescriptionParagraph:
-                    strDescription = strDescription + strDescriptionParagraph.strip()
                 self.dicParsedResultOfProject[strProjUrl]["strDescription"] = \
-                    strDescription
-                #strIntroduction
-                self.dicParsedResultOfProject[strProjUrl]["strIntroduction"] = \
                     root.css("div.i-musty-background div:nth-of-type(1)::text").extract_first().strip()
+                #strIntroduction
+                strIntroduction = u""
+                lstStrIntroductionParagraph = root.css("div.i-description  campaign-description *::text").extract()
+                for strIntroductionParagraph in lstStrIntroductionParagraph:
+                    strIntroduction = strIntroduction + strIntroductionParagraph.strip()
+                self.dicParsedResultOfProject[strProjUrl]["strIntroduction"] = \
+                    strIntroduction
                 #strCreator
                 self.dicParsedResultOfProject[strProjUrl]["strCreator"] = \
                     root.css("div.campaignTrustTeaser-item:nth-of-type(1) div.campaignTrustTeaser-text div.campaignTrustTeaser-text-title::text").extract_first().strip()
@@ -300,10 +305,8 @@ individuals category - parse individuals.html of category then create xxx.json
                     intRemainDays
                 #strEndDate
                 strEndDate = None
-                timeNow = datetime.datetime.now()
-                timeEndDate = timeNow
-                if intRemainDays != 0:
-                    timeEndDate = timeNow + datetime.timedelta(days=intRemainDays)
+                if intRemainDays > 0:
+                    timeEndDate = dtCrawlTime + datetime.timedelta(days=intRemainDays)
                     strEndDate = timeEndDate.strftime("%Y-%m-%d")
                 self.dicParsedResultOfProject[strProjUrl]["strEndDate"] = \
                     strEndDate
@@ -316,7 +319,6 @@ individuals category - parse individuals.html of category then create xxx.json
                 #intVideoCount = "" 取得困難??
                 #新增以下欄位
                 #strCity -> (strLocation = "Toronto, Ontario, Canada", strCity = "Toronto", strContinent="America") -> https://pypi.python.org/pypi/geonamescache
-                #strCrawlTime local story.html的建立時間
                 
     #解析 _updates.html
     def parseProjectUpdatesPage(self, strCategoryName=None):
