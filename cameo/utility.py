@@ -28,18 +28,33 @@ class Utility:
                         lstStrFilePathWithSuffixes.append(strFilePath)
         return lstStrFilePathWithSuffixes
         
-    #轉換文字成數字 (ex:26.3k -> 26300)
+    #轉換 簡化數字字串 成 純數字 (ex:26.3k -> 26300)
     def translateNumTextToPureNum(self, strNumText=None):
         strNumText = strNumText.lower()
         fPureNum = 0.0
-        fFloatPartText = re.match("^([0-9\.]*)k?m?$", strNumText)
-        if fFloatPartText != None:
-            fFloatPartText = fFloatPartText.group(1)
+        strFloatPartText = re.match("^([0-9\.]*)k?m?$", strNumText)
+        if strFloatPartText != None:
+            strFloatPartText = strFloatPartText.group(1)
             if strNumText.endswith("k"):
-                fPureNum = float(fFloatPartText) * 1000
+                fPureNum = float(strFloatPartText) * 1000
             elif strNumText.endswith("m"):
-                fPureNum = float(fFloatPartText) * 1000000
+                fPureNum = float(strFloatPartText) * 1000000
             else:
-                fPureNum = float(fFloatPartText) * 1
+                fPureNum = float(strFloatPartText) * 1
         return int(fPureNum)
         
+    #轉換 剩餘日期表示字串 成 純數字 (ex:100 day left -> 100)
+    def translateTimeleftTextToPureNum(self, strTimeleftText=None):
+        strTimeleftText = strTimeleftText.lower().strip()
+        intDays = 0
+        if "hours left" in strTimeleftText:
+            strHoursText = re.match("^([0-9]*) hours left$", strTimeleftText)
+            if strHoursText != None:
+                strHoursText = strHoursText.group(1)
+                intDays = (int(strHoursText)+24)/24
+        if "days left" in strTimeleftText:
+            strDaysText = re.match("^([0-9]*) days left$", strTimeleftText)
+            if strDaysText != None:
+                strDaysText = strDaysText.group(1)
+                intDays = int(strDaysText)
+        return intDays

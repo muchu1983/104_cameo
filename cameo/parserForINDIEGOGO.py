@@ -293,7 +293,15 @@ individuals category - parse individuals.html of category then create xxx.json
                 #strStartDate = "" 無法取得
                 #isPMSelect = "" 無法取得
                 #intVideoCount = "" 取得困難??
-                #intRemainDays = "" 取得困難??
+                #intRemainDays
+                intRemainDays = 0
+                strProjectTimeleftListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\INDIEGOGO\\%s\\project_timeleft_list.txt"%strCategoryName)
+                with open(strProjectTimeleftListFilePath, "r") as projectTimeleftListFile:
+                    for strProjTimeleftLine in projectTimeleftListFile:
+                        if strProjUrl in strProjTimeleftLine:
+                            intRemainDays = self.utility.translateTimeleftTextToPureNum(strProjTimeleftLine.split(",")[1].strip())
+                self.dicParsedResultOfProject[strProjUrl]["intRemainDays"] = \
+                    intRemainDays
                 #strEndDate = "" 取得困難??
                 
     #解析 _updates.html
