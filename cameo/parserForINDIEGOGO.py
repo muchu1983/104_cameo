@@ -564,6 +564,8 @@ individuals category - parse individuals.html of category then create xxx.json
                 self.dicParsedResultOfProfile[strIndividualsUrl]["intSuccessProject"] = None
                 #intFailedProject 無法取得
                 self.dicParsedResultOfProfile[strIndividualsUrl]["intFailedProject"] = None
+                #新增以下欄位
+                #strCity -> (strLocation = "Toronto, Ontario, Canada", strCity = "Toronto", strContinent="America") -> https://pypi.python.org/pypi/geonamescache
         
     #解析 _campaigns.html
     def parseIndividualsCampaignsPage(self, strCategoryName=None):
