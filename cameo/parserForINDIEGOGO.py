@@ -307,11 +307,16 @@ individuals category - parse individuals.html of category then create xxx.json
                     strEndDate = timeEndDate.strftime("%Y-%m-%d")
                 self.dicParsedResultOfProject[strProjUrl]["strEndDate"] = \
                     strEndDate
+                #strStartDate = "" 無法取得
+                self.dicParsedResultOfProject[strProjUrl]["strStartDate"] = None
+                #isPMSelect = "" 無法取得
+                self.dicParsedResultOfProject[strProjUrl]["isPMSelect"] = None
                 #strCreatorUrl = "" 已由 parseProjectDetailsPage 取得
                 #lstStrBacker = "" 已由 parseProjectBackersPage 取得
-                #strStartDate = "" 無法取得
-                #isPMSelect = "" 無法取得
                 #intVideoCount = "" 取得困難??
+                #新增以下欄位
+                #strCity -> (strLocation = "Toronto, Ontario, Canada", strCity = "Toronto", strContinent="America") -> https://pypi.python.org/pypi/geonamescache
+                #strCrawlTime local story.html的建立時間
                 
     #解析 _updates.html
     def parseProjectUpdatesPage(self, strCategoryName=None):
@@ -341,8 +346,11 @@ individuals category - parse individuals.html of category then create xxx.json
                     dicUpdateData["strUpdateDate"] = \
                         elementUpdate.css("h2.activityUpdate-timestamp::text").extract_first().strip()
                     #intComment 無法取得
+                    dicUpdateData["intComment"] = None
                     #intLike 無法取得
+                    dicUpdateData["intLike"] = None
                     #strUpdateTitle 無法取得
+                    dicUpdateData["strUpdateTitle"] = None
                     lstDicUpdateData.append(dicUpdateData)
                 self.dicParsedResultOfUpdate[strProjUrl] = lstDicUpdateData
         
@@ -540,10 +548,20 @@ individuals category - parse individuals.html of category then create xxx.json
                 #strIdentityName (同 strName)
                 self.dicParsedResultOfProfile[strIndividualsUrl]["strIdentityName"] = \
                     strName
-                #intFbFriend ??
+                #intFbFriend
+                intFbFriend = 0
+                lstStrVerificationSpanText = root.css("div.i-verifications div.profileVerification span::text").extract()
+                for strVerificationSpanText in lstStrVerificationSpanText:
+                    if "friends" in strVerificationSpanText:
+                        strVerificationSpanText = re.sub("[^0-9]", "", strVerificationSpanText)
+                        intFbFriend = int(strVerificationSpanText)
+                self.dicParsedResultOfProfile[strIndividualsUrl]["intFbFriend"] = intFbFriend
                 #intLiveProject 無法取得
+                self.dicParsedResultOfProfile[strIndividualsUrl]["intLiveProject"] = None
                 #intSuccessProject 無法取得
+                self.dicParsedResultOfProfile[strIndividualsUrl]["intSuccessProject"] = None
                 #intFailedProject 無法取得
+                self.dicParsedResultOfProfile[strIndividualsUrl]["intFailedProject"] = None
         
     #解析 _campaigns.html
     def parseIndividualsCampaignsPage(self, strCategoryName=None):
