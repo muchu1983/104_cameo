@@ -249,10 +249,6 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         strProjBackersFilePath = strProjectsFolderPath + <span class="str">"\\"</span> + strProjBackersFilename
         <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strProjBackersFilePath):<span class="cmt">#check backers.html</span>
             isProjHtmlFileMissing = True
-        strProjGalleryFilename = strProjName+<span class="str">"_gallery.html"</span>
-        strProjGalleryFilePath = strProjectsFolderPath + <span class="str">"\\"</span> + strProjGalleryFilename
-        <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strProjGalleryFilePath):<span class="cmt">#check gallery.html</span>
-            isProjHtmlFileMissing = True
         <span class="cmt">#open chrome 
 </span>        <span class="kw">if</span> isProjHtmlFileMissing:
             openChrome()
@@ -298,6 +294,9 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
             <span class="skw">wait</span>(<img src="1457063099388.png" />, <span class="dig">300</span>)
             unfoldUCBShowmore()
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjBackersFilename)
+        <span class="cmt">#gallery may not exists
+</span>        strProjGalleryFilename = strProjName+<span class="str">"_gallery.html"</span>
+        strProjGalleryFilePath = strProjectsFolderPath + <span class="str">"\\"</span> + strProjGalleryFilename
         <span class="kw">if</span> (<span class="kw">not</span> os.path.exists(strProjGalleryFilePath)) <span class="kw">and</span> exists(<img src="1456828715470.png" />):<span class="cmt">#check gallery.html</span>
             <span class="cmt">#save gallery
 </span>            <span class="skw">wait</span>(<img src="1456828715470.png" />, <span class="dig">300</span>)

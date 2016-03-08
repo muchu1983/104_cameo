@@ -177,10 +177,6 @@ def downloadProjectPages(strTargetCategory=None):
         strProjBackersFilePath = strProjectsFolderPath + "\\" + strProjBackersFilename                        
         if not os.path.exists(strProjBackersFilePath):#check backers.html
             isProjHtmlFileMissing = True
-        strProjGalleryFilename = strProjName+"_gallery.html"
-        strProjGalleryFilePath = strProjectsFolderPath + "\\" + strProjGalleryFilename
-        if not os.path.exists(strProjGalleryFilePath):#check gallery.html
-            isProjHtmlFileMissing = True            
         #open chrome 
         if isProjHtmlFileMissing:
             openChrome()
@@ -226,6 +222,9 @@ def downloadProjectPages(strTargetCategory=None):
             wait("1457063099388.png", 300)
             unfoldUCBShowmore()
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjBackersFilename)
+        #gallery may not exists
+        strProjGalleryFilename = strProjName+"_gallery.html"
+        strProjGalleryFilePath = strProjectsFolderPath + "\\" + strProjGalleryFilename            
         if (not os.path.exists(strProjGalleryFilePath)) and exists("1456828715470.png"):#check gallery.html
             #save gallery
             wait("1456828715470.png", 300)
