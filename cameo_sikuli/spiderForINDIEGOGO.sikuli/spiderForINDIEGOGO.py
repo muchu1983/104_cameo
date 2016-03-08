@@ -155,12 +155,40 @@ def downloadProjectPages(strTargetCategory=None):
     projUrlListFile = open(strProjUrlListFilePath, "r") 
     for strProjUrl in projUrlListFile:
         strProjName = re.search("^https://www.indiegogo.com/projects/(.*)/.{4}$", strProjUrl).group(1)
-        openChrome()
-        typeUrlOnChrome(strUrlText=strProjUrl)
-        wait("1456229536809.png", 300)
-        wait(0.5)
+        #check html file exists
+        isProjHtmlFileMissing = False
         strProjDetailsFilename = strProjName+"_details.html"
         strProjDetailsFilePath = strProjectsFolderPath + "\\" + strProjDetailsFilename
+        if not os.path.exists(strProjDetailsFilePath):#check detail.html
+            isProjHtmlFileMissing = True
+        strProjStoryFilename = strProjName+"_story.html"
+        strProjStroyFilePath = strProjectsFolderPath + "\\" + strProjStoryFilename
+        if not os.path.exists(strProjStroyFilePath):#check story.html
+            isProjHtmlFileMissing = True
+        strProjUpdatesFilename = strProjName+"_updates.html"
+        strProjUpdatesFilePath = strProjectsFolderPath + "\\" + strProjUpdatesFilename        
+        if not os.path.exists(strProjUpdatesFilePath):#check updates.html
+            isProjHtmlFileMissing = True
+        strProjCommentsFilename = strProjName+"_comments.html"
+        strProjCommentsFilePath = strProjectsFolderPath + "\\" + strProjCommentsFilename                
+        if not os.path.exists(strProjCommentsFilePath):#check comments.html
+            isProjHtmlFileMissing = True
+        strProjBackersFilename = strProjName+"_backers.html"
+        strProjBackersFilePath = strProjectsFolderPath + "\\" + strProjBackersFilename                        
+        if not os.path.exists(strProjBackersFilePath):#check backers.html
+            isProjHtmlFileMissing = True
+        strProjGalleryFilename = strProjName+"_gallery.html"
+        strProjGalleryFilePath = strProjectsFolderPath + "\\" + strProjGalleryFilename
+        if not os.path.exists(strProjGalleryFilePath):#check gallery.html
+            isProjHtmlFileMissing = True            
+        #open chrome 
+        if isProjHtmlFileMissing:
+            openChrome()
+            typeUrlOnChrome(strUrlText=strProjUrl)
+            wait("1456229536809.png", 300)
+            wait(0.5)
+        else:
+            continue #skip this url
         if not os.path.exists(strProjDetailsFilePath):#check detail.html
             while(not exists("1456229579631.png")):
                 type(Key.PAGE_DOWN)
@@ -174,13 +202,9 @@ def downloadProjectPages(strTargetCategory=None):
             wait("1456229579631.png", 300)
             type(Key.HOME)       
             wait("1456229536809.png", 300)
-        strProjStoryFilename = strProjName+"_story.html"
-        strProjStroyFilePath = strProjectsFolderPath + "\\" + strProjStoryFilename
         if not os.path.exists(strProjStroyFilePath):#check story.html
             #save story
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjStoryFilename)
-        strProjUpdatesFilename = strProjName+"_updates.html"
-        strProjUpdatesFilePath = strProjectsFolderPath + "\\" + strProjUpdatesFilename        
         if not os.path.exists(strProjUpdatesFilePath):#check updates.html
             #save updates
             wait("1456232941269.png", 300)
@@ -188,8 +212,6 @@ def downloadProjectPages(strTargetCategory=None):
             wait("1456232962072.png", 300)
             unfoldUCBShowmore()
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjUpdatesFilename)
-        strProjCommentsFilename = strProjName+"_comments.html"
-        strProjCommentsFilePath = strProjectsFolderPath + "\\" + strProjCommentsFilename                
         if not os.path.exists(strProjCommentsFilePath):#check comments.html
             #save comments
             wait("1456232986275.png", 300)
@@ -197,8 +219,6 @@ def downloadProjectPages(strTargetCategory=None):
             wait("1456233002434.png", 300)
             unfoldUCBShowmore()
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjCommentsFilename)
-        strProjBackersFilename = strProjName+"_backers.html"
-        strProjBackersFilePath = strProjectsFolderPath + "\\" + strProjBackersFilename                        
         if not os.path.exists(strProjBackersFilePath):#check backers.html
             #save backers
             wait("1456233023222.png", 300)
@@ -206,8 +226,6 @@ def downloadProjectPages(strTargetCategory=None):
             wait("1457063099388.png", 300)
             unfoldUCBShowmore()
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjBackersFilename)
-        strProjGalleryFilename = strProjName+"_gallery.html"
-        strProjGalleryFilePath = strProjectsFolderPath + "\\" + strProjGalleryFilename
         if (not os.path.exists(strProjGalleryFilePath)) and exists("1456828715470.png"):#check gallery.html
             #save gallery
             wait("1456828715470.png", 300)
@@ -226,15 +244,23 @@ def downloadIndividualsPages(strTargetCategory=None):
     individualsUrlListFile = open(strIndividualsUrlListFilePath, "r") 
     for strIndividualsUrl in individualsUrlListFile:
         strIndividualsId = re.search("^https://www.indiegogo.com/individuals/(.*)$", strIndividualsUrl).group(1)
-        openChrome()
-        typeUrlOnChrome(strUrlText=strIndividualsUrl)
-        wait("1456297470021.png", 300)
+        #check html exists
+        isIndividualsHtmlFileMissing = False
         strIndividualsProfileFilename = strIndividualsId+"_profile.html"
         strIndividualsProfileFilePath = strIndividualsFolderPath + "\\" + strIndividualsProfileFilename
         if not os.path.exists(strIndividualsProfileFilePath):#check profile.html
-            saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsProfileFilename)
+            isIndividualsHtmlFileMissing = True
         strIndividualsCampaignsFilename = strIndividualsId+"_campaigns.html"       
         strIndividualsCampaignsFilePath = strIndividualsFolderPath + "\\" + strIndividualsCampaignsFilename        
+        if not os.path.exists(strIndividualsCampaignsFilePath):#check campaigns.html  
+            isIndividualsHtmlFileMissing = True
+        #open chrome
+        if isIndividualsHtmlFileMissing:
+            openChrome()
+            typeUrlOnChrome(strUrlText=strIndividualsUrl)
+            wait("1456297470021.png", 300)
+        if not os.path.exists(strIndividualsProfileFilePath):#check profile.html
+            saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsProfileFilename)
         if not os.path.exists(strIndividualsCampaignsFilePath):#check campaigns.html        
             wait("1456297490082.png", 300)
             click("1456297490082.png")
