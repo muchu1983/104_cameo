@@ -61,6 +61,4 @@ individuals category - get all individuals.html of category
         strArg1 = None
         if len(lstSubcommand) == 2:
             strArg1 = lstSubcommand[1]
-        print("INDIEGOGO spider [%s] starting..."%strSubcommand)
         self.dicSubCommandHandler[strSubcommand](strArg1)
-        print("INDIEGOGO spider [%s] finished."%strSubcommand)

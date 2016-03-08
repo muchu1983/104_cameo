@@ -63,7 +63,9 @@ clean - clean _files dirs"""
         if self.strTargetSite != None:
             print(self.dicSpiders[self.strTargetSite].getUseageMessage())
             lstStrInputCommand = raw_input("spider[%s]>>>"%self.strTargetSite).split(" ")
+            print("spider start... [%s]"%self.strTargetSite)
             self.dicSpiders[self.strTargetSite].runSpider(lstStrInputCommand)
+            print("[%s] spider completed"%self.strTargetSite)
         
     #顯示 parser 訊息
     def printParserMessage(self):
@@ -71,7 +73,9 @@ clean - clean _files dirs"""
         if self.strTargetSite != None:
             print(self.dicParsers[self.strTargetSite].getUseageMessage())
             lstStrInputCommand = raw_input("parser[%s]>>>"%self.strTargetSite).split(" ")
+            print("parser start... [%s]"%self.strTargetSite)
             self.dicParsers[self.strTargetSite].runParser(lstStrInputCommand)
+            print("[%s] parsed"%self.strTargetSite)
         
     #顯示 cleaner 訊息
     def printCleanerMessage(self):
