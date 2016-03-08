@@ -7,6 +7,7 @@ This file is part of BSD license
 <https://opensource.org/licenses/BSD-3-Clause>
 """
 import os
+import datetime
 import re
 import json
 import logging
@@ -19,7 +20,7 @@ from cameo.utility import Utility
 class ParserForINDIEGOGO:
     #建構子
     def __init__(self):
-        logging.basicConfig(level=logging.INFO)
+        logging.basicConfig(level=logging.WARNING)
         self.utility = Utility()
         self.dicSubCommandHandler = {"explore":[self.parseExplorePage],
                                      "category":[self.parseCategoryPage],
@@ -288,11 +289,6 @@ individuals category - parse individuals.html of category then create xxx.json
                     self.dicParsedResultOfProject[strProjUrl]["isAON"] = True
                 else:
                     self.dicParsedResultOfProject[strProjUrl]["isAON"] = False
-                #strCreatorUrl = "" 已由 parseProjectDetailsPage 取得
-                #lstStrBacker = "" 已由 parseProjectBackersPage 取得
-                #strStartDate = "" 無法取得
-                #isPMSelect = "" 無法取得
-                #intVideoCount = "" 取得困難??
                 #intRemainDays
                 intRemainDays = 0
                 strProjectTimeleftListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\INDIEGOGO\\%s\\project_timeleft_list.txt"%strCategoryName)
@@ -302,7 +298,20 @@ individuals category - parse individuals.html of category then create xxx.json
                             intRemainDays = self.utility.translateTimeleftTextToPureNum(strProjTimeleftLine.split(",")[1].strip())
                 self.dicParsedResultOfProject[strProjUrl]["intRemainDays"] = \
                     intRemainDays
-                #strEndDate = "" 取得困難??
+                #strEndDate
+                strEndDate = None
+                timeNow = datetime.datetime.now()
+                timeEndDate = timeNow
+                if intRemainDays != 0:
+                    timeEndDate = timeNow + datetime.timedelta(days=intRemainDays)
+                    strEndDate = timeEndDate.strftime("%Y-%m-%d")
+                self.dicParsedResultOfProject[strProjUrl]["strEndDate"] = \
+                    strEndDate
+                #strCreatorUrl = "" 已由 parseProjectDetailsPage 取得
+                #lstStrBacker = "" 已由 parseProjectBackersPage 取得
+                #strStartDate = "" 無法取得
+                #isPMSelect = "" 無法取得
+                #intVideoCount = "" 取得困難??
                 
     #解析 _updates.html
     def parseProjectUpdatesPage(self, strCategoryName=None):
