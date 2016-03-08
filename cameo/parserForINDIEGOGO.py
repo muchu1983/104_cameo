@@ -509,9 +509,9 @@ individuals category - parse individuals.html of category then create xxx.json
                     root.css("div.i-profile-show-content p.i-description::text").extract_first().strip()
                 #strLocation and strContinent and strCountry
                 strLocationSpanText = root.css("div.i-profileHeader-location span::text").extract_first()
-                strLocation = u"N/A"
-                strContinent = u"N/A"
-                strCountry = u"N/A"
+                strLocation = None
+                strContinent = None
+                strCountry = None
                 if strLocationSpanText != None:
                     lstStrLocationPart = strLocationSpanText.split(",")
                     if len(lstStrLocationPart) == 3:
