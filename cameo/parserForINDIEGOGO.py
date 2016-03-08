@@ -105,9 +105,13 @@ individuals category - parse individuals.html of category then create xxx.json
                     root = Selector(text=strPageSource)
                     lstStrProjUrls = root.css("a.discoveryCard::attr(href)").extract() #parse proj urls
                     strProjectUrlListFilePath = strCategoryResultFolderPath + u"\\project_url_list.txt"
-                    with open(strProjectUrlListFilePath, "w+") as projUrlListFile: #write to project_url_list.txt
+                    strProjectTimeleftListFilePath = strCategoryResultFolderPath + u"\\project_timeleft_list.txt"
+                    with open(strProjectUrlListFilePath, "w+") as projUrlListFile, open(strProjectTimeleftListFilePath, "w+") as projTimeleftListFile:
                         for strProjUrl in lstStrProjUrls:
-                            projUrlListFile.write(strProjUrl + u"\n")
+                            projUrlListFile.write(strProjUrl + u"\n")#write to project_url_list.txt
+                            strProjTimeleft = root.css("a.discoveryCard[href='%s'] div.discoveryCard-timeleft::text"%strProjUrl).extract_first() #parse proj time left
+                            #write to project_timeleft_list.txt
+                            projTimeleftListFile.write(strProjUrl + u"," + str(strProjTimeleft) + u"\n")
 #project #####################################################################################
     #解析 project page(s) 之前
     def beforeParseProjectPage(self, strCategoryName=None):

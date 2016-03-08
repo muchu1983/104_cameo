@@ -18,7 +18,7 @@ class ParserForINDIEGOGOTest(unittest.TestCase):
 
     #準備
     def setUp(self):
-        logging.basicConfig(level=logging.INFO)
+        logging.basicConfig(level=logging.WARNING)
         pass
         
     #收尾
