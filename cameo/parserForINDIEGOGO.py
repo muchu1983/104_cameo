@@ -491,8 +491,9 @@ individuals category - parse individuals.html of category then create xxx.json
                 self.dicParsedResultOfProfile[strIndividualsUrl]["strUrl"] = \
                     strIndividualsUrl
                 #strName
+                strName = root.css("h1.i-profileHeader-accountName::text").extract_first().strip()
                 self.dicParsedResultOfProfile[strIndividualsUrl]["strName"] = \
-                    root.css("h1.i-profileHeader-accountName::text").extract_first().strip()
+                    strName
                 #strDescription
                 self.dicParsedResultOfProfile[strIndividualsUrl]["strDescription"] = \
                     root.css("div.i-profile-show-content p.i-description::text").extract_first().strip()
@@ -536,7 +537,9 @@ individuals category - parse individuals.html of category then create xxx.json
                 if intBackedCount > 0:
                     isBacker = True
                 self.dicParsedResultOfProfile[strIndividualsUrl]["isBacker"] = isBacker
-                #strIdentityName ??
+                #strIdentityName (同 strName)
+                self.dicParsedResultOfProfile[strIndividualsUrl]["strIdentityName"] = \
+                    strName
                 #intFbFriend ??
                 #intLiveProject 無法取得
                 #intSuccessProject 無法取得
