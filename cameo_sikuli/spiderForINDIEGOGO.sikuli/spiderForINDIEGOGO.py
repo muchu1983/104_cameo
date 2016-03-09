@@ -3,6 +3,7 @@ import sys
 import re
 from java.awt import Toolkit
 from java.awt.datatransfer import StringSelection
+sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
 strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"
 #open chrome
 def openChrome():
@@ -19,9 +20,7 @@ def delOriginText():
     wait(0.5)
 # paste text by using clipboard
 def pasteClipboardText(strText=None):
-    toolkit = Toolkit.getDefaultToolkit()
-    clipboard = toolkit.getSystemClipboard()
-    clipboard.setContents(StringSelection(u""+strText), None)
+    sysClipboard.setContents(StringSelection(u""+strText), None)
     wait(0.5)
     type("v", KeyModifier.CTRL)
     wait(0.5)
