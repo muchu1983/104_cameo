@@ -188,15 +188,15 @@ individuals category - parse individuals.html of category then create xxx.json
                 #strLocation
                 self.dicParsedResultOfProject[strProjUrl]["strLocation"] = \
                     root.css("div.campaignHeader-location a.ng-binding::text").extract_first().strip()
+                #strCity
+                self.dicParsedResultOfProject[strProjUrl]["strCity"] = \
+                    root.css("div.campaignHeader-city a.ng-binding::text").extract_first().strip()
                 #strCountry
                 self.dicParsedResultOfProject[strProjUrl]["strCountry"] = \
                     root.css("div.campaignTrustTeaser-item:nth-of-type(2) div.campaignTrustTeaser-text div.ng-binding:nth-of-type(3)::text").extract_first().strip()
                 #strContinent
-                strTrustTeaserText = root.css("div.campaignTrustTeaser-item:nth-of-type(2) div.campaignTrustTeaser-text div.ng-binding:nth-of-type(2)::text").extract_first()
-                strContinent = None
-                if "," in strTrustTeaserText:
-                    strContinent = strTrustTeaserText.split(",")[1].strip()
-                self.dicParsedResultOfProject[strProjUrl]["strContinent"] = strContinent
+                #TODO 從 strCountry 取得 大陸
+                self.dicParsedResultOfProject[strProjUrl]["strContinent"] = None
                 #strDescription
                 self.dicParsedResultOfProject[strProjUrl]["strDescription"] = \
                     root.css("div.i-musty-background div:nth-of-type(1)::text").extract_first().strip()
@@ -317,8 +317,6 @@ individuals category - parse individuals.html of category then create xxx.json
                 #strCreatorUrl = "" 已由 parseProjectDetailsPage 取得
                 #lstStrBacker = "" 已由 parseProjectBackersPage 取得
                 #intVideoCount = "" 取得困難??
-                #新增以下欄位
-                #strCity -> (strLocation = "Toronto, Ontario, Canada", strCity = "Toronto", strContinent="America") -> https://pypi.python.org/pypi/geonamescache
                 
     #解析 _updates.html
     def parseProjectUpdatesPage(self, strCategoryName=None):
@@ -507,25 +505,27 @@ individuals category - parse individuals.html of category then create xxx.json
                 #strDescription
                 self.dicParsedResultOfProfile[strIndividualsUrl]["strDescription"] = \
                     root.css("div.i-profile-show-content p.i-description::text").extract_first().strip()
-                #strLocation and strContinent and strCountry
+                #strLocation
                 strLocationSpanText = root.css("div.i-profileHeader-location span::text").extract_first()
-                strLocation = None
-                strContinent = None
-                strCountry = None
-                if strLocationSpanText != None:
-                    lstStrLocationPart = strLocationSpanText.split(",")
-                    if len(lstStrLocationPart) == 3:
-                        strLocation = lstStrLocationPart[0].strip()
-                        strContinent = lstStrLocationPart[1].strip()
-                        strCountry = lstStrLocationPart[2].strip()
-                    elif len(lstStrLocationPart) == 1:
-                        strCountry = lstStrLocationPart[0].strip()
+                strLocation = strLocationSpanText
                 self.dicParsedResultOfProfile[strIndividualsUrl]["strLocation"] = \
                     strLocation
-                self.dicParsedResultOfProfile[strIndividualsUrl]["strContinent"] = \
-                    strContinent
+                #strCountry and strCity
+                strCountry = None
+                strCity = None
+                if strLocationSpanText != None:
+                    lstStrLocationPart = strLocationSpanText.split(",")
+                    if len(lstStrLocationPart) > 1 :
+                        strCountry = lstStrLocationPart[-1].strip()
+                        strCity = lstStrLocationPart[0].strip()
+                    elif len(lstStrLocationPart) == 1:
+                        strCountry = lstStrLocationPart[0].strip()
                 self.dicParsedResultOfProfile[strIndividualsUrl]["strCountry"] = \
                     strCountry
+                self.dicParsedResultOfProfile[strIndividualsUrl]["strCity"] = \
+                    strCity
+                #strContinent may use https://pypi.python.org/pypi/geonamescache
+                self.dicParsedResultOfProfile[strIndividualsUrl]["strContinent"] = None
                 #intBackedCount and intCreatedCount
                 lstStrStatsEmText = root.css("ul.i-stats li em::text").extract()
                 intCreatedCount = 0
@@ -564,8 +564,6 @@ individuals category - parse individuals.html of category then create xxx.json
                 self.dicParsedResultOfProfile[strIndividualsUrl]["intSuccessProject"] = None
                 #intFailedProject 無法取得
                 self.dicParsedResultOfProfile[strIndividualsUrl]["intFailedProject"] = None
-                #新增以下欄位
-                #strCity -> (strLocation = "Toronto, Ontario, Canada", strCity = "Toronto", strContinent="America") -> https://pypi.python.org/pypi/geonamescache
         
     #解析 _campaigns.html
     def parseIndividualsCampaignsPage(self, strCategoryName=None):
