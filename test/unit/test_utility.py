@@ -40,6 +40,9 @@ class UtilityTest(unittest.TestCase):
         self.assertEquals("Europe", self.utility.getContinentByCountryName("Sweden"))
         self.assertEquals("Europe", self.utility.getContinentByCountryName("Slovenia"))
         
+    #測試 geopy
+    def test_geopy(self):
+        self.utility.geopy()
 
 #測試開始
 if __name__ == "__main__":

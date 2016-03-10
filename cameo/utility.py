@@ -9,6 +9,7 @@ This file is part of BSD license
 import os
 import re
 import json
+from geopy.geocoders import GoogleV3
 #共用工具程式
 class Utility:
     
@@ -59,7 +60,10 @@ class Utility:
                 intDays = int(strDaysText)
         return intDays
         
-
+    def geopy(self):
+        geolocator = GoogleV3()
+        location, (x, y) = geolocator.geocode("dubai")
+        print(location, x, y)
         
     def getContinentByCountryName(self, strCountryName=None):
         countries = [
