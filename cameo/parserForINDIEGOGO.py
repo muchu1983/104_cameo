@@ -192,11 +192,12 @@ individuals category - parse individuals.html of category then create xxx.json
                 self.dicParsedResultOfProject[strProjUrl]["strCity"] = \
                     root.css("div.campaignHeader-city a.ng-binding::text").extract_first().strip()
                 #strCountry
+                strCountry = root.css("div.campaignTrustTeaser-item:nth-of-type(2) div.campaignTrustTeaser-text div.ng-binding:nth-of-type(3)::text").extract_first().strip()
                 self.dicParsedResultOfProject[strProjUrl]["strCountry"] = \
-                    root.css("div.campaignTrustTeaser-item:nth-of-type(2) div.campaignTrustTeaser-text div.ng-binding:nth-of-type(3)::text").extract_first().strip()
+                    strCountry
                 #strContinent
-                #TODO 從 strCountry 取得 大陸
-                self.dicParsedResultOfProject[strProjUrl]["strContinent"] = None
+                self.dicParsedResultOfProject[strProjUrl]["strContinent"] = \
+                    self.utility.getContinentByCountryName(strCountry)
                 #strDescription
                 self.dicParsedResultOfProject[strProjUrl]["strDescription"] = \
                     root.css("div.i-musty-background div:nth-of-type(1)::text").extract_first().strip()
@@ -524,8 +525,9 @@ individuals category - parse individuals.html of category then create xxx.json
                     strCountry
                 self.dicParsedResultOfProfile[strIndividualsUrl]["strCity"] = \
                     strCity
-                #strContinent may use https://pypi.python.org/pypi/geonamescache
-                self.dicParsedResultOfProfile[strIndividualsUrl]["strContinent"] = None
+                #strContinent
+                self.dicParsedResultOfProfile[strIndividualsUrl]["strContinent"] = \
+                    self.utility.getContinentByCountryName(strCountry)
                 #intBackedCount and intCreatedCount
                 lstStrStatsEmText = root.css("ul.i-stats li em::text").extract()
                 intCreatedCount = 0

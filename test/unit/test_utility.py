@@ -31,7 +31,15 @@ class UtilityTest(unittest.TestCase):
         self.assertEquals(self.utility.translateNumTextToPureNum("26.3M"), 26300000)
         self.assertEquals(self.utility.translateNumTextToPureNum("26.3"), 26)
         self.assertEquals(self.utility.translateNumTextToPureNum("0.3k"), 300)
-
+        
+    #測試 取得國家所屬的洲名稱
+    def test_getContinentByCountryName(self):
+        self.assertEquals("Asia", self.utility.getContinentByCountryName("JaPaN"))
+        self.assertEquals("North America", self.utility.getContinentByCountryName("United sTaTeS"))
+        self.assertEquals("Europe", self.utility.getContinentByCountryName("UnIted Kingdom"))
+        self.assertEquals("Europe", self.utility.getContinentByCountryName("Sweden"))
+        self.assertEquals("Europe", self.utility.getContinentByCountryName("Slovenia"))
+        
 
 #測試開始
 if __name__ == "__main__":
