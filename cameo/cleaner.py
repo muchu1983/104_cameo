@@ -18,8 +18,7 @@ class CleanerForINDIEGOGO:
     
     def clean(self):
         for base, dirs, files in os.walk(self.strBasedir):
-            if base.endswith("projects") or base.endswith("profiles"):
-                for dir in dirs:
-                    if dir.endswith("_files"):
-                        strDirPath = base + "\\" + dir
-                        shutil.rmtree(strDirPath)
+            for dir in dirs:
+                if dir.endswith("_files"):
+                    strDirPath = base + "\\" + dir
+                    shutil.rmtree(strDirPath)
