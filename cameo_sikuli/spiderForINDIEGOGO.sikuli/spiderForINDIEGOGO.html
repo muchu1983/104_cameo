@@ -73,9 +73,6 @@
 <span class="kw">import</span> os
 <span class="kw">import</span> sys
 <span class="kw">import</span> re
-<span class="kw">from</span> java.awt <span class="kw">import</span> Toolkit
-<span class="kw">from</span> java.awt.datatransfer <span class="kw">import</span> StringSelection
-sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
 strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"</span>
 <span class="cmt">#open chrome
 </span><span class="kw">def</span> openChrome():
@@ -89,12 +86,6 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     <span class="skw">type</span>(<span class="str">"a"</span>, KeyModifier.CTRL)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
     <span class="skw">type</span>(Key.BACKSPACE)
-    <span class="skw">wait</span>(<span class="dig">0.5</span>)
-<span class="cmt"># paste text by using clipboard
-</span><span class="kw">def</span> pasteClipboardText(strText=None):
-    sysClipboard.setContents(StringSelection(<span class="str">u""</span>+strText), None)
-    <span class="skw">wait</span>(<span class="dig">0.5</span>)
-    <span class="skw">type</span>(<span class="str">"v"</span>, KeyModifier.CTRL)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
 <span class="cmt">#roll to page end
 </span><span class="kw">def</span> rollToPageEnd():
@@ -131,7 +122,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     <span class="skw">click</span>(<img src="1455955040522.png" />)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
     delOriginText()
-    pasteClipboardText(strText=strUrlText)
+    paste(strUrlText)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
     <span class="skw">type</span>(Key.ENTER)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
@@ -149,7 +140,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     <span class="skw">click</span>(Pattern(<img src="1456054857857.png" />).targetOffset(<span class="dig">10</span>,<span class="dig">0</span>))
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
     delOriginText()
-    pasteClipboardText(strText=strFolderPath)
+    paste(strFolderPath)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
     <span class="skw">type</span>(Key.ENTER)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
@@ -167,7 +158,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
     delOriginText()
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
-    pasteClipboardText(strText=strFilename)
+    paste(strFilename)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
     <span class="skw">click</span>(<img src="1455955227414.png" />)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
@@ -184,7 +175,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
     delOriginText()
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
-    pasteClipboardText(strText=strFilename)
+    paste(strFilename)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
     <span class="skw">click</span>(<img src="1455955227414.png" />)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)

@@ -1,9 +1,6 @@
 import os
 import sys
 import re
-from java.awt import Toolkit
-from java.awt.datatransfer import StringSelection
-sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
 strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"
 #open chrome
 def openChrome():
@@ -17,12 +14,6 @@ def delOriginText():
     type("a", KeyModifier.CTRL)
     wait(0.5)
     type(Key.BACKSPACE)
-    wait(0.5)
-# paste text by using clipboard
-def pasteClipboardText(strText=None):
-    sysClipboard.setContents(StringSelection(u""+strText), None)
-    wait(0.5)
-    type("v", KeyModifier.CTRL)
     wait(0.5)
 #roll to page end
 def rollToPageEnd():
@@ -59,7 +50,7 @@ def typeUrlOnChrome(strUrlText=None):
     click("1455955040522.png")
     wait(0.5)
     delOriginText()
-    pasteClipboardText(strText=strUrlText)
+    paste(strUrlText)
     wait(0.5)
     type(Key.ENTER)
     wait(0.5)
@@ -77,7 +68,7 @@ def typeFolderPath(strFolderPath=None):
     click(Pattern("1456054857857.png").targetOffset(10,0))
     wait(0.5)
     delOriginText()
-    pasteClipboardText(strText=strFolderPath)
+    paste(strFolderPath)
     wait(0.5)
     type(Key.ENTER)
     wait(0.5)
@@ -95,7 +86,7 @@ def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None
     wait(0.5)
     delOriginText()
     wait(0.5)
-    pasteClipboardText(strText=strFilename)
+    paste(strFilename)
     wait(0.5)
     click("1455955227414.png")
     wait(0.5)
@@ -112,7 +103,7 @@ def saveCurrentPage(strFolderPath=None, strFilename="default.html"):
     wait(0.5)
     delOriginText()
     wait(0.5)
-    pasteClipboardText(strText=strFilename)
+    paste(strFilename)
     wait(0.5)
     click("1455955227414.png")
     wait(0.5)
