@@ -48,9 +48,9 @@ def unfoldUCBShowmore():
     while(not exists("1456062534102.png")):
         type(Key.PAGE_DOWN)
         wait(0.5)
-        if exists("1456873668385.png"):
-            click("1456873668385.png")
-            waitVanish("1456873668385.png", 300)
+        if exists("1457668772685.png"):
+            click("1457668772685.png")
+            waitVanish("1457668772685.png", 300)
             wait(2)
     type(Key.HOME)
     wait("1456873739809.png", 300)
