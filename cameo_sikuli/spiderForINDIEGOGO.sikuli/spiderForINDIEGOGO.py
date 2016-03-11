@@ -73,8 +73,8 @@ def goExplorePage():
     wait("1456214122362.png", 300)
 #choose folder at save progress
 def typeFolderPath(strFolderPath=None):
-    wait(Pattern("1456054857857.png").targetOffset(10,0), 300)
-    click(Pattern("1456054857857.png").targetOffset(10,0))
+    wait(Pattern("localpng_foldername_input_bar.png").targetOffset(10,0), 300)
+    click(Pattern("localpng_foldername_input_bar.png").targetOffset(10,0))
     wait(0.5)
     delOriginText()
     pasteClipboardText(strText=strFolderPath)

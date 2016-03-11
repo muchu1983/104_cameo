@@ -145,8 +145,8 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     <span class="skw">wait</span>(<img src="1456214122362.png" />, <span class="dig">300</span>)
 <span class="cmt">#choose folder at save progress
 </span><span class="kw">def</span> typeFolderPath(strFolderPath=None):
-    <span class="skw">wait</span>(Pattern(<img src="1456054857857.png" />).targetOffset(<span class="dig">10</span>,<span class="dig">0</span>), <span class="dig">300</span>)
-    <span class="skw">click</span>(Pattern(<img src="1456054857857.png" />).targetOffset(<span class="dig">10</span>,<span class="dig">0</span>))
+    <span class="skw">wait</span>(Pattern(<img src="localpng_foldername_input_bar.png" />).targetOffset(<span class="dig">10</span>,<span class="dig">0</span>), <span class="dig">300</span>)
+    <span class="skw">click</span>(Pattern(<img src="localpng_foldername_input_bar.png" />).targetOffset(<span class="dig">10</span>,<span class="dig">0</span>))
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
     delOriginText()
     pasteClipboardText(strText=strFolderPath)
