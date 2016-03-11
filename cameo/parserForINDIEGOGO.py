@@ -311,13 +311,17 @@ individuals category - parse individuals.html of category then create xxx.json
                     strEndDate = timeEndDate.strftime("%Y-%m-%d")
                 self.dicParsedResultOfProject[strProjUrl]["strEndDate"] = \
                     strEndDate
+                #intVideoCount
+                lstVideoElements = root.css("campaign-video.campaignVideo, iframe.embedly-embed[src*='media']").extract()
+                self.dicParsedResultOfProject[strProjUrl]["intVideoCount"] = \
+                    len(lstVideoElements)
                 #strStartDate = "" 無法取得
                 self.dicParsedResultOfProject[strProjUrl]["strStartDate"] = None
                 #isPMSelect = "" 無法取得
                 self.dicParsedResultOfProject[strProjUrl]["isPMSelect"] = None
                 #strCreatorUrl = "" 已由 parseProjectDetailsPage 取得
                 #lstStrBacker = "" 已由 parseProjectBackersPage 取得
-                #intVideoCount = "" 取得困難??
+                
                 
     #解析 _updates.html
     def parseProjectUpdatesPage(self, strCategoryName=None):
@@ -461,7 +465,21 @@ individuals category - parse individuals.html of category then create xxx.json
                     if len(lstStrEstimateDeliveryText) == 2 and lstStrEstimateDeliveryText[0].strip() == "Estimated delivery:":
                         strRewardDeliveryDate = lstStrEstimateDeliveryText[1].strip()
                     dicRewardData["strRewardDeliveryDate"] = strRewardDeliveryDate
-                    #intRewardRetailPrice 取得困難??
+                    #intRewardRetailPrice
+                    intRewardRetailPrice = 0
+                    """
+   if("retail" in strRewardContent or "MSRP" in strRewardContent):
+    lstIntNum = re.findall('\d+', strRewardContent) 
+    intRetailPrice = sys.maxint
+    for intNum in lstIntNum:
+     intNum = int(intNum)
+     if ((intNum > intRewardMoney) and (intNum < intRetailPrice)):
+      intRetailPrice = intNum
+    if(intRetailPrice < sys.maxint):
+     intRewardRetailPrice = intRetailPrice
+                    """
+                    
+                    
                     lstDicRewardData.append(dicRewardData)
                 self.dicParsedResultOfReward[strProjUrl] = lstDicRewardData
                 
