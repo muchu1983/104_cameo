@@ -73,12 +73,15 @@
 <span class="kw">import</span> os
 <span class="kw">import</span> sys
 <span class="kw">import</span> re
+<span class="kw">from</span> java.awt <span class="kw">import</span> Toolkit
+<span class="kw">from</span> java.awt.datatransfer <span class="kw">import</span> StringSelection
+sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
 strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"</span>
 <span class="cmt">#open chrome
 </span><span class="kw">def</span> openChrome():
     <span class="skw">type</span>(<span class="str">"d"</span>, KeyModifier.WIN)
-    <span class="skw">wait</span>(<img src="1456281338394.png" />, <span class="dig">300</span>)
-    <span class="skw">click</span>(<img src="1456281338394.png" />)
+    <span class="skw">wait</span>(<img src="localpng_chrome_logo.png" />, <span class="dig">300</span>)
+    <span class="skw">click</span>(<img src="localpng_chrome_logo.png" />)
     waitVanish(<img src="1456214096530.png" />, <span class="dig">300</span>)
     <span class="skw">wait</span>(<img src="1456214122362.png" />, <span class="dig">300</span>)
 <span class="cmt"># delete origin text
@@ -86,6 +89,12 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     <span class="skw">type</span>(<span class="str">"a"</span>, KeyModifier.CTRL)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
     <span class="skw">type</span>(Key.BACKSPACE)
+    <span class="skw">wait</span>(<span class="dig">0.5</span>)
+<span class="cmt"># paste text by using clipboard
+</span><span class="kw">def</span> pasteClipboardText(strText=None):
+    sysClipboard.setContents(StringSelection(<span class="str">u""</span>+strText), None)
+    <span class="skw">wait</span>(<span class="dig">0.5</span>)
+    <span class="skw">type</span>(<span class="str">"v"</span>, KeyModifier.CTRL)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
 <span class="cmt">#roll to page end
 </span><span class="kw">def</span> rollToPageEnd():
@@ -119,10 +128,10 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     <span class="skw">wait</span>(<img src="1456873739809.png" />, <span class="dig">300</span>)
 <span class="cmt">#type url on chrome
 </span><span class="kw">def</span> typeUrlOnChrome(strUrlText=None):
-    <span class="skw">click</span>(<img src="1455955040522.png" />)
+    <span class="skw">click</span>(<img src="localpng_url_text_bar.png" />)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
     delOriginText()
-    paste(strUrlText)
+    pasteClipboardText(strText=strUrlText)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
     <span class="skw">type</span>(Key.ENTER)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
@@ -140,7 +149,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     <span class="skw">click</span>(Pattern(<img src="1456054857857.png" />).targetOffset(<span class="dig">10</span>,<span class="dig">0</span>))
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
     delOriginText()
-    paste(strFolderPath)
+    pasteClipboardText(strText=strFolderPath)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
     <span class="skw">type</span>(Key.ENTER)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
@@ -149,37 +158,37 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     waitVanish(<img src="1456214096530.png" />, <span class="dig">300</span>)
     <span class="skw">wait</span>(<img src="1456214122362.png" />, <span class="dig">300</span>)
     <span class="skw">rightClick</span>(onImage)
-    <span class="skw">wait</span>(<img src="1456245315336.png" />, <span class="dig">300</span>)
-    <span class="skw">click</span>(<img src="1456245315336.png" />)
-    <span class="skw">wait</span>(<img src="1455955227414.png" />, <span class="dig">300</span>)
+    <span class="skw">wait</span>(<img src="localpng_right_click_save_as.png" />, <span class="dig">300</span>)
+    <span class="skw">click</span>(<img src="localpng_right_click_save_as.png" />)
+    <span class="skw">wait</span>(<img src="localpng_save_btn.png" />, <span class="dig">300</span>)
     <span class="kw">if</span> strFolderPath != None:
         typeFolderPath(strFolderPath)
-    <span class="skw">click</span>(Pattern(<img src="1455959876192.png" />).targetOffset(<span class="dig">36</span>,<span class="dig">0</span>))
+    <span class="skw">click</span>(Pattern(<img src="localpng_filename_input_bar.png" />).targetOffset(<span class="dig">36</span>,<span class="dig">0</span>))
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
     delOriginText()
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
-    paste(strFilename)
+    pasteClipboardText(strText=strFilename)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
-    <span class="skw">click</span>(<img src="1455955227414.png" />)
+    <span class="skw">click</span>(<img src="localpng_save_btn.png" />)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
-    <span class="skw">wait</span>(<img src="1456247446257.png" />, <span class="dig">300</span>)<span class="cmt">#wait save complete</span>
+    <span class="skw">wait</span>(<img src="localpng_download_finished.png" />, <span class="dig">300</span>)<span class="cmt">#wait save complete</span>
 <span class="cmt">#ask chrome save current page
 </span><span class="kw">def</span> saveCurrentPage(strFolderPath=None, strFilename=<span class="str">"default.html"</span>):
     waitVanish(<img src="1456214096530.png" />, <span class="dig">300</span>)
     <span class="skw">wait</span>(<img src="1456214122362.png" />, <span class="dig">300</span>)
     <span class="skw">type</span>(<span class="str">"s"</span>, KeyModifier.CTRL)
-    <span class="skw">wait</span>(<img src="1455955227414.png" />, <span class="dig">300</span>)
+    <span class="skw">wait</span>(<img src="localpng_save_btn.png" />, <span class="dig">300</span>)
     <span class="kw">if</span> strFolderPath != None:
         typeFolderPath(strFolderPath)
-    <span class="skw">click</span>(Pattern(<img src="1455959876192.png" />).targetOffset(<span class="dig">36</span>,<span class="dig">0</span>))
+    <span class="skw">click</span>(Pattern(<img src="localpng_filename_input_bar.png" />).targetOffset(<span class="dig">36</span>,<span class="dig">0</span>))
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
     delOriginText()
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
-    paste(strFilename)
+    pasteClipboardText(strText=strFilename)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
-    <span class="skw">click</span>(<img src="1455955227414.png" />)
+    <span class="skw">click</span>(<img src="localpng_save_btn.png" />)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
-    <span class="skw">wait</span>(<img src="1456247446257.png" />, <span class="dig">300</span>)<span class="cmt">#wait save complete</span>
+    <span class="skw">wait</span>(<img src="localpng_download_finished.png" />, <span class="dig">300</span>)<span class="cmt">#wait save complete</span>
 <span class="cmt">#download explore pages
 </span><span class="kw">def</span> downloadExplorePages():
     openChrome()

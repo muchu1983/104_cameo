@@ -1,12 +1,15 @@
 import os
 import sys
 import re
+from java.awt import Toolkit
+from java.awt.datatransfer import StringSelection
+sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
 strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"
 #open chrome
 def openChrome():
     type("d", KeyModifier.WIN)
-    wait("1456281338394.png", 300)
-    click("1456281338394.png")
+    wait("localpng_chrome_logo.png", 300)
+    click("localpng_chrome_logo.png")
     waitVanish("1456214096530.png", 300)
     wait("1456214122362.png", 300)
 # delete origin text
@@ -14,6 +17,12 @@ def delOriginText():
     type("a", KeyModifier.CTRL)
     wait(0.5)
     type(Key.BACKSPACE)
+    wait(0.5)
+# paste text by using clipboard
+def pasteClipboardText(strText=None):
+    sysClipboard.setContents(StringSelection(u""+strText), None)
+    wait(0.5)
+    type("v", KeyModifier.CTRL)
     wait(0.5)
 #roll to page end
 def rollToPageEnd():
@@ -47,10 +56,10 @@ def unfoldUCBShowmore():
     wait("1456873739809.png", 300)
 #type url on chrome
 def typeUrlOnChrome(strUrlText=None):
-    click("1455955040522.png")
+    click("localpng_url_text_bar.png")
     wait(0.5)
     delOriginText()
-    paste(strUrlText)
+    pasteClipboardText(strText=strUrlText)
     wait(0.5)
     type(Key.ENTER)
     wait(0.5)
@@ -68,7 +77,7 @@ def typeFolderPath(strFolderPath=None):
     click(Pattern("1456054857857.png").targetOffset(10,0))
     wait(0.5)
     delOriginText()
-    paste(strFolderPath)
+    pasteClipboardText(strText=strFolderPath)
     wait(0.5)
     type(Key.ENTER)
     wait(0.5)
@@ -77,37 +86,37 @@ def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None
     waitVanish("1456214096530.png", 300)
     wait("1456214122362.png", 300)
     rightClick(onImage)
-    wait("1456245315336.png", 300)
-    click("1456245315336.png")
-    wait("1455955227414.png", 300)
+    wait("localpng_right_click_save_as.png", 300)
+    click("localpng_right_click_save_as.png")
+    wait("localpng_save_btn.png", 300)
     if strFolderPath != None:
         typeFolderPath(strFolderPath)
-    click(Pattern("1455959876192.png").targetOffset(36,0))
+    click(Pattern("localpng_filename_input_bar.png").targetOffset(36,0))
     wait(0.5)
     delOriginText()
     wait(0.5)
-    paste(strFilename)
+    pasteClipboardText(strText=strFilename)
     wait(0.5)
-    click("1455955227414.png")
+    click("localpng_save_btn.png")
     wait(0.5)
-    wait("1456247446257.png", 300)#wait save complete
+    wait("localpng_download_finished.png", 300)#wait save complete
 #ask chrome save current page
 def saveCurrentPage(strFolderPath=None, strFilename="default.html"):
     waitVanish("1456214096530.png", 300)
     wait("1456214122362.png", 300)
     type("s", KeyModifier.CTRL)
-    wait("1455955227414.png", 300)
+    wait("localpng_save_btn.png", 300)
     if strFolderPath != None:
         typeFolderPath(strFolderPath)
-    click(Pattern("1455959876192.png").targetOffset(36,0))
+    click(Pattern("localpng_filename_input_bar.png").targetOffset(36,0))
     wait(0.5)
     delOriginText()
     wait(0.5)
-    paste(strFilename)
+    pasteClipboardText(strText=strFilename)
     wait(0.5)
-    click("1455955227414.png")
+    click("localpng_save_btn.png")
     wait(0.5)
-    wait("1456247446257.png", 300)#wait save complete
+    wait("localpng_download_finished.png", 300)#wait save complete
 #download explore pages
 def downloadExplorePages():
     openChrome()
