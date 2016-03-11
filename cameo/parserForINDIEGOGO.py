@@ -465,21 +465,9 @@ individuals category - parse individuals.html of category then create xxx.json
                     if len(lstStrEstimateDeliveryText) == 2 and lstStrEstimateDeliveryText[0].strip() == "Estimated delivery:":
                         strRewardDeliveryDate = lstStrEstimateDeliveryText[1].strip()
                     dicRewardData["strRewardDeliveryDate"] = strRewardDeliveryDate
-                    #intRewardRetailPrice
+                    #intRewardRetailPrice 零售價出現格式不統一難以取得
                     intRewardRetailPrice = 0
-                    """
-   if("retail" in strRewardContent or "MSRP" in strRewardContent):
-    lstIntNum = re.findall('\d+', strRewardContent) 
-    intRetailPrice = sys.maxint
-    for intNum in lstIntNum:
-     intNum = int(intNum)
-     if ((intNum > intRewardMoney) and (intNum < intRetailPrice)):
-      intRetailPrice = intNum
-    if(intRetailPrice < sys.maxint):
-     intRewardRetailPrice = intRetailPrice
-                    """
-                    
-                    
+                    dicRewardData["intRewardRetailPrice"] = None
                     lstDicRewardData.append(dicRewardData)
                 self.dicParsedResultOfReward[strProjUrl] = lstDicRewardData
                 
