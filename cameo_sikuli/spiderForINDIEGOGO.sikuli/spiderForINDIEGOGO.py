@@ -99,7 +99,7 @@ def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None
     wait(0.5)
     click("localpng_save_btn.png")
     wait(0.5)
-    wait("1457669200683.png", 300)#wait save complete
+    wait("1457673648130.png", 300)#wait save complete
 #ask chrome save current page
 def saveCurrentPage(strFolderPath=None, strFilename="default.html"):
     waitVanish("1456214096530.png", 300)
@@ -116,7 +116,7 @@ def saveCurrentPage(strFolderPath=None, strFilename="default.html"):
     wait(0.5)
     click("localpng_save_btn.png")
     wait(0.5)
-    wait("1457669200683.png", 300)#wait save complete
+    wait("1457673648130.png", 300)#wait save complete
 #download explore pages
 def downloadExplorePages():
     openChrome()
