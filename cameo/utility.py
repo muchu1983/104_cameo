@@ -64,11 +64,13 @@ class Utility:
             intDays = 0
         return intDays
         
+    #使用 geopy 查找 洲別 資料 (目前不可用)
     def geopy(self):
         geolocator = GoogleV3()
         location, (x, y) = geolocator.geocode("dubai")
         print(location, x, y)
         
+    #使用 國家對照表 查找 洲別 資料
     def getContinentByCountryName(self, strCountryName=None):
         countries = [
             {"code": "AD", "continent": "Europe", "name": "Andorra", "capital": "Andorra la Vella"},

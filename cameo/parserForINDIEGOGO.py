@@ -150,6 +150,16 @@ individuals category - parse individuals.html of category then create xxx.json
         self.utility.writeObjectToJsonFile(self.dicParsedResultOfComment, strProjectsResultFolderPath + u"\\comment.json")
         self.utility.writeObjectToJsonFile(self.dicParsedResultOfReward, strProjectsResultFolderPath + u"\\reward.json")
             
+    #檢查 project url 是否在 project_url_list.txt 列表內
+    def checkIsProjUrlInProjUrlListFile(self, strCategoryName=None, strProjUrl=None):
+        isExists = False
+        strProjectUrlListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\INDIEGOGO\\%s\\project_url_list.txt"%strCategoryName
+        with open(strProjectUrlListFilePath, "r") as projUrlListFile:
+            for strProjUrlLine in projUrlListFile:
+                if strProjUrl in strProjUrlLine:
+                    isExists = True
+        return isExists
+    
     #解析 _details.html
     def parseProjectDetailsPage(self, strCategoryName=None):
         strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"\\INDIEGOGO\\%s\\projects"%strCategoryName)
@@ -159,6 +169,9 @@ individuals category - parse individuals.html of category then create xxx.json
             with open(strProjectDetailsHtmlPath, "r") as projDetailsHtmlFile: #open *_details.html
                 strProjHtmlFileName = os.path.basename(projDetailsHtmlFile.name)
                 strProjUrl = "https://www.indiegogo.com/projects/" + re.search("^(.*)_details.html$", strProjHtmlFileName).group(1)
+                if not self.checkIsProjUrlInProjUrlListFile(strCategoryName=strCategoryName, strProjUrl=strProjUrl):
+                    logging.warning("%s not in project_url_list.txt, skip parse it"%strProjUrl)
+                    continue #skip
                 if strProjUrl not in self.dicParsedResultOfProject:
                     self.dicParsedResultOfProject[strProjUrl] = {}
                 strPageSource = projDetailsHtmlFile.read()
@@ -186,6 +199,9 @@ individuals category - parse individuals.html of category then create xxx.json
             with open(strProjStoryFilePath, "r") as projStoryHtmlFile:
                 strProjHtmlFileName = os.path.basename(projStoryHtmlFile.name)
                 strProjUrl = "https://www.indiegogo.com/projects/" + re.search("^(.*)_story.html$", strProjHtmlFileName).group(1)
+                if not self.checkIsProjUrlInProjUrlListFile(strCategoryName=strCategoryName, strProjUrl=strProjUrl):
+                    logging.warning("%s not in project_url_list.txt, skip parse it"%strProjUrl)
+                    continue #skip
                 if strProjUrl not in self.dicParsedResultOfProject:
                     self.dicParsedResultOfProject[strProjUrl] = {}
                 strPageSource = projStoryHtmlFile.read()
@@ -358,6 +374,9 @@ individuals category - parse individuals.html of category then create xxx.json
             with open(strProjUpdatesFilePath, "r") as projUpdatesHtmlFile:
                 strProjHtmlFileName = os.path.basename(projUpdatesHtmlFile.name)
                 strProjUrl = "https://www.indiegogo.com/projects/" + re.search("^(.*)_updates.html$", strProjHtmlFileName).group(1)
+                if not self.checkIsProjUrlInProjUrlListFile(strCategoryName=strCategoryName, strProjUrl=strProjUrl):
+                    logging.warning("%s not in project_url_list.txt, skip parse it"%strProjUrl)
+                    continue #skip
                 strPageSource = projUpdatesHtmlFile.read()
                 root = Selector(text=strPageSource)
                 #parse *_updates.html
@@ -394,6 +413,9 @@ individuals category - parse individuals.html of category then create xxx.json
             with open(strProjCommentsFilePath, "r") as projCommentsHtmlFile:
                 strProjHtmlFileName = os.path.basename(projCommentsHtmlFile.name)
                 strProjUrl = "https://www.indiegogo.com/projects/" + re.search("^(.*)_comments.html$", strProjHtmlFileName).group(1)
+                if not self.checkIsProjUrlInProjUrlListFile(strCategoryName=strCategoryName, strProjUrl=strProjUrl):
+                    logging.warning("%s not in project_url_list.txt, skip parse it"%strProjUrl)
+                    continue #skip
                 strPageSource = projCommentsHtmlFile.read()
                 root = Selector(text=strPageSource)
                 #parse *_comments.html
@@ -433,6 +455,9 @@ individuals category - parse individuals.html of category then create xxx.json
             with open(strProjBackersFilePath, "r") as projBackersHtmlFile:
                 strProjHtmlFileName = os.path.basename(projBackersHtmlFile.name)
                 strProjUrl = "https://www.indiegogo.com/projects/" + re.search("^(.*)_backers.html$", strProjHtmlFileName).group(1)
+                if not self.checkIsProjUrlInProjUrlListFile(strCategoryName=strCategoryName, strProjUrl=strProjUrl):
+                    logging.warning("%s not in project_url_list.txt, skip parse it"%strProjUrl)
+                    continue #skip
                 if strProjUrl not in self.dicParsedResultOfProject:
                     self.dicParsedResultOfProject[strProjUrl] = {}
                 strPageSource = projBackersHtmlFile.read()
@@ -451,6 +476,9 @@ individuals category - parse individuals.html of category then create xxx.json
             with open(strProjStoryFilePath, "r") as projStoryHtmlFile:
                 strProjHtmlFileName = os.path.basename(projStoryHtmlFile.name)
                 strProjUrl = "https://www.indiegogo.com/projects/" + re.search("^(.*)_story.html$", strProjHtmlFileName).group(1)
+                if not self.checkIsProjUrlInProjUrlListFile(strCategoryName=strCategoryName, strProjUrl=strProjUrl):
+                    logging.warning("%s not in project_url_list.txt, skip parse it"%strProjUrl)
+                    continue #skip
                 strPageSource = projStoryHtmlFile.read()
                 root = Selector(text=strPageSource)
                 #parse *_story.html (for reward data)
