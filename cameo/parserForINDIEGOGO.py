@@ -104,15 +104,35 @@ individuals category - parse individuals.html of category then create xxx.json
                 with open(strCategoryHtmlPath, "r") as catHtmlFile: #open category.html
                     strPageSource = catHtmlFile.read()
                     root = Selector(text=strPageSource)
+                    #project url
                     lstStrProjUrls = root.css("a.discoveryCard::attr(href)").extract() #parse proj urls
+                    #抓取時間
+                    fCTimeStamp = os.path.getctime(strCategoryHtmlPath)
+                    dtCrawlTime = datetime.datetime.fromtimestamp(fCTimeStamp)
+                    strCrawlTime = dtCrawlTime.strftime("%Y-%m-%d")
+                    #寫入檔案
                     strProjectUrlListFilePath = strCategoryResultFolderPath + u"\\project_url_list.txt"
                     strProjectTimeleftListFilePath = strCategoryResultFolderPath + u"\\project_timeleft_list.txt"
                     with open(strProjectUrlListFilePath, "w+") as projUrlListFile, open(strProjectTimeleftListFilePath, "w+") as projTimeleftListFile:
+                        projTimeleftListFile.write(u"Crawl-Time:%s\n"%strCrawlTime)
                         for strProjUrl in lstStrProjUrls:
-                            projUrlListFile.write(strProjUrl + u"\n")#write to project_url_list.txt
+                            #write to project_url_list.txt
+                            projUrlListFile.write(strProjUrl + u"\n")
+                            #記錄剩餘時間
                             strProjTimeleft = root.css("a.discoveryCard[href='%s'] div.discoveryCard-timeleft::text"%strProjUrl).extract_first() #parse proj time left
+                            #轉換剩餘時間 (Indemaned 及 No time left 均轉為 0)
+                            intRemainDays = self.utility.translateTimeleftTextToPureNum(strProjTimeleft)
+                            #專案結束日期
+                            strEndDate = None
+                            if strProjTimeleft == None: #InDemaned
+                                strEndDate = "indemand"
+                            elif intRemainDays == 0: #No time left
+                                strEndDate = "closed"
+                            elif intRemainDays > 0:
+                                dtEndDate = dtCrawlTime + datetime.timedelta(days=intRemainDays)
+                                strEndDate = dtEndDate.strftime("%Y-%m-%d")
                             #write to project_timeleft_list.txt
-                            projTimeleftListFile.write(strProjUrl + u"," + str(strProjTimeleft) + u"\n")
+                            projTimeleftListFile.write(strProjUrl + u"," + unicode(intRemainDays) + u"," + unicode(strEndDate) + u"\n")
 #project #####################################################################################
     #解析 project page(s) 之前
     def beforeParseProjectPage(self, strCategoryName=None):
@@ -177,11 +197,6 @@ individuals category - parse individuals.html of category then create xxx.json
                 #strUrl
                 self.dicParsedResultOfProject[strProjUrl]["strUrl"] = \
                     strProjUrl
-                #strCrawlTime local story.html的建立時間
-                fCTimeStamp = os.path.getctime(strProjStoryFilePath)
-                dtCrawlTime = datetime.datetime.fromtimestamp(fCTimeStamp)
-                strCrawlTime = dtCrawlTime.strftime("%Y-%m-%d")
-                self.dicParsedResultOfProject[strProjUrl]["strCrawlTime"] = strCrawlTime
                 #strProjectName
                 self.dicParsedResultOfProject[strProjUrl]["strProjectName"] = \
                     root.css("h1.campaignHeader-title::text").extract_first().strip()
@@ -223,20 +238,26 @@ individuals category - parse individuals.html of category then create xxx.json
                     isIndemand = True
                 intIndemandFundedPersentage = 0
                 intFundingPersentage = 0
-                if isIndemand:
+                if isIndemand: #InDemaned
                     strIndemandBlurbText = root.css("div.preOrder-fundingBlurb::text").extract_first().strip()
                     intIndemandFundedPersentage = int(re.search("^Original campaign was ([0-9\.]*)% funded on .*$", strIndemandBlurbText).group(1))
                     if intIndemandFundedPersentage >= 100:
                         self.dicParsedResultOfProject[strProjUrl]["intStatus"] = 3
                     else:
                         self.dicParsedResultOfProject[strProjUrl]["intStatus"] = 4
-                else:
+                else:#not InDemaned
                     strMetaFundingText = root.css("div.campaignGoal-barMetaFunding em::text").extract_first().strip()
                     intFundingPersentage = int(re.search("([0-9\.]*)%", strMetaFundingText).group(1))
-                    if intFundingPersentage >= 100:
+                    if intFundingPersentage >= 100: #已超過 100%
                         self.dicParsedResultOfProject[strProjUrl]["intStatus"] = 1
-                    else:
-                        self.dicParsedResultOfProject[strProjUrl]["intStatus"] = 0
+                    else:#未超過 100%
+                        strMetaRemainingText = root.css("div.campaignGoal-barMetaRemaining em::text").extract_first()
+                        if strMetaRemainingText != None and strMetaRemainingText.strip() == u"No":
+                            #已結束 (No time left)
+                            self.dicParsedResultOfProject[strProjUrl]["intStatus"] = 2
+                        else:
+                            #未結束
+                            self.dicParsedResultOfProject[strProjUrl]["intStatus"] = 0
                 #strCategory
                 strCategory = root.css("div.campaignTrustTeaser-item:nth-of-type(2) div.campaignTrustTeaser-text-title::text").extract_first().strip()
                 self.dicParsedResultOfProject[strProjUrl]["strCategory"] = \
@@ -295,22 +316,27 @@ individuals category - parse individuals.html of category then create xxx.json
                     self.dicParsedResultOfProject[strProjUrl]["isAON"] = True
                 else:
                     self.dicParsedResultOfProject[strProjUrl]["isAON"] = False
-                #intRemainDays
-                intRemainDays = 0
                 strProjectTimeleftListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\INDIEGOGO\\%s\\project_timeleft_list.txt"%strCategoryName)
                 with open(strProjectTimeleftListFilePath, "r") as projectTimeleftListFile:
+                    #strCrawlTime local category.html的建立時間
+                    strCrawlTime = projectTimeleftListFile.readline().split(u":")[1].strip()
+                    #intRemainDays and strEndDate
+                    intRemainDays = 0
+                    strEndDate = None
+                    isProjInProjTimeleftList = False
                     for strProjTimeleftLine in projectTimeleftListFile:
                         if strProjUrl in strProjTimeleftLine:
-                            intRemainDays = self.utility.translateTimeleftTextToPureNum(strProjTimeleftLine.split(",")[1].strip())
-                self.dicParsedResultOfProject[strProjUrl]["intRemainDays"] = \
-                    intRemainDays
-                #strEndDate
-                strEndDate = None
-                if intRemainDays > 0:
-                    timeEndDate = dtCrawlTime + datetime.timedelta(days=intRemainDays)
-                    strEndDate = timeEndDate.strftime("%Y-%m-%d")
-                self.dicParsedResultOfProject[strProjUrl]["strEndDate"] = \
-                    strEndDate
+                            isProjInProjTimeleftList = True
+                            intRemainDays = int(strProjTimeleftLine.split(",")[1].strip())
+                            strEndDate = strProjTimeleftLine.split(",")[2].strip()
+                    if not isProjInProjTimeleftList:
+                        strCrawlTime = None
+                    self.dicParsedResultOfProject[strProjUrl]["strCrawlTime"] = \
+                        strCrawlTime
+                    self.dicParsedResultOfProject[strProjUrl]["intRemainDays"] = \
+                        intRemainDays
+                    self.dicParsedResultOfProject[strProjUrl]["strEndDate"] = \
+                        strEndDate
                 #intVideoCount
                 lstVideoElements = root.css("campaign-video.campaignVideo, iframe.embedly-embed[src*='media']").extract()
                 self.dicParsedResultOfProject[strProjUrl]["intVideoCount"] = \

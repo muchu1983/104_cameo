@@ -40,7 +40,7 @@ class ParserForINDIEGOGOTest(unittest.TestCase):
     #測試 解析 project 頁面
     def test_parseProjectPage(self):
         logging.info("ParserForINDIEGOGOTest.test_parseProjectPage")
-        strCategory = "art"
+        strCategory = "animals"
         parser = ParserForINDIEGOGO()
         parser.beforeParseProjectPage(strCategory)
         parser.parseProjectDetailsPage(strCategory)
@@ -54,7 +54,7 @@ class ParserForINDIEGOGOTest(unittest.TestCase):
     #測試 解析 individuals 頁面
     def test_parseIndividualsPage(self):
         logging.info("ParserForINDIEGOGOTest.test_parseIndividualsPage")
-        strCategory = "art"
+        strCategory = "animals"
         parser = ParserForINDIEGOGO()
         parser.beforeParseIndividualsPage(strCategory)
         parser.parseIndividualsProfilePage(strCategory)

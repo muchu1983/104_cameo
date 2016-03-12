@@ -46,18 +46,22 @@ class Utility:
         
     #轉換 剩餘日期表示字串 成 純數字 (ex:100 day left -> 100)
     def translateTimeleftTextToPureNum(self, strTimeleftText=None):
-        strTimeleftText = strTimeleftText.lower().strip()
         intDays = 0
+        if strTimeleftText == None:
+            return intDays
+        strTimeleftText = strTimeleftText.lower().strip()
         if "hours left" in strTimeleftText:
             strHoursText = re.match("^([0-9]*) hours left$", strTimeleftText)
             if strHoursText != None:
                 strHoursText = strHoursText.group(1)
-                intDays = (int(strHoursText)+24)/24
-        if "days left" in strTimeleftText:
+                intDays = (int(strHoursText)+24)/24 #不足24h以1天計
+        elif "days left" in strTimeleftText:
             strDaysText = re.match("^([0-9]*) days left$", strTimeleftText)
             if strDaysText != None:
                 strDaysText = strDaysText.group(1)
                 intDays = int(strDaysText)
+        else:
+            intDays = 0
         return intDays
         
     def geopy(self):
