@@ -23,6 +23,16 @@ class Utility:
         with open(strJsonFilePath, "w+") as jsonFile:
             jsonFile.write(json.dumps(dicData, ensure_ascii=False, indent=4, sort_keys=True).encode("utf-8"))
     
+    #取得子目錄的路徑
+    def getSubFolderPathList(self, strBasedir=None):
+        lstStrSubFolderPath = []
+        for base, dirs, files in os.walk(strBasedir):
+            if base == strBasedir:
+                for dir in dirs:
+                    strFolderPath = base + "\\" + dir
+                    lstStrSubFolderPath.append(strFolderPath)
+        return lstStrSubFolderPath
+    
     #取得 strBasedir 目錄中，檔名以 strSuffixes 結尾的檔案路徑
     def getFilePathListWithSuffixes(self, strBasedir=None, strSuffixes=None):
         lstStrFilePathWithSuffixes = []
