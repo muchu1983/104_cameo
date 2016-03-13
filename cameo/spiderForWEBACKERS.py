@@ -10,6 +10,7 @@ from selenium import webdriver
 import os
 import time
 import re
+import random
 from cameo.utility import Utility
 """
 抓取 貝果 html 存放到 source_html 
@@ -86,7 +87,7 @@ useage:
                 #下一頁
                 elesNextPageA = self.driver.find_elements_by_css_selector("ul.pagination li:last-of-type a")
                 while len(elesNextPageA) != 0:
-                    time.sleep(5)
+                    time.sleep(random.randint(0,5))
                     intPageNum = intPageNum+1
                     strNextPageUrl = elesNextPageA[0].get_attribute("href")
                     strCategoryHtmlFilePath = strCategoryHtmlFolderPath + "\\%d_category.html"%intPageNum
@@ -95,3 +96,39 @@ useage:
                     #再下一頁
                     elesNextPageA = self.driver.find_elements_by_css_selector("ul.pagination li:last-of-type a")
                 
+    #下載案件頁面
+    def downloadProjectPage(self, strCategoryName=None):
+        strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\WEBACKERS\\%s\\projects"%strCategoryName
+        if not os.path.exists(strProjectsHtmlFolderPath):
+            os.mkdir(strProjectsHtmlFolderPath) #mkdir source_html/WEBACKERS/category/projects/
+        strProjectUrlListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\WEBACKERS\\%s\\project_url_list.txt"%strCategoryName)
+        with open(strProjectUrlListFilePath, "r") as projectUrlListFile:
+            for strProjectIntroUrl in projectUrlListFile:
+                strProjId = re.match("^https://www.webackers.com/Proposal/Display/([0-9]*)$", strProjectIntroUrl).group(1)
+                #專案介紹 TAB
+                strProjectIntroHtmlFileName = strProjId + u"_intro.html"
+                strProjectIntroHtmlFilePath = strProjectsHtmlFolderPath + (u"\\%s"%strProjectIntroHtmlFileName)
+                time.sleep(random.randint(0,5))
+                self.driver.get(strProjectIntroUrl.strip())
+                self.utility.overwriteSaveAs(strFilePath=strProjectIntroHtmlFilePath, unicodeData=self.driver.page_source)
+                #進度報告 TAB
+                strProjectProgressHtmlFileName = strProjId + u"_progress.html"
+                strProjectProgressHtmlFilePath = strProjectsHtmlFolderPath + (u"\\%s"%strProjectProgressHtmlFileName)
+                time.sleep(random.randint(0,5))
+                strProjectProgressUrl = self.driver.find_element_by_css_selector("ul.nav-tabs li a[href*='tab=progress']").get_attribute("href")
+                self.driver.get(strProjectProgressUrl.strip())
+                self.utility.overwriteSaveAs(strFilePath=strProjectProgressHtmlFilePath, unicodeData=self.driver.page_source)
+                #獲得贊助 TAB (點開 more)
+                strProjectSponsorHtmlFileName = strProjId + u"_sponsor.html"
+                strProjectSponsorHtmlFilePath = strProjectsHtmlFolderPath + (u"\\%s"%strProjectSponsorHtmlFileName)
+                time.sleep(random.randint(0,5))
+                strProjectSponsorUrl = self.driver.find_element_by_css_selector("ul.nav-tabs li a[href*='tab=sponsor']").get_attribute("href")
+                self.driver.get(strProjectSponsorUrl.strip())
+                self.utility.overwriteSaveAs(strFilePath=strProjectSponsorHtmlFilePath, unicodeData=self.driver.page_source)
+                #問與答 TAB (點開 more)
+                strProjectFaqHtmlFileName = strProjId + u"_faq.html"
+                strProjectFaqHtmlFilePath = strProjectsHtmlFolderPath + (u"\\%s"%strProjectFaqHtmlFileName)
+                time.sleep(random.randint(0,5))
+                strProjectFaqUrl = self.driver.find_element_by_css_selector("ul.nav-tabs li a[href*='tab=faq']").get_attribute("href")
+                self.driver.get(strProjectFaqUrl.strip())
+                self.utility.overwriteSaveAs(strFilePath=strProjectFaqHtmlFilePath, unicodeData=self.driver.page_source)

@@ -18,23 +18,26 @@ class SpiderForWEBACKERSTest(unittest.TestCase):
     #準備
     def setUp(self):
         logging.basicConfig(level=logging.INFO)
-        pass
+        self.spider = SpiderForWEBACKERS()
         
     #收尾
     def tearDown(self):
         pass
-
+    """
     #測試抓取 Browse page
     def test_downloadBrowsePageAndParseBrowsePage(self):
         logging.info("SpiderForWEBACKERSTest.test_downloadBrowsePageAndParseBrowsePage")
-        spider = SpiderForWEBACKERS()
-        spider.downloadBrowsePageAndParseBrowsePage()
+        self.spider.downloadBrowsePageAndParseBrowsePage()
 
     #測試抓取 Category page
     def test_downloadCategoryPage(self):
         logging.info("SpiderForWEBACKERSTest.test_downloadCategoryPage")
-        spider = SpiderForWEBACKERS()
-        spider.downloadCategoryPage()
+        self.spider.downloadCategoryPage()
+    """
+    #測試抓取 Project page
+    def test_downloadProjectPage(self):
+        logging.info("SpiderForWEBACKERSTest.test_downloadProjectPage")
+        self.spider.downloadProjectPage("art")
 
 #測試開始
 if __name__ == "__main__":
