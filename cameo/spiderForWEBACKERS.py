@@ -132,3 +132,34 @@ useage:
                 strProjectFaqUrl = self.driver.find_element_by_css_selector("ul.nav-tabs li a[href*='tab=faq']").get_attribute("href")
                 self.driver.get(strProjectFaqUrl.strip())
                 self.utility.overwriteSaveAs(strFilePath=strProjectFaqHtmlFilePath, unicodeData=self.driver.page_source)
+                
+    #下載個人資料頁面
+    def downloadProfilePage(self, strCategoryName=None):
+        strProfilesHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\WEBACKERS\\%s\\profiles"%strCategoryName
+        if not os.path.exists(strProfilesHtmlFolderPath):
+            os.mkdir(strProfilesHtmlFolderPath) #mkdir source_html/WEBACKERS/category/profiles/
+        strProfileUrlListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\WEBACKERS\\%s\\profile_url_list.txt"%strCategoryName)
+        with open(strProfileUrlListFilePath, "r") as profileUrlListFile:
+            for strProfileProjectUrl in profileUrlListFile:
+                strProfileId = re.match("^.*proposalId=([0-9]*)$", strProfileProjectUrl).group(1)
+                #啟動專案 TAB
+                strProfileProjHtmlFileName = strProfileId + u"_proj.html"
+                strProfileProjHtmlFilePath = strProfilesHtmlFolderPath + (u"\\%s"%strProfileProjHtmlFileName)
+                time.sleep(random.randint(0,5))
+                self.driver.get(strProfileProjectUrl.strip())
+                self.utility.overwriteSaveAs(strFilePath=strProfileProjHtmlFilePath, unicodeData=self.driver.page_source)
+                #贊助過的專案 TAB
+                strProfileOrderHtmlFileName = strProfileId + u"_order.html"
+                strProfileOrderHtmlFilePath = strProfilesHtmlFolderPath + (u"\\%s"%strProfileOrderHtmlFileName)
+                time.sleep(random.randint(0,5))
+                strProfileOrderUrl = self.driver.find_element_by_css_selector("ul.nav-tabs li a[href*='tab=order']").get_attribute("href")
+                self.driver.get(strProfileOrderUrl)
+                self.utility.overwriteSaveAs(strFilePath=strProfileOrderHtmlFilePath, unicodeData=self.driver.page_source)
+                #喜歡的專案 TAB
+                strProfileSubHtmlFileName = strProfileId + u"_sub.html"
+                strProfileSubHtmlFilePath = strProfilesHtmlFolderPath + (u"\\%s"%strProfileSubHtmlFileName)
+                time.sleep(random.randint(0,5))
+                strProfileSubUrl = self.driver.find_element_by_css_selector("ul.nav-tabs li a[href*='tab=subscribe']").get_attribute("href")
+                self.driver.get(strProfileSubUrl)
+                self.utility.overwriteSaveAs(strFilePath=strProfileSubHtmlFilePath, unicodeData=self.driver.page_source)
+                
