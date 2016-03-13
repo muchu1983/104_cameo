@@ -45,6 +45,8 @@ useage:
     #解析 category.html
     def parseCategoryPage(self, uselessArg1=None):
         strBrowseHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\WEBACKERS"
-        lstStrCategoryFolderPath = self.utility.getSubFolderPathList(strBrowseHtmlFolderPath)
+        lstStrCategoryFolderPath = self.utility.getSubFolderPathList(strBasedir=strBrowseHtmlFolderPath)
         for strCategoryFolderPath in lstStrCategoryFolderPath:
-            print(strCategoryFolderPath)
+            lstStrCategoryHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strCategoryFolderPath, strSuffixes=u"category.html")
+            for strCategoryHtmlFilePath in lstStrCategoryHtmlFilePath:
+                print(strCategoryHtmlFilePath)
