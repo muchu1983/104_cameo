@@ -38,6 +38,10 @@ useage:
         driver = webdriver.Chrome(chromeDriverExeFilePath)
         return driver
         
+    #停止 selenium driver 物件
+    def quitDriver(self):
+        self.driver.quit()
+        
     #執行 spider
     def runSpider(self, lstSubcommand=[]):
         pass
