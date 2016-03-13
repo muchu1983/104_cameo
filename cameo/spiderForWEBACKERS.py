@@ -99,7 +99,17 @@ useage:
                     self.utility.overwriteSaveAs(strFilePath=strCategoryHtmlFilePath, unicodeData=self.driver.page_source)
                     #再下一頁
                     elesNextPageA = self.driver.find_elements_by_css_selector("ul.pagination li:last-of-type a")
-                
+           
+    #點擊 more button
+    def clickMore(self):
+        elesBtnMore = self.driver.find_elements_by_css_selector("button#more")
+        strErrMsg = u""
+        while strErrMsg == u"" and len(elesBtnMore) != 0:
+            elesBtnMore[0].click()
+            time.sleep(random.randint(0,5))
+            elesBtnMore = self.driver.find_elements_by_css_selector("button#more")
+            strErrMsg = self.driver.find_element_by_css_selector("p#ErrorMessage").text.strip()
+            
     #下載案件頁面
     def downloadProjectPage(self, strCategoryName=None):
         strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\WEBACKERS\\%s\\projects"%strCategoryName
@@ -128,6 +138,7 @@ useage:
                 time.sleep(random.randint(0,5))
                 strProjectSponsorUrl = self.driver.find_element_by_css_selector("ul.nav-tabs li a[href*='tab=sponsor']").get_attribute("href")
                 self.driver.get(strProjectSponsorUrl.strip())
+                self.clickMore() #點開 more
                 self.utility.overwriteSaveAs(strFilePath=strProjectSponsorHtmlFilePath, unicodeData=self.driver.page_source)
                 #問與答 TAB (點開 more)
                 strProjectFaqHtmlFileName = strProjId + u"_faq.html"

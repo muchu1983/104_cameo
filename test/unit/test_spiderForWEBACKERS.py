@@ -43,6 +43,7 @@ class SpiderForWEBACKERSTest(unittest.TestCase):
     def test_downloadProfilePage(self):
         logging.info("SpiderForWEBACKERSTest.test_downloadProfilePage")
         self.spider.downloadProfilePage("sport")
+    
 
 #測試開始
 if __name__ == "__main__":
