@@ -23,6 +23,7 @@ class ParserForWEBACKERS:
         logging.basicConfig(level=logging.WARNING)
         self.utility = Utility()
         self.dicSubCommandHandler = {}
+        self.strWebsiteDomain = u"https://www.webackers.com"
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
         self.dicParsedResultOfProject = {} #project.json 資料
@@ -44,9 +45,28 @@ useage:
 #category #####################################################################################
     #解析 category.html
     def parseCategoryPage(self, uselessArg1=None):
+        strBrowseResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\WEBACKERS"
         strBrowseHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\WEBACKERS"
-        lstStrCategoryFolderPath = self.utility.getSubFolderPathList(strBasedir=strBrowseHtmlFolderPath)
-        for strCategoryFolderPath in lstStrCategoryFolderPath:
-            lstStrCategoryHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strCategoryFolderPath, strSuffixes=u"category.html")
-            for strCategoryHtmlFilePath in lstStrCategoryHtmlFilePath:
-                print(strCategoryHtmlFilePath)
+        lstStrCategoryHtmlFolderPath = self.utility.getSubFolderPathList(strBasedir=strBrowseHtmlFolderPath)
+        for strCategoryHtmlFolderPath in lstStrCategoryHtmlFolderPath: #各分類子資料夾
+            strCategoryResultFolderPath = strBrowseResultFolderPath + u"\\%s"%re.match("^.*WEBACKERS\\\\([a-z]*)$", strCategoryHtmlFolderPath).group(1)
+            if not os.path.exists(strCategoryResultFolderPath):
+                os.mkdir(strCategoryResultFolderPath) #mkdir parsed_result/WEBACKERS/category/
+            strProjectUrlListFilePath = strCategoryResultFolderPath + u"\\project_url_list.txt"
+            strProfileUrlListFilePath = strCategoryResultFolderPath + u"\\profile_url_list.txt"
+            #解析各頁的 category.html 並將 url 集合於 txt 檔案裡
+            with open(strProjectUrlListFilePath, "w+") as projectUrlListFile, open(strProfileUrlListFilePath, "w+") as profileUrlListFile:
+                lstStrCategoryHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strCategoryHtmlFolderPath, strSuffixes=u"category.html")
+                for strCategoryHtmlFilePath in lstStrCategoryHtmlFilePath: #category.html 各分頁
+                    with open(strCategoryHtmlFilePath, "r") as categoryHtmlFile:
+                        strPageSource = categoryHtmlFile.read()
+                        root = Selector(text=strPageSource)
+                        #開始解析
+                        lstStrProjectUrl = root.css("li.cbp-item div.thumbnail > a:first-of-type::attr(href)").extract()
+                        lstStrProfileUrl = root.css("li.cbp-item div.thumbnail a.pull-left::attr(href)").extract()
+                        #寫入 url
+                        for strProjectUrl in lstStrProjectUrl:
+                            projectUrlListFile.write(self.strWebsiteDomain + strProjectUrl + u"\n")
+                        for strProfileUrl in lstStrProfileUrl:
+                            profileUrlListFile.write(self.strWebsiteDomain + strProfileUrl + u"\n")
+                        
