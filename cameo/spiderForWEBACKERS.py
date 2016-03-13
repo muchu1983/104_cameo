@@ -9,6 +9,8 @@ This file is part of BSD license
 from selenium import webdriver
 import os
 import time
+import re
+from cameo.utility import Utility
 """
 抓取 貝果 html 存放到 source_html 
 """
@@ -20,6 +22,7 @@ class SpiderForWEBACKERS:
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
         self.CATEGORY_URL_LIST_FILENAME = u"category_url_list.txt"
         self.PROJ_URL_LIST_FILENAME = u"_proj_url_list.txt"
+        self.utility = Utility()
         self.driver = self.getDriver()
         
     #取得 spider 使用資訊
@@ -53,8 +56,7 @@ useage:
         self.driver.get(strAllStatusUrl)
         #儲存 browse.html
         strBrowseHtmlFilePath = strBrowseHtmlFolderPath + u"\\browse.html"
-        with open(strBrowseHtmlFilePath, "w+") as browseHtmlFile:
-            browseHtmlFile.write(self.driver.page_source.encode("utf-8"))
+        self.utility.overwriteSaveAs(strFilePath=strBrowseHtmlFilePath, unicodeData=self.driver.page_source)
         #解析 category url
         strBrowseResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\WEBACKERS"
         if not os.path.exists(strBrowseResultFolderPath):
@@ -72,5 +74,24 @@ useage:
             for strCategoryUrl in categoryUrlListFile:
                 if "category=ALL" in strCategoryUrl:
                     continue #略過所有類別
+                strCategoryName = re.match("^https://www.webackers.com/Proposal/Browse?.*category=([A-Z]*)$", strCategoryUrl).group(1).lower()
+                strCategoryHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\WEBACKERS\\%s"%strCategoryName
+                if not os.path.exists(strCategoryHtmlFolderPath):
+                    os.mkdir(strCategoryHtmlFolderPath) #mkdir source_html/WEBACKERS/category/
+                intPageNum = 0
+                strCategoryHtmlFilePath = strCategoryHtmlFolderPath + "\\%d_category.html"%intPageNum
+                #第0頁
                 self.driver.get(strCategoryUrl)
-                time.sleep(10)
+                self.utility.overwriteSaveAs(strFilePath=strCategoryHtmlFilePath, unicodeData=self.driver.page_source)
+                #下一頁
+                elesNextPageA = self.driver.find_elements_by_css_selector("ul.pagination li:last-of-type a")
+                while len(elesNextPageA) != 0:
+                    time.sleep(5)
+                    intPageNum = intPageNum+1
+                    strNextPageUrl = elesNextPageA[0].get_attribute("href")
+                    strCategoryHtmlFilePath = strCategoryHtmlFolderPath + "\\%d_category.html"%intPageNum
+                    self.driver.get(strNextPageUrl)
+                    self.utility.overwriteSaveAs(strFilePath=strCategoryHtmlFilePath, unicodeData=self.driver.page_source)
+                    #再下一頁
+                    elesNextPageA = self.driver.find_elements_by_css_selector("ul.pagination li:last-of-type a")
+                

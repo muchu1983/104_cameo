@@ -13,6 +13,11 @@ from geopy.geocoders import GoogleV3
 #共用工具程式
 class Utility:
     
+    #儲存檔案
+    def overwriteSaveAs(self, strFilePath=None, unicodeData=None):
+        with open(strFilePath, "w+") as file:
+            file.write(unicodeData.encode("utf-8"))
+    
     #將 dict 物件的內容寫入到 json 檔案內
     def writeObjectToJsonFile(self, dicData=None, strJsonFilePath=None):
         with open(strJsonFilePath, "w+") as jsonFile:
