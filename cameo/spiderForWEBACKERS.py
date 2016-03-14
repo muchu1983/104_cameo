@@ -7,6 +7,7 @@ This file is part of BSD license
 <https://opensource.org/licenses/BSD-3-Clause>
 """
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 import os
 import time
 import re
@@ -121,13 +122,17 @@ class SpiderForWEBACKERS:
            
     #點擊 more button
     def clickMoreBtn(self):
-        eleBtnMore = self.driver.find_element_by_css_selector("#more")
-        strBtnMoreStyle = eleBtnMore.get_attribute("style")
-        while u"none" not in strBtnMoreStyle:
-            eleBtnMore.click()
-            time.sleep(random.randint(3,7))
+        try:
             eleBtnMore = self.driver.find_element_by_css_selector("#more")
             strBtnMoreStyle = eleBtnMore.get_attribute("style")
+            while u"none" not in strBtnMoreStyle:
+                eleBtnMore.click()
+                time.sleep(random.randint(3,7))
+                eleBtnMore = self.driver.find_element_by_css_selector("#more")
+                strBtnMoreStyle = eleBtnMore.get_attribute("style")
+        except NoSuchElementException:
+            print("can't find the more button.")
+            return
             
     #下載案件頁面
     def downloadProjectPage(self, strCategoryName=None):
