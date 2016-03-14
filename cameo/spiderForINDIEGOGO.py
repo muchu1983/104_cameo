@@ -48,15 +48,15 @@ class SpiderForINDIEGOGO:
               
     #取得 spider 使用資訊
     def getUseageMessage(self):
-        return """- INDIEGOGO -
-useage:
-explore - get explore.html
-category - get category.html
-project category - get all project.html of category
-individuals category - get all individuals.html of category
-"""
+        return ("- INDIEGOGO -\n"
+                "useage:\n"
+                "explore - download explore.html\n"
+                "category - download category.html\n"
+                "project category - download project's pages of given category\n"
+                "individuals category - download individuals's pages of given category\n")
+                
     #執行 spider
-    def runSpider(self, lstSubcommand=[]):
+    def runSpider(self, lstSubcommand=None):
         strSubcommand = lstSubcommand[0]
         strArg1 = None
         if len(lstSubcommand) == 2:

@@ -49,24 +49,21 @@ class ParserForINDIEGOGO:
         
     #取得 parser 使用資訊
     def getUseageMessage(self):
-        return """- INDIEGOGO -
-useage:
-explore - parse explore.html then create category_url_list.txt
-category - parse category.html then create xxx_proj_url_list.txt
-project category - parse project.html of category then create xxx.json
-individuals category - parse individuals.html of category then create xxx.json
-"""
+        return ("- INDIEGOGO -\n"
+                "useage:\n"
+                "explore - parse explore.html then create category_url_list.txt\n"
+                "category - parse category.html then create project_url_list.txt\n"
+                "project category - parse project's html of given category then create .json\n"
+                "individuals category - parse individuals's html of given category then create .json\n")
 
     #執行 parser
-    def runParser(self, lstSubcommand=[]):
+    def runParser(self, lstSubcommand=None):
         strSubcommand = lstSubcommand[0]
         strArg1 = None
         if len(lstSubcommand) == 2:
             strArg1 = lstSubcommand[1]
         for handler in self.dicSubCommandHandler[strSubcommand]:
-            print("INDIEGOGO parser [%s] starting..."%strSubcommand)
             handler(strArg1)
-            print("INDIEGOGO parser [%s] finished."%strSubcommand)
 #explore #####################################################################################
     #解析 explore.html
     def parseExplorePage(self, uselessArg1=None):

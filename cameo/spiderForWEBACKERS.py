@@ -21,16 +21,23 @@ class SpiderForWEBACKERS:
     def __init__(self):
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
+        self.dicSubCommandHandler = {"browse":self.downloadBrowsePageAndParseBrowsePage,
+                                     "category":self.downloadCategoryPage,
+                                     "project":self.downloadProjectPage,
+                                     "profile":self.downloadProfilePage}
         self.CATEGORY_URL_LIST_FILENAME = u"category_url_list.txt"
         self.PROJ_URL_LIST_FILENAME = u"_proj_url_list.txt"
         self.utility = Utility()
-        self.driver = self.getDriver()
+        self.driver = None
         
     #取得 spider 使用資訊
     def getUseageMessage(self):
-        return """- WEBACKERS -
-useage:
-"""
+        return ("- WEBACKERS -\n"
+                "useage:\n"
+                "browse - download browse.html with parse it\n"
+                "category - download #_category.html (# is page number.)\n"
+                "project category - download project pages of given category\n"
+                "profile category - download profile pages of given category\n")
     
     #取得 selenium driver 物件
     def getDriver(self):
@@ -38,16 +45,28 @@ useage:
         driver = webdriver.Chrome(chromeDriverExeFilePath)
         return driver
         
-    #停止 selenium driver 物件
+    #初始化 selenium driver 物件
+    def initDriver(self):
+        if self.driver is None:
+            self.driver = self.getDriver()
+        
+    #終止 selenium driver 物件
     def quitDriver(self):
         self.driver.quit()
+        self.driver = None
         
     #執行 spider
-    def runSpider(self, lstSubcommand=[]):
-        pass
+    def runSpider(self, lstSubcommand=None):
+        strSubcommand = lstSubcommand[0]
+        strArg1 = None
+        if len(lstSubcommand) == 2:
+            strArg1 = lstSubcommand[1]
+        self.initDriver() #init selenium driver
+        self.dicSubCommandHandler[strSubcommand](strArg1)
+        self.quitDriver() #quit selenium driver
         
     #下載 Browse 頁面 並解析
-    def downloadBrowsePageAndParseBrowsePage(self):
+    def downloadBrowsePageAndParseBrowsePage(self, uselessArg1=None):
         strBrowseHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\WEBACKERS"
         if not os.path.exists(strBrowseHtmlFolderPath):
             os.mkdir(strBrowseHtmlFolderPath) #mkdir source_html/WEBACKERS/
@@ -73,7 +92,7 @@ useage:
                 categoryUrlListFile.write(eleCategoryUrl.get_attribute("href") + u"\n")
             
     #下載類別頁面
-    def downloadCategoryPage(self):
+    def downloadCategoryPage(self, uselessArg1=None):
         strCategoryUrlListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + "\\WEBACKERS\\category_url_list.txt"
         with open(strCategoryUrlListFilePath, "r") as categoryUrlListFile:
             for strCategoryUrl in categoryUrlListFile:

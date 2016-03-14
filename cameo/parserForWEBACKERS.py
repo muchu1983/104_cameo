@@ -22,7 +22,9 @@ class ParserForWEBACKERS:
     def __init__(self):
         logging.basicConfig(level=logging.WARNING)
         self.utility = Utility()
-        self.dicSubCommandHandler = {}
+        self.dicSubCommandHandler = {"category":[self.parseCategoryPage],
+                                     "project":None,
+                                     "profile":None}
         self.strWebsiteDomain = u"https://www.webackers.com"
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
@@ -34,13 +36,20 @@ class ParserForWEBACKERS:
         
     #取得 parser 使用資訊
     def getUseageMessage(self):
-        return """- WEBACKERS -
-useage:
-"""
+        return ("- WEBACKERS -\n"
+                "useage:\n"
+                "category - parse #_category.html then create project_url_list.txt\n"
+                "project category - parse project's html of given category then create .json\n"
+                "profile category - parse profile's html of given category then create .json\n")
 
     #執行 parser
-    def runParser(self, lstSubcommand=[]):
-        pass
+    def runParser(self, lstSubcommand=None):
+        strSubcommand = lstSubcommand[0]
+        strArg1 = None
+        if len(lstSubcommand) == 2:
+            strArg1 = lstSubcommand[1]
+        for handler in self.dicSubCommandHandler[strSubcommand]:
+            handler(strArg1)
 
 #category #####################################################################################
     #解析 category.html

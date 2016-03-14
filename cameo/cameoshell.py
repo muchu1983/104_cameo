@@ -6,8 +6,10 @@ This file is part of BSD license
 
 <https://opensource.org/licenses/BSD-3-Clause>
 """
-from cameo.parserForINDIEGOGO import ParserForINDIEGOGO
 from cameo.spiderForINDIEGOGO import SpiderForINDIEGOGO
+from cameo.parserForINDIEGOGO import ParserForINDIEGOGO
+from cameo.spiderForWEBACKERS import SpiderForWEBACKERS
+from cameo.parserForWEBACKERS import ParserForWEBACKERS
 from cameo.cleaner import CleanerForINDIEGOGO
 """
 shell 操作介面
@@ -18,8 +20,10 @@ class CameoShell:
     def __init__(self):
         self.intShellStateCode = 0 #0-已關閉，1-已開啟，
         self.strTargetSite = None
-        self.dicSpiders = {"indiegogo":SpiderForINDIEGOGO()}
-        self.dicParsers = {"indiegogo":ParserForINDIEGOGO()}
+        self.dicSpiders = {"indiegogo":SpiderForINDIEGOGO(),
+                           "webackers":SpiderForWEBACKERS()}
+        self.dicParsers = {"indiegogo":ParserForINDIEGOGO(),
+                           "webackers":ParserForWEBACKERS()}
         self.dicCleaners = {"indiegogo":CleanerForINDIEGOGO()}
         
     #顯示目前的目標網站
@@ -34,7 +38,8 @@ class CameoShell:
     def changeSiteMessage(self):
         print("type one of site name below:\n")
         for strSiteName in self.dicSpiders:
-            print(strSiteName+"\n")
+            print(strSiteName)
+        print("\n")
         strInputSiteName = raw_input(">>>")
         if strInputSiteName in self.dicSpiders:
             self.strTargetSite = strInputSiteName
@@ -46,15 +51,15 @@ class CameoShell:
             
     #顯示幫助訊息
     def printHelpMessage(self):
-        strHelpText = """- HELP -
-useage:
-help - print this message
-exit - close shell
-lssite - list current site
-chsite - change site
-spider - run spider
-parser - run parser
-clean - clean _files dirs"""
+        strHelpText = ("- HELP -\n"
+                       "useage:\n"
+                       "help - print this message\n"
+                       "exit - close shell\n"
+                       "lssite - list current site\n"
+                       "chsite - change site\n"
+                       "spider - run spider\n"
+                       "parser - run parser\n"
+                       "clean - clean _files dirs\n")
         print(strHelpText)
         
     #顯示 spider 訊息
@@ -88,7 +93,6 @@ clean - clean _files dirs"""
     #開啟 shell
     def openShell(self):
         self.printHelpMessage()
-        print("\n")
         self.listSiteMessage()
         self.intShellStateCode = 1
         while self.intShellStateCode != 0:

@@ -19,6 +19,7 @@ class SpiderForWEBACKERSTest(unittest.TestCase):
     def setUp(self):
         logging.basicConfig(level=logging.INFO)
         self.spider = SpiderForWEBACKERS()
+        self.spider.initDriver()
         
     #收尾
     def tearDown(self):
