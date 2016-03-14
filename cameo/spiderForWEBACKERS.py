@@ -110,7 +110,7 @@ class SpiderForWEBACKERS:
                 #下一頁
                 elesNextPageA = self.driver.find_elements_by_css_selector("ul.pagination li:last-of-type a")
                 while len(elesNextPageA) != 0:
-                    time.sleep(random.randint(0,5))
+                    time.sleep(random.randint(2,5))
                     intPageNum = intPageNum+1
                     strNextPageUrl = elesNextPageA[0].get_attribute("href")
                     strCategoryHtmlFilePath = strCategoryHtmlFolderPath + "\\%d_category.html"%intPageNum
@@ -121,13 +121,13 @@ class SpiderForWEBACKERS:
            
     #點擊 more button
     def clickMore(self):
-        elesBtnMore = self.driver.find_elements_by_css_selector("button#more")
-        strErrMsg = u""
-        while strErrMsg == u"" and len(elesBtnMore) != 0:
-            elesBtnMore[0].click()
-            time.sleep(random.randint(0,5))
-            elesBtnMore = self.driver.find_elements_by_css_selector("button#more")
-            strErrMsg = self.driver.find_element_by_css_selector("p#ErrorMessage").text.strip()
+        eleBtnMore = self.driver.find_element_by_css_selector("#more")
+        strBtnMoreStyle = eleBtnMore.get_attribute("style")
+        while u"none" not in strBtnMoreStyle:
+            eleBtnMore.click()
+            time.sleep(random.randint(3,7))
+            eleBtnMore = self.driver.find_element_by_css_selector("#more")
+            strBtnMoreStyle = eleBtnMore.get_attribute("style")
             
     #下載案件頁面
     def downloadProjectPage(self, strCategoryName=None):
@@ -141,20 +141,20 @@ class SpiderForWEBACKERS:
                 #專案介紹 TAB
                 strProjectIntroHtmlFileName = strProjId + u"_intro.html"
                 strProjectIntroHtmlFilePath = strProjectsHtmlFolderPath + (u"\\%s"%strProjectIntroHtmlFileName)
-                time.sleep(random.randint(0,5))
+                time.sleep(random.randint(2,5))
                 self.driver.get(strProjectIntroUrl.strip())
                 self.utility.overwriteSaveAs(strFilePath=strProjectIntroHtmlFilePath, unicodeData=self.driver.page_source)
                 #進度報告 TAB
                 strProjectProgressHtmlFileName = strProjId + u"_progress.html"
                 strProjectProgressHtmlFilePath = strProjectsHtmlFolderPath + (u"\\%s"%strProjectProgressHtmlFileName)
-                time.sleep(random.randint(0,5))
+                time.sleep(random.randint(2,5))
                 strProjectProgressUrl = self.driver.find_element_by_css_selector("ul.nav-tabs li a[href*='tab=progress']").get_attribute("href")
                 self.driver.get(strProjectProgressUrl.strip())
                 self.utility.overwriteSaveAs(strFilePath=strProjectProgressHtmlFilePath, unicodeData=self.driver.page_source)
                 #獲得贊助 TAB (點開 more)
                 strProjectSponsorHtmlFileName = strProjId + u"_sponsor.html"
                 strProjectSponsorHtmlFilePath = strProjectsHtmlFolderPath + (u"\\%s"%strProjectSponsorHtmlFileName)
-                time.sleep(random.randint(0,5))
+                time.sleep(random.randint(2,5))
                 strProjectSponsorUrl = self.driver.find_element_by_css_selector("ul.nav-tabs li a[href*='tab=sponsor']").get_attribute("href")
                 self.driver.get(strProjectSponsorUrl.strip())
                 self.clickMore() #點開 more
@@ -162,7 +162,7 @@ class SpiderForWEBACKERS:
                 #問與答 TAB (點開 more)
                 strProjectFaqHtmlFileName = strProjId + u"_faq.html"
                 strProjectFaqHtmlFilePath = strProjectsHtmlFolderPath + (u"\\%s"%strProjectFaqHtmlFileName)
-                time.sleep(random.randint(0,5))
+                time.sleep(random.randint(2,5))
                 strProjectFaqUrl = self.driver.find_element_by_css_selector("ul.nav-tabs li a[href*='tab=faq']").get_attribute("href")
                 self.driver.get(strProjectFaqUrl.strip())
                 self.utility.overwriteSaveAs(strFilePath=strProjectFaqHtmlFilePath, unicodeData=self.driver.page_source)
@@ -179,20 +179,20 @@ class SpiderForWEBACKERS:
                 #啟動專案 TAB
                 strProfileProjHtmlFileName = strProfileId + u"_proj.html"
                 strProfileProjHtmlFilePath = strProfilesHtmlFolderPath + (u"\\%s"%strProfileProjHtmlFileName)
-                time.sleep(random.randint(0,5))
+                time.sleep(random.randint(2,5))
                 self.driver.get(strProfileProjectUrl.strip())
                 self.utility.overwriteSaveAs(strFilePath=strProfileProjHtmlFilePath, unicodeData=self.driver.page_source)
                 #贊助過的專案 TAB
                 strProfileOrderHtmlFileName = strProfileId + u"_order.html"
                 strProfileOrderHtmlFilePath = strProfilesHtmlFolderPath + (u"\\%s"%strProfileOrderHtmlFileName)
-                time.sleep(random.randint(0,5))
+                time.sleep(random.randint(2,5))
                 strProfileOrderUrl = self.driver.find_element_by_css_selector("ul.nav-tabs li a[href*='tab=order']").get_attribute("href")
                 self.driver.get(strProfileOrderUrl)
                 self.utility.overwriteSaveAs(strFilePath=strProfileOrderHtmlFilePath, unicodeData=self.driver.page_source)
                 #喜歡的專案 TAB
                 strProfileSubHtmlFileName = strProfileId + u"_sub.html"
                 strProfileSubHtmlFilePath = strProfilesHtmlFolderPath + (u"\\%s"%strProfileSubHtmlFileName)
-                time.sleep(random.randint(0,5))
+                time.sleep(random.randint(2,5))
                 strProfileSubUrl = self.driver.find_element_by_css_selector("ul.nav-tabs li a[href*='tab=subscribe']").get_attribute("href")
                 self.driver.get(strProfileSubUrl)
                 self.utility.overwriteSaveAs(strFilePath=strProfileSubHtmlFilePath, unicodeData=self.driver.page_source)
