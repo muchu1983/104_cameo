@@ -10,6 +10,7 @@ from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 import os
 import time
+import logging
 import re
 import random
 from cameo.utility import Utility
@@ -20,6 +21,7 @@ class SpiderForWEBACKERS:
     
     #建構子
     def __init__(self):
+        logging.basicConfig(level=logging.INFO)
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
         self.dicSubCommandHandler = {"browse":self.downloadBrowsePageAndParseBrowsePage,
@@ -131,7 +133,7 @@ class SpiderForWEBACKERS:
                 eleBtnMore = self.driver.find_element_by_css_selector("#more")
                 strBtnMoreStyle = eleBtnMore.get_attribute("style")
         except NoSuchElementException:
-            print("can't find the more button.")
+            logging.info("selenium driver can't find the more button.")
             return
             
     #下載案件頁面
