@@ -120,7 +120,7 @@ class SpiderForWEBACKERS:
                     elesNextPageA = self.driver.find_elements_by_css_selector("ul.pagination li:last-of-type a")
            
     #點擊 more button
-    def clickMore(self):
+    def clickMoreBtn(self):
         eleBtnMore = self.driver.find_element_by_css_selector("#more")
         strBtnMoreStyle = eleBtnMore.get_attribute("style")
         while u"none" not in strBtnMoreStyle:
@@ -157,7 +157,7 @@ class SpiderForWEBACKERS:
                 time.sleep(random.randint(2,5))
                 strProjectSponsorUrl = self.driver.find_element_by_css_selector("ul.nav-tabs li a[href*='tab=sponsor']").get_attribute("href")
                 self.driver.get(strProjectSponsorUrl.strip())
-                self.clickMore() #點開 more
+                self.clickMoreBtn() #點開 more
                 self.utility.overwriteSaveAs(strFilePath=strProjectSponsorHtmlFilePath, unicodeData=self.driver.page_source)
                 #問與答 TAB (點開 more)
                 strProjectFaqHtmlFileName = strProjId + u"_faq.html"
@@ -165,6 +165,7 @@ class SpiderForWEBACKERS:
                 time.sleep(random.randint(2,5))
                 strProjectFaqUrl = self.driver.find_element_by_css_selector("ul.nav-tabs li a[href*='tab=faq']").get_attribute("href")
                 self.driver.get(strProjectFaqUrl.strip())
+                self.clickMoreBtn() #點開 more
                 self.utility.overwriteSaveAs(strFilePath=strProjectFaqHtmlFilePath, unicodeData=self.driver.page_source)
                 
     #下載個人資料頁面
