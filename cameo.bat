@@ -1,4 +1,4 @@
-c:\python27\python2 cameo\launcher.py
+c:\python27\python cameo\launcher.py
 ECHO
 PAUSE
 EXIT
