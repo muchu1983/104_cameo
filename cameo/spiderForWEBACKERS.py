@@ -21,13 +21,15 @@ class SpiderForWEBACKERS:
     
     #建構子
     def __init__(self):
-        logging.basicConfig(level=logging.INFO)
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
         self.dicSubCommandHandler = {"browse":self.downloadBrowsePageAndParseBrowsePage,
                                      "category":self.downloadCategoryPage,
                                      "project":self.downloadProjectPage,
-                                     "profile":self.downloadProfilePage}
+                                     "profile":self.downloadProfilePage,
+                                     "automode":self.downloadProjectAndProfilePageAutoMode}
+        self.lstStrCategoryName = ["acg", "art", "charity", "design", "music",
+                                   "publication", "sport", "surprise", "technology", "video"]
         self.CATEGORY_URL_LIST_FILENAME = u"category_url_list.txt"
         self.PROJ_URL_LIST_FILENAME = u"_proj_url_list.txt"
         self.utility = Utility()
@@ -40,7 +42,8 @@ class SpiderForWEBACKERS:
                 "browse - download browse.html with parse it\n"
                 "category - download #_category.html (# is page number.)\n"
                 "project category - download project pages of given category\n"
-                "profile category - download profile pages of given category\n")
+                "profile category - download profile pages of given category\n"
+                "automode - download project and profile pages of all categories\n")
     
     #取得 selenium driver 物件
     def getDriver(self):
@@ -70,6 +73,7 @@ class SpiderForWEBACKERS:
         
     #下載 Browse 頁面 並解析
     def downloadBrowsePageAndParseBrowsePage(self, uselessArg1=None):
+        logging.info("download browse page, and parse it.")
         strBrowseHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\WEBACKERS"
         if not os.path.exists(strBrowseHtmlFolderPath):
             os.mkdir(strBrowseHtmlFolderPath) #mkdir source_html/WEBACKERS/
@@ -96,6 +100,7 @@ class SpiderForWEBACKERS:
             
     #下載類別頁面
     def downloadCategoryPage(self, uselessArg1=None):
+        logging.info("download category page")
         strCategoryUrlListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + "\\WEBACKERS\\category_url_list.txt"
         with open(strCategoryUrlListFilePath, "r") as categoryUrlListFile:
             for strCategoryUrl in categoryUrlListFile:
@@ -136,8 +141,15 @@ class SpiderForWEBACKERS:
             logging.info("selenium driver can't find the more button.")
             return
             
+    #全自動下載所有類別的案件頁面
+    def downloadProjectAndProfilePageAutoMode(self, uselessArg1=None):
+        for strCategoryName in self.lstStrCategoryName:
+            self.downloadProjectPage(strCategoryName=strCategoryName)
+            self.downloadProfilePage(strCategoryName=strCategoryName)
+            
     #下載案件頁面
     def downloadProjectPage(self, strCategoryName=None):
+        logging.info("download project page.(%s)"%strCategoryName)
         strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\WEBACKERS\\%s\\projects"%strCategoryName
         if not os.path.exists(strProjectsHtmlFolderPath):
             os.mkdir(strProjectsHtmlFolderPath) #mkdir source_html/WEBACKERS/category/projects/
@@ -177,6 +189,7 @@ class SpiderForWEBACKERS:
                 
     #下載個人資料頁面
     def downloadProfilePage(self, strCategoryName=None):
+        logging.info("download profile page.(%s)"%strCategoryName)
         strProfilesHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\WEBACKERS\\%s\\profiles"%strCategoryName
         if not os.path.exists(strProfilesHtmlFolderPath):
             os.mkdir(strProfilesHtmlFolderPath) #mkdir source_html/WEBACKERS/category/profiles/

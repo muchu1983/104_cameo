@@ -20,7 +20,6 @@ from cameo.utility import Utility
 class ParserForINDIEGOGO:
     #建構子
     def __init__(self):
-        logging.basicConfig(level=logging.WARNING)
         self.utility = Utility()
         self.dicSubCommandHandler = {"explore":[self.parseExplorePage],
                                      "category":[self.parseCategoryPage],

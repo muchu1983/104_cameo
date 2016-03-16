@@ -6,12 +6,14 @@ This file is part of BSD license
 
 <https://opensource.org/licenses/BSD-3-Clause>
 """
+import logging
 from cameo.cameoshell import CameoShell
 """
 程式進入點 (main)
 """
 #進入點
 def entry_point():
+    logging.basicConfig(level=logging.INFO)
     shell = CameoShell()
     shell.openShell()
 
