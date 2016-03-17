@@ -205,21 +205,21 @@ def downloadProjectPages(strTargetCategory=None):
             wait("1456232941269.png", 300)
             click("1456232941269.png")
             wait("1456232962072.png", 300)
-            unfoldUCBShowmore()
+            #unfoldUCBShowmore()
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjUpdatesFilename)
         if not os.path.exists(strProjCommentsFilePath):#check comments.html
             #save comments
             wait("1456232986275.png", 300)
             click("1456232986275.png")
             wait("1456233002434.png", 300)
-            unfoldUCBShowmore()
+            #unfoldUCBShowmore()
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjCommentsFilename)
         if not os.path.exists(strProjBackersFilePath):#check backers.html
             #save backers
             wait("1456233023222.png", 300)
             click("1456233023222.png")
             wait("1457063099388.png", 300)
-            unfoldUCBShowmore()
+            #unfoldUCBShowmore()
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjBackersFilename)
         #gallery may not exists
         strProjGalleryFilename = strProjName+"_gallery.html"
