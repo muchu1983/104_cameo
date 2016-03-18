@@ -27,6 +27,7 @@ class ParserForWEBACKERS:
         self.strWebsiteDomain = u"https://www.webackers.com"
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
+        self.dicParsedResultOfCategory = {} #category.json 資料
         self.dicParsedResultOfProject = {} #project.json 資料
         self.dicParsedResultOfUpdate = {} #update.json 資料
         self.dicParsedResultOfComment = {} #comment.json 資料
@@ -60,8 +61,13 @@ class ParserForWEBACKERS:
             strCategoryResultFolderPath = strBrowseResultFolderPath + u"\\%s"%re.match("^.*WEBACKERS\\\\([a-z]*)$", strCategoryHtmlFolderPath).group(1)
             if not os.path.exists(strCategoryResultFolderPath):
                 os.mkdir(strCategoryResultFolderPath) #mkdir parsed_result/WEBACKERS/category/
+            strCategoryJsonFilePath = strCategoryResultFolderPath + u"\\category.json"
             strProjectUrlListFilePath = strCategoryResultFolderPath + u"\\project_url_list.txt"
             strProfileUrlListFilePath = strCategoryResultFolderPath + u"\\profile_url_list.txt"
+            #清空 dicParsedResultOfCategory 資料
+            self.dicParsedResultOfCategory = {}
+            self.dicParsedResultOfCategory["project_url_list"] = []
+            self.dicParsedResultOfCategory["profile_url_list"] = []
             #解析各頁的 category.html 並將 url 集合於 txt 檔案裡
             with open(strProjectUrlListFilePath, "w+") as projectUrlListFile, open(strProfileUrlListFilePath, "w+") as profileUrlListFile:
                 lstStrCategoryHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strCategoryHtmlFolderPath, strSuffixes=u"category.html")
@@ -74,10 +80,14 @@ class ParserForWEBACKERS:
                         lstStrProfileUrl = root.css("li.cbp-item div.thumbnail a.pull-left::attr(href)").extract()
                         #寫入 url
                         for strProjectUrl in lstStrProjectUrl:
-                            projectUrlListFile.write(self.strWebsiteDomain + strProjectUrl + u"\n")
+                            strFullProjectUrl = self.strWebsiteDomain + strProjectUrl
+                            projectUrlListFile.write(strFullProjectUrl + u"\n")
+                            self.dicParsedResultOfCategory["project_url_list"].append(strFullProjectUrl)
                         for strProfileUrl in lstStrProfileUrl:
-                            profileUrlListFile.write(self.strWebsiteDomain + strProfileUrl + u"\n")
-                        
+                            strFullProfileUrl = self.strWebsiteDomain + strProfileUrl
+                            profileUrlListFile.write(strFullProfileUrl + u"\n")
+                            self.dicParsedResultOfCategory["profile_url_list"].append(strFullProfileUrl)
+            self.utility.writeObjectToJsonFile(self.dicParsedResultOfCategory, strCategoryJsonFilePath)
 #project #####################################################################################
     #解析 project page(s) 之前
     def beforeParseProjectPage(self, strCategoryName=None):
@@ -116,13 +126,16 @@ class ParserForWEBACKERS:
                 #strProjectName
                 self.dicParsedResultOfProject[strProjUrl]["strProjectName"] = \
                     root.css("a[href*='%s'] span.case_title::text"%strProjId).extract_first().strip()
+                #strLocation
+                self.dicParsedResultOfProject[strProjUrl]["strLocation"] = u"Taiwan"
+                #strCountry
+                self.dicParsedResultOfProject[strProjUrl]["strCountry"] = u"ROC"
+                #strContinent
+                self.dicParsedResultOfProject[strProjUrl]["strContinent"] = u"Asia"
+                #strDescription
+                #strIntroduction
         
 ##project.json
-#strLocation
-#strCountry
-#strContinent
-#strDescription
-#strIntroduction
 #intStatus
 #strCreator
 #strCreatorUrl
