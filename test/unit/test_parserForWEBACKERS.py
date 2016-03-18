@@ -35,7 +35,7 @@ class ParserForWEBACKERSTest(unittest.TestCase):
     #測試 解析 project 頁面
     def test_parseProjectPage(self):
         logging.info("ParserForWEBACKERSTest.test_parseProjectPage")
-        strCategoryName = "acg"
+        strCategoryName = "charity"
         parser = ParserForWEBACKERS()
         parser.beforeParseProjectPage(strCategoryName)
         parser.parseIntroPage(strCategoryName)

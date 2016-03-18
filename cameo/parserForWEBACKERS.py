@@ -79,18 +79,24 @@ class ParserForWEBACKERS:
                     lstStrProfileUrl = root.css("li.cbp-item div.thumbnail a.pull-left::attr(href)").extract()
                     #寫入 url
                     for strProjectUrl in lstStrProjectUrl:
-                        #儲存在 category.html 下的 project 資料
+                        #儲存在 category.html 頁面下的 project 資料
                         dicProjectData = {}
                         #strUrl
                         strFullProjectUrl = self.strWebsiteDomain + strProjectUrl
                         dicProjectData["strUrl"] = strFullProjectUrl
-                        #strDescription
+                        #strDescription and #strStatus
                         strDescription = None
-                        elesDivThumbnail = root.css("div.thumbnail")
-                        for eleDivThumbnail in elesDivThumbnail:
-                            if len(eleDivThumbnail.css("a[href='%s']"%strProjectUrl)) != 0:
-                                strDescription = eleDivThumbnail.css("div.caption_view p::text").extract_first()
+                        strStatus = None
+                        elesDivItemWrapper = root.css("div.cbp-item-wrapper")
+                        for eleDivItemWrapper in elesDivItemWrapper:
+                            if len(eleDivItemWrapper.css("div.thumbnail a[href='%s']"%strProjectUrl)) != 0:
+                                strDescription = eleDivItemWrapper.css("div.thumbnail div.caption_view p::text").extract_first()
+                                for strStatus in eleDivItemWrapper.css("div.case_msg_i li.timeitem::text").extract():
+                                    if strStatus is not None and strStatus.strip() != u"":
+                                        strStatus = strStatus.strip()
                         dicProjectData["strDescription"] = strDescription
+                        dicProjectData["strStatus"] = strStatus
+                        #append project 資料
                         self.dicParsedResultOfCategory["project_url_list"].append(dicProjectData)
                     for strProfileUrl in lstStrProfileUrl:
                         strFullProfileUrl = self.strWebsiteDomain + strProfileUrl
@@ -126,6 +132,10 @@ class ParserForWEBACKERS:
                 #取得 category 頁面的 project 資料
                 strCategoryJsonFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\WEBACKERS\\%s\\category.json"%strCategoryName)
                 dicCategoryData = self.utility.readObjectFromJsonFile(strJsonFilePath=strCategoryJsonFilePath)
+                dicCurrentProjectData = None
+                for dicProjectData in dicCategoryData["project_url_list"]:
+                    if dicProjectData["strUrl"] == strProjUrl:
+                        dicCurrentProjectData = dicProjectData
                 #開始解析
                 strPageSource = projectIntroHtmlFile.read()
                 root = Selector(text=strPageSource)
@@ -145,25 +155,41 @@ class ParserForWEBACKERS:
                 #strContinent
                 self.dicParsedResultOfProject[strProjUrl]["strContinent"] = u"Asia"
                 #strDescription
-                strDescription = None
-                for dicProjectData in dicCategoryData["project_url_list"]:
-                    if dicProjectData["strUrl"] == strProjUrl:
-                        strDescription = dicProjectData["strDescription"]
+                strDescription = dicCurrentProjectData["strDescription"]
                 self.dicParsedResultOfProject[strProjUrl]["strDescription"] = strDescription
                 #strIntroduction
-        
+                strIntroduction = u""
+                for strIntroductionText in root.css("div.description *::text").extract():
+                    strIntroduction = strIntroduction + strIntroductionText
+                self.dicParsedResultOfProject[strProjUrl]["strIntroduction"] = strIntroduction
+                #intStatus
+                dicMappingStatus = {u"已完成":1,
+                                    u"已結束":2,}
+                intStatus = 0
+                strStatus = dicCurrentProjectData["strStatus"]
+                if strStatus in dicMappingStatus:
+                    intStatus = dicMappingStatus[strStatus]
+                else:
+                    intStatus = 0
+                self.dicParsedResultOfProject[strProjUrl]["intStatus"] = intStatus
+                #strCreator
+                strCreator = root.css("aside.col-md-3 article:nth-of-type(5) h3 a::text").extract_first().strip()
+                self.dicParsedResultOfProject[strProjUrl]["strCreator"] = strCreator
+                #strCreatorUrl
+                strCreatorUrl = root.css("aside.col-md-3 article:nth-of-type(5) h3 a::attr('href')").extract_first().strip()
+                self.dicParsedResultOfProject[strProjUrl]["strCreatorUrl"] = self.strWebsiteDomain + strCreatorUrl
+                #strCategory and strSubCategory
+                strCategory = root.css("a[href*='category='] span.case_title::text").extract_first().strip()
+                self.dicParsedResultOfProject[strProjUrl]["strCategory"] = strCategory
+                self.dicParsedResultOfProject[strProjUrl]["strSubCategory"] = strCategory
+                #intFundTarget
+                #intRaisedMoney
+                #fFundProgress
 ##project.json
-#intStatus
-#strCreator
-#strCreatorUrl
 #intVideoCount
 #intImageCount
 #isPMSelect
-#strCategory
-#strSubCategory
-#fFundProgress
-#intFundTarget
-#intRaisedMoney
+
 #strCurrency
 #intBacker
 #intRemainDays
