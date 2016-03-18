@@ -183,18 +183,27 @@ class ParserForWEBACKERS:
                 self.dicParsedResultOfProject[strProjUrl]["strCategory"] = strCategory
                 self.dicParsedResultOfProject[strProjUrl]["strSubCategory"] = strCategory
                 #intFundTarget
+                strFundTarget = root.css("span.money_target::text").extract_first().strip()
+                intFundTarget = int(re.sub("[^0-9]", "", strFundTarget))
+                self.dicParsedResultOfProject[strProjUrl]["intFundTarget"] = intFundTarget
                 #intRaisedMoney
+                strRaisedMoney = root.css("span.money_now::text").extract_first().strip()
+                intRaisedMoney = int(re.sub("[^0-9]", "", strRaisedMoney))
+                self.dicParsedResultOfProject[strProjUrl]["intRaisedMoney"] = intRaisedMoney
                 #fFundProgress
+                fFundProgress = float(intRaisedMoney) / float(intFundTarget)
+                self.dicParsedResultOfProject[strProjUrl]["fFundProgress"] = round(fFundProgress, 2)
+                #strCurrency
+                self.dicParsedResultOfProject[strProjUrl]["strCurrency"] = u"NTD"
+                #intRemainDays
+                #strEndDate
+                #strStartDate
 ##project.json
 #intVideoCount
 #intImageCount
 #isPMSelect
 
-#strCurrency
 #intBacker
-#intRemainDays
-#strEndDate
-#strStartDate
 #intComment
 #intUpdate
 #lstStrBacker
