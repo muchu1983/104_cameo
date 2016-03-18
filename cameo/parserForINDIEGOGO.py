@@ -205,7 +205,7 @@ class ParserForINDIEGOGO:
                 #parse *_story.html
                 #strSource
                 self.dicParsedResultOfProject[strProjUrl]["strSource"] = \
-                    "INDIEGOGO"
+                    u"INDIEGOGO"
                 #strUrl
                 self.dicParsedResultOfProject[strProjUrl]["strUrl"] = \
                     strProjUrl

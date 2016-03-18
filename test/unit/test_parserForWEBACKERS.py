@@ -19,7 +19,7 @@ class ParserForWEBACKERSTest(unittest.TestCase):
 
     #準備
     def setUp(self):
-        logging.basicConfig(level=logging.WARNING)
+        logging.basicConfig(level=logging.INFO)
         pass
         
     #收尾
@@ -31,6 +31,15 @@ class ParserForWEBACKERSTest(unittest.TestCase):
         logging.info("ParserForWEBACKERSTest.test_parseCategoryPage")
         parser = ParserForWEBACKERS()
         parser.parseCategoryPage()
+        
+    #測試 解析 project 頁面
+    def test_parseProjectPage(self):
+        logging.info("ParserForWEBACKERSTest.test_parseProjectPage")
+        strCategoryName = "acg"
+        parser = ParserForWEBACKERS()
+        parser.beforeParseProjectPage(strCategoryName)
+        parser.parseIntroPage(strCategoryName)
+        parser.afterParseProjectPage(strCategoryName)
 
 #測試開始
 if __name__ == "__main__":

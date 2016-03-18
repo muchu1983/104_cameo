@@ -78,3 +78,110 @@ class ParserForWEBACKERS:
                         for strProfileUrl in lstStrProfileUrl:
                             profileUrlListFile.write(self.strWebsiteDomain + strProfileUrl + u"\n")
                         
+#project #####################################################################################
+    #解析 project page(s) 之前
+    def beforeParseProjectPage(self, strCategoryName=None):
+        strProjectsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\WEBACKERS\\%s\\projects"%strCategoryName)
+        if not os.path.exists(strProjectsResultFolderPath):
+            #mkdir parsed_result/WEBACKERS/category/projects/
+            os.mkdir(strProjectsResultFolderPath)
+            
+    #解析 project page(s) 之後
+    def afterParseProjectPage(self, strCategoryName=None):
+        strProjectsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\WEBACKERS\\%s\\projects"%strCategoryName)
+        #將 parse 結果寫入 json 檔案
+        self.utility.writeObjectToJsonFile(self.dicParsedResultOfProject, strProjectsResultFolderPath + u"\\project.json")
+        
+    #解析 intro.html
+    def parseIntroPage(self, strCategoryName=None):
+        strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"\\WEBACKERS\\%s\\projects"%strCategoryName)
+        lstStrIntroHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strProjectsHtmlFolderPath, strSuffixes="_intro.html")
+        for strProjectIntroHtmlFilePath in lstStrIntroHtmlFilePath:
+            logging.info("parsing %s"%strProjectIntroHtmlFilePath)
+            with open(strProjectIntroHtmlFilePath, "r") as projectIntroHtmlFile:
+                strProjHtmlFileName = os.path.basename(projectIntroHtmlFile.name)
+                strProjId = re.search("^(.*)_intro.html$", strProjHtmlFileName).group(1)
+                strProjUrl = u"https://www.webackers.com/Proposal/Display/" + strProjId
+                if strProjUrl not in self.dicParsedResultOfProject:
+                    self.dicParsedResultOfProject[strProjUrl] = {}
+                strPageSource = projectIntroHtmlFile.read()
+                root = Selector(text=strPageSource)
+                #開始解析
+                #strSource
+                self.dicParsedResultOfProject[strProjUrl]["strSource"] = \
+                    u"WEBACKERS"
+                #strUrl
+                self.dicParsedResultOfProject[strProjUrl]["strUrl"] = \
+                    strProjUrl
+                #strProjectName
+                self.dicParsedResultOfProject[strProjUrl]["strProjectName"] = \
+                    root.css("a[href*='%s'] span.case_title::text"%strProjId).extract_first().strip()
+        
+##project.json
+#strLocation
+#strCountry
+#strContinent
+#strDescription
+#strIntroduction
+#intStatus
+#strCreator
+#strCreatorUrl
+#intVideoCount
+#intImageCount
+#isPMSelect
+#strCategory
+#strSubCategory
+#fFundProgress
+#intFundTarget
+#intRaisedMoney
+#strCurrency
+#intBacker
+#intRemainDays
+#strEndDate
+#strStartDate
+#intComment
+#intUpdate
+#lstStrBacker
+#intFbLike
+##reward.json
+#strUrl
+#strRewardContent
+#intRewardMoney
+#intRewardBacker
+#intRewardLimit
+#strRewardDeliveryDate
+#strRewardShipTo
+#intRewardRetailPrice
+##update.json
+#strUrl
+#strUpdateTitle
+#strUpdateContent
+#strUpdateDate
+##comment.json
+#strUrl
+#strQnaQuestion
+#strQnaAnswer
+#strQnaDate
+
+#profile #####################################################################################
+##profile.json
+#strName
+#strDescription
+#strLocation
+#strCountry
+#strContinent
+#lstStrSocialNetwork
+#lstStrCreatedProject
+#lstStrCreatedProjectUrl
+#lstStrBackedProject
+#lstStrBackedProjectUrl
+#intBackedCount
+#intCreatedCount
+#isCreator
+#isBacker
+#intLiveProject
+#intSuccessProject
+#intFailedProject
+#strIdentityName
+#strLastLoginDate
+#intFbFriends
