@@ -22,8 +22,10 @@ class ParserForWEBACKERS:
     def __init__(self):
         self.utility = Utility()
         self.dicSubCommandHandler = {"category":[self.parseCategoryPage],
-                                     "project":None,
-                                     "profile":None}
+                                     "project":[self.beforeParseProjectPage,
+                                                self.parseIntroPage,
+                                                self.afterParseProjectPage],
+                                     "profile":[]}
         self.strWebsiteDomain = u"https://www.webackers.com"
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
@@ -62,31 +64,37 @@ class ParserForWEBACKERS:
             if not os.path.exists(strCategoryResultFolderPath):
                 os.mkdir(strCategoryResultFolderPath) #mkdir parsed_result/WEBACKERS/category/
             strCategoryJsonFilePath = strCategoryResultFolderPath + u"\\category.json"
-            strProjectUrlListFilePath = strCategoryResultFolderPath + u"\\project_url_list.txt"
-            strProfileUrlListFilePath = strCategoryResultFolderPath + u"\\profile_url_list.txt"
             #清空 dicParsedResultOfCategory 資料
             self.dicParsedResultOfCategory = {}
             self.dicParsedResultOfCategory["project_url_list"] = []
             self.dicParsedResultOfCategory["profile_url_list"] = []
-            #解析各頁的 category.html 並將 url 集合於 txt 檔案裡
-            with open(strProjectUrlListFilePath, "w+") as projectUrlListFile, open(strProfileUrlListFilePath, "w+") as profileUrlListFile:
-                lstStrCategoryHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strCategoryHtmlFolderPath, strSuffixes=u"category.html")
-                for strCategoryHtmlFilePath in lstStrCategoryHtmlFilePath: #category.html 各分頁
-                    with open(strCategoryHtmlFilePath, "r") as categoryHtmlFile:
-                        strPageSource = categoryHtmlFile.read()
-                        root = Selector(text=strPageSource)
-                        #開始解析
-                        lstStrProjectUrl = root.css("li.cbp-item div.thumbnail > a:first-of-type::attr(href)").extract()
-                        lstStrProfileUrl = root.css("li.cbp-item div.thumbnail a.pull-left::attr(href)").extract()
-                        #寫入 url
-                        for strProjectUrl in lstStrProjectUrl:
-                            strFullProjectUrl = self.strWebsiteDomain + strProjectUrl
-                            projectUrlListFile.write(strFullProjectUrl + u"\n")
-                            self.dicParsedResultOfCategory["project_url_list"].append(strFullProjectUrl)
-                        for strProfileUrl in lstStrProfileUrl:
-                            strFullProfileUrl = self.strWebsiteDomain + strProfileUrl
-                            profileUrlListFile.write(strFullProfileUrl + u"\n")
-                            self.dicParsedResultOfCategory["profile_url_list"].append(strFullProfileUrl)
+            #解析各頁的 category.html 並將 url 集合於 json 檔案裡
+            lstStrCategoryHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strCategoryHtmlFolderPath, strSuffixes=u"category.html")
+            for strCategoryHtmlFilePath in lstStrCategoryHtmlFilePath: #category.html 各分頁
+                with open(strCategoryHtmlFilePath, "r") as categoryHtmlFile:
+                    strPageSource = categoryHtmlFile.read()
+                    root = Selector(text=strPageSource)
+                    #開始解析
+                    lstStrProjectUrl = root.css("li.cbp-item div.thumbnail > a:first-of-type::attr(href)").extract()
+                    lstStrProfileUrl = root.css("li.cbp-item div.thumbnail a.pull-left::attr(href)").extract()
+                    #寫入 url
+                    for strProjectUrl in lstStrProjectUrl:
+                        #儲存在 category.html 下的 project 資料
+                        dicProjectData = {}
+                        #strUrl
+                        strFullProjectUrl = self.strWebsiteDomain + strProjectUrl
+                        dicProjectData["strUrl"] = strFullProjectUrl
+                        #strDescription
+                        strDescription = None
+                        elesDivThumbnail = root.css("div.thumbnail")
+                        for eleDivThumbnail in elesDivThumbnail:
+                            if len(eleDivThumbnail.css("a[href='%s']"%strProjectUrl)) != 0:
+                                strDescription = eleDivThumbnail.css("div.caption_view p::text").extract_first()
+                        dicProjectData["strDescription"] = strDescription
+                        self.dicParsedResultOfCategory["project_url_list"].append(dicProjectData)
+                    for strProfileUrl in lstStrProfileUrl:
+                        strFullProfileUrl = self.strWebsiteDomain + strProfileUrl
+                        self.dicParsedResultOfCategory["profile_url_list"].append(strFullProfileUrl)
             self.utility.writeObjectToJsonFile(self.dicParsedResultOfCategory, strCategoryJsonFilePath)
 #project #####################################################################################
     #解析 project page(s) 之前
@@ -110,13 +118,17 @@ class ParserForWEBACKERS:
             logging.info("parsing %s"%strProjectIntroHtmlFilePath)
             with open(strProjectIntroHtmlFilePath, "r") as projectIntroHtmlFile:
                 strProjHtmlFileName = os.path.basename(projectIntroHtmlFile.name)
+                #取得 url
                 strProjId = re.search("^(.*)_intro.html$", strProjHtmlFileName).group(1)
                 strProjUrl = u"https://www.webackers.com/Proposal/Display/" + strProjId
                 if strProjUrl not in self.dicParsedResultOfProject:
                     self.dicParsedResultOfProject[strProjUrl] = {}
+                #取得 category 頁面的 project 資料
+                strCategoryJsonFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\WEBACKERS\\%s\\category.json"%strCategoryName)
+                dicCategoryData = self.utility.readObjectFromJsonFile(strJsonFilePath=strCategoryJsonFilePath)
+                #開始解析
                 strPageSource = projectIntroHtmlFile.read()
                 root = Selector(text=strPageSource)
-                #開始解析
                 #strSource
                 self.dicParsedResultOfProject[strProjUrl]["strSource"] = \
                     u"WEBACKERS"
@@ -133,6 +145,11 @@ class ParserForWEBACKERS:
                 #strContinent
                 self.dicParsedResultOfProject[strProjUrl]["strContinent"] = u"Asia"
                 #strDescription
+                strDescription = None
+                for dicProjectData in dicCategoryData["project_url_list"]:
+                    if dicProjectData["strUrl"] == strProjUrl:
+                        strDescription = dicProjectData["strDescription"]
+                self.dicParsedResultOfProject[strProjUrl]["strDescription"] = strDescription
                 #strIntroduction
         
 ##project.json
