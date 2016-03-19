@@ -39,6 +39,7 @@ class ParserForWEBACKERSTest(unittest.TestCase):
         parser = ParserForWEBACKERS()
         parser.beforeParseProjectPage(strCategoryName)
         parser.parseIntroPage(strCategoryName)
+        parser.parseSponsorPage(strCategoryName)
         parser.afterParseProjectPage(strCategoryName)
 
 #測試開始

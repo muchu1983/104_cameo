@@ -24,6 +24,7 @@ class ParserForWEBACKERS:
         self.dicSubCommandHandler = {"category":[self.parseCategoryPage],
                                      "project":[self.beforeParseProjectPage,
                                                 self.parseIntroPage,
+                                                self.parseSponsorPage,
                                                 self.afterParseProjectPage],
                                      "profile":[]}
         self.strWebsiteDomain = u"https://www.webackers.com"
@@ -212,17 +213,47 @@ class ParserForWEBACKERS:
                 self.dicParsedResultOfProject[strProjUrl]["strEndDate"] = strEndDate
                 #strStartDate 無法取得
                 self.dicParsedResultOfProject[strProjUrl]["strStartDate"] = None
-                #intBacker
-                #intComment
                 #intUpdate
+                intUpdate = int(root.css("ul.nav-tabs li a[href*='tab=progress'] div.badge::text").extract_first().strip())
+                self.dicParsedResultOfProject[strProjUrl]["intUpdate"] = intUpdate
+                #intBacker
+                intBacker = int(root.css("ul.nav-tabs li a[href*='tab=sponsor'] div.badge::text").extract_first().strip())
+                self.dicParsedResultOfProject[strProjUrl]["intBacker"] = intBacker
+                #intComment
+                intComment = int(root.css("ul.nav-tabs li a[href*='tab=faq'] div.badge::text").extract_first().strip())
+                self.dicParsedResultOfProject[strProjUrl]["intComment"] = intComment
+                #intFbLike
+                intFbLike = int(root.css("span.fbBtn span.fb_share_count::text").extract_first().strip())
+                self.dicParsedResultOfProject[strProjUrl]["intFbLike"] = intFbLike
+                #intVideoCount
+                intVideoCount = len(root.css("div.description iframe[src*='youtube'], div.flex-video"))
+                self.dicParsedResultOfProject[strProjUrl]["intVideoCount"] = intVideoCount
+                #intImageCount
+                intImageCount = len(root.css("div.description img[src*='image']"))
+                self.dicParsedResultOfProject[strProjUrl]["intImageCount"] = intImageCount
+                #isPMSelect 無法取得
+                self.dicParsedResultOfProject[strProjUrl]["isPMSelect"] = None
                 
-##project.json
-#intVideoCount
-#intImageCount
-#isPMSelect
+    #解析 sponsor.html
+    def parseSponsorPage(self, strCategoryName=None):
+        strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"\\WEBACKERS\\%s\\projects"%strCategoryName)
+        lstStrSponsorHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strProjectsHtmlFolderPath, strSuffixes="_sponsor.html")
+        for strProjectSponsorHtmlFilePath in lstStrSponsorHtmlFilePath:
+            logging.info("parsing %s"%strProjectSponsorHtmlFilePath)
+            with open(strProjectSponsorHtmlFilePath, "r") as projectSponsorHtmlFile:
+                strProjHtmlFileName = os.path.basename(projectSponsorHtmlFile.name)
+                #取得 url
+                strProjId = re.search("^(.*)_sponsor.html$", strProjHtmlFileName).group(1)
+                strProjUrl = u"https://www.webackers.com/Proposal/Display/" + strProjId
+                if strProjUrl not in self.dicParsedResultOfProject:
+                    self.dicParsedResultOfProject[strProjUrl] = {}
+                #開始解析
+                strPageSource = projectSponsorHtmlFile.read()
+                root = Selector(text=strPageSource)
+                #lstStrBacker
+                lstStrBacker = root.css("div#sponsor_panel p a.fa-black_h::text").extract()
+                self.dicParsedResultOfProject[strProjUrl]["lstStrBacker"] = lstStrBacker
 
-#lstStrBacker
-#intFbLike
 ##reward.json
 #strUrl
 #strRewardContent
