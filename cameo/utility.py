@@ -9,6 +9,7 @@ This file is part of BSD license
 import os
 import re
 import json
+import datetime
 from geopy.geocoders import GoogleV3
 #共用工具程式
 class Utility:
@@ -66,8 +67,14 @@ class Utility:
                 fPureNum = float(strFloatPartText) * 1
         return int(fPureNum)
         
+    #轉換 剩餘日期表示字串 成 純數字
+    def translateTimeleftTextToPureNum(self, strTimeleftText=None, strVer=None):
+        dicVer = {"INDIEGOGO": self.translateTimeleftTextToPureNum_INDIEGOGO,
+                  "WEBACKERS": self.translateTimeleftTextToPureNum_WEBACKERS}
+        return dicVer[strVer](strTimeleftText=strTimeleftText)
+    
     #轉換 剩餘日期表示字串 成 純數字 (ex:100 day left -> 100)
-    def translateTimeleftTextToPureNum(self, strTimeleftText=None):
+    def translateTimeleftTextToPureNum_INDIEGOGO(self, strTimeleftText=None):
         intDays = 0
         if strTimeleftText == None:
             return intDays
@@ -85,6 +92,29 @@ class Utility:
         else:
             intDays = 0
         return intDays
+        
+    #剩餘日期轉換為日數 (ex.2個月13天後結束 -> 73天)
+    def translateTimeleftTextToPureNum_WEBACKERS(self, strTimeleftText=None):
+        intDays = 0
+        if strTimeleftText is not None:
+            if strTimeleftText in (u"已完成", u"已結束"):
+                return 0
+            strMonth = re.match(u"^([0-9]*)個月[0-9]*天後結束$", strTimeleftText)
+            strDay = re.match(u"^[0-9]*?個?月?([0-9]*)天後結束$", strTimeleftText)
+            if strMonth is not None:
+                strMonth = strMonth.group(1)
+                intDays = intDays + (int(strMonth)*30)
+            if strDay is not None:
+                strDay = strDay.group(1)
+                intDays = intDays + int(strDay)
+        return intDays
+        
+    #取得檔案的建立日期
+    def getCtimeOfFile(self, strFilePath=None):
+        fCTimeStamp = os.path.getctime(strFilePath)
+        dtCTime = datetime.datetime.fromtimestamp(fCTimeStamp)
+        strCTime = dtCTime.strftime("%Y-%m-%d")
+        return strCTime
         
     #使用 geopy 查找 洲別 資料 (目前不可用)
     def geopy(self):

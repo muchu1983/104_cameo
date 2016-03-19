@@ -71,6 +71,9 @@ class ParserForWEBACKERS:
             #解析各頁的 category.html 並將 url 集合於 json 檔案裡
             lstStrCategoryHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strCategoryHtmlFolderPath, strSuffixes=u"category.html")
             for strCategoryHtmlFilePath in lstStrCategoryHtmlFilePath: #category.html 各分頁
+                #記錄抓取時間
+                strCrawlTime = self.utility.getCtimeOfFile(strFilePath=strCategoryHtmlFilePath)
+                self.dicParsedResultOfCategory["strCrawlTime"] = strCrawlTime
                 with open(strCategoryHtmlFilePath, "r") as categoryHtmlFile:
                     strPageSource = categoryHtmlFile.read()
                     root = Selector(text=strPageSource)
@@ -103,6 +106,7 @@ class ParserForWEBACKERS:
                         self.dicParsedResultOfCategory["profile_url_list"].append(strFullProfileUrl)
             self.utility.writeObjectToJsonFile(self.dicParsedResultOfCategory, strCategoryJsonFilePath)
 #project #####################################################################################
+
     #解析 project page(s) 之前
     def beforeParseProjectPage(self, strCategoryName=None):
         strProjectsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\WEBACKERS\\%s\\projects"%strCategoryName)
@@ -196,16 +200,27 @@ class ParserForWEBACKERS:
                 #strCurrency
                 self.dicParsedResultOfProject[strProjUrl]["strCurrency"] = u"NTD"
                 #intRemainDays
+                intRemainDays = self.utility.translateTimeleftTextToPureNum(strTimeleftText=strStatus, strVer="WEBACKERS")
+                self.dicParsedResultOfProject[strProjUrl]["intRemainDays"] = intRemainDays
                 #strEndDate
-                #strStartDate
+                strEndDate = None
+                if intRemainDays > 0:
+                    strCrawlTime = dicCategoryData["strCrawlTime"]
+                    dtCrawlTime = datetime.datetime.strptime(strCrawlTime, "%Y-%m-%d")
+                    dtEndDate = dtCrawlTime + datetime.timedelta(days=intRemainDays)
+                    strEndDate = dtEndDate.strftime("%Y-%m-%d")
+                self.dicParsedResultOfProject[strProjUrl]["strEndDate"] = strEndDate
+                #strStartDate 無法取得
+                self.dicParsedResultOfProject[strProjUrl]["strStartDate"] = None
+                #intBacker
+                #intComment
+                #intUpdate
+                
 ##project.json
 #intVideoCount
 #intImageCount
 #isPMSelect
 
-#intBacker
-#intComment
-#intUpdate
 #lstStrBacker
 #intFbLike
 ##reward.json

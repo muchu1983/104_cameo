@@ -102,7 +102,7 @@ class ParserForINDIEGOGO:
                     root = Selector(text=strPageSource)
                     #project url
                     lstStrProjUrls = root.css("a.discoveryCard::attr(href)").extract() #parse proj urls
-                    #抓取時間
+                    #記錄抓取時間
                     fCTimeStamp = os.path.getctime(strCategoryHtmlPath)
                     dtCrawlTime = datetime.datetime.fromtimestamp(fCTimeStamp)
                     strCrawlTime = dtCrawlTime.strftime("%Y-%m-%d")
@@ -117,7 +117,7 @@ class ParserForINDIEGOGO:
                             #記錄剩餘時間
                             strProjTimeleft = root.css("a.discoveryCard[href='%s'] div.discoveryCard-timeleft::text"%strProjUrl).extract_first() #parse proj time left
                             #轉換剩餘時間 (Indemaned 及 No time left 均轉為 0)
-                            intRemainDays = self.utility.translateTimeleftTextToPureNum(strProjTimeleft)
+                            intRemainDays = self.utility.translateTimeleftTextToPureNum(strTimeleftText=strProjTimeleft, strVer="INDIEGOGO")
                             #專案結束日期
                             strEndDate = None
                             if strProjTimeleft == None: #InDemaned
