@@ -25,6 +25,7 @@ class ParserForWEBACKERS:
                                      "project":[self.beforeParseProjectPage,
                                                 self.parseIntroPage,
                                                 self.parseSponsorPage,
+                                                self.parseProgressPage,
                                                 self.afterParseProjectPage],
                                      "profile":[]}
         self.strWebsiteDomain = u"https://www.webackers.com"
@@ -153,6 +154,7 @@ class ParserForWEBACKERS:
         #將 parse 結果寫入 json 檔案
         self.utility.writeObjectToJsonFile(self.dicParsedResultOfProject, strProjectsResultFolderPath + u"\\project.json")
         self.utility.writeObjectToJsonFile(self.dicParsedResultOfReward, strProjectsResultFolderPath + u"\\reward.json")
+        self.utility.writeObjectToJsonFile(self.dicParsedResultOfUpdate, strProjectsResultFolderPath + u"\\update.json")
         
     #解析 intro.html
     def parseIntroPage(self, strCategoryName=None):
@@ -329,13 +331,42 @@ class ParserForWEBACKERS:
                 #lstStrBacker
                 lstStrBacker = root.css("div#sponsor_panel p a.fa-black_h::text").extract()
                 self.dicParsedResultOfProject[strProjUrl]["lstStrBacker"] = lstStrBacker
+    
+    #解析 progress.html
+    def parseProgressPage(self, strCategoryName=None):
+        strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"\\WEBACKERS\\%s\\projects"%strCategoryName)
+        lstStrProgressHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strProjectsHtmlFolderPath, strSuffixes="_progress.html")
+        for strProjectProgressHtmlFilePath in lstStrProgressHtmlFilePath:
+            logging.info("parsing %s"%strProjectProgressHtmlFilePath)
+            with open(strProjectProgressHtmlFilePath, "r") as projectProgressHtmlFile:
+                strProjHtmlFileName = os.path.basename(projectProgressHtmlFile.name)
+                #取得 url
+                strProjId = re.search("^(.*)_progress.html$", strProjHtmlFileName).group(1)
+                strProjUrl = u"https://www.webackers.com/Proposal/Display/" + strProjId
+                #開始解析
+                strPageSource = projectProgressHtmlFile.read()
+                root = Selector(text=strPageSource)
+                lstDicUpdateData = []
+                elesUpdate = root.css("div.active div.panel-group")
+                for eleUpdate in elesUpdate:
+                    dicUpdateData = {}
+                    #strUrl
+                    dicUpdateData["strUrl"] = strProjUrl
+                    #strUpdateTitle
+                    strUpdateTitle = eleUpdate.css("div.panel-heading div.pull-left h4::text").extract_first().strip()
+                    dicUpdateData["strUpdateTitle"] = strUpdateTitle
+                    #strUpdateContent
+                    lstStrUpdateContentText = eleUpdate.css("div.panel-body div.content_area *::text").extract()
+                    strUpdateContent = self.stripTextArray(lstStrText=lstStrUpdateContentText)
+                    dicUpdateData["strUpdateContent"] = strUpdateContent
+                    #strUpdateDate
+                    strUpdateDate = eleUpdate.css("div.panel-heading div.pull-right span:nth-of-type(2)::text").extract_first().strip()
+                    strUpdateDate = re.sub("/", "-", strUpdateDate)
+                    dicUpdateData["strUpdateDate"] = strUpdateDate
+                    #append update 資料
+                    lstDicUpdateData.append(dicUpdateData)
+                self.dicParsedResultOfUpdate[strProjUrl] = lstDicUpdateData
 
-
-##update.json
-#strUrl
-#strUpdateTitle
-#strUpdateContent
-#strUpdateDate
 ##comment.json
 #strUrl
 #strQnaQuestion
