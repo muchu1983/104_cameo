@@ -120,6 +120,7 @@ class ParserForWEBACKERS:
         strProjectsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\WEBACKERS\\%s\\projects"%strCategoryName)
         #將 parse 結果寫入 json 檔案
         self.utility.writeObjectToJsonFile(self.dicParsedResultOfProject, strProjectsResultFolderPath + u"\\project.json")
+        self.utility.writeObjectToJsonFile(self.dicParsedResultOfReward, strProjectsResultFolderPath + u"\\reward.json")
         
     #解析 intro.html
     def parseIntroPage(self, strCategoryName=None):
@@ -144,6 +145,7 @@ class ParserForWEBACKERS:
                 #開始解析
                 strPageSource = projectIntroHtmlFile.read()
                 root = Selector(text=strPageSource)
+                # - project.json -
                 #strSource
                 self.dicParsedResultOfProject[strProjUrl]["strSource"] = \
                     u"WEBACKERS"
@@ -233,6 +235,20 @@ class ParserForWEBACKERS:
                 self.dicParsedResultOfProject[strProjUrl]["intImageCount"] = intImageCount
                 #isPMSelect 無法取得
                 self.dicParsedResultOfProject[strProjUrl]["isPMSelect"] = None
+                #
+                # - reward.json -
+                if strProjUrl not in self.dicParsedResultOfReward:
+                    self.dicParsedResultOfReward[strProjUrl] = {}
+                #strUrl
+                self.dicParsedResultOfReward[strProjUrl]["strUrl"] = \
+                    strProjUrl
+                #strRewardContent
+                #intRewardMoney
+                #intRewardBacker
+                #intRewardLimit
+                #strRewardDeliveryDate
+                #strRewardShipTo
+                #intRewardRetailPrice
                 
     #解析 sponsor.html
     def parseSponsorPage(self, strCategoryName=None):
@@ -254,15 +270,7 @@ class ParserForWEBACKERS:
                 lstStrBacker = root.css("div#sponsor_panel p a.fa-black_h::text").extract()
                 self.dicParsedResultOfProject[strProjUrl]["lstStrBacker"] = lstStrBacker
 
-##reward.json
-#strUrl
-#strRewardContent
-#intRewardMoney
-#intRewardBacker
-#intRewardLimit
-#strRewardDeliveryDate
-#strRewardShipTo
-#intRewardRetailPrice
+
 ##update.json
 #strUrl
 #strUpdateTitle
