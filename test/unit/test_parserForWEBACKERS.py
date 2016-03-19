@@ -25,7 +25,18 @@ class ParserForWEBACKERSTest(unittest.TestCase):
     #收尾
     def tearDown(self):
         pass
-        
+    
+    #測試 解析 回饋組合的贊助狀態 字串
+    def test_parseStrRewardBacker(self):
+        logging.info("ParserForWEBACKERSTest.test_parseStrRewardBacker")
+        parser = ParserForWEBACKERS()
+        ret = parser.parseStrRewardBacker(strRewardBacker=u"1人待繳5人剩餘94人")
+        self.assertEquals((1, 5, 94), ret)
+        ret = parser.parseStrRewardBacker(strRewardBacker=u"1人待繳5人")
+        self.assertEquals((1, 5, None), ret)
+        ret = parser.parseStrRewardBacker(strRewardBacker=u"15人")
+        self.assertEquals((15, None, None), ret)
+    
     #測試 解析 category 頁面
     def test_parseCategoryPage(self):
         logging.info("ParserForWEBACKERSTest.test_parseCategoryPage")
@@ -41,6 +52,7 @@ class ParserForWEBACKERSTest(unittest.TestCase):
         parser.parseIntroPage(strCategoryName)
         parser.parseSponsorPage(strCategoryName)
         parser.afterParseProjectPage(strCategoryName)
+    
 
 #測試開始
 if __name__ == "__main__":

@@ -53,6 +53,39 @@ class ParserForWEBACKERS:
             strArg1 = lstSubcommand[1]
         for handler in self.dicSubCommandHandler[strSubcommand]:
             handler(strArg1)
+#tool method #####################################################################################
+    #將字串陣列合併之後再 strip
+    def stripTextArray(self, lstStrText=None):
+        strTextLine = u""
+        for strText in lstStrText:
+            if strText is not None:
+                strText = re.sub("\s", "", strText)
+                strTextLine = strTextLine + strText
+        return strTextLine.strip()
+        
+    #解析 回饋組合的贊助狀態 字串 ex."1人待繳5人剩餘94人" return (1,5,94)
+    def parseStrRewardBacker(self, strRewardBacker=None):
+        (intPayed, intNotPayYet, intRemainQuta) = (0,0,0)
+        #pattern X人
+        m1 = re.match(u"^([0-9]*)人$", strRewardBacker)
+        if m1 is not None:
+            intPayed = int(m1.group(1))
+            return (intPayed, None, None)
+        #pattern X人待繳Y人剩餘Z人
+        m2 = re.match(u"^([0-9]*)人待繳([0-9]*)人剩餘([0-9]*)人$", strRewardBacker)
+        if m2 is not None:
+            intPayed = int(m2.group(1))
+            intNotPayYet = int(m2.group(2))
+            intRemainQuta = int(m2.group(3))
+            return (intPayed, intNotPayYet, intRemainQuta)
+        #pattern X人待繳Y人
+        m3 = re.match(u"^([0-9]*)人待繳([0-9]*)人$", strRewardBacker)
+        if m3 is not None:
+            intPayed = int(m3.group(1))
+            intNotPayYet = int(m3.group(2))
+            return (intPayed, intNotPayYet, None)
+        #pattern error
+        return None
 
 #category #####################################################################################
     #解析 category.html
@@ -95,9 +128,8 @@ class ParserForWEBACKERS:
                         for eleDivItemWrapper in elesDivItemWrapper:
                             if len(eleDivItemWrapper.css("div.thumbnail a[href='%s']"%strProjectUrl)) != 0:
                                 strDescription = eleDivItemWrapper.css("div.thumbnail div.caption_view p::text").extract_first()
-                                for strStatus in eleDivItemWrapper.css("div.case_msg_i li.timeitem::text").extract():
-                                    if strStatus is not None and strStatus.strip() != u"":
-                                        strStatus = strStatus.strip()
+                                lstStrStatus = eleDivItemWrapper.css("div.case_msg_i li.timeitem::text").extract()
+                                strStatus = self.stripTextArray(lstStrText=lstStrStatus)
                         dicProjectData["strDescription"] = strDescription
                         dicProjectData["strStatus"] = strStatus
                         #append project 資料
@@ -145,7 +177,7 @@ class ParserForWEBACKERS:
                 #開始解析
                 strPageSource = projectIntroHtmlFile.read()
                 root = Selector(text=strPageSource)
-                # - project.json -
+                # - 解析 project.json -
                 #strSource
                 self.dicParsedResultOfProject[strProjUrl]["strSource"] = \
                     u"WEBACKERS"
@@ -236,19 +268,47 @@ class ParserForWEBACKERS:
                 #isPMSelect 無法取得
                 self.dicParsedResultOfProject[strProjUrl]["isPMSelect"] = None
                 #
-                # - reward.json -
-                if strProjUrl not in self.dicParsedResultOfReward:
-                    self.dicParsedResultOfReward[strProjUrl] = {}
-                #strUrl
-                self.dicParsedResultOfReward[strProjUrl]["strUrl"] = \
-                    strProjUrl
-                #strRewardContent
-                #intRewardMoney
-                #intRewardBacker
-                #intRewardLimit
-                #strRewardDeliveryDate
-                #strRewardShipTo
-                #intRewardRetailPrice
+                # - 解析 reward.json -
+                lstDicRewardData = []
+                elesReward = root.css("aside article div.panel")
+                for eleReward in elesReward:
+                    if len(eleReward.css("div.panel-case")) != 0:
+                        dicRewardData = {}
+                        #strUrl
+                        dicRewardData["strUrl"] = strProjUrl
+                        #strRewardContent
+                        strRewardContent = eleReward.css("div.panel-body div.fa-black_h.padding_space.txt_line_fix::text").extract_first()
+                        dicRewardData["strRewardContent"] = strRewardContent
+                        #intRewardMoney
+                        strRewardMoney = eleReward.css("div.panel-case div.pull-left span.font_m1::text").extract_first().strip()
+                        intRewardMoney = int(re.sub("[^0-9]", "", strRewardMoney))
+                        dicRewardData["intRewardMoney"] = intRewardMoney
+                        #intRewardBacker
+                        lstStrRewardBacker = eleReward.css("div.panel-case div.pull-right::text").extract()
+                        strRewardBacker = self.stripTextArray(lstStrText=lstStrRewardBacker) #ex. "1人待繳5人剩餘94人"
+                        (intPayed, intNotPayYet, intRemainQuta) = self.parseStrRewardBacker(strRewardBacker=strRewardBacker)
+                        intRewardBacker = intPayed
+                        dicRewardData["intRewardBacker"] = intRewardBacker
+                        #intRewardLimit
+                        intRewardLimit = 0
+                        if intRemainQuta is not None:
+                            intRewardLimit = sum((intPayed, intNotPayYet, intRemainQuta))
+                        dicRewardData["intRewardLimit"] = intRewardLimit
+                        #strRewardShipTo and strRewardDeliveryDate
+                        lstStrDeliveryDateAndShipTo = eleReward.css("div.panel-body div.fa-black_h.bg_gray_h::text").extract()
+                        strDeliveryDateAndShipTo = self.stripTextArray(lstStrText=lstStrDeliveryDateAndShipTo) #"寄送條件：.*預計送達：.*"
+                        mDeliveryDateAndShipTo = re.match(u"^寄送條件：(.*)預計送達：(.*)$", strDeliveryDateAndShipTo)
+                        (strRewardDeliveryDate, strRewardShipTo) = (None, None)
+                        if mDeliveryDateAndShipTo is not None:
+                            strRewardShipTo = mDeliveryDateAndShipTo.group(1)
+                            strRewardDeliveryDate = mDeliveryDateAndShipTo.group(2)
+                        dicRewardData["strRewardShipTo"] = strRewardShipTo
+                        dicRewardData["strRewardDeliveryDate"] = strRewardDeliveryDate
+                        #intRewardRetailPrice 無法取得
+                        dicRewardData["intRewardRetailPrice"] = None
+                        #append reward 資料
+                        lstDicRewardData.append(dicRewardData)
+                self.dicParsedResultOfReward[strProjUrl] = lstDicRewardData
                 
     #解析 sponsor.html
     def parseSponsorPage(self, strCategoryName=None):
