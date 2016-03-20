@@ -28,7 +28,8 @@ class ParserForWEBACKERS:
                                                 self.parseProgressPage,
                                                 self.parseFaqPage,
                                                 self.afterParseProjectPage],
-                                     "profile":[]}
+                                     "profile":[self.beforeParseProfilePage,
+                                                self.afterParseProfilePage]}
         self.strWebsiteDomain = u"https://www.webackers.com"
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
@@ -404,6 +405,18 @@ class ParserForWEBACKERS:
                 self.dicParsedResultOfComment[strProjUrl] = lstDicCommentData
 
 #profile #####################################################################################
+    #解析 profile page(s) 之前
+    def beforeParseProfilePage(self, strCategoryName=None):
+        strProfilesResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\WEBACKERS\\%s\\profiles"%strCategoryName)
+        if not os.path.exists(strProfilesResultFolderPath):
+            #mkdir parsed_result/WEBACKERS/category/profiles
+            os.mkdir(strProfilesResultFolderPath)
+            
+    #解析 profile page(s) 之後
+    def afterParseProfilePage(self, strCategoryName=None):
+        strProfilesResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\WEBACKERS\\%s\\profiles"%strCategoryName)
+        #將 parse 結果寫入 json 檔案
+        self.utility.writeObjectToJsonFile(self.dicParsedResultOfProfile, strProfilesResultFolderPath + u"\\profile.json")
 ##profile.json
 #strName
 #strDescription
