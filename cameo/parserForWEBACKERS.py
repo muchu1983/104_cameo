@@ -26,6 +26,7 @@ class ParserForWEBACKERS:
                                                 self.parseIntroPage,
                                                 self.parseSponsorPage,
                                                 self.parseProgressPage,
+                                                self.parseFaqPage,
                                                 self.afterParseProjectPage],
                                      "profile":[]}
         self.strWebsiteDomain = u"https://www.webackers.com"
@@ -155,6 +156,7 @@ class ParserForWEBACKERS:
         self.utility.writeObjectToJsonFile(self.dicParsedResultOfProject, strProjectsResultFolderPath + u"\\project.json")
         self.utility.writeObjectToJsonFile(self.dicParsedResultOfReward, strProjectsResultFolderPath + u"\\reward.json")
         self.utility.writeObjectToJsonFile(self.dicParsedResultOfUpdate, strProjectsResultFolderPath + u"\\update.json")
+        self.utility.writeObjectToJsonFile(self.dicParsedResultOfComment, strProjectsResultFolderPath + u"\\comment.json")
         
     #解析 intro.html
     def parseIntroPage(self, strCategoryName=None):
@@ -367,11 +369,39 @@ class ParserForWEBACKERS:
                     lstDicUpdateData.append(dicUpdateData)
                 self.dicParsedResultOfUpdate[strProjUrl] = lstDicUpdateData
 
-##comment.json
-#strUrl
-#strQnaQuestion
-#strQnaAnswer
-#strQnaDate
+    #解析 faq.html
+    def parseFaqPage(self, strCategoryName=None):
+        strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"\\WEBACKERS\\%s\\projects"%strCategoryName)
+        lstStrFaqHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strProjectsHtmlFolderPath, strSuffixes="_faq.html")
+        for strProjectFaqHtmlFilePath in lstStrFaqHtmlFilePath:
+            logging.info("parsing %s"%strProjectFaqHtmlFilePath)
+            with open(strProjectFaqHtmlFilePath, "r") as projectFaqHtmlFile:
+                strProjHtmlFileName = os.path.basename(projectFaqHtmlFile.name)
+                #取得 url
+                strProjId = re.search("^(.*)_faq.html$", strProjHtmlFileName).group(1)
+                strProjUrl = u"https://www.webackers.com/Proposal/Display/" + strProjId
+                #開始解析
+                strPageSource = projectFaqHtmlFile.read()
+                root = Selector(text=strPageSource)
+                lstDicCommentData = []
+                elesComment = root.css("div.panel-group div.panel")
+                for eleComment in elesComment:
+                    dicCommentData = {}
+                    #strUrl
+                    dicCommentData["strUrl"] = strProjUrl
+                    #strQnaQuestion
+                    lstStrQnaQuestionText = eleComment.css("div.panel-heading a::text").extract()
+                    strQnaQuestion = self.stripTextArray(lstStrText=lstStrQnaQuestionText)
+                    dicCommentData["strQnaQuestion"] = strQnaQuestion
+                    #strQnaAnswer
+                    lstStrQnaAnswerText = eleComment.css("div.panel-collapse div.panel-body div.reply::text").extract()
+                    strQnaAnswer = self.stripTextArray(lstStrText=lstStrQnaAnswerText)
+                    dicCommentData["strQnaAnswer"] = strQnaAnswer
+                    #strQnaDate 無法取得
+                    dicCommentData["strQnaDate"] = None
+                    #append comment 資料
+                    lstDicCommentData.append(dicCommentData)
+                self.dicParsedResultOfComment[strProjUrl] = lstDicCommentData
 
 #profile #####################################################################################
 ##profile.json

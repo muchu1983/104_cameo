@@ -52,6 +52,7 @@ class ParserForWEBACKERSTest(unittest.TestCase):
         parser.parseIntroPage(strCategoryName)
         parser.parseSponsorPage(strCategoryName)
         parser.parseProgressPage(strCategoryName)
+        parser.parseFaqPage(strCategoryName)
         parser.afterParseProjectPage(strCategoryName)
     
 
