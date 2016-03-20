@@ -29,6 +29,7 @@ class ParserForWEBACKERS:
                                                 self.parseFaqPage,
                                                 self.afterParseProjectPage],
                                      "profile":[self.beforeParseProfilePage,
+                                                self.parseProjPage,
                                                 self.afterParseProfilePage]}
         self.strWebsiteDomain = u"https://www.webackers.com"
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
@@ -417,24 +418,93 @@ class ParserForWEBACKERS:
         strProfilesResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\WEBACKERS\\%s\\profiles"%strCategoryName)
         #將 parse 結果寫入 json 檔案
         self.utility.writeObjectToJsonFile(self.dicParsedResultOfProfile, strProfilesResultFolderPath + u"\\profile.json")
+        
+    #解析 proj.html
+    def parseProjPage(self, strCategoryName=None):
+        strProfilesHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"\\WEBACKERS\\%s\\profiles"%strCategoryName)
+        lstStrProjHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strProfilesHtmlFolderPath, strSuffixes="_proj.html")
+        for strProfileProjHtmlFilePath in lstStrProjHtmlFilePath:
+            logging.info("parsing %s"%strProfileProjHtmlFilePath)
+            with open(strProfileProjHtmlFilePath, "r") as profileProjHtmlFile:
+                strProfHtmlFileName = os.path.basename(profileProjHtmlFile.name)
+                #取得 url
+                strProfId = re.search("^(.*)_proj.html$", strProfHtmlFileName).group(1)
+                strProfUrl = u"https://www.webackers.com/Proposal/CreatorProfile?proposalId=" + strProfId
+                if strProfUrl not in self.dicParsedResultOfProfile:
+                    self.dicParsedResultOfProfile[strProfUrl] = {}
+                #開始解析
+                strPageSource = profileProjHtmlFile.read()
+                root = Selector(text=strPageSource)
+                #strUrl
+                self.dicParsedResultOfProfile[strProfUrl]["strUrl"] = strProfUrl
+                #strName
+                lstStrNameText = root.css("h4.fa-black::text").extract()
+                strName = self.stripTextArray(lstStrText=lstStrNameText)
+                self.dicParsedResultOfProfile[strProfUrl]["strName"] = strName
+                #strIdentityName 同 strName
+                self.dicParsedResultOfProfile[strProfUrl]["strIdentityName"] = strName
+                #strDescription
+                lstStrDescription = root.css("p small.fa-gray::text").extract()
+                strDescription = self.stripTextArray(lstStrText=lstStrDescription)
+                self.dicParsedResultOfProfile[strProfUrl]["strDescription"] = strDescription
+                #strLocation
+                self.dicParsedResultOfProfile[strProfUrl]["strLocation"] = u"Taiwan"
+                #strCountry
+                self.dicParsedResultOfProfile[strProfUrl]["strCountry"] = u"ROC"
+                #strContinent
+                self.dicParsedResultOfProfile[strProfUrl]["strContinent"] = u"Asia"
+                #intCreatedCount
+                intCreatedCount = int(root.css("ul.nav-tabs li a[href*='tab=project'] div.badge::text").extract_first())
+                self.dicParsedResultOfProfile[strProfUrl]["intCreatedCount"] = intCreatedCount
+                #intBackedCount
+                intBackedCount = int(root.css("ul.nav-tabs li a[href*='tab=order'] div.badge::text").extract_first())
+                self.dicParsedResultOfProfile[strProfUrl]["intBackedCount"] = intBackedCount
+                #isCreator
+                isCreator = (True if intCreatedCount > 0 else False)
+                self.dicParsedResultOfProfile[strProfUrl]["isCreator"] = isCreator
+                #isBacker
+                isBacker = (True if intBackedCount > 0 else False)
+                self.dicParsedResultOfProfile[strProfUrl]["isBacker"] = isBacker
+                #lstStrCreatedProject and lstStrCreatedProjectUrl
+                elesCreatedProject = root.css("div.panel-body div.col-sm-6.col-md-4.col-lg-4.col-xs-12")
+                lstStrCreatedProject = []
+                lstStrCreatedProjectUrl = []
+                lstStrCreatedProjectStatus = []
+                for eleCreatedProject in elesCreatedProject:
+                    lstStrCreatedProjectText = eleCreatedProject.css("div.thumbnail div.caption h4::text").extract()
+                    strCreatedProject = self.stripTextArray(lstStrText=lstStrCreatedProjectText)
+                    lstStrCreatedProject.append(strCreatedProject)
+                    strCreatedProjectUrl = (self.strWebsiteDomain + 
+                                            eleCreatedProject.css("div.thumbnail a::attr('href')").extract_first().strip())
+                    lstStrCreatedProjectUrl.append(strCreatedProjectUrl)
+                    #記錄 status 以用來計算 intLiveProject, intSuccessProject, intFailedProject
+                    lstStrCreatedProjectStatusText = eleCreatedProject.css("div.about_i li.timeitem::text").extract()
+                    strCreatedProjectStatus = self.stripTextArray(lstStrText=lstStrCreatedProjectStatusText)
+                    lstStrCreatedProjectStatus.append(strCreatedProjectStatus)
+                self.dicParsedResultOfProfile[strProfUrl]["lstStrCreatedProject"] = lstStrCreatedProject
+                self.dicParsedResultOfProfile[strProfUrl]["lstStrCreatedProjectUrl"] = lstStrCreatedProjectUrl
+                #intSuccessProject
+                intSuccessProject = lstStrCreatedProjectStatus.count(u"已完成")
+                self.dicParsedResultOfProfile[strProfUrl]["intSuccessProject"] = intSuccessProject
+                #intFailedProject
+                intFailedProject = lstStrCreatedProjectStatus.count(u"已結束")
+                self.dicParsedResultOfProfile[strProfUrl]["intFailedProject"] = intFailedProject
+                #intLiveProject
+                intLiveProject = len(lstStrCreatedProjectStatus) - intSuccessProject - intFailedProject
+                self.dicParsedResultOfProfile[strProfUrl]["intLiveProject"] = intLiveProject
+                #lstStrSocialNetwork 無法取得
+                self.dicParsedResultOfProfile[strProfUrl]["lstStrSocialNetwork"] = None
+                #intFbFriends 無法取得
+                self.dicParsedResultOfProfile[strProfUrl]["intFbFriends"] = None
+                #strLastLoginDate 無法取得
+                self.dicParsedResultOfProfile[strProfUrl]["strLastLoginDate"] = None
+                
+    #解析 order.html
+    
+    #解析 sub.html 目前無用處暫不處理
+    
 ##profile.json
-#strName
-#strDescription
-#strLocation
-#strCountry
-#strContinent
-#lstStrSocialNetwork
-#lstStrCreatedProject
-#lstStrCreatedProjectUrl
 #lstStrBackedProject
 #lstStrBackedProjectUrl
-#intBackedCount
-#intCreatedCount
-#isCreator
-#isBacker
-#intLiveProject
-#intSuccessProject
-#intFailedProject
-#strIdentityName
-#strLastLoginDate
-#intFbFriends
+
+

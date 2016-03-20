@@ -61,6 +61,7 @@ class ParserForWEBACKERSTest(unittest.TestCase):
         strCategoryName = "charity"
         parser = ParserForWEBACKERS()
         parser.beforeParseProfilePage(strCategoryName)
+        parser.parseProjPage(strCategoryName)
         parser.afterParseProfilePage(strCategoryName)
 
 #測試開始
