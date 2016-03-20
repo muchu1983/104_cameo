@@ -141,7 +141,7 @@ class SpiderForWEBACKERS:
             logging.info("selenium driver can't find the more button.")
             return
             
-    #全自動下載所有類別的案件頁面
+    #全自動下載 所有類別 的 案件頁面 及 個人資料頁面
     def downloadProjectAndProfilePageAutoMode(self, uselessArg1=None):
         for strCategoryName in self.lstStrCategoryName:
             self.downloadProjectPage(strCategoryName=strCategoryName)

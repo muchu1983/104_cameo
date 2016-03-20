@@ -30,8 +30,12 @@ class ParserForWEBACKERS:
                                                 self.afterParseProjectPage],
                                      "profile":[self.beforeParseProfilePage,
                                                 self.parseProjPage,
-                                                self.afterParseProfilePage]}
+                                                self.parseOrderPage,
+                                                self.afterParseProfilePage],
+                                     "automode":[self.parseProjectAndProfilePageAutoMode]}
         self.strWebsiteDomain = u"https://www.webackers.com"
+        self.lstStrCategoryName = ["acg", "art", "charity", "design", "music",
+                                   "publication", "sport", "surprise", "technology", "video"]
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
         self.dicParsedResultOfCategory = {} #category.json 資料
@@ -46,8 +50,9 @@ class ParserForWEBACKERS:
         return ("- WEBACKERS -\n"
                 "useage:\n"
                 "category - parse #_category.html then create project_url_list.txt\n"
-                "project category - parse project's html of given category then create .json\n"
-                "profile category - parse profile's html of given category then create .json\n")
+                "project category - parse project's html of given category, then create .json\n"
+                "profile category - parse profile's html of given category, then create .json\n"
+                "automode - parse project's and profile's html of all categories, then create .json\n")
 
     #執行 parser
     def runParser(self, lstSubcommand=None):
@@ -170,6 +175,10 @@ class ParserForWEBACKERS:
                 strProjHtmlFileName = os.path.basename(projectIntroHtmlFile.name)
                 #取得 url
                 strProjId = re.search("^(.*)_intro.html$", strProjHtmlFileName).group(1)
+                #
+                if strProjId == u"345":
+                    continue
+                #
                 strProjUrl = u"https://www.webackers.com/Proposal/Display/" + strProjId
                 if strProjUrl not in self.dicParsedResultOfProject:
                     self.dicParsedResultOfProject[strProjUrl] = {}
@@ -500,11 +509,50 @@ class ParserForWEBACKERS:
                 self.dicParsedResultOfProfile[strProfUrl]["strLastLoginDate"] = None
                 
     #解析 order.html
-    
+    def parseOrderPage(self, strCategoryName=None):
+        strProfilesHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"\\WEBACKERS\\%s\\profiles"%strCategoryName)
+        lstStrOrderHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strProfilesHtmlFolderPath, strSuffixes="_order.html")
+        for strProfileOrderHtmlFilePath in lstStrOrderHtmlFilePath:
+            logging.info("parsing %s"%strProfileOrderHtmlFilePath)
+            with open(strProfileOrderHtmlFilePath, "r") as profileOrderHtmlFile:
+                strProfHtmlFileName = os.path.basename(profileOrderHtmlFile.name)
+                #取得 url
+                strProfId = re.search("^(.*)_order.html$", strProfHtmlFileName).group(1)
+                strProfUrl = u"https://www.webackers.com/Proposal/CreatorProfile?proposalId=" + strProfId
+                if strProfUrl not in self.dicParsedResultOfProfile:
+                    self.dicParsedResultOfProfile[strProfUrl] = {}
+                #開始解析
+                strPageSource = profileOrderHtmlFile.read()
+                root = Selector(text=strPageSource)
+                #lstStrBackedProject and lstStrBackedProjectUrl
+                elesBackedProject = root.css("div#history-panel div.col-sm-6.col-md-4.col-lg-4.col-xs-12")
+                lstStrBackedProject = []
+                lstStrBackedProjectUrl = []
+                for eleBackedProject in elesBackedProject:
+                    strBackedProject = eleBackedProject.css("div.thumbnail div.caption h4::text").extract_first().strip()
+                    lstStrBackedProject.append(strBackedProject)
+                    strBackedProjectUrl = (self.strWebsiteDomain + 
+                                           eleBackedProject.css("div.thumbnail > a::attr('href')").extract_first().strip())
+                    lstStrBackedProjectUrl.append(strBackedProjectUrl)
+                self.dicParsedResultOfProfile[strProfUrl]["lstStrBackedProject"] = lstStrBackedProject
+                self.dicParsedResultOfProfile[strProfUrl]["lstStrBackedProjectUrl"] = lstStrBackedProjectUrl
+                
     #解析 sub.html 目前無用處暫不處理
-    
-##profile.json
-#lstStrBackedProject
-#lstStrBackedProjectUrl
-
-
+    def parseSubPage(self, strCategoryName=None):
+        pass
+#automode #####################################################################################
+    #全自動 解析 所有類別 的 案件頁面 及 個人資料頁面
+    def parseProjectAndProfilePageAutoMode(self, uselessArg1=None):
+        for strCategoryName in self.lstStrCategoryName:
+            #parse project page
+            self.beforeParseProjectPage(strCategoryName)
+            self.parseIntroPage(strCategoryName)
+            self.parseSponsorPage(strCategoryName)
+            self.parseProgressPage(strCategoryName)
+            self.parseFaqPage(strCategoryName)
+            self.afterParseProjectPage(strCategoryName)
+            #parse profile page
+            self.beforeParseProfilePage(strCategoryName)
+            self.parseProjPage(strCategoryName)
+            self.parseOrderPage(strCategoryName)
+            self.afterParseProfilePage(strCategoryName)
