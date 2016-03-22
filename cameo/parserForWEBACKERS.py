@@ -175,10 +175,6 @@ class ParserForWEBACKERS:
                 strProjHtmlFileName = os.path.basename(projectIntroHtmlFile.name)
                 #取得 url
                 strProjId = re.search("^(.*)_intro.html$", strProjHtmlFileName).group(1)
-                #
-                if strProjId == u"345":
-                    continue
-                #
                 strProjUrl = u"https://www.webackers.com/Proposal/Display/" + strProjId
                 if strProjUrl not in self.dicParsedResultOfProject:
                     self.dicParsedResultOfProject[strProjUrl] = {}

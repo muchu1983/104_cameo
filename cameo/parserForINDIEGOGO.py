@@ -132,6 +132,10 @@ class ParserForINDIEGOGO:
 #project #####################################################################################
     #解析 project page(s) 之前
     def beforeParseProjectPage(self, strCategoryName=None):
+        self.dicParsedResultOfProject = {} #project.json 資料
+        self.dicParsedResultOfUpdate = {} #update.json 資料
+        self.dicParsedResultOfComment = {} #comment.json 資料
+        self.dicParsedResultOfReward = {} #reward.json 資料
         strProjectsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\INDIEGOGO\\%s\\projects"%strCategoryName)
         if not os.path.exists(strProjectsResultFolderPath):
             #mkdir parsed_result/INDIEGOGO/category/projects/
@@ -558,6 +562,7 @@ class ParserForINDIEGOGO:
 #individuals #####################################################################################
     #解析 individuals page(s) 之前
     def beforeParseIndividualsPage(self, strCategoryName=None):
+        self.dicParsedResultOfProfile = {} #profile.json 資料
         strIndividualsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\INDIEGOGO\\%s\\profiles"%strCategoryName)
         if not os.path.exists(strIndividualsResultFolderPath):
             #mkdir parsed_result/INDIEGOGO/category/profiles/
