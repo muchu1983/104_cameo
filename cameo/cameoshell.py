@@ -11,6 +11,8 @@ from cameo.parserForINDIEGOGO import ParserForINDIEGOGO
 from cameo.spiderForWEBACKERS import SpiderForWEBACKERS
 from cameo.parserForWEBACKERS import ParserForWEBACKERS
 from cameo.cleaner import CleanerForINDIEGOGO
+from cameo.reporter import ReporterForINDIEGOGO
+from cameo.reporter import ReporterForWEBACKERS
 """
 shell 操作介面
 """
@@ -25,6 +27,8 @@ class CameoShell:
         self.dicParsers = {"indiegogo":ParserForINDIEGOGO(),
                            "webackers":ParserForWEBACKERS()}
         self.dicCleaners = {"indiegogo":CleanerForINDIEGOGO()}
+        self.dicReporters = {"indiegogo":ReporterForINDIEGOGO(),
+                             "webackers":ReporterForWEBACKERS()}
         
     #顯示目前的目標網站
     def listSiteMessage(self):
@@ -59,7 +63,8 @@ class CameoShell:
                        "chsite - change site\n"
                        "spider - run spider\n"
                        "parser - run parser\n"
-                       "clean - clean _files dirs\n")
+                       "clean - clean _files dirs\n"
+                       "report - report result of site\n")
         print(strHelpText)
         
     #顯示 spider 訊息
@@ -89,6 +94,12 @@ class CameoShell:
             print("cleaning... [%s]"%self.strTargetSite)
             self.dicCleaners[self.strTargetSite].clean()
             print("[%s] cleaned"%self.strTargetSite)
+            
+    #顯示 reporter 訊息
+    def printReportMessage(self):
+        self.listSiteMessage()
+        if self.strTargetSite != None:
+            print(self.dicReporters[self.strTargetSite].getReportMessage())
         
     #開啟 shell
     def openShell(self):
@@ -110,6 +121,8 @@ class CameoShell:
                 self.printParserMessage()
             elif input == "clean":
                 self.printCleanerMessage()
+            elif input == "report":
+                self.printReportMessage()
             elif input == "exit":
                 self.intShellStateCode = 0
         

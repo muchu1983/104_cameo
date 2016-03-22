@@ -151,6 +151,10 @@ class ParserForWEBACKERS:
 
     #解析 project page(s) 之前
     def beforeParseProjectPage(self, strCategoryName=None):
+        self.dicParsedResultOfProject = {} #project.json 資料
+        self.dicParsedResultOfUpdate = {} #update.json 資料
+        self.dicParsedResultOfComment = {} #comment.json 資料
+        self.dicParsedResultOfReward = {} #reward.json 資料
         strProjectsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\WEBACKERS\\%s\\projects"%strCategoryName)
         if not os.path.exists(strProjectsResultFolderPath):
             #mkdir parsed_result/WEBACKERS/category/projects/
@@ -413,6 +417,7 @@ class ParserForWEBACKERS:
 #profile #####################################################################################
     #解析 profile page(s) 之前
     def beforeParseProfilePage(self, strCategoryName=None):
+        self.dicParsedResultOfProfile = {} #profile.json 資料
         strProfilesResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\WEBACKERS\\%s\\profiles"%strCategoryName)
         if not os.path.exists(strProfilesResultFolderPath):
             #mkdir parsed_result/WEBACKERS/category/profiles

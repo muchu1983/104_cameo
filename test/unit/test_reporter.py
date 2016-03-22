@@ -34,6 +34,14 @@ class ReporterTest(unittest.TestCase):
     #測試 建立 webackers 報告
     def test_reportWebackers(self):
         logging.info("ReporterTest.test_reportWebackers")
+        self.rWEBACKERS.CountDownloadedProject()
+        self.rWEBACKERS.CountParsedProject()
+        
+    #測試 取得報表結果
+    def test_getReportMessage(self):
+        logging.info("ReporterTest.test_getReportMessage")
+        self.rINDIEGOGO.getReportMessage()
+        self.rWEBACKERS.getReportMessage()
 
 #測試開始
 if __name__ == "__main__":

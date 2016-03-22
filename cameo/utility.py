@@ -52,6 +52,16 @@ class Utility:
                         lstStrFilePathWithSuffixes.append(strFilePath)
         return lstStrFilePathWithSuffixes
         
+    #深層取得 strBasedir 目錄中，檔名以 strSuffixes 結尾的檔案路徑
+    def recursiveGetFilePathListWithSuffixes(self, strBasedir=None, strSuffixes=None):
+        lstStrFilePathWithSuffixes = []
+        for base, dirs, files in os.walk(strBasedir): 
+            for strFilename in files:
+                if strFilename.endswith(strSuffixes):#find target files
+                    strFilePath = base + "\\" + strFilename
+                    lstStrFilePathWithSuffixes.append(strFilePath)
+        return lstStrFilePathWithSuffixes
+        
     #轉換 簡化數字字串 成 純數字 (ex:26.3k -> 26300)
     def translateNumTextToPureNum(self, strNumText=None):
         strNumText = strNumText.lower()

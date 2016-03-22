@@ -15,30 +15,37 @@ class ReporterForINDIEGOGO:
     
     #建構子
     def __init__(self):
-        self.strSourceBasedir = "cameo_res\\source_html\\INDIEGOGO"
-        self.strResultBasedir = "cameo_res\\parsed_result\\INDIEGOGO"
+        self.strSourceBasedir = u"cameo_res\\source_html\\INDIEGOGO"
+        self.strResultBasedir = u"cameo_res\\parsed_result\\INDIEGOGO"
         self.utility = Utility()
+        
+    #取得報表結果
+    def getReportMessage(self):
+        intDownloadedProject = self.CountDownloadedProject()
+        intParsedProject = self.CountParsedProject()
+        strReportMsg = (u"- INDIEGOGO -\n" +
+                        u"downloaded:\n" +
+                        str(intDownloadedProject) + u"\n"
+                        u"parsed:\n" + 
+                        str(intParsedProject) + u"\n")
+        return strReportMsg
     
     #計算已下載的專案數量
     def CountDownloadedProject(self):
-        pass
+        #find _story.html file path
+        lstStrStoryHtmlFilePath = self.utility.recursiveGetFilePathListWithSuffixes(strBasedir=self.strSourceBasedir, strSuffixes="_story.html")
+        return len(lstStrStoryHtmlFilePath)
         
     #計算已解析的專案數量
     def CountParsedProject(self):
-        #find json file path
-        lstStrProjectJsonFilePath = []
-        for base, dirs, files in os.walk(self.strResultBasedir): 
-            for strFilename in files:
-                if strFilename.endswith("project.json"):
-                    strFilePath = base + "\\" + strFilename
-                    lstStrProjectJsonFilePath.append(strFilePath)
-        #read json file and count
+        #find project.json file path
+        lstStrProjectJsonFilePath = self.utility.recursiveGetFilePathListWithSuffixes(strBasedir=self.strResultBasedir, strSuffixes="project.json")
+        #read project.json file and count keys
         intParsedProject = 0
         for strProjectJsonFilePath in lstStrProjectJsonFilePath:
             dicProject =  self.utility.readObjectFromJsonFile(strJsonFilePath=strProjectJsonFilePath)
-            print(strProjectJsonFilePath, len(dicProject))
             intParsedProject = intParsedProject + len(dicProject)
-        print(intParsedProject)
+        return intParsedProject
 
 """
 WEBACKERS 分析報告
@@ -50,12 +57,32 @@ class ReporterForWEBACKERS:
         self.strSourceBasedir = "cameo_res\\source_html\\WEBACKERS"
         self.strResultBasedir = "cameo_res\\parsed_result\\WEBACKERS"
         self.utility = Utility()
+        
+    #取得報表結果
+    def getReportMessage(self):
+        intDownloadedProject = self.CountDownloadedProject()
+        intParsedProject = self.CountParsedProject()
+        strReportMsg = (u"- WEBACKERS -\n" +
+                        u"downloaded:\n" +
+                        str(intDownloadedProject) + u"\n"
+                        u"parsed:\n" + 
+                        str(intParsedProject) + u"\n")
+        return strReportMsg
     
     #計算已下載的專案數量
     def CountDownloadedProject(self):
-        pass
+        #find _intro.html file path
+        lstStrIntroHtmlFilePath = self.utility.recursiveGetFilePathListWithSuffixes(strBasedir=self.strSourceBasedir, strSuffixes="_intro.html")
+        return len(lstStrIntroHtmlFilePath)
         
     #計算已解析的專案數量
     def CountParsedProject(self):
-        pass
+        #find project.json file path
+        lstStrProjectJsonFilePath = self.utility.recursiveGetFilePathListWithSuffixes(strBasedir=self.strResultBasedir, strSuffixes="project.json")
+        #read project.json file and count keys
+        intParsedProject = 0
+        for strProjectJsonFilePath in lstStrProjectJsonFilePath:
+            dicProject =  self.utility.readObjectFromJsonFile(strJsonFilePath=strProjectJsonFilePath)
+            intParsedProject = intParsedProject + len(dicProject)
+        return intParsedProject
     
