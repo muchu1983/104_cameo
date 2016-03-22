@@ -191,175 +191,206 @@ class ParserForINDIEGOGO:
         strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"\\INDIEGOGO\\%s\\projects"%strCategoryName)
         lstStrStoryHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strProjectsHtmlFolderPath, strSuffixes="_story.html")
         for strProjStoryFilePath in lstStrStoryHtmlFilePath:
-            logging.info("parsing %s"%strProjStoryFilePath)
-            with open(strProjStoryFilePath, "r") as projStoryHtmlFile:
-                strProjHtmlFileName = os.path.basename(projStoryHtmlFile.name)
-                strProjUrl = "https://www.indiegogo.com/projects/" + re.search("^(.*)_story.html$", strProjHtmlFileName).group(1)
-                if not self.checkIsProjUrlInProjUrlListFile(strCategoryName=strCategoryName, strProjUrl=strProjUrl):
-                    logging.warning("%s not in project_url_list.txt, skip parse it"%strProjUrl)
-                    continue #skip
-                if strProjUrl not in self.dicParsedResultOfProject:
-                    self.dicParsedResultOfProject[strProjUrl] = {}
-                strPageSource = projStoryHtmlFile.read()
-                root = Selector(text=strPageSource)
-                #parse *_story.html
-                #strSource
-                self.dicParsedResultOfProject[strProjUrl]["strSource"] = \
-                    u"INDIEGOGO"
-                #strUrl
-                self.dicParsedResultOfProject[strProjUrl]["strUrl"] = \
-                    strProjUrl
-                #strProjectName
-                self.dicParsedResultOfProject[strProjUrl]["strProjectName"] = \
-                    root.css("h1.campaignHeader-title::text").extract_first().strip()
-                #strLocation
-                self.dicParsedResultOfProject[strProjUrl]["strLocation"] = \
-                    root.css("div.campaignHeader-location a.ng-binding::text").extract_first().strip()
-                #strCity
-                self.dicParsedResultOfProject[strProjUrl]["strCity"] = \
-                    root.css("div.campaignHeader-city a.ng-binding::text").extract_first().strip()
-                #strCountry
-                strCountry = root.css("div.campaignTrustTeaser-item:nth-of-type(2) div.campaignTrustTeaser-text div.ng-binding:nth-of-type(3)::text").extract_first().strip()
-                self.dicParsedResultOfProject[strProjUrl]["strCountry"] = \
-                    strCountry
-                #strContinent
-                self.dicParsedResultOfProject[strProjUrl]["strContinent"] = \
-                    self.utility.getContinentByCountryName(strCountry)
-                #strDescription
-                self.dicParsedResultOfProject[strProjUrl]["strDescription"] = \
-                    root.css("div.i-musty-background div:nth-of-type(1)::text").extract_first().strip()
-                #strIntroduction
-                strIntroduction = u""
-                lstStrIntroductionParagraph = root.css("div.i-description  campaign-description *::text").extract()
-                for strIntroductionParagraph in lstStrIntroductionParagraph:
-                    strIntroduction = strIntroduction + strIntroductionParagraph.strip()
-                self.dicParsedResultOfProject[strProjUrl]["strIntroduction"] = \
-                    strIntroduction
-                #strCreator
-                self.dicParsedResultOfProject[strProjUrl]["strCreator"] = \
-                    root.css("div.campaignTrustTeaser-item:nth-of-type(1) div.campaignTrustTeaser-text div.campaignTrustTeaser-text-title::text").extract_first().strip()
-                #intImageCount
-                strGalleryCountText = root.css("span.i-tab:nth-of-type(5) span span::text").extract_first()
-                intImageCount = 0
-                if strGalleryCountText != None:
-                    intImageCount = int(strGalleryCountText.strip())
-                self.dicParsedResultOfProject[strProjUrl]["intImageCount"] = intImageCount
-                #intStatus
-                isIndemand = False
-                if len(root.css("div.indemandSidebar-banner").extract()) > 0:
-                    isIndemand = True
-                intIndemandFundedPersentage = 0
-                intFundingPersentage = 0
-                if isIndemand: #InDemaned
-                    strIndemandBlurbText = root.css("div.preOrder-fundingBlurb::text").extract_first().strip()
-                    intIndemandFundedPersentage = int(re.search("^Original campaign was ([0-9\.]*)% funded on .*$", strIndemandBlurbText).group(1))
-                    if intIndemandFundedPersentage >= 100:
-                        self.dicParsedResultOfProject[strProjUrl]["intStatus"] = 3
-                    else:
-                        self.dicParsedResultOfProject[strProjUrl]["intStatus"] = 4
-                else:#not InDemaned
-                    strMetaFundingText = root.css("div.campaignGoal-barMetaFunding em::text").extract_first().strip()
-                    intFundingPersentage = int(re.search("([0-9\.]*)%", strMetaFundingText).group(1))
-                    if intFundingPersentage >= 100: #已超過 100%
-                        self.dicParsedResultOfProject[strProjUrl]["intStatus"] = 1
-                    else:#未超過 100%
-                        strMetaRemainingText = root.css("div.campaignGoal-barMetaRemaining em::text").extract_first()
-                        if strMetaRemainingText != None and strMetaRemainingText.strip() == u"No":
-                            #已結束 (No time left)
-                            self.dicParsedResultOfProject[strProjUrl]["intStatus"] = 2
+            try:
+                logging.info("parsing %s"%strProjStoryFilePath)
+                with open(strProjStoryFilePath, "r") as projStoryHtmlFile:
+                    strProjHtmlFileName = os.path.basename(projStoryHtmlFile.name)
+                    strProjUrl = "https://www.indiegogo.com/projects/" + re.search("^(.*)_story.html$", strProjHtmlFileName).group(1)
+                    if not self.checkIsProjUrlInProjUrlListFile(strCategoryName=strCategoryName, strProjUrl=strProjUrl):
+                        logging.warning("%s not in project_url_list.txt, skip parse it"%strProjUrl)
+                        continue #skip
+                    if strProjUrl not in self.dicParsedResultOfProject:
+                        self.dicParsedResultOfProject[strProjUrl] = {}
+                    strPageSource = projStoryHtmlFile.read()
+                    root = Selector(text=strPageSource)
+                    #parse *_story.html
+                    #strSource
+                    self.dicParsedResultOfProject[strProjUrl]["strSource"] = \
+                        u"INDIEGOGO"
+                    #strUrl
+                    self.dicParsedResultOfProject[strProjUrl]["strUrl"] = \
+                        strProjUrl
+                    #strProjectName
+                    self.dicParsedResultOfProject[strProjUrl]["strProjectName"] = \
+                        root.css("h1.campaignHeader-title::text").extract_first().strip()
+                    #strLocation
+                    self.dicParsedResultOfProject[strProjUrl]["strLocation"] = \
+                        root.css("div.campaignHeader-location a.ng-binding::text").extract_first().strip()
+                    #strCity
+                    strCity = root.css("div.campaignHeader-city a.ng-binding::text").extract_first()
+                    strCity = (strCity.strip() if strCity is not None else None)
+                    self.dicParsedResultOfProject[strProjUrl]["strCity"] = strCity
+                    #strCountry
+                    strCountry = root.css("div.campaignTrustTeaser-item:nth-of-type(2) div.campaignTrustTeaser-text div.ng-binding:nth-of-type(3)::text").extract_first().strip()
+                    self.dicParsedResultOfProject[strProjUrl]["strCountry"] = \
+                        strCountry
+                    #strContinent
+                    self.dicParsedResultOfProject[strProjUrl]["strContinent"] = \
+                        self.utility.getContinentByCountryName(strCountry)
+                    #strDescription
+                    self.dicParsedResultOfProject[strProjUrl]["strDescription"] = \
+                        root.css("div.i-musty-background div:nth-of-type(1)::text").extract_first().strip()
+                    #strIntroduction
+                    strIntroduction = u""
+                    lstStrIntroductionParagraph = root.css("div.i-description  campaign-description *::text").extract()
+                    for strIntroductionParagraph in lstStrIntroductionParagraph:
+                        strIntroduction = strIntroduction + strIntroductionParagraph.strip()
+                    self.dicParsedResultOfProject[strProjUrl]["strIntroduction"] = \
+                        strIntroduction
+                    #strCreator
+                    self.dicParsedResultOfProject[strProjUrl]["strCreator"] = \
+                        root.css("div.campaignTrustTeaser-item:nth-of-type(1) div.campaignTrustTeaser-text div.campaignTrustTeaser-text-title::text").extract_first().strip()
+                    #intImageCount
+                    strGalleryCountText = root.css("span.i-tab:nth-of-type(5) span span::text").extract_first()
+                    intImageCount = 0
+                    if strGalleryCountText != None:
+                        intImageCount = int(strGalleryCountText.strip())
+                    self.dicParsedResultOfProject[strProjUrl]["intImageCount"] = intImageCount
+                    #intStatus
+                    isIndemand = False
+                    isClosed = False
+                    if len(root.css("div.indemandSidebar-banner").extract()) > 0:
+                        isIndemand = True
+                    if len(root.css("div.i-campaign-closed").extract()) > 0:
+                        isClosed = True
+                    intIndemandFundedPersentage = 0
+                    intFundingPersentage = 0
+                    if isIndemand: #InDemaned
+                        strIndemandBlurbText = root.css("div.preOrder-fundingBlurb::text").extract_first().strip()
+                        intIndemandFundedPersentage = int(re.search("^Original campaign was ([0-9\.]*)% funded on .*$", strIndemandBlurbText).group(1))
+                        if intIndemandFundedPersentage >= 100:
+                            self.dicParsedResultOfProject[strProjUrl]["intStatus"] = 3
                         else:
-                            #未結束
-                            self.dicParsedResultOfProject[strProjUrl]["intStatus"] = 0
-                #strCategory
-                strCategory = root.css("div.campaignTrustTeaser-item:nth-of-type(2) div.campaignTrustTeaser-text-title::text").extract_first().strip()
-                self.dicParsedResultOfProject[strProjUrl]["strCategory"] = \
-                    strCategory
-                #strSubCategory 與 strCategory 相同
-                self.dicParsedResultOfProject[strProjUrl]["strSubCategory"] = \
-                    strCategory
-                #intRaisedMoney
-                intRaisedMoney = 0
-                if isIndemand:
-                    strFundsAmountText = root.css("div.preOrder-combinedBalance div.ng-binding span.currency span::text").extract_first().strip()
-                else:
-                    strFundsAmountText = root.css("div.campaignGoal-funds span.campaignGoal-fundsAmount span.currency span::text").extract_first().strip()
-                intRaisedMoney = int(re.sub("[^0-9]", "", strFundsAmountText))
-                self.dicParsedResultOfProject[strProjUrl]["intRaisedMoney"] = \
-                    intRaisedMoney
-                #intFundTarget
-                if isIndemand:
-                    intFundTarget = int(float(intRaisedMoney) / (float(intIndemandFundedPersentage) / 100 ))
-                else:
-                    strRaisedGoalText = root.css("span.campaignGoal-fundsRaisedGoal span.numeral::text").extract_first().strip()
-                    intFundTarget = int(re.sub("[^0-9]", "", strRaisedGoalText))
-                self.dicParsedResultOfProject[strProjUrl]["intFundTarget"] = intFundTarget
-                #fFundProgress
-                if isIndemand:
-                    self.dicParsedResultOfProject[strProjUrl]["fFundProgress"] = float(intIndemandFundedPersentage) / 100
-                else:
-                    self.dicParsedResultOfProject[strProjUrl]["fFundProgress"] = float(intFundingPersentage) / 100
-                #strCurrency
-                if isIndemand:
-                    strCurrencyText = root.css("div.preOrder-combinedBalance div.ng-binding span.currency em::text").extract_first().strip()
-                else:
-                    strCurrencyText = root.css("div.campaignGoal-funds span.campaignGoal-fundsAmount span.currency em::text").extract_first().strip()
-                self.dicParsedResultOfProject[strProjUrl]["strCurrency"] = strCurrencyText
-                #intBacker
-                self.dicParsedResultOfProject[strProjUrl]["intBacker"] = \
-                    int(root.css("span.i-tab:nth-of-type(4) span span::text").extract_first().strip())
-                #intUpdate
-                self.dicParsedResultOfProject[strProjUrl]["intUpdate"] = \
-                    int(root.css("span.i-tab:nth-of-type(2) span span::text").extract_first().strip())
-                #intComment
-                self.dicParsedResultOfProject[strProjUrl]["intComment"] = \
-                    int(root.css("span.i-tab:nth-of-type(3) span span::text").extract_first().strip())
-                #intFbLike
-                strShareBannerText = root.css("div.shareBanner div.shareBanner-label div.shareBanner-labelText::text").extract_first().strip()
-                intFbLike = self.utility.translateNumTextToPureNum(strShareBannerText)
-                self.dicParsedResultOfProject[strProjUrl]["intFbLike"] = intFbLike
-                #isDemand
-                if isIndemand:
-                    self.dicParsedResultOfProject[strProjUrl]["isDemand"] = True
-                else:
-                    self.dicParsedResultOfProject[strProjUrl]["isDemand"] = False
-                #isAON
-                strIStatusText = root.css("div.campaignGoal-goalFundingType span.i-status::text").extract_first()
-                if strIStatusText != None and strIStatusText.strip() == "Flexible Funding":
-                    self.dicParsedResultOfProject[strProjUrl]["isAON"] = True
-                else:
-                    self.dicParsedResultOfProject[strProjUrl]["isAON"] = False
-                strProjectTimeleftListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\INDIEGOGO\\%s\\project_timeleft_list.txt"%strCategoryName)
-                with open(strProjectTimeleftListFilePath, "r") as projectTimeleftListFile:
-                    #strCrawlTime local category.html的建立時間
-                    strCrawlTime = projectTimeleftListFile.readline().split(u":")[1].strip()
-                    #intRemainDays and strEndDate
-                    intRemainDays = 0
-                    strEndDate = None
-                    isProjInProjTimeleftList = False
-                    for strProjTimeleftLine in projectTimeleftListFile:
-                        if strProjUrl in strProjTimeleftLine:
-                            isProjInProjTimeleftList = True
-                            intRemainDays = int(strProjTimeleftLine.split(",")[1].strip())
-                            strEndDate = strProjTimeleftLine.split(",")[2].strip()
-                    if not isProjInProjTimeleftList:
-                        strCrawlTime = None
-                    self.dicParsedResultOfProject[strProjUrl]["strCrawlTime"] = \
-                        strCrawlTime
-                    self.dicParsedResultOfProject[strProjUrl]["intRemainDays"] = \
-                        intRemainDays
-                    self.dicParsedResultOfProject[strProjUrl]["strEndDate"] = \
-                        strEndDate
-                #intVideoCount
-                lstVideoElements = root.css("campaign-video.campaignVideo, iframe.embedly-embed[src*='media']").extract()
-                self.dicParsedResultOfProject[strProjUrl]["intVideoCount"] = \
-                    len(lstVideoElements)
-                #strStartDate = "" 無法取得
-                self.dicParsedResultOfProject[strProjUrl]["strStartDate"] = None
-                #isPMSelect = "" 無法取得
-                self.dicParsedResultOfProject[strProjUrl]["isPMSelect"] = None
-                #strCreatorUrl = "" 已由 parseProjectDetailsPage 取得
-                #lstStrBacker = "" 已由 parseProjectBackersPage 取得
-                
+                            self.dicParsedResultOfProject[strProjUrl]["intStatus"] = 4
+                    elif isClosed:
+                        strClosedText = root.css("div.indemandSidebar-closed-textSection::text").extract_first()
+                        if (strClosedText is not None) and (u"100%" in strClosedText):
+                            self.dicParsedResultOfProject[strProjUrl]["intStatus"] = 1
+                        else:
+                            self.dicParsedResultOfProject[strProjUrl]["intStatus"] = 2
+                    else:#not InDemaned and not Closed
+                        strMetaFundingText = root.css("div.campaignGoal-barMetaFunding em::text").extract_first().strip()
+                        intFundingPersentage = int(re.search("([0-9\.]*)%", strMetaFundingText).group(1))
+                        if intFundingPersentage >= 100: #已超過 100%
+                            self.dicParsedResultOfProject[strProjUrl]["intStatus"] = 1
+                        else:#未超過 100%
+                            strMetaRemainingText = root.css("div.campaignGoal-barMetaRemaining em::text").extract_first()
+                            if strMetaRemainingText != None and strMetaRemainingText.strip() == u"No":
+                                #已結束 (No time left)
+                                self.dicParsedResultOfProject[strProjUrl]["intStatus"] = 2
+                            else:
+                                #未結束
+                                self.dicParsedResultOfProject[strProjUrl]["intStatus"] = 0
+                    #strCategory
+                    strCategory = root.css("div.campaignTrustTeaser-item:nth-of-type(2) div.campaignTrustTeaser-text-title::text").extract_first().strip()
+                    self.dicParsedResultOfProject[strProjUrl]["strCategory"] = \
+                        strCategory
+                    #strSubCategory 與 strCategory 相同
+                    self.dicParsedResultOfProject[strProjUrl]["strSubCategory"] = \
+                        strCategory
+                    #intRaisedMoney
+                    intRaisedMoney = 0
+                    if isIndemand:
+                        strFundsAmountText = root.css("div.preOrder-combinedBalance div.ng-binding span.currency span::text").extract_first().strip()
+                    elif isClosed:
+                        strFundsAmountText = root.css("div.preOrder-combinedBalance div.ng-binding span.currency span::text").extract_first()
+                        if strFundsAmountText is not None:
+                            strFundsAmountText = strFundsAmountText.strip()
+                        else:
+                            strFundsAmountText = u"0"
+                    else:
+                        strFundsAmountText = root.css("div.campaignGoal-funds span.campaignGoal-fundsAmount span.currency span::text").extract_first().strip()
+                    intRaisedMoney = int(re.sub("[^0-9]", "", strFundsAmountText))
+                    self.dicParsedResultOfProject[strProjUrl]["intRaisedMoney"] = \
+                        intRaisedMoney
+                    #intFundTarget
+                    if isIndemand:
+                        intFundTarget = int(float(intRaisedMoney) / (float(intIndemandFundedPersentage) / 100 ))
+                    elif isClosed:
+                        intFundTarget = None
+                    else:
+                        strRaisedGoalText = root.css("span.campaignGoal-fundsRaisedGoal span.numeral::text").extract_first().strip()
+                        intFundTarget = int(re.sub("[^0-9]", "", strRaisedGoalText))
+                    self.dicParsedResultOfProject[strProjUrl]["intFundTarget"] = intFundTarget
+                    #fFundProgress
+                    if isIndemand:
+                        self.dicParsedResultOfProject[strProjUrl]["fFundProgress"] = float(intIndemandFundedPersentage) / 100
+                    elif isClosed:
+                        self.dicParsedResultOfProject[strProjUrl]["fFundProgress"] = None
+                    else:
+                        self.dicParsedResultOfProject[strProjUrl]["fFundProgress"] = float(intFundingPersentage) / 100
+                    #strCurrency
+                    if isIndemand:
+                        strCurrencyText = root.css("div.preOrder-combinedBalance div.ng-binding span.currency em::text").extract_first().strip()
+                    elif isClosed:
+                        strCurrencyText = root.css("div.preOrder-combinedBalance div.ng-binding span.currency em::text").extract_first()
+                        if strCurrencyText is not None:
+                            strCurrencyText = strCurrencyText.strip()
+                        else:
+                            strCurrencyText = None
+                    else:
+                        strCurrencyText = root.css("div.campaignGoal-funds span.campaignGoal-fundsAmount span.currency em::text").extract_first().strip()
+                    self.dicParsedResultOfProject[strProjUrl]["strCurrency"] = strCurrencyText
+                    #intBacker
+                    self.dicParsedResultOfProject[strProjUrl]["intBacker"] = \
+                        int(root.css("span.i-tab:nth-of-type(4) span span::text").extract_first().strip())
+                    #intUpdate
+                    self.dicParsedResultOfProject[strProjUrl]["intUpdate"] = \
+                        int(root.css("span.i-tab:nth-of-type(2) span span::text").extract_first().strip())
+                    #intComment
+                    self.dicParsedResultOfProject[strProjUrl]["intComment"] = \
+                        int(root.css("span.i-tab:nth-of-type(3) span span::text").extract_first().strip())
+                    #intFbLike
+                    strShareBannerText = root.css("div.shareBanner div.shareBanner-label div.shareBanner-labelText::text").extract_first().strip()
+                    intFbLike = self.utility.translateNumTextToPureNum(strShareBannerText)
+                    self.dicParsedResultOfProject[strProjUrl]["intFbLike"] = intFbLike
+                    #isDemand
+                    if isIndemand:
+                        self.dicParsedResultOfProject[strProjUrl]["isDemand"] = True
+                    else:
+                        self.dicParsedResultOfProject[strProjUrl]["isDemand"] = False
+                    #isAON
+                    strIStatusText = root.css("div.campaignGoal-goalFundingType span.i-status::text").extract_first()
+                    if strIStatusText != None and strIStatusText.strip() == "Flexible Funding":
+                        self.dicParsedResultOfProject[strProjUrl]["isAON"] = True
+                    else:
+                        self.dicParsedResultOfProject[strProjUrl]["isAON"] = False
+                    strProjectTimeleftListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\INDIEGOGO\\%s\\project_timeleft_list.txt"%strCategoryName)
+                    with open(strProjectTimeleftListFilePath, "r") as projectTimeleftListFile:
+                        #strCrawlTime local category.html的建立時間
+                        strCrawlTime = projectTimeleftListFile.readline().split(u":")[1].strip()
+                        #intRemainDays and strEndDate
+                        intRemainDays = 0
+                        strEndDate = None
+                        isProjInProjTimeleftList = False
+                        for strProjTimeleftLine in projectTimeleftListFile:
+                            if strProjUrl in strProjTimeleftLine:
+                                isProjInProjTimeleftList = True
+                                intRemainDays = int(strProjTimeleftLine.split(",")[1].strip())
+                                strEndDate = strProjTimeleftLine.split(",")[2].strip()
+                        if not isProjInProjTimeleftList:
+                            strCrawlTime = None
+                        self.dicParsedResultOfProject[strProjUrl]["strCrawlTime"] = \
+                            strCrawlTime
+                        self.dicParsedResultOfProject[strProjUrl]["intRemainDays"] = \
+                            intRemainDays
+                        self.dicParsedResultOfProject[strProjUrl]["strEndDate"] = \
+                            strEndDate
+                    #intVideoCount
+                    lstVideoElements = root.css("campaign-video.campaignVideo, iframe.embedly-embed[src*='media']").extract()
+                    self.dicParsedResultOfProject[strProjUrl]["intVideoCount"] = \
+                        len(lstVideoElements)
+                    #strStartDate = "" 無法取得
+                    self.dicParsedResultOfProject[strProjUrl]["strStartDate"] = None
+                    #isPMSelect = "" 無法取得
+                    self.dicParsedResultOfProject[strProjUrl]["isPMSelect"] = None
+                    #strCreatorUrl = "" 已由 parseProjectDetailsPage 取得
+                    #lstStrBacker = "" 已由 parseProjectBackersPage 取得
+            except:
+                strErrorLogFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\INDIEGOGO\\error.log")
+                with open(strErrorLogFilePath, "a") as errFile:
+                    errFile.write(strProjUrl + "\n")
+                continue
                 
     #解析 _updates.html
     def parseProjectUpdatesPage(self, strCategoryName=None):
