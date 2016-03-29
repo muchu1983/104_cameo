@@ -10,6 +10,7 @@ import os
 import re
 import json
 import datetime
+from scrapy import Selector
 from geopy.geocoders import GoogleV3
 #共用工具程式
 class Utility:
@@ -129,8 +130,26 @@ class Utility:
     #使用 geopy 查找 洲別 資料 (目前不可用)
     def geopy(self):
         geolocator = GoogleV3()
-        location, (x, y) = geolocator.geocode("dubai")
-        print(location, x, y)
+        location, (x, y) = geolocator.geocode("tainan", exactly_one=True)
+        print(location)
+        
+    #解析 list_of_country_by_continent_on_wikipedia.html
+    def parseListOfCountryWikiPage(self):
+        strWikiPageFilePath = u"cameo_res\\list_of_country_by_continent_on_wikipedia.html"
+        strParsedResultJsonFilePath = u"cameo_res\\country_of_continent.json"
+        with open(strWikiPageFilePath, "r") as wikiPageFile:
+            strPageSource = wikiPageFile.read()
+            root = Selector(text=strPageSource)
+            elesContinentTable = root.css("table.wikitable")
+            dicParsedResult = {}
+            dicContinentName = {"1":"Africa", "2":"Asia", "3":"Europe", "4":"North America",
+                                "5":"South America", "6":"Oceania", "7":"Antarctica"}
+            intCurrentTableIndex = 0 
+            for eleContinentTable in elesContinentTable:
+                intCurrentTableIndex = intCurrentTableIndex+1
+                lstStrCountryName = eleContinentTable.css("tr td:nth-of-type(2) i > a::text, tr td:nth-of-type(2) b > a::text").extract()
+                dicParsedResult[dicContinentName[str(intCurrentTableIndex)]] = lstStrCountryName
+            self.writeObjectToJsonFile(dicData=dicParsedResult, strJsonFilePath=strParsedResultJsonFilePath)
         
     #使用 國家對照表 查找 洲別 資料
     def getContinentByCountryName(self, strCountryName=None):

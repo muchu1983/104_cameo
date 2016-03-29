@@ -41,6 +41,7 @@ class UtilityTest(unittest.TestCase):
         self.assertEquals("Europe", self.utility.getContinentByCountryName("Sweden"))
         self.assertEquals("Europe", self.utility.getContinentByCountryName("Slovenia"))
         
+    #測試 轉換 剩餘日期表示字串 成 純數字
     def test_translateTimeleftTextToPureNum(self):
         logging.info("UtilityTest.test_translateTimeleftTextToPureNum")
         #INDIEGOGO version
@@ -51,13 +52,21 @@ class UtilityTest(unittest.TestCase):
         self.assertEquals(0, self.utility.translateTimeleftTextToPureNum(strTimeleftText=u"已結束", strVer="WEBACKERS"))
         self.assertEquals(0, self.utility.translateTimeleftTextToPureNum(strTimeleftText=u"已完成", strVer="WEBACKERS"))
         
+    #測試 取得檔案的建立日期
     def test_getCtimeOfFile(self):
         logging.info("UtilityTest.test_getCtimeOfFile")
         self.assertEquals(u"2016-03-03", self.utility.getCtimeOfFile(strFilePath=u"cameo\\utility.py"))
         
     #測試 geopy
     def test_geopy(self):
+        logging.info("UtilityTest.test_geopy")
         self.utility.geopy()
+        
+    #測試 解析 list_of_country_by_continent_on_wikipedia.html
+    def test_parseListOfCountryWikiPage(self):
+        logging.info("UtilityTest.test_parseListOfCountryWikiPage")
+        self.utility.parseListOfCountryWikiPage()
+        
 
 #測試開始
 if __name__ == "__main__":
