@@ -136,7 +136,7 @@ class Utility:
     #解析 list_of_country_by_continent_on_wikipedia.html
     def parseListOfCountryWikiPage(self):
         strWikiPageFilePath = u"cameo_res\\list_of_country_by_continent_on_wikipedia.html"
-        strParsedResultJsonFilePath = u"cameo_res\\country_of_continent.json"
+        strParsedResultJsonFilePath = u"cameo_res\\list_of_country_by_continent.json"
         with open(strWikiPageFilePath, "r") as wikiPageFile:
             strPageSource = wikiPageFile.read()
             root = Selector(text=strPageSource)
