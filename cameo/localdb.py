@@ -21,15 +21,15 @@ class LocalDbForTECHORANGE:
     def initialDb(self):
         strSQLCreateTable = ("CREATE TABLE IF NOT EXISTS techorange_project("
                              "id INTEGER PRIMARY KEY,"
-                             "strUrl TEXT,"
-                             "isDownloaded BOOLEAN)")
+                             "strUrl TEXT NOT NULL,"
+                             "isDownloaded BOOLEAN NOT NULL)")
         self.db.commitSQL(strSQL=strSQLCreateTable)
         strSQLCreateTable = ("CREATE TABLE IF NOT EXISTS techorange_tag("
                              "id INTEGER PRIMARY KEY,"
-                             "strName TEXT)")
+                             "strName TEXT NOT NULL)")
         self.db.commitSQL(strSQL=strSQLCreateTable)
         strSQLCreateTable = ("CREATE TABLE IF NOT EXISTS techorange_project_tag("
                              "id INTEGER PRIMARY KEY,"
-                             "strProjectUrl TEXT,"
-                             "strTagName TEXT)")
+                             "strProjectUrl TEXT NOT NULL,"
+                             "strTagName TEXT NOT NULL)")
         self.db.commitSQL(strSQL=strSQLCreateTable)
