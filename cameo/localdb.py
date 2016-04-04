@@ -6,7 +6,7 @@ This file is part of BSD license
 
 <https://opensource.org/licenses/BSD-3-Clause>
 """
-from united.localdb import SQLite3Db
+from bennu.localdb import SQLite3Db
 """
 本地端資料庫存取
 """
