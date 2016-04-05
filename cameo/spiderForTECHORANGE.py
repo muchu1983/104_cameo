@@ -76,3 +76,12 @@ class SpiderForTECHORANGE:
         strIndexHtmlFilePath = strIndexHtmlFolderPath + u"\\index.html"
         self.utility.overwriteSaveAs(strFilePath=strIndexHtmlFilePath, unicodeData=self.driver.page_source)
         
+    #下載 tag 頁面
+    def downloadTagPag(self, uselessArg1=None):
+        logging.info("download tag page")
+        strTagHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\TECHORANGE\\tag"
+        if not os.path.exists(strTagHtmlFolderPath):
+            os.mkdir(strTagHtmlFolderPath) #mkdir source_html/TECHORANGE/tag/
+        lstStrNotObtainedTagName = self.db.fetchallNotObtainedTagName() #取得 Db 中尚未下載的 Tag 名稱
+        for strNotObtainedTagName in lstStrNotObtainedTagName:
+            pass

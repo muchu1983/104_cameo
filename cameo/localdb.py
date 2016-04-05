@@ -38,7 +38,16 @@ class LocalDbForTECHORANGE:
     #若無重覆，儲存Tag
     def insertTagIFNotExists(self, strTagName=None):
         strSQL = "SELECT * FROM techorange_tag WHERE strTagName='%s'"%strTagName
-        fetchedData = self.db.fetchallSQL(strSQL=strSQL)
-        if len(fetchedData) == 0:
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        if len(lstRowData) == 0:
             strSQL = "INSERT INTO techorange_tag VALUES(NULL, '%s', 0)"%strTagName
             self.db.commitSQL(strSQL=strSQL)
+            
+    #取得所有未完成下載的 Tag 名稱
+    def fetchallNotObtainedTagName(self):
+        strSQL = "SELECT strTagName FROM techorange_tag WHERE isGot=0"
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        lstStrTagName = []
+        for rowData in lstRowData:
+            lstStrTagName.append(rowData["strTagName"])
+        return lstStrTagName
