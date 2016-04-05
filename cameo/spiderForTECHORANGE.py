@@ -23,6 +23,7 @@ class SpiderForTECHORANGE:
     def __init__(self):
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
+        self.strWebsiteDomain = u"http://buzzorange.com/techorange"
         self.dicSubCommandHandler = {"index":self.downloadIndexPage,
                                      "tag":None,
                                      "news":None}
@@ -72,7 +73,7 @@ class SpiderForTECHORANGE:
             os.mkdir(strIndexHtmlFolderPath) #mkdir source_html/TECHORANGE/
         #科技報橘首頁
         self.driver.get("http://buzzorange.com/techorange/")
-        #儲存
+        #儲存 html
         strIndexHtmlFilePath = strIndexHtmlFolderPath + u"\\index.html"
         self.utility.overwriteSaveAs(strFilePath=strIndexHtmlFilePath, unicodeData=self.driver.page_source)
         
@@ -82,6 +83,16 @@ class SpiderForTECHORANGE:
         strTagHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\TECHORANGE\\tag"
         if not os.path.exists(strTagHtmlFolderPath):
             os.mkdir(strTagHtmlFolderPath) #mkdir source_html/TECHORANGE/tag/
+        strTagWebsiteDomain = self.strWebsiteDomain + u"/tag"
         lstStrNotObtainedTagName = self.db.fetchallNotObtainedTagName() #取得 Db 中尚未下載的 Tag 名稱
         for strNotObtainedTagName in lstStrNotObtainedTagName:
-            pass
+            strTagUrl = strTagWebsiteDomain + u"/" + strNotObtainedTagName
+            #tag 第1頁
+            time.sleep(random.randint(2,5))
+            self.driver.get(strTagUrl)
+            #儲存 html
+            strZeroPageTagHtmlFilePath = strTagHtmlFolderPath + u"\\0_%s_tag.html"%strNotObtainedTagName
+            self.utility.overwriteSaveAs(strFilePath=strZeroPageTagHtmlFilePath, unicodeData=self.driver.page_source)
+            #取得 tag 總頁數
+            #self.driver.find_elements_by_css_selector("")
+            #set db tag isGot = 1

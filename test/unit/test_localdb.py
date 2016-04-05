@@ -27,7 +27,7 @@ class LocalDbTest(unittest.TestCase):
         logging.info("LocalDbTest.test_localdb_for_techorange")
         db = LocalDbForTECHORANGE()
         #db.insertTagIFNotExists(strTagName="aaaa")
-        print(db.fetchallNotObtainedTagName())
+        #db.fetchallNotObtainedTagName()
 
 
 #測試開始
