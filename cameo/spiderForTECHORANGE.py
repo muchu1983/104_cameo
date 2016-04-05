@@ -87,12 +87,25 @@ class SpiderForTECHORANGE:
         lstStrNotObtainedTagName = self.db.fetchallNotObtainedTagName() #取得 Db 中尚未下載的 Tag 名稱
         for strNotObtainedTagName in lstStrNotObtainedTagName:
             strTagUrl = strTagWebsiteDomain + u"/" + strNotObtainedTagName
-            #tag 第1頁
-            time.sleep(random.randint(2,5))
+            #tag 第0頁
+            intPageNum = 0
+            time.sleep(random.randint(2,5)) #sleep random time
             self.driver.get(strTagUrl)
             #儲存 html
-            strZeroPageTagHtmlFilePath = strTagHtmlFolderPath + u"\\0_%s_tag.html"%strNotObtainedTagName
-            self.utility.overwriteSaveAs(strFilePath=strZeroPageTagHtmlFilePath, unicodeData=self.driver.page_source)
-            #取得 tag 總頁數
-            #self.driver.find_elements_by_css_selector("")
-            #set db tag isGot = 1
+            strTagHtmlFilePath = strTagHtmlFolderPath + u"\\%d_%s_tag.html"%(intPageNum, strNotObtainedTagName)
+            self.utility.overwriteSaveAs(strFilePath=strTagHtmlFilePath, unicodeData=self.driver.page_source)
+            #tag 下一頁
+            elesNextPageA = self.driver.find_elements_by_css_selector("ul.page-numbers li a.next.page-numbers")
+            while len(elesNextPageA) != 0:
+                time.sleep(random.randint(2,5)) #sleep random time
+                intPageNum = intPageNum+1
+                strTagUrl = elesNextPageA[0].get_attribute("href")
+                self.driver.get(strTagUrl)
+                #儲存 html
+                strTagHtmlFilePath = strTagHtmlFolderPath + u"\\%d_%s_tag.html"%(intPageNum, strNotObtainedTagName)
+                self.utility.overwriteSaveAs(strFilePath=strTagHtmlFilePath, unicodeData=self.driver.page_source)
+                #tag 再下一頁
+                elesNextPageA = self.driver.find_elements_by_css_selector("ul.page-numbers li a.next.page-numbers")
+            #更新db為已抓取 (isGot = 1)
+            
+            
