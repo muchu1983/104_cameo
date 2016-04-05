@@ -13,6 +13,7 @@ import logging
 import re
 import random
 from cameo.utility import Utility
+from cameo.localdb import LocalDbForTECHORANGE
 """
 抓取 科技報橘 html 存放到 source_html 
 """
@@ -26,6 +27,7 @@ class SpiderForTECHORANGE:
                                      "tag":None,
                                      "news":None}
         self.utility = Utility()
+        self.db = LocalDbForTECHORANGE()
         self.driver = None
         
     #取得 spider 使用資訊
