@@ -107,5 +107,5 @@ class SpiderForTECHORANGE:
                 #tag 再下一頁
                 elesNextPageA = self.driver.find_elements_by_css_selector("ul.page-numbers li a.next.page-numbers")
             #更新db為已抓取 (isGot = 1)
-            
+            self.db.updateTagStatusIsGot(strTagName=strNotObtainedTagName)
             

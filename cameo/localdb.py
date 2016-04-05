@@ -51,3 +51,8 @@ class LocalDbForTECHORANGE:
         for rowData in lstRowData:
             lstStrTagName.append(rowData["strTagName"])
         return lstStrTagName
+        
+    #更新 Tag 為已完成下載狀態
+    def updateTagStatusIsGot(self, strTagName=None):
+        strSQL = "UPDATE techorange_tag SET isGot=1 WHERE strTagName='%s'"%strTagName
+        self.db.commitSQL(strSQL=strSQL)
