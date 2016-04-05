@@ -19,17 +19,18 @@ class LocalDbForTECHORANGE:
         
     #初取化資料庫
     def initialDb(self):
-        strSQLCreateTable = ("CREATE TABLE IF NOT EXISTS techorange_project("
+        strSQLCreateTable = ("CREATE TABLE IF NOT EXISTS techorange_news("
                              "id INTEGER PRIMARY KEY,"
-                             "strUrl TEXT NOT NULL,"
-                             "isDownloaded BOOLEAN NOT NULL)")
+                             "strNewsUrl TEXT NOT NULL,"
+                             "isGot BOOLEAN NOT NULL)")
         self.db.commitSQL(strSQL=strSQLCreateTable)
         strSQLCreateTable = ("CREATE TABLE IF NOT EXISTS techorange_tag("
                              "id INTEGER PRIMARY KEY,"
-                             "strName TEXT NOT NULL)")
+                             "strTagName TEXT NOT NULL,"
+                             "isGot BOOLEAN NOT NULL)")
         self.db.commitSQL(strSQL=strSQLCreateTable)
-        strSQLCreateTable = ("CREATE TABLE IF NOT EXISTS techorange_project_tag("
+        strSQLCreateTable = ("CREATE TABLE IF NOT EXISTS techorange_newstag("
                              "id INTEGER PRIMARY KEY,"
-                             "strProjectUrl TEXT NOT NULL,"
+                             "strNewsUrl TEXT NOT NULL,"
                              "strTagName TEXT NOT NULL)")
         self.db.commitSQL(strSQL=strSQLCreateTable)
