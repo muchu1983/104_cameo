@@ -118,9 +118,18 @@ class SpiderForTECHORANGE:
             os.mkdir(strNewsHtmlFolderPath) #mkdir source_html/TECHORANGE/news/
         #取得 DB 紀錄中，指定 strTagName tag 的 news url
         lstStrNewsUrl = self.db.fetchallNewsUrlByTagName(strTagName=strTagName)
+        intDownloadedNewsCount = 0#紀錄下載 news 頁面數量
+        timeStart = time.time() #計時開始時間點
+        timeEnd = None #計時結束時間點
         for strNewsUrl in lstStrNewsUrl:
             #檢查是否已下載
             if not self.db.checkNewsIsGot(strNewsUrl=strNewsUrl):
+                if intDownloadedNewsCount%10 == 0: #計算下載10筆news所需時間
+                    timeEnd = time.time()
+                    timeCost = timeEnd - timeStart
+                    logging.info("download 10 news cost %f sec"%timeCost)
+                    timeStart = timeEnd
+                intDownloadedNewsCount = intDownloadedNewsCount+1
                 time.sleep(random.randint(2,5)) #sleep random time
                 self.driver.get(strNewsUrl)
                 #儲存 html
