@@ -24,7 +24,7 @@ class SpiderForTECHORANGETest(unittest.TestCase):
     #收尾
     def tearDown(self):
         self.spider.quitDriver()
-    
+    """
     #測試抓取 index page
     def test_downloadIndexPage(self):
         logging.info("SpiderForTECHORANGETest.test_downloadIndexPage")
@@ -34,6 +34,11 @@ class SpiderForTECHORANGETest(unittest.TestCase):
     def test_downloadTagPage(self):
         logging.info("SpiderForTECHORANGETest.test_downloadTagPage")
         self.spider.downloadTagPag()
+    """
+    #測試抓取 news page
+    def test_downloadNewsPage(self):
+        logging.info("SpiderForTECHORANGETest.test_downloadNewsPage")
+        self.spider.downloadNewsPage(strTagName="software_digimarketing")
 
 #測試開始
 if __name__ == "__main__":

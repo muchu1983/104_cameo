@@ -81,3 +81,11 @@ class LocalDbForTECHORANGE:
             strSQL = "INSERT INTO techorange_newstag VALUES(NULL, '%s', '%s')"%(strNewsUrl, strTagName)
             self.db.commitSQL(strSQL=strSQL)
         
+    #取得指定 tag 的 news url
+    def fetchallNewsUrlByTagName(self, strTagName=None):
+        strSQL = "SELECT * FROM techorange_newstag WHERE strTagName='%s'"%strTagName
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        lstStrNewsUrl = []
+        for rowData in lstRowData:
+            lstStrNewsUrl.append(rowData["strNewsUrl"])
+        return lstStrNewsUrl

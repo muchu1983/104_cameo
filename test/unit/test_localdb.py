@@ -31,6 +31,7 @@ class LocalDbTest(unittest.TestCase):
         db.updateTagStatusIsGot(strTagName="tag_for_unit_test")
         db.fetchallCompletedObtainedTagName()
         db.insertNewsUrlAndNewsTagMappingIfNotExists(strNewsUrl="http://news/for/unit/test", strTagName="tag_for_unit_test")
+        db.fetchallNewsUrlByTagName(strTagName="tag_for_unit_test")
 
 #測試開始
 if __name__ == "__main__":

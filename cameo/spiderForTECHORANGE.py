@@ -84,7 +84,8 @@ class SpiderForTECHORANGE:
         if not os.path.exists(strTagHtmlFolderPath):
             os.mkdir(strTagHtmlFolderPath) #mkdir source_html/TECHORANGE/tag/
         strTagWebsiteDomain = self.strWebsiteDomain + u"/tag"
-        lstStrNotObtainedTagName = self.db.fetchallNotObtainedTagName() #取得 Db 中尚未下載的 Tag 名稱
+        #取得 Db 中尚未下載的 Tag 名稱
+        lstStrNotObtainedTagName = self.db.fetchallNotObtainedTagName()
         for strNotObtainedTagName in lstStrNotObtainedTagName:
             strTagUrl = strTagWebsiteDomain + u"/" + strNotObtainedTagName
             #tag 第0頁
@@ -106,6 +107,23 @@ class SpiderForTECHORANGE:
                 self.utility.overwriteSaveAs(strFilePath=strTagHtmlFilePath, unicodeData=self.driver.page_source)
                 #tag 再下一頁
                 elesNextPageA = self.driver.find_elements_by_css_selector("ul.page-numbers li a.next.page-numbers")
-            #更新db為已抓取 (isGot = 1)
+            #更新tag DB 為已抓取 (isGot = 1)
             self.db.updateTagStatusIsGot(strTagName=strNotObtainedTagName)
+            
+    #下載 news 頁面 (指定 tag 名稱)
+    def downloadNewsPage(self, strTagName=None):
+        logging.info("download news page")
+        strNewsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\TECHORANGE\\news"
+        if not os.path.exists(strNewsHtmlFolderPath):
+            os.mkdir(strNewsHtmlFolderPath) #mkdir source_html/TECHORANGE/news/
+        #取得 DB 紀錄中，指定 strTagName tag 的 news url
+        lstStrNewsUrl = self.db.fetchallNewsUrlByTagName(strTagName=strTagName)
+        for strNewsUrl in lstStrNewsUrl:
+            time.sleep(random.randint(2,5)) #sleep random time
+            self.driver.get(strNewsUrl)
+            #儲存 html
+            strNewsName = re.match("http://buzzorange.com/techorange/[0-9]*/[0-9]*/[0-9]*/(.*)/", strNewsUrl).group(1)
+            strNewsHtmlFilePath = strNewsHtmlFolderPath + u"\\%s_news.html"%strNewsName
+            self.utility.overwriteSaveAs(strFilePath=strNewsHtmlFilePath, unicodeData=self.driver.page_source)
+            #更新news DB 為已抓取 (isGot = 1)
             
