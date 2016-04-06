@@ -89,3 +89,18 @@ class LocalDbForTECHORANGE:
         for rowData in lstRowData:
             lstStrNewsUrl.append(rowData["strNewsUrl"])
         return lstStrNewsUrl
+        
+    #檢查 news 是否已下載
+    def checkNewsIsGot(self, strNewsUrl=None):
+        isGot = True
+        strSQL = "SELECT * FROM techorange_news WHERE strNewsUrl='%s'"%strNewsUrl
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        for rowData in lstRowData:
+            if rowData["isGot"] == 0:
+                isGot = False
+        return isGot
+        
+    #更新 news 為已完成下載狀態
+    def updateNewsStatusIsGot(self, strNewsUrl=None):
+        strSQL = "UPDATE techorange_news SET isGot=1 WHERE strNewsUrl='%s'"%strNewsUrl
+        self.db.commitSQL(strSQL=strSQL)

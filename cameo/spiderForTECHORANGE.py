@@ -119,11 +119,14 @@ class SpiderForTECHORANGE:
         #取得 DB 紀錄中，指定 strTagName tag 的 news url
         lstStrNewsUrl = self.db.fetchallNewsUrlByTagName(strTagName=strTagName)
         for strNewsUrl in lstStrNewsUrl:
-            time.sleep(random.randint(2,5)) #sleep random time
-            self.driver.get(strNewsUrl)
-            #儲存 html
-            strNewsName = re.match("http://buzzorange.com/techorange/[0-9]*/[0-9]*/[0-9]*/(.*)/", strNewsUrl).group(1)
-            strNewsHtmlFilePath = strNewsHtmlFolderPath + u"\\%s_news.html"%strNewsName
-            self.utility.overwriteSaveAs(strFilePath=strNewsHtmlFilePath, unicodeData=self.driver.page_source)
-            #更新news DB 為已抓取 (isGot = 1)
+            #檢查是否已下載
+            if not self.db.checkNewsIsGot(strNewsUrl=strNewsUrl):
+                time.sleep(random.randint(2,5)) #sleep random time
+                self.driver.get(strNewsUrl)
+                #儲存 html
+                strNewsName = re.match("http://buzzorange.com/techorange/[0-9]*/[0-9]*/[0-9]*/(.*)/", strNewsUrl).group(1)
+                strNewsHtmlFilePath = strNewsHtmlFolderPath + u"\\%s_news.html"%strNewsName
+                self.utility.overwriteSaveAs(strFilePath=strNewsHtmlFilePath, unicodeData=self.driver.page_source)
+                #更新news DB 為已抓取 (isGot = 1)
+                self.db.updateNewsStatusIsGot(strNewsUrl=strNewsUrl)
             
