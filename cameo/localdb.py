@@ -36,7 +36,7 @@ class LocalDbForTECHORANGE:
         self.db.commitSQL(strSQL=strSQLCreateTable)
         
     #若無重覆，儲存Tag
-    def insertTagIFNotExists(self, strTagName=None):
+    def insertTagIfNotExists(self, strTagName=None):
         strSQL = "SELECT * FROM techorange_tag WHERE strTagName='%s'"%strTagName
         lstRowData = self.db.fetchallSQL(strSQL=strSQL)
         if len(lstRowData) == 0:
@@ -65,3 +65,19 @@ class LocalDbForTECHORANGE:
     def updateTagStatusIsGot(self, strTagName=None):
         strSQL = "UPDATE techorange_tag SET isGot=1 WHERE strTagName='%s'"%strTagName
         self.db.commitSQL(strSQL=strSQL)
+        
+    #儲存 news URL 以及 URL 所對應的 tag 
+    def insertNewsUrlAndNewsTagMappingIfNotExists(self, strNewsUrl=None, strTagName=None):
+        #insert news url if not exists
+        strSQL = "SELECT * FROM techorange_news WHERE strNewsUrl='%s'"%strNewsUrl
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        if len(lstRowData) == 0:
+            strSQL = "INSERT INTO techorange_news VALUES(NULL, '%s', 0)"%strNewsUrl
+            self.db.commitSQL(strSQL=strSQL)
+        #insert news tag mapping if not exists
+        strSQL = "SELECT * FROM techorange_newstag WHERE strNewsUrl='%s' AND strTagName='%s'"%(strNewsUrl, strTagName)
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        if len(lstRowData) == 0:
+            strSQL = "INSERT INTO techorange_newstag VALUES(NULL, '%s', '%s')"%(strNewsUrl, strTagName)
+            self.db.commitSQL(strSQL=strSQL)
+        

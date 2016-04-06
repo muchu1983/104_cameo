@@ -61,7 +61,7 @@ class ParserForTECHORANGE:
             lstStrHotTagUrl = root.css("ul#tag-bar li.menu-item-object-post_tag a::attr(href)").extract()
             for strHotTagUrl in lstStrHotTagUrl:
                 strHotTagName = re.match("^http://buzzorange.com/techorange/tag/(.*)/$", strHotTagUrl).group(1)
-                self.db.insertTagIFNotExists(strTagName=strHotTagName)
+                self.db.insertTagIfNotExists(strTagName=strHotTagName)
                 
     #解析 tag.html
     def parseTagPage(self, uselessArg1=None):
@@ -69,7 +69,7 @@ class ParserForTECHORANGE:
         if not os.path.exists(strTagResultFolderPath):
             os.mkdir(strTagResultFolderPath) #mkdir parsed_result/TECHORANGE/tag/
         strTagHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\TECHORANGE\\tag"
-        self.dicParsedResultOfTag = {} #清空 dicParsedResultOfTag 資料
+        self.dicParsedResultOfTag = {} #清空 dicParsedResultOfTag 資料 (暫無用處)
         #取得已下載完成的 strTagName list
         lstStrObtainedTagName = self.db.fetchallCompletedObtainedTagName()
         for strObtainedTagName in lstStrObtainedTagName: #tag loop
@@ -83,5 +83,6 @@ class ParserForTECHORANGE:
                     lstStrNewsUrl = root.css("ul.article-list li article header.entry-header h2.entry-title a::attr(href)").extract()
                     for strNewsUrl in lstStrNewsUrl: #news loop
                         #儲存 news url 及 news tag mapping 至 DB
+                        self.db.insertNewsUrlAndNewsTagMappingIfNotExists(strNewsUrl=strNewsUrl, strTagName=strObtainedTagName)
                         
             

@@ -26,10 +26,11 @@ class LocalDbTest(unittest.TestCase):
     def test_localdb_for_techorange(self):
         logging.info("LocalDbTest.test_localdb_for_techorange")
         db = LocalDbForTECHORANGE()
-        db.insertTagIFNotExists(strTagName="tag_for_unit_test")
+        db.insertTagIfNotExists(strTagName="tag_for_unit_test")
         db.fetchallNotObtainedTagName()
         db.updateTagStatusIsGot(strTagName="tag_for_unit_test")
         db.fetchallCompletedObtainedTagName()
+        db.insertNewsUrlAndNewsTagMappingIfNotExists(strNewsUrl="http://news/for/unit/test", strTagName="tag_for_unit_test")
 
 #測試開始
 if __name__ == "__main__":
