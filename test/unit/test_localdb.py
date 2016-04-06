@@ -29,6 +29,7 @@ class LocalDbTest(unittest.TestCase):
         db.insertTagIFNotExists(strTagName="tag_for_unit_test")
         db.fetchallNotObtainedTagName()
         db.updateTagStatusIsGot(strTagName="tag_for_unit_test")
+        db.fetchallCompletedObtainedTagName()
 
 #測試開始
 if __name__ == "__main__":

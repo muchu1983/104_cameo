@@ -52,6 +52,15 @@ class LocalDbForTECHORANGE:
             lstStrTagName.append(rowData["strTagName"])
         return lstStrTagName
         
+    #取得所有已完成下載的 Tag 名稱
+    def fetchallCompletedObtainedTagName(self):
+        strSQL = "SELECT strTagName FROM techorange_tag WHERE isGot=1"
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        lstStrTagName = []
+        for rowData in lstRowData:
+            lstStrTagName.append(rowData["strTagName"])
+        return lstStrTagName
+        
     #更新 Tag 為已完成下載狀態
     def updateTagStatusIsGot(self, strTagName=None):
         strSQL = "UPDATE techorange_tag SET isGot=1 WHERE strTagName='%s'"%strTagName

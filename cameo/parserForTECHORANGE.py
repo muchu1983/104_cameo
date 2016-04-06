@@ -62,4 +62,26 @@ class ParserForTECHORANGE:
             for strHotTagUrl in lstStrHotTagUrl:
                 strHotTagName = re.match("^http://buzzorange.com/techorange/tag/(.*)/$", strHotTagUrl).group(1)
                 self.db.insertTagIFNotExists(strTagName=strHotTagName)
+                
+    #解析 tag.html
+    def parseTagPage(self, uselessArg1=None):
+        strTagResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\TECHORANGE\\tag"
+        if not os.path.exists(strTagResultFolderPath):
+            os.mkdir(strTagResultFolderPath) #mkdir parsed_result/TECHORANGE/tag/
+        strTagHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\TECHORANGE\\tag"
+        self.dicParsedResultOfTag = {} #清空 dicParsedResultOfTag 資料
+        #取得已下載完成的 strTagName list
+        lstStrObtainedTagName = self.db.fetchallCompletedObtainedTagName()
+        for strObtainedTagName in lstStrObtainedTagName: #tag loop
+            strTagSuffixes = u"_%s_tag.html"%strObtainedTagName
+            lstStrTagHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strTagHtmlFolderPath, strSuffixes=strTagSuffixes)
+            for strTagHtmlFilePath in lstStrTagHtmlFilePath: #tag page loop
+                with open(strTagHtmlFilePath, "r") as tagHtmlFile:
+                    strPageSource = tagHtmlFile.read()
+                    root = Selector(text=strPageSource)
+                    #解析 news URL
+                    lstStrNewsUrl = root.css("ul.article-list li article header.entry-header h2.entry-title a::attr(href)").extract()
+                    for strNewsUrl in lstStrNewsUrl: #news loop
+                        #儲存 news url 及 news tag mapping 至 DB
+                        
             

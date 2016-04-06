@@ -29,6 +29,12 @@ class ParserForTECHORANGETest(unittest.TestCase):
         logging.info("ParserForTECHORANGETest.test_parseIndexPage")
         parser = ParserForTECHORANGE()
         parser.parseIndexPage()
+        
+    #測試 解析 tag.html
+    def test_parseTagPage(self):
+        logging.info("ParserForTECHORANGETest.test_parseTagPage")
+        parser = ParserForTECHORANGE()
+        parser.parseTagPage()
   
 #測試開始
 if __name__ == "__main__":
