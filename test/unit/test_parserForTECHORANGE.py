@@ -35,7 +35,19 @@ class ParserForTECHORANGETest(unittest.TestCase):
         logging.info("ParserForTECHORANGETest.test_parseTagPage")
         parser = ParserForTECHORANGE()
         parser.parseTagPage()
-  
+        
+    #測試 解析 news.html 以找出更多 tag
+    def test_findMoreTagByParseNewsPage(self):
+        logging.info("ParserForTECHORANGETest.test_findMoreTagByParseNewsPage")
+        parser = ParserForTECHORANGE()
+        parser.findMoreTagByParseNewsPage()
+        
+    #測試 解析 news.html 並建立 news.json
+    def test_parseNewsPageThenCreateNewsJson(self):
+        logging.info("ParserForTECHORANGETest.test_parseNewsPageThenCreateNewsJson")
+        parser = ParserForTECHORANGE()
+        parser.parseNewsPageThenCreateNewsJson()
+        
 #測試開始
 if __name__ == "__main__":
     unittest.main(exit=False)

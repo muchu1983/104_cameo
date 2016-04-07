@@ -25,8 +25,8 @@ class ParserForTECHORANGE:
         self.db = LocalDbForTECHORANGE()
         self.dicSubCommandHandler = {"index":[self.parseIndexPage],
                                      "tag":[self.parseTagPage],
-                                     "news":[self.parseNewsPage],
-                                     "json":[self.createNewsJson]}
+                                     "news":[self.findMoreTagByParseNewsPage],
+                                     "json":[self.parseNewsPageThenCreateNewsJson]}
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
         self.dicParsedResultOfTag = {} #tag.json 資料
@@ -88,9 +88,9 @@ class ParserForTECHORANGE:
                         self.db.insertNewsUrlAndNewsTagMappingIfNotExists(strNewsUrl=strNewsUrl, strTagName=strObtainedTagName)
                         
     #解析 news.html 之一 (取得更多 tag)
-    def parseNewsPage(self, uselessArg1=None):
+    def findMoreTagByParseNewsPage(self, uselessArg1=None):
         pass
         
     #解析 news.html 之二 (產生 news.json )
-    def createNewsJson(self, uselessArg1=None):
+    def parseNewsPageThenCreateNewsJson(self, uselessArg1=None):
         pass
