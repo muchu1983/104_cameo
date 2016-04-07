@@ -23,8 +23,8 @@ class ParserForTECHORANGE:
     def __init__(self):
         self.utility = Utility()
         self.db = LocalDbForTECHORANGE()
-        self.dicSubCommandHandler = {"index":[],
-                                     "tag":[],
+        self.dicSubCommandHandler = {"index":[self.parseIndexPage],
+                                     "tag":[self.parseTagPage],
                                      "news":[]}
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
@@ -35,9 +35,9 @@ class ParserForTECHORANGE:
     def getUseageMessage(self):
         return ("- TECHORANGE -\n"
                 "useage:\n"
-                "index - \n"
-                "tag - "
-                "news - ")
+                "index - parse index.html then insert tag into DB \n"
+                "tag - parse tag.html then insert news and newstag into DB \n"
+                "news - parse news.html then create json \n")
                 
     #執行 parser
     def runParser(self, lstSubcommand=None):

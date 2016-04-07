@@ -10,6 +10,8 @@ from cameo.spiderForINDIEGOGO import SpiderForINDIEGOGO
 from cameo.parserForINDIEGOGO import ParserForINDIEGOGO
 from cameo.spiderForWEBACKERS import SpiderForWEBACKERS
 from cameo.parserForWEBACKERS import ParserForWEBACKERS
+from cameo.spiderForTECHORANGE import SpiderForTECHORANGE
+from cameo.parserForTECHORANGE import ParserForTECHORANGE
 from cameo.cleaner import CleanerForINDIEGOGO
 from cameo.reporter import ReporterForINDIEGOGO
 from cameo.reporter import ReporterForWEBACKERS
@@ -23,9 +25,11 @@ class CameoShell:
         self.intShellStateCode = 0 #0-已關閉，1-已開啟，
         self.strTargetSite = None
         self.dicSpiders = {"indiegogo":SpiderForINDIEGOGO(),
-                           "webackers":SpiderForWEBACKERS()}
+                           "webackers":SpiderForWEBACKERS(),
+                           "techorange":SpiderForTECHORANGE()}
         self.dicParsers = {"indiegogo":ParserForINDIEGOGO(),
-                           "webackers":ParserForWEBACKERS()}
+                           "webackers":ParserForWEBACKERS(),
+                           "techorange":ParserForTECHORANGE()}
         self.dicCleaners = {"indiegogo":CleanerForINDIEGOGO()}
         self.dicReporters = {"indiegogo":ReporterForINDIEGOGO(),
                              "webackers":ReporterForWEBACKERS()}
@@ -34,24 +38,24 @@ class CameoShell:
     def listSiteMessage(self):
         if self.strTargetSite == None:
             print("you have not select any site.")
-            print("use chsite to select one.")
+            print("use chsite to select one.\n")
         else:
-            print("current target site: %s"%self.strTargetSite)
+            print("current target site: %s\n"%self.strTargetSite)
             
     #選擇目標網站
     def changeSiteMessage(self):
         print("type one of site name below:\n")
         for strSiteName in self.dicSpiders:
             print(strSiteName)
-        print("\n")
+        print("") #分隔行
         strInputSiteName = raw_input(">>>")
         if strInputSiteName in self.dicSpiders:
             self.strTargetSite = strInputSiteName
-            print("current target site: %s"%self.strTargetSite)
+            print("current target site: %s\n"%self.strTargetSite)
         else:
             self.strTargetSite = None
             print("not found site with name: %s"%strInputSiteName)
-            print("you have not select any site.")
+            print("you have not select any site.\n")
             
     #顯示幫助訊息
     def printHelpMessage(self):
@@ -75,7 +79,7 @@ class CameoShell:
             lstStrInputCommand = raw_input("spider[%s]>>>"%self.strTargetSite).split(" ")
             print("spider start... [%s]"%self.strTargetSite)
             self.dicSpiders[self.strTargetSite].runSpider(lstStrInputCommand)
-            print("[%s] spider completed"%self.strTargetSite)
+            print("[%s] spider completed\n"%self.strTargetSite)
         
     #顯示 parser 訊息
     def printParserMessage(self):
@@ -85,7 +89,7 @@ class CameoShell:
             lstStrInputCommand = raw_input("parser[%s]>>>"%self.strTargetSite).split(" ")
             print("parser start... [%s]"%self.strTargetSite)
             self.dicParsers[self.strTargetSite].runParser(lstStrInputCommand)
-            print("[%s] parsed"%self.strTargetSite)
+            print("[%s] parsed\n"%self.strTargetSite)
         
     #顯示 cleaner 訊息
     def printCleanerMessage(self):
@@ -93,7 +97,7 @@ class CameoShell:
         if self.strTargetSite != None:
             print("cleaning... [%s]"%self.strTargetSite)
             self.dicCleaners[self.strTargetSite].clean()
-            print("[%s] cleaned"%self.strTargetSite)
+            print("[%s] cleaned\n"%self.strTargetSite)
             
     #顯示 reporter 訊息
     def printReportMessage(self):
@@ -107,7 +111,7 @@ class CameoShell:
         self.listSiteMessage()
         self.intShellStateCode = 1
         while self.intShellStateCode != 0:
-            input = raw_input("\n>>>")
+            input = raw_input(">>>")
             print("you just input: %s"%input)
             if input == "help":
                 self.printHelpMessage()

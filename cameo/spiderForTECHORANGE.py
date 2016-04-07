@@ -25,8 +25,8 @@ class SpiderForTECHORANGE:
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
         self.strWebsiteDomain = u"http://buzzorange.com/techorange"
         self.dicSubCommandHandler = {"index":self.downloadIndexPage,
-                                     "tag":None,
-                                     "news":None}
+                                     "tag":self.downloadTagPag,
+                                     "news":self.downloadNewsPage}
         self.utility = Utility()
         self.db = LocalDbForTECHORANGE()
         self.driver = None
@@ -35,9 +35,9 @@ class SpiderForTECHORANGE:
     def getUseageMessage(self):
         return ("- TECHORANGE -\n"
                 "useage:\n"
-                "index - \n"
-                "tag - \n"
-                "news tag - \n")
+                "index - download entry page of TECHORANGE \n"
+                "tag - download not obtained tag page \n"
+                "news tag - download not obtained news of given tag \n")
     
     #取得 selenium driver 物件
     def getDriver(self):
