@@ -30,7 +30,7 @@ class ParserForTECHORANGE:
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
         self.dicParsedResultOfTag = {} #tag.json 資料
-        self.dicParsedResultOfNews = {} #news.json 資料
+        self.dicParsedResultOfNews = [] #news.json 資料
         
     #取得 parser 使用資訊
     def getUseageMessage(self):
@@ -86,7 +86,7 @@ class ParserForTECHORANGE:
                     for strNewsUrl in lstStrNewsUrl: #news loop
                         #儲存 news url 及 news tag mapping 至 DB
                         self.db.insertNewsUrlAndNewsTagMappingIfNotExists(strNewsUrl=strNewsUrl, strTagName=strObtainedTagName)
-                        
+                    
     #解析 news.html 之一 (取得更多 tag)
     def findMoreTagByParseNewsPage(self, uselessArg1=None):
         strNewsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\TECHORANGE\\news"
@@ -104,4 +104,41 @@ class ParserForTECHORANGE:
         
     #解析 news.html 之二 (產生 news.json )
     def parseNewsPageThenCreateNewsJson(self, uselessArg1=None):
-        pass
+        strNewsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\TECHORANGE\\news"
+        if not os.path.exists(strNewsResultFolderPath):
+            os.mkdir(strNewsResultFolderPath) #mkdir parsed_result/TECHORANGE/news/
+        strNewsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\TECHORANGE\\news"
+        self.dicParsedResultOfNews = [] #清空 news.json 資料
+        #讀取 news.html
+        lstStrNewsHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strNewsHtmlFolderPath, strSuffixes=u"_news.html")
+        for strNewsHtmlFilePath in lstStrNewsHtmlFilePath:
+            dicNewsData = {} #新聞資料物件
+            with open(strNewsHtmlFilePath, "r") as newsHtmlFile:
+                strPageSource = newsHtmlFile.read()
+                root = Selector(text=strPageSource)
+                #解析 news.html
+                #strSiteName
+                dicNewsData["strSiteName"] = u"TECHORANGE"
+                #strUrl
+                strNewsUrl = root.css("tbody tr td div.facebook a::attr(page_href)").extract_first().strip()
+                dicNewsData["strUrl"] = strNewsUrl
+                #strTitle
+                dicNewsData["strTitle"] = root.css("header.entry-header h2.entry-title::text").extract_first().strip()
+                #strContent
+                lstStrContent = root.css("section.single-wrapper div.post *::text").extract()
+                strContent = u"\n".join(lstStrContent)
+                dicNewsData["strContent"] = strContent.strip()
+                #lstStrKeyword
+                dicNewsData["lstStrKeyword"] = root.css("div.entry-meta-box-inner span.entry-tags span a::text").extract()
+                #strPublishDate
+                dicNewsData["strPublishDate"] = root.css("div.entry-meta-box-inner span.entry-date::text").extract_first().strip()
+                #strCrawlDate
+                dicNewsData["strCrawlDate"] = self.utility.getCtimeOfFile(strFilePath=strNewsHtmlFilePath)
+            #將 新聞資料物件 加入 json
+            self.dicParsedResultOfNews.append(dicNewsData)
+            #每一千筆資料另存一個 json
+            pass
+            #TODO
+        #儲存 json (之後上移至 for 內)
+        strNewsJsonFilePath = strNewsResultFolderPath + u"\\news.json"
+        self.utility.writeObjectToJsonFile(dicData=self.dicParsedResultOfNews, strJsonFilePath=strNewsJsonFilePath)
