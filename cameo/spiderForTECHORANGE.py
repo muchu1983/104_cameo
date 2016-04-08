@@ -110,11 +110,11 @@ class SpiderForTECHORANGE:
             #更新tag DB 為已抓取 (isGot = 1)
             self.db.updateTagStatusIsGot(strTagName=strNotObtainedTagName)
             
-    #限縮 字串長度低於 200
-    def limitStrLessThen200Char(self, strStr=None):
-        if len(strStr) > 200:
-            logging.info("limit str less then 200 char")
-            return strStr[:199] + u"_"
+    #限縮 字串長度低於 128 字元
+    def limitStrLessThen128Char(self, strStr=None):
+        if len(strStr) > 128:
+            logging.info("limit str less then 128 char")
+            return strStr[:127] + u"_"
         else:
             return strStr
             
@@ -142,7 +142,7 @@ class SpiderForTECHORANGE:
                 self.driver.get(strNewsUrl)
                 #儲存 html
                 strNewsName = re.match("http://buzzorange.com/techorange/[0-9]*/[0-9]*/[0-9]*/(.*)/", strNewsUrl).group(1)
-                strNewsName = self.limitStrLessThen200Char(strStr=strNewsName) #將名稱縮短小於200字完
+                strNewsName = self.limitStrLessThen128Char(strStr=strNewsName) #將名稱縮短小於128字完
                 strNewsHtmlFilePath = strNewsHtmlFolderPath + u"\\%s_news.html"%strNewsName
                 self.utility.overwriteSaveAs(strFilePath=strNewsHtmlFilePath, unicodeData=self.driver.page_source)
                 #更新news DB 為已抓取 (isGot = 1)
