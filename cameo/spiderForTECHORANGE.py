@@ -109,6 +109,7 @@ class SpiderForTECHORANGE:
                 elesNextPageA = self.driver.find_elements_by_css_selector("ul.page-numbers li a.next.page-numbers")
             #更新tag DB 為已抓取 (isGot = 1)
             self.db.updateTagStatusIsGot(strTagName=strNotObtainedTagName)
+            logging.info("got tag %s"%strNotObtainedTagName)
             
     #限縮 字串長度低於 128 字元
     def limitStrLessThen128Char(self, strStr=None):
