@@ -125,8 +125,8 @@ class ParserForTECHORANGE:
                 #strTitle
                 dicNewsData["strTitle"] = root.css("header.entry-header h2.entry-title::text").extract_first().strip()
                 #strContent
-                lstStrContent = root.css("section.single-wrapper div.post *:not(script)::text").extract()
-                strContent = u"\n".join(lstStrContent)
+                lstStrContent = root.css("section.single-wrapper div.post *:not(script):not(h2.entry-title)::text").extract()
+                strContent = re.sub("\s", "", u"".join(lstStrContent)) #接合 新聞內容 並去除空白字元
                 dicNewsData["strContent"] = strContent.strip()
                 #lstStrKeyword
                 dicNewsData["lstStrKeyword"] = root.css("div.entry-meta-box-inner span.entry-tags span a::text").extract()
