@@ -113,6 +113,7 @@ class SpiderForTECHORANGE:
     #限縮 字串長度低於 200
     def limitStrLessThen200Char(self, strStr=None):
         if len(strStr) > 200:
+            logging.info("limit str less then 200 char")
             return strStr[:199] + u"_"
         else:
             return strStr
