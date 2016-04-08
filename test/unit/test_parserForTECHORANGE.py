@@ -23,7 +23,7 @@ class ParserForTECHORANGETest(unittest.TestCase):
     #收尾
     def tearDown(self):
         pass
-    """
+    
     #測試 解析 index.html
     def test_parseIndexPage(self):
         logging.info("ParserForTECHORANGETest.test_parseIndexPage")
@@ -41,7 +41,7 @@ class ParserForTECHORANGETest(unittest.TestCase):
         logging.info("ParserForTECHORANGETest.test_findMoreTagByParseNewsPage")
         parser = ParserForTECHORANGE()
         parser.findMoreTagByParseNewsPage()
-    """
+    
     #測試 解析 news.html 並建立 news.json
     def test_parseNewsPageThenCreateNewsJson(self):
         logging.info("ParserForTECHORANGETest.test_parseNewsPageThenCreateNewsJson")

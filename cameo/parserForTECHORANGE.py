@@ -29,6 +29,8 @@ class ParserForTECHORANGE:
                                      "json":[self.parseNewsPageThenCreateNewsJson]}
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
+        self.intNewsJsonNum = 0 #news.json 檔案編號
+        self.intMaxNewsPerNewsJsonFile = 1000 #每個 news.json 儲存的 news 之最大數量
         self.dicParsedResultOfTag = {} #tag.json 資料
         self.dicParsedResultOfNews = [] #news.json 資料
         
@@ -137,8 +139,17 @@ class ParserForTECHORANGE:
             #將 新聞資料物件 加入 json
             self.dicParsedResultOfNews.append(dicNewsData)
             #每一千筆資料另存一個 json
-            pass
-            #TODO
-        #儲存 json (之後上移至 for 內)
-        strNewsJsonFilePath = strNewsResultFolderPath + u"\\news.json"
-        self.utility.writeObjectToJsonFile(dicData=self.dicParsedResultOfNews, strJsonFilePath=strNewsJsonFilePath)
+            if len(self.dicParsedResultOfNews) == self.intMaxNewsPerNewsJsonFile:
+                self.intNewsJsonNum = self.intNewsJsonNum + self.intMaxNewsPerNewsJsonFile
+                #儲存 json
+                strNewsJsonFilePath = strNewsResultFolderPath + u"\\%d_news.json"%self.intNewsJsonNum
+                self.utility.writeObjectToJsonFile(dicData=self.dicParsedResultOfNews, strJsonFilePath=strNewsJsonFilePath)
+                logging.info("%d news saved on %s"%(self.intMaxNewsPerNewsJsonFile, strNewsJsonFilePath))
+                self.dicParsedResultOfNews = [] #清空 news.json 資料
+        else:#news loop 順利結束，儲存剩餘的 news 至 json
+            self.intNewsJsonNum = self.intNewsJsonNum + self.intMaxNewsPerNewsJsonFile
+            #儲存 json
+            strNewsJsonFilePath = strNewsResultFolderPath + u"\\%d_news.json"%self.intNewsJsonNum
+            self.utility.writeObjectToJsonFile(dicData=self.dicParsedResultOfNews, strJsonFilePath=strNewsJsonFilePath)
+            logging.info("%d news saved on %s"%(len(self.dicParsedResultOfNews), strNewsJsonFilePath))
+            self.dicParsedResultOfNews = [] #清空 news.json 資料
