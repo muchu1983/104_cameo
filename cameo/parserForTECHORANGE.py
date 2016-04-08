@@ -125,7 +125,7 @@ class ParserForTECHORANGE:
                 #strTitle
                 dicNewsData["strTitle"] = root.css("header.entry-header h2.entry-title::text").extract_first().strip()
                 #strContent
-                lstStrContent = root.css("section.single-wrapper div.post *::text").extract()
+                lstStrContent = root.css("section.single-wrapper div.post *:not(script)::text").extract()
                 strContent = u"\n".join(lstStrContent)
                 dicNewsData["strContent"] = strContent.strip()
                 #lstStrKeyword
