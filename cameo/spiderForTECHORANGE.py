@@ -37,7 +37,7 @@ class SpiderForTECHORANGE:
                 "useage:\n"
                 "index - download entry page of TECHORANGE \n"
                 "tag - download not obtained tag page \n"
-                "news tag - download not obtained news of given tag \n")
+                "news [tag] - download not obtained news [of given tag] \n")
     
     #取得 selenium driver 物件
     def getDriver(self):
@@ -119,9 +119,20 @@ class SpiderForTECHORANGE:
         else:
             return strStr
             
-    #下載 news 頁面 (指定 tag 名稱)
+    #下載 news 頁面 (strTagName == None 會自動找尋已下載完成之 tag，但若未先執行 parser tag 即使 tag 已下載完成亦無法下載 news)
     def downloadNewsPage(self, strTagName=None):
-        logging.info("download news page")
+        if strTagName is None:
+            #未指定 tag
+            lstStrObtainedTagName = self.db.fetchallCompletedObtainedTagName()
+            for strObtainedTagName in lstStrObtainedTagName:
+                self.downloadNewsPageWithGivenTagName(strTagName=strObtainedTagName)
+        else:
+            #有指定 tag 名稱
+            self.downloadNewsPageWithGivenTagName(strTagName=strTagName)
+            
+    #下載 news 頁面 (指定 tag 名稱)
+    def downloadNewsPageWithGivenTagName(self, strTagName=None):
+        logging.info("download news page with tag %s"%strTagName)
         strNewsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\TECHORANGE\\news"
         if not os.path.exists(strNewsHtmlFolderPath):
             os.mkdir(strNewsHtmlFolderPath) #mkdir source_html/TECHORANGE/news/

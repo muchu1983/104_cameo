@@ -80,6 +80,7 @@ class ParserForTECHORANGE:
             strTagSuffixes = u"_%s_tag.html"%strObtainedTagName
             lstStrTagHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strTagHtmlFolderPath, strSuffixes=strTagSuffixes)
             for strTagHtmlFilePath in lstStrTagHtmlFilePath: #tag page loop
+                logging.info("parse %s"%strTagHtmlFilePath)
                 with open(strTagHtmlFilePath, "r") as tagHtmlFile:
                     strPageSource = tagHtmlFile.read()
                     root = Selector(text=strPageSource)
@@ -95,6 +96,7 @@ class ParserForTECHORANGE:
         #讀取 news.html
         lstStrNewsHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strNewsHtmlFolderPath, strSuffixes=u"_news.html")
         for strNewsHtmlFilePath in lstStrNewsHtmlFilePath:
+            logging.info("parse %s"%strNewsHtmlFilePath)
             with open(strNewsHtmlFilePath, "r") as newsHtmlFile:
                 strPageSource = newsHtmlFile.read()
                 root = Selector(text=strPageSource)
@@ -114,6 +116,7 @@ class ParserForTECHORANGE:
         #讀取 news.html
         lstStrNewsHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strNewsHtmlFolderPath, strSuffixes=u"_news.html")
         for strNewsHtmlFilePath in lstStrNewsHtmlFilePath:
+            logging.info("parse %s"%strNewsHtmlFilePath)
             dicNewsData = {} #新聞資料物件
             with open(strNewsHtmlFilePath, "r") as newsHtmlFile:
                 strPageSource = newsHtmlFile.read()
