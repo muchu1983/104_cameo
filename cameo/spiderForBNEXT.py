@@ -23,19 +23,19 @@ class SpiderForBNEXT:
     def __init__(self):
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
-        self.strWebsiteDomain = u"http://buzzorange.com/techorange"
+        self.strWebsiteDomain = u"http://www.bnext.com.tw/"
         self.dicSubCommandHandler = {"index":self.downloadIndexPage,
                                      "tag":self.downloadTagPag,
                                      "news":self.downloadNewsPage}
         self.utility = Utility()
-        self.db = LocalDbForTECHORANGE()
+        self.db = LocalDbForBNEXT()
         self.driver = None
         
     #取得 spider 使用資訊
     def getUseageMessage(self):
-        return ("- TECHORANGE -\n"
+        return ("- BNEXT -\n"
                 "useage:\n"
-                "index - download entry page of TECHORANGE \n"
+                "index - download entry page of BNEXT \n"
                 "tag - download not obtained tag page \n"
                 "news [tag] - download not obtained news [of given tag] \n")
     
@@ -68,11 +68,11 @@ class SpiderForBNEXT:
     #下載 index 頁面
     def downloadIndexPage(self, uselessArg1=None):
         logging.info("download index page")
-        strIndexHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\TECHORANGE"
+        strIndexHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\BNEXT"
         if not os.path.exists(strIndexHtmlFolderPath):
-            os.mkdir(strIndexHtmlFolderPath) #mkdir source_html/TECHORANGE/
-        #科技報橘首頁
-        self.driver.get("http://buzzorange.com/techorange/")
+            os.mkdir(strIndexHtmlFolderPath) #mkdir source_html/BNEXT/
+        #數位時代首頁
+        self.driver.get("http://www.bnext.com.tw")
         #儲存 html
         strIndexHtmlFilePath = strIndexHtmlFolderPath + u"\\index.html"
         self.utility.overwriteSaveAs(strFilePath=strIndexHtmlFilePath, unicodeData=self.driver.page_source)
