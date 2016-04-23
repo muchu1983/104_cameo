@@ -23,31 +23,31 @@ class ParserForBNEXTTest(unittest.TestCase):
     #收尾
     def tearDown(self):
         pass
-    
+    """
     #測試 解析 index.html
     def test_parseIndexPage(self):
-        logging.info("ParserForTECHORANGETest.test_parseIndexPage")
-        parser = ParserForTECHORANGE()
+        logging.info("ParserForBNEXTTest.test_parseIndexPage")
+        parser = ParserForBNEXT()
         parser.parseIndexPage()
-        
+    
     #測試 解析 tag.html
     def test_parseTagPage(self):
-        logging.info("ParserForTECHORANGETest.test_parseTagPage")
-        parser = ParserForTECHORANGE()
+        logging.info("ParserForBNEXTTest.test_parseTagPage")
+        parser = ParserForBNEXT()
         parser.parseTagPage()
-    
+    """
     #測試 解析 news.html 以找出更多 tag
     def test_findMoreTagByParseNewsPage(self):
-        logging.info("ParserForTECHORANGETest.test_findMoreTagByParseNewsPage")
-        parser = ParserForTECHORANGE()
+        logging.info("ParserForBNEXTTest.test_findMoreTagByParseNewsPage")
+        parser = ParserForBNEXT()
         parser.findMoreTagByParseNewsPage()
-    
+    """
     #測試 解析 news.html 並建立 news.json
     def test_parseNewsPageThenCreateNewsJson(self):
-        logging.info("ParserForTECHORANGETest.test_parseNewsPageThenCreateNewsJson")
-        parser = ParserForTECHORANGE()
+        logging.info("ParserForBNEXTTest.test_parseNewsPageThenCreateNewsJson")
+        parser = ParserForBNEXT()
         parser.parseNewsPageThenCreateNewsJson()
-        
+    """
 #測試開始
 if __name__ == "__main__":
     unittest.main(exit=False)

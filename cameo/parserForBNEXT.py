@@ -11,6 +11,7 @@ import datetime
 import re
 import json
 import logging
+import urllib
 from scrapy import Selector
 from cameo.utility import Utility
 from cameo.localdb import LocalDbForBNEXT
@@ -22,11 +23,12 @@ class ParserForBNEXT:
     #建構子
     def __init__(self):
         self.utility = Utility()
-        self.db = LocalDbForTECHORANGE()
+        self.db = LocalDbForBNEXT()
         self.dicSubCommandHandler = {"index":[self.parseIndexPage],
                                      "tag":[self.parseTagPage],
                                      "news":[self.findMoreTagByParseNewsPage],
                                      "json":[self.parseNewsPageThenCreateNewsJson]}
+        self.strWebsiteDomain = u"http://www.bnext.com.tw"
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
         self.intNewsJsonNum = 0 #news.json 檔案編號
@@ -36,7 +38,7 @@ class ParserForBNEXT:
         
     #取得 parser 使用資訊
     def getUseageMessage(self):
-        return ("- TECHORANGE -\n"
+        return ("- BNEXT -\n"
                 "useage:\n"
                 "index - parse index.html then insert tag into DB \n"
                 "tag - parse tag.html then insert news and newstag into DB \n"
@@ -54,25 +56,26 @@ class ParserForBNEXT:
     
     #解析 index.html
     def parseIndexPage(self, uselessArg1=None):
-        strIndexResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\TECHORANGE"
+        strIndexResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\BNEXT"
         if not os.path.exists(strIndexResultFolderPath):
-            os.mkdir(strIndexResultFolderPath) #mkdir parsed_result/TECHORANGE/
-        strIndexHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\TECHORANGE"
+            os.mkdir(strIndexResultFolderPath) #mkdir parsed_result/BNEXT/
+        strIndexHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\BNEXT"
         strIndexHtmlFilePath = strIndexHtmlFolderPath + u"\\index.html"
         with open(strIndexHtmlFilePath, "r") as indexHtmlFile:
             strPageSource = indexHtmlFile.read()
             root = Selector(text=strPageSource)
-            lstStrHotTagUrl = root.css("ul#tag-bar li.menu-item-object-post_tag a::attr(href)").extract()
+            lstStrHotTagUrl = root.css("div#keyword_block div a::attr(href)").extract()
             for strHotTagUrl in lstStrHotTagUrl:
-                strHotTagName = re.match("^http://buzzorange.com/techorange/tag/(.*)/$", strHotTagUrl).group(1)
+                strHotTagName = re.match("^/search/tag/(.*)$", strHotTagUrl).group(1)
+                strHotTagName = urllib.quote(strHotTagName.encode("utf-8"))
                 self.db.insertTagIfNotExists(strTagName=strHotTagName)
                 
     #解析 tag.html
     def parseTagPage(self, uselessArg1=None):
-        strTagResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\TECHORANGE\\tag"
+        strTagResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\BNEXT\\tag"
         if not os.path.exists(strTagResultFolderPath):
-            os.mkdir(strTagResultFolderPath) #mkdir parsed_result/TECHORANGE/tag/
-        strTagHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\TECHORANGE\\tag"
+            os.mkdir(strTagResultFolderPath) #mkdir parsed_result/BNEXT/tag/
+        strTagHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\BNEXT\\tag"
         self.dicParsedResultOfTag = {} #清空 dicParsedResultOfTag 資料 (暫無用處)
         #取得已下載完成的 strTagName list
         lstStrObtainedTagName = self.db.fetchallCompletedObtainedTagName()
@@ -85,10 +88,12 @@ class ParserForBNEXT:
                     strPageSource = tagHtmlFile.read()
                     root = Selector(text=strPageSource)
                     #解析 news URL
-                    lstStrNewsUrl = root.css("ul.article-list li article header.entry-header h2.entry-title a::attr(href)").extract()
+                    lstStrNewsUrl = root.css("div#search_list div.item_box div.div_tr div.item_text a.item_title::attr(href)").extract()
                     for strNewsUrl in lstStrNewsUrl: #news loop
                         #儲存 news url 及 news tag mapping 至 DB
-                        self.db.insertNewsUrlAndNewsTagMappingIfNotExists(strNewsUrl=strNewsUrl, strTagName=strObtainedTagName)
+                        if strNewsUrl.startswith("/article/view/id/"): #filter AD and px... url
+                            strNewsUrl = self.strWebsiteDomain + strNewsUrl
+                            self.db.insertNewsUrlAndNewsTagMappingIfNotExists(strNewsUrl=strNewsUrl, strTagName=strObtainedTagName)
                     
     #解析 news.html 之一 (取得更多 tag)
     def findMoreTagByParseNewsPage(self, uselessArg1=None):

@@ -153,7 +153,7 @@ class SpiderForTECHORANGE:
                 time.sleep(random.randint(2,5)) #sleep random time
                 self.driver.get(strNewsUrl)
                 #儲存 html
-                strNewsName = re.match("http://buzzorange.com/techorange/[0-9]*/[0-9]*/[0-9]*/(.*)/", strNewsUrl).group(1)
+                strNewsName = re.match("^http://buzzorange.com/techorange/[0-9]*/[0-9]*/[0-9]*/(.*)/$", strNewsUrl).group(1)
                 strNewsName = self.limitStrLessThen128Char(strStr=strNewsName) #將名稱縮短小於128字完
                 strNewsHtmlFilePath = strNewsHtmlFolderPath + u"\\%s_news.html"%strNewsName
                 self.utility.overwriteSaveAs(strFilePath=strNewsHtmlFilePath, unicodeData=self.driver.page_source)

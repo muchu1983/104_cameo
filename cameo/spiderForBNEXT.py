@@ -23,7 +23,7 @@ class SpiderForBNEXT:
     def __init__(self):
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
-        self.strWebsiteDomain = u"http://www.bnext.com.tw/"
+        self.strWebsiteDomain = u"http://www.bnext.com.tw"
         self.dicSubCommandHandler = {"index":self.downloadIndexPage,
                                      "tag":self.downloadTagPag,
                                      "news":self.downloadNewsPage}
@@ -77,13 +77,22 @@ class SpiderForBNEXT:
         strIndexHtmlFilePath = strIndexHtmlFolderPath + u"\\index.html"
         self.utility.overwriteSaveAs(strFilePath=strIndexHtmlFilePath, unicodeData=self.driver.page_source)
         
+    #找出下一頁 tag 的 element
+    def findNextPageElements(self):
+        elesNextPageA = []
+        elesPageA = self.driver.find_elements_by_css_selector("ul.pagination li a")
+        for elePageA in elesPageA:
+            if elePageA.text == ">":
+                elesNextPageA.append(elePageA)
+        return elesNextPageA
+        
     #下載 tag 頁面
     def downloadTagPag(self, uselessArg1=None):
         logging.info("download tag page")
-        strTagHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\TECHORANGE\\tag"
+        strTagHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\BNEXT\\tag"
         if not os.path.exists(strTagHtmlFolderPath):
-            os.mkdir(strTagHtmlFolderPath) #mkdir source_html/TECHORANGE/tag/
-        strTagWebsiteDomain = self.strWebsiteDomain + u"/tag"
+            os.mkdir(strTagHtmlFolderPath) #mkdir source_html/BNEXT/tag/
+        strTagWebsiteDomain = self.strWebsiteDomain + u"/search/tag"
         #取得 Db 中尚未下載的 Tag 名稱
         lstStrNotObtainedTagName = self.db.fetchallNotObtainedTagName()
         for strNotObtainedTagName in lstStrNotObtainedTagName:
@@ -96,7 +105,7 @@ class SpiderForBNEXT:
             strTagHtmlFilePath = strTagHtmlFolderPath + u"\\%d_%s_tag.html"%(intPageNum, strNotObtainedTagName)
             self.utility.overwriteSaveAs(strFilePath=strTagHtmlFilePath, unicodeData=self.driver.page_source)
             #tag 下一頁
-            elesNextPageA = self.driver.find_elements_by_css_selector("ul.page-numbers li a.next.page-numbers")
+            elesNextPageA = self.findNextPageElements()
             while len(elesNextPageA) != 0:
                 time.sleep(random.randint(2,5)) #sleep random time
                 intPageNum = intPageNum+1
@@ -106,7 +115,7 @@ class SpiderForBNEXT:
                 strTagHtmlFilePath = strTagHtmlFolderPath + u"\\%d_%s_tag.html"%(intPageNum, strNotObtainedTagName)
                 self.utility.overwriteSaveAs(strFilePath=strTagHtmlFilePath, unicodeData=self.driver.page_source)
                 #tag 再下一頁
-                elesNextPageA = self.driver.find_elements_by_css_selector("ul.page-numbers li a.next.page-numbers")
+                elesNextPageA = self.findNextPageElements()
             #更新tag DB 為已抓取 (isGot = 1)
             self.db.updateTagStatusIsGot(strTagName=strNotObtainedTagName)
             logging.info("got tag %s"%strNotObtainedTagName)
@@ -133,9 +142,9 @@ class SpiderForBNEXT:
     #下載 news 頁面 (指定 tag 名稱)
     def downloadNewsPageWithGivenTagName(self, strTagName=None):
         logging.info("download news page with tag %s"%strTagName)
-        strNewsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\TECHORANGE\\news"
+        strNewsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\BNEXT\\news"
         if not os.path.exists(strNewsHtmlFolderPath):
-            os.mkdir(strNewsHtmlFolderPath) #mkdir source_html/TECHORANGE/news/
+            os.mkdir(strNewsHtmlFolderPath) #mkdir source_html/BNEXT/news/
         #取得 DB 紀錄中，指定 strTagName tag 的 news url
         lstStrNewsUrl = self.db.fetchallNewsUrlByTagName(strTagName=strTagName)
         intDownloadedNewsCount = 0#紀錄下載 news 頁面數量
@@ -153,8 +162,7 @@ class SpiderForBNEXT:
                 time.sleep(random.randint(2,5)) #sleep random time
                 self.driver.get(strNewsUrl)
                 #儲存 html
-                strNewsName = re.match("http://buzzorange.com/techorange/[0-9]*/[0-9]*/[0-9]*/(.*)/", strNewsUrl).group(1)
-                strNewsName = self.limitStrLessThen128Char(strStr=strNewsName) #將名稱縮短小於128字完
+                strNewsName = re.match("^http://www.bnext.com.tw/article/view/id/([0-9]*)$", strNewsUrl).group(1)
                 strNewsHtmlFilePath = strNewsHtmlFolderPath + u"\\%s_news.html"%strNewsName
                 self.utility.overwriteSaveAs(strFilePath=strNewsHtmlFilePath, unicodeData=self.driver.page_source)
                 #更新news DB 為已抓取 (isGot = 1)
