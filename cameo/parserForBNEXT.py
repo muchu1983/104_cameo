@@ -67,7 +67,7 @@ class ParserForBNEXT:
             lstStrHotTagUrl = root.css("div#keyword_block div a::attr(href)").extract()
             for strHotTagUrl in lstStrHotTagUrl:
                 strHotTagName = re.match("^/search/tag/(.*)$", strHotTagUrl).group(1)
-                strHotTagName = urllib.quote(strHotTagName.encode("utf-8"))
+                strHotTagName = urllib.quote(strHotTagName.encode("utf-8")) #url encode
                 self.db.insertTagIfNotExists(strTagName=strHotTagName)
                 
     #解析 tag.html
@@ -91,13 +91,13 @@ class ParserForBNEXT:
                     lstStrNewsUrl = root.css("div#search_list div.item_box div.div_tr div.item_text a.item_title::attr(href)").extract()
                     for strNewsUrl in lstStrNewsUrl: #news loop
                         #儲存 news url 及 news tag mapping 至 DB
-                        if strNewsUrl.startswith("/article/view/id/"): #filter AD and px... url
+                        if strNewsUrl.startswith("/article/view/id/"): #filter remove AD and px... url
                             strNewsUrl = self.strWebsiteDomain + strNewsUrl
                             self.db.insertNewsUrlAndNewsTagMappingIfNotExists(strNewsUrl=strNewsUrl, strTagName=strObtainedTagName)
                     
     #解析 news.html 之一 (取得更多 tag)
     def findMoreTagByParseNewsPage(self, uselessArg1=None):
-        strNewsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\TECHORANGE\\news"
+        strNewsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\BNEXT\\news"
         #讀取 news.html
         lstStrNewsHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strNewsHtmlFolderPath, strSuffixes=u"_news.html")
         for strNewsHtmlFilePath in lstStrNewsHtmlFilePath:
@@ -106,9 +106,10 @@ class ParserForBNEXT:
                 strPageSource = newsHtmlFile.read()
                 root = Selector(text=strPageSource)
                 #解析 news.html
-                lstStrTagUrl = root.css("div.entry-meta-box-inner span.entry-tags span a::attr(href)").extract()
+                lstStrTagUrl = root.css("div.tag_box a.tag_link::attr(href)").extract()
                 for strTagUrl in lstStrTagUrl:
-                    strTagName = re.match("http://buzzorange.com/techorange/tag/(.*)/", strTagUrl).group(1)
+                    strTagName = re.match("^/search/tag/(.*)$", strTagUrl).group(1)
+                    strTagName = urllib.quote(strTagName.encode("utf-8")) #url encode
                     self.db.insertTagIfNotExists(strTagName=strTagName)
         
     #解析 news.html 之二 (產生 news.json )

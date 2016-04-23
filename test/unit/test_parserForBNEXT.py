@@ -35,7 +35,7 @@ class ParserForBNEXTTest(unittest.TestCase):
         logging.info("ParserForBNEXTTest.test_parseTagPage")
         parser = ParserForBNEXT()
         parser.parseTagPage()
-    """
+    
     #測試 解析 news.html 以找出更多 tag
     def test_findMoreTagByParseNewsPage(self):
         logging.info("ParserForBNEXTTest.test_findMoreTagByParseNewsPage")
@@ -47,7 +47,7 @@ class ParserForBNEXTTest(unittest.TestCase):
         logging.info("ParserForBNEXTTest.test_parseNewsPageThenCreateNewsJson")
         parser = ParserForBNEXT()
         parser.parseNewsPageThenCreateNewsJson()
-    """
+    
 #測試開始
 if __name__ == "__main__":
     unittest.main(exit=False)

@@ -29,7 +29,7 @@ class SpiderForBNEXTTest(unittest.TestCase):
     def test_downloadIndexPage(self):
         logging.info("SpiderForBNEXTTest.test_downloadIndexPage")
         self.spider.downloadIndexPage()
-    
+    """
     #測試抓取 tag page
     def test_downloadTagPage(self):
         logging.info("SpiderForBNEXTTest.test_downloadTagPage")
@@ -39,7 +39,7 @@ class SpiderForBNEXTTest(unittest.TestCase):
     def test_downloadNewsPage(self):
         logging.info("SpiderForBNEXTTest.test_downloadNewsPage")
         self.spider.downloadNewsPage(strTagName="VR")
-    
+    """
 #測試開始
 if __name__ == "__main__":
     unittest.main(exit=False)
