@@ -9,6 +9,7 @@ This file is part of BSD license
 import unittest
 import logging
 from cameo.localdb import LocalDbForTECHORANGE
+from cameo.localdb import LocalDbForBNEXT
 """
 測試 本地端資料庫存取
 """
@@ -27,13 +28,30 @@ class LocalDbTest(unittest.TestCase):
         logging.info("LocalDbTest.test_localdb_for_techorange")
         db = LocalDbForTECHORANGE()
         db.insertTagIfNotExists(strTagName="tag_for_unit_test")
-        db.fetchallNotObtainedTagName()
+        self.assertEquals(db.fetchallNotObtainedTagName()[0], "tag_for_unit_test")
         db.updateTagStatusIsGot(strTagName="tag_for_unit_test")
-        db.fetchallCompletedObtainedTagName()
+        self.assertEquals(db.fetchallCompletedObtainedTagName()[0], "tag_for_unit_test")
         db.insertNewsUrlAndNewsTagMappingIfNotExists(strNewsUrl="http://news/for/unit/test", strTagName="tag_for_unit_test")
-        db.fetchallNewsUrlByTagName(strTagName="tag_for_unit_test")
-        db.checkNewsIsGot(strNewsUrl="http://news/for/unit/test")
+        self.assertEquals(db.fetchallNewsUrlByTagName(strTagName="tag_for_unit_test")[0], "http://news/for/unit/test")
+        self.assertFalse(db.checkNewsIsGot(strNewsUrl="http://news/for/unit/test"))
         db.updateNewsStatusIsGot(strNewsUrl="http://news/for/unit/test")
+        self.assertTrue(db.checkNewsIsGot(strNewsUrl="http://news/for/unit/test"))
+        db.clearTestData()
+        
+    #測試 bnext 本地端資料庫存取
+    def test_localdb_for_bnext(self):
+        logging.info("LocalDbTest.test_localdb_for_bnext")
+        db = LocalDbForBNEXT()
+        db.insertTagIfNotExists(strTagName="tag_for_unit_test")
+        self.assertEquals(db.fetchallNotObtainedTagName()[0], "tag_for_unit_test")
+        db.updateTagStatusIsGot(strTagName="tag_for_unit_test")
+        self.assertEquals(db.fetchallCompletedObtainedTagName()[0], "tag_for_unit_test")
+        db.insertNewsUrlAndNewsTagMappingIfNotExists(strNewsUrl="http://news/for/unit/test", strTagName="tag_for_unit_test")
+        self.assertEquals(db.fetchallNewsUrlByTagName(strTagName="tag_for_unit_test")[0], "http://news/for/unit/test")
+        self.assertFalse(db.checkNewsIsGot(strNewsUrl="http://news/for/unit/test"))
+        db.updateNewsStatusIsGot(strNewsUrl="http://news/for/unit/test")
+        self.assertTrue(db.checkNewsIsGot(strNewsUrl="http://news/for/unit/test"))
+        db.clearTestData()
 
 #測試開始
 if __name__ == "__main__":
