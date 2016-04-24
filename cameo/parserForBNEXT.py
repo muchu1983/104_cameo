@@ -131,6 +131,8 @@ class ParserForBNEXT:
                 #strSiteName
                 dicNewsData["strSiteName"] = u"BNEXT"
                 #strUrl
+                strUrl = root.css("div.fb-like::attr(data-href)").extract_first()
+                dicNewsData["strUrl"] = strUrl
                 #strTitle
                 #strContent
                 #lstStrKeyword
