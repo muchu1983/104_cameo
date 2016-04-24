@@ -12,6 +12,8 @@ from cameo.spiderForWEBACKERS import SpiderForWEBACKERS
 from cameo.parserForWEBACKERS import ParserForWEBACKERS
 from cameo.spiderForTECHORANGE import SpiderForTECHORANGE
 from cameo.parserForTECHORANGE import ParserForTECHORANGE
+from cameo.spiderForBNEXT import SpiderForBNEXT
+from cameo.parserForBNEXT import ParserForBNEXT
 from cameo.cleaner import CleanerForINDIEGOGO
 from cameo.reporter import ReporterForINDIEGOGO
 from cameo.reporter import ReporterForWEBACKERS
@@ -26,10 +28,12 @@ class CameoShell:
         self.strTargetSite = None
         self.dicSpiders = {"indiegogo":SpiderForINDIEGOGO(),
                            "webackers":SpiderForWEBACKERS(),
-                           "techorange":SpiderForTECHORANGE()}
+                           "techorange":SpiderForTECHORANGE(),
+                           "bnext":SpiderForBNEXT()}
         self.dicParsers = {"indiegogo":ParserForINDIEGOGO(),
                            "webackers":ParserForWEBACKERS(),
-                           "techorange":ParserForTECHORANGE()}
+                           "techorange":ParserForTECHORANGE(),
+                           "bnext":ParserForBNEXT()}
         self.dicCleaners = {"indiegogo":CleanerForINDIEGOGO()}
         self.dicReporters = {"indiegogo":ReporterForINDIEGOGO(),
                              "webackers":ReporterForWEBACKERS()}

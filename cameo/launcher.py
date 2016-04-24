@@ -17,5 +17,5 @@ def entry_point():
     shell = CameoShell()
     shell.openShell()
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     entry_point()
