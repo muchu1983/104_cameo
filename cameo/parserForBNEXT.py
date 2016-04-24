@@ -134,9 +134,19 @@ class ParserForBNEXT:
                 strUrl = root.css("div.fb-like::attr(data-href)").extract_first()
                 dicNewsData["strUrl"] = strUrl
                 #strTitle
+                strTitle = root.css("div.main_title::text").extract_first()
+                dicNewsData["strTitle"] = strTitle
                 #strContent
+                lstStrContent = root.css("div.content.htmlview *:not(script)::text").extract()
+                strContent = re.sub("\s", "", u"".join(lstStrContent)) #接合 新聞內容 並去除空白字元
+                dicNewsData["strContent"] = strContent.strip()
                 #lstStrKeyword
+                lstStrKeyword = root.css("div.tag_box a.tag_link::text").extract()
+                dicNewsData["lstStrKeyword"] = lstStrKeyword
                 #strPublishDate
+                strPublishDate = root.css("div.info_box span.info:nth-of-type(2)::text").extract_first()
+                strPublishDate = re.sub("[^0-9-]", "", re.sub("/", "-", strPublishDate)) #date format 2016-04-24
+                dicNewsData["strPublishDate"] = strPublishDate
                 #strCrawlDate
                 dicNewsData["strCrawlDate"] = self.utility.getCtimeOfFile(strFilePath=strNewsHtmlFilePath)
             #將 新聞資料物件 加入 json
