@@ -114,10 +114,10 @@ class ParserForBNEXT:
         
     #解析 news.html 之二 (產生 news.json )
     def parseNewsPageThenCreateNewsJson(self, uselessArg1=None):
-        strNewsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\TECHORANGE\\news"
+        strNewsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\BNEXT\\news"
         if not os.path.exists(strNewsResultFolderPath):
-            os.mkdir(strNewsResultFolderPath) #mkdir parsed_result/TECHORANGE/news/
-        strNewsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\TECHORANGE\\news"
+            os.mkdir(strNewsResultFolderPath) #mkdir parsed_result/BNEXT/news/
+        strNewsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\BNEXT\\news"
         self.dicParsedResultOfNews = [] #清空 news.json 資料
         #讀取 news.html
         lstStrNewsHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strNewsHtmlFolderPath, strSuffixes=u"_news.html")
@@ -129,20 +129,12 @@ class ParserForBNEXT:
                 root = Selector(text=strPageSource)
                 #解析 news.html
                 #strSiteName
-                dicNewsData["strSiteName"] = u"TECHORANGE"
+                dicNewsData["strSiteName"] = u"BNEXT"
                 #strUrl
-                strNewsUrl = root.css("tbody tr td div.facebook a::attr(page_href)").extract_first().strip()
-                dicNewsData["strUrl"] = strNewsUrl
                 #strTitle
-                dicNewsData["strTitle"] = root.css("header.entry-header h2.entry-title::text").extract_first().strip()
                 #strContent
-                lstStrContent = root.css("section.single-wrapper div.post *:not(script):not(h2.entry-title)::text").extract()
-                strContent = re.sub("\s", "", u"".join(lstStrContent)) #接合 新聞內容 並去除空白字元
-                dicNewsData["strContent"] = strContent.strip()
                 #lstStrKeyword
-                dicNewsData["lstStrKeyword"] = root.css("div.entry-meta-box-inner span.entry-tags span a::text").extract()
                 #strPublishDate
-                dicNewsData["strPublishDate"] = root.css("div.entry-meta-box-inner span.entry-date::text").extract_first().strip()
                 #strCrawlDate
                 dicNewsData["strCrawlDate"] = self.utility.getCtimeOfFile(strFilePath=strNewsHtmlFilePath)
             #將 新聞資料物件 加入 json

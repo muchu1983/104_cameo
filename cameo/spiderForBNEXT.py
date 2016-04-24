@@ -120,14 +120,6 @@ class SpiderForBNEXT:
             self.db.updateTagStatusIsGot(strTagName=strNotObtainedTagName)
             logging.info("got tag %s"%strNotObtainedTagName)
             
-    #限縮 字串長度低於 128 字元
-    def limitStrLessThen128Char(self, strStr=None):
-        if len(strStr) > 128:
-            logging.info("limit str less then 128 char")
-            return strStr[:127] + u"_"
-        else:
-            return strStr
-            
     #下載 news 頁面 (strTagName == None 會自動找尋已下載完成之 tag，但若未先執行 parser tag 即使 tag 已下載完成亦無法下載 news)
     def downloadNewsPage(self, strTagName=None):
         if strTagName is None:
