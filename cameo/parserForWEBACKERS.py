@@ -22,17 +22,17 @@ class ParserForWEBACKERS:
     def __init__(self):
         self.utility = Utility()
         self.dicSubCommandHandler = {"category":[self.parseCategoryPage],
-                                     "project":[self.beforeParseProjectPage,
-                                                self.parseIntroPage,
-                                                self.parseSponsorPage,
-                                                self.parseProgressPage,
-                                                self.parseFaqPage,
-                                                self.afterParseProjectPage],
-                                     "profile":[self.beforeParseProfilePage,
-                                                self.parseProjPage,
-                                                self.parseOrderPage,
-                                                self.afterParseProfilePage],
-                                     "automode":[self.parseProjectAndProfilePageAutoMode]}
+                            "project":[self.beforeParseProjectPage,
+                                   self.parseIntroPage,
+                                   self.parseSponsorPage,
+                                   self.parseProgressPage,
+                                   self.parseFaqPage,
+                                   self.afterParseProjectPage],
+                            "profile":[self.beforeParseProfilePage,
+                                   self.parseProjPage,
+                                   self.parseOrderPage,
+                                   self.afterParseProfilePage],
+                            "automode":[self.parseProjectAndProfilePageAutoMode]}
         self.strWebsiteDomain = u"https://www.webackers.com"
         self.lstStrCategoryName = ["acg", "art", "charity", "design", "music",
                                    "publication", "sport", "surprise", "technology", "video"]
@@ -41,7 +41,7 @@ class ParserForWEBACKERS:
         self.dicParsedResultOfCategory = {} #category.json 資料
         self.dicParsedResultOfProject = {} #project.json 資料
         self.dicParsedResultOfUpdate = {} #update.json 資料
-        self.dicParsedResultOfComment = {} #comment.json 資料
+        self.dicParsedResultOfQanda = {} #qanda.json 資料
         self.dicParsedResultOfReward = {} #reward.json 資料
         self.dicParsedResultOfProfile = {} #profile.json 資料
         
@@ -153,7 +153,7 @@ class ParserForWEBACKERS:
     def beforeParseProjectPage(self, strCategoryName=None):
         self.dicParsedResultOfProject = {} #project.json 資料
         self.dicParsedResultOfUpdate = {} #update.json 資料
-        self.dicParsedResultOfComment = {} #comment.json 資料
+        self.dicParsedResultOfQanda = {} #qanda.json 資料
         self.dicParsedResultOfReward = {} #reward.json 資料
         strProjectsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\WEBACKERS\\%s\\projects"%strCategoryName)
         if not os.path.exists(strProjectsResultFolderPath):
@@ -167,7 +167,7 @@ class ParserForWEBACKERS:
         self.utility.writeObjectToJsonFile(self.dicParsedResultOfProject, strProjectsResultFolderPath + u"\\project.json")
         self.utility.writeObjectToJsonFile(self.dicParsedResultOfReward, strProjectsResultFolderPath + u"\\reward.json")
         self.utility.writeObjectToJsonFile(self.dicParsedResultOfUpdate, strProjectsResultFolderPath + u"\\update.json")
-        self.utility.writeObjectToJsonFile(self.dicParsedResultOfComment, strProjectsResultFolderPath + u"\\comment.json")
+        self.utility.writeObjectToJsonFile(self.dicParsedResultOfQanda, strProjectsResultFolderPath + u"\\qanda.json")
         
     #解析 intro.html
     def parseIntroPage(self, strCategoryName=None):
@@ -199,15 +199,20 @@ class ParserForWEBACKERS:
                 #strUrl
                 self.dicParsedResultOfProject[strProjUrl]["strUrl"] = \
                     strProjUrl
+                #strCrawlTime
+                strCrawlTime = dicCategoryData["strCrawlTime"]
+                self.dicParsedResultOfProject[strProjUrl]["strCrawlTime"] = strCrawlTime
                 #strProjectName
                 self.dicParsedResultOfProject[strProjUrl]["strProjectName"] = \
                     root.css("a[href*='%s'] span.case_title::text"%strProjId).extract_first().strip()
                 #strLocation
                 self.dicParsedResultOfProject[strProjUrl]["strLocation"] = u"Taiwan"
+                #strCity
+                self.dicParsedResultOfProject[strProjUrl]["strCity"] = u"Taiwan"
                 #strCountry
-                self.dicParsedResultOfProject[strProjUrl]["strCountry"] = u"ROC"
+                self.dicParsedResultOfProject[strProjUrl]["strCountry"] = u"TW"
                 #strContinent
-                self.dicParsedResultOfProject[strProjUrl]["strContinent"] = u"Asia"
+                self.dicParsedResultOfProject[strProjUrl]["strContinent"] = u"AS"
                 #strDescription
                 strDescription = dicCurrentProjectData["strDescription"]
                 self.dicParsedResultOfProject[strProjUrl]["strDescription"] = strDescription
@@ -245,8 +250,8 @@ class ParserForWEBACKERS:
                 intRaisedMoney = int(re.sub("[^0-9]", "", strRaisedMoney))
                 self.dicParsedResultOfProject[strProjUrl]["intRaisedMoney"] = intRaisedMoney
                 #fFundProgress
-                fFundProgress = float(intRaisedMoney) / float(intFundTarget)
-                self.dicParsedResultOfProject[strProjUrl]["fFundProgress"] = round(fFundProgress, 2)
+                fFundProgress = (float(intRaisedMoney) / float(intFundTarget)) * 100
+                self.dicParsedResultOfProject[strProjUrl]["fFundProgress"] = int(fFundProgress)
                 #strCurrency
                 self.dicParsedResultOfProject[strProjUrl]["strCurrency"] = u"NTD"
                 #intRemainDays
@@ -394,25 +399,25 @@ class ParserForWEBACKERS:
                 #開始解析
                 strPageSource = projectFaqHtmlFile.read()
                 root = Selector(text=strPageSource)
-                lstDicCommentData = []
-                elesComment = root.css("div.panel-group div.panel")
-                for eleComment in elesComment:
-                    dicCommentData = {}
+                lstDicQandaData = []
+                elesQanda = root.css("div.panel-group div.panel")
+                for eleQanda in elesQanda:
+                    dicQandaData = {}
                     #strUrl
-                    dicCommentData["strUrl"] = strProjUrl
+                    dicQandaData["strUrl"] = strProjUrl
                     #strQnaQuestion
-                    lstStrQnaQuestionText = eleComment.css("div.panel-heading a::text").extract()
+                    lstStrQnaQuestionText = eleQanda.css("div.panel-heading a::text").extract()
                     strQnaQuestion = self.stripTextArray(lstStrText=lstStrQnaQuestionText)
-                    dicCommentData["strQnaQuestion"] = strQnaQuestion
+                    dicQandaData["strQnaQuestion"] = strQnaQuestion
                     #strQnaAnswer
-                    lstStrQnaAnswerText = eleComment.css("div.panel-collapse div.panel-body div.reply::text").extract()
+                    lstStrQnaAnswerText = eleQanda.css("div.panel-collapse div.panel-body div.reply::text").extract()
                     strQnaAnswer = self.stripTextArray(lstStrText=lstStrQnaAnswerText)
-                    dicCommentData["strQnaAnswer"] = strQnaAnswer
+                    dicQandaData["strQnaAnswer"] = strQnaAnswer
                     #strQnaDate 無法取得
-                    dicCommentData["strQnaDate"] = None
-                    #append comment 資料
-                    lstDicCommentData.append(dicCommentData)
-                self.dicParsedResultOfComment[strProjUrl] = lstDicCommentData
+                    dicQandaData["strQnaDate"] = None
+                    #append qanda 資料
+                    lstDicQandaData.append(dicQandaData)
+                self.dicParsedResultOfQanda[strProjUrl] = lstDicQandaData
 
 #profile #####################################################################################
     #解析 profile page(s) 之前
@@ -459,10 +464,12 @@ class ParserForWEBACKERS:
                 self.dicParsedResultOfProfile[strProfUrl]["strDescription"] = strDescription
                 #strLocation
                 self.dicParsedResultOfProfile[strProfUrl]["strLocation"] = u"Taiwan"
+                #strCity
+                self.dicParsedResultOfProfile[strProfUrl]["strCity"] = u"Taiwan"
                 #strCountry
-                self.dicParsedResultOfProfile[strProfUrl]["strCountry"] = u"ROC"
+                self.dicParsedResultOfProfile[strProfUrl]["strCountry"] = u"TW"
                 #strContinent
-                self.dicParsedResultOfProfile[strProfUrl]["strContinent"] = u"Asia"
+                self.dicParsedResultOfProfile[strProfUrl]["strContinent"] = u"AS"
                 #intCreatedCount
                 intCreatedCount = int(root.css("ul.nav-tabs li a[href*='tab=project'] div.badge::text").extract_first())
                 self.dicParsedResultOfProfile[strProfUrl]["intCreatedCount"] = intCreatedCount
@@ -485,7 +492,7 @@ class ParserForWEBACKERS:
                     strCreatedProject = self.stripTextArray(lstStrText=lstStrCreatedProjectText)
                     lstStrCreatedProject.append(strCreatedProject)
                     strCreatedProjectUrl = (self.strWebsiteDomain + 
-                                            eleCreatedProject.css("div.thumbnail a::attr('href')").extract_first().strip())
+                                    eleCreatedProject.css("div.thumbnail a::attr('href')").extract_first().strip())
                     lstStrCreatedProjectUrl.append(strCreatedProjectUrl)
                     #記錄 status 以用來計算 intLiveProject, intSuccessProject, intFailedProject
                     lstStrCreatedProjectStatusText = eleCreatedProject.css("div.about_i li.timeitem::text").extract()
@@ -504,8 +511,8 @@ class ParserForWEBACKERS:
                 self.dicParsedResultOfProfile[strProfUrl]["intLiveProject"] = intLiveProject
                 #lstStrSocialNetwork 無法取得
                 self.dicParsedResultOfProfile[strProfUrl]["lstStrSocialNetwork"] = None
-                #intFbFriends 無法取得
-                self.dicParsedResultOfProfile[strProfUrl]["intFbFriends"] = None
+                #intFbFriend 無法取得
+                self.dicParsedResultOfProfile[strProfUrl]["intFbFriend"] = None
                 #strLastLoginDate 無法取得
                 self.dicParsedResultOfProfile[strProfUrl]["strLastLoginDate"] = None
                 
