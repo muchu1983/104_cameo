@@ -35,7 +35,7 @@ class ParserForWEBACKERS:
                             "automode":[self.parseProjectAndProfilePageAutoMode]}
         self.strWebsiteDomain = u"https://www.webackers.com"
         self.lstStrCategoryName = ["acg", "art", "charity", "design", "music",
-                                   "publication", "sport", "surprise", "technology", "video"]
+                        "publication", "sport", "surprise", "technology", "video"]
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
         self.dicParsedResultOfCategory = {} #category.json 資料
