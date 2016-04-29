@@ -95,6 +95,15 @@ class ParserForWEBACKERS:
             return (intPayed, intNotPayYet, None)
         #pattern error
         return None
+        
+    #轉換預計出貨日期格式
+    def formatOriginStrRewardDeliveryDate(self, strOrigin=None):
+        strRet = None
+        if strOrigin is not None:
+            matchObj = re.search(u"^([0-9]*)年([0-9]*)月$", strOrigin)
+            if matchObj is not None:
+                strRet = "-".join([matchObj.group(1), matchObj.group(2), "01"])
+        return strRet
 
 #category #####################################################################################
     #解析 category.html
@@ -323,6 +332,7 @@ class ParserForWEBACKERS:
                             strRewardShipTo = mDeliveryDateAndShipTo.group(1)
                             strRewardDeliveryDate = mDeliveryDateAndShipTo.group(2)
                         dicRewardData["strRewardShipTo"] = strRewardShipTo
+                        strRewardDeliveryDate = self.formatOriginStrRewardDeliveryDate(strOrigin=strRewardDeliveryDate) #轉換格式 2016年04月 -> 2016-04-01
                         dicRewardData["strRewardDeliveryDate"] = strRewardDeliveryDate
                         #intRewardRetailPrice 無法取得
                         dicRewardData["intRewardRetailPrice"] = None
