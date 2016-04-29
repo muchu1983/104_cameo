@@ -233,7 +233,7 @@ class ParserForWEBACKERS:
                 self.dicParsedResultOfProject[strProjUrl]["strIntroduction"] = strIntroduction
                 #intStatus
                 dicMappingStatus = {u"已完成":1,
-                                    u"已結束":2,}
+                               u"已結束":2,}
                 intStatus = 0
                 strStatus = dicCurrentProjectData["strStatus"]
                 if strStatus in dicMappingStatus:
@@ -269,10 +269,14 @@ class ParserForWEBACKERS:
                 self.dicParsedResultOfProject[strProjUrl]["intRemainDays"] = intRemainDays
                 #strEndDate
                 strEndDate = None
-                if intRemainDays > 0:
+                if intRemainDays > 0: #進行中
                     strCrawlTime = dicCategoryData["strCrawlTime"]
                     dtCrawlTime = datetime.datetime.strptime(strCrawlTime, "%Y-%m-%d")
                     dtEndDate = dtCrawlTime + datetime.timedelta(days=intRemainDays)
+                    strEndDate = dtEndDate.strftime("%Y-%m-%d")
+                else:#已完成 或 已結束
+                    strEndDate = root.css("aside.col-md-3 article:nth-of-type(4) div.panel-body span:nth-of-type(2)::text").extract_first().strip()
+                    dtEndDate = datetime.datetime.strptime(strEndDate, "%Y/%m/%d %H:%M")
                     strEndDate = dtEndDate.strftime("%Y-%m-%d")
                 self.dicParsedResultOfProject[strProjUrl]["strEndDate"] = strEndDate
                 #strStartDate 無法取得
