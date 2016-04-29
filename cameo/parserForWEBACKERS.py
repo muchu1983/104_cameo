@@ -13,6 +13,7 @@ import json
 import logging
 from scrapy import Selector
 from cameo.utility import Utility
+from cameo.mod.yuwei.utility.scrapyUtility import scrapyUtility
 """
 從 source_html 的 HTML 檔案解析資料
 結果放置於 parsed_result 下
@@ -306,7 +307,8 @@ class ParserForWEBACKERS:
                         #strUrl
                         dicRewardData["strUrl"] = strProjUrl
                         #strRewardContent
-                        strRewardContent = eleReward.css("div.panel-body div.fa-black_h.padding_space.txt_line_fix::text").extract_first()
+                        lstStrRewardContent = eleReward.css("div.panel-body div.fa-black_h.padding_space.txt_line_fix::text").extract()
+                        strRewardContent = self.stripTextArray(lstStrText=lstStrRewardContent)
                         dicRewardData["strRewardContent"] = strRewardContent
                         #intRewardMoney
                         strRewardMoney = eleReward.css("div.panel-case div.pull-left span.font_m1::text").extract_first().strip()
@@ -334,8 +336,8 @@ class ParserForWEBACKERS:
                         dicRewardData["strRewardShipTo"] = strRewardShipTo
                         strRewardDeliveryDate = self.formatOriginStrRewardDeliveryDate(strOrigin=strRewardDeliveryDate) #轉換格式 2016年04月 -> 2016-04-01
                         dicRewardData["strRewardDeliveryDate"] = strRewardDeliveryDate
-                        #intRewardRetailPrice 無法取得
-                        dicRewardData["intRewardRetailPrice"] = None
+                        #intRewardRetailPrice
+                        dicRewardData["intRewardRetailPrice"] = scrapyUtility.getRetailPrice(strRewardContent,  [u"原價", u"市價", u"價", u"零售"], intRewardMoney=intRewardMoney)
                         #append reward 資料
                         lstDicRewardData.append(dicRewardData)
                 self.dicParsedResultOfReward[strProjUrl] = lstDicRewardData

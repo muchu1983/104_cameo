@@ -1,0 +1,14 @@
+{
+	"strLocalFilePath":{
+		"nt": "C:/SavedPage/",
+		"posix": "/Users/yuwei/Desktop/SavedPage/"
+	},
+	"strParsedFilePath":{
+		"nt": "C:/ParsedResult/",
+		"posix": "/Users/yuwei/Desktop/ParsedResult/"
+	},
+	"strChromePath":{
+		"nt": "C:/Python27/Scripts/chromedriver.exe",
+		"posix": "/Users/yuwei/Documents/Webdriver/chromedriver"
+	}
+} 
