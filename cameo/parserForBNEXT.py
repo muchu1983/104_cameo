@@ -119,6 +119,7 @@ class ParserForBNEXT:
             os.mkdir(strNewsResultFolderPath) #mkdir parsed_result/BNEXT/news/
         strNewsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\BNEXT\\news"
         self.dicParsedResultOfNews = [] #清空 news.json 資料
+        self.intNewsJsonNum = 0 #計數器歸零
         #讀取 news.html
         lstStrNewsHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strNewsHtmlFolderPath, strSuffixes=u"_news.html")
         for strNewsHtmlFilePath in lstStrNewsHtmlFilePath:
