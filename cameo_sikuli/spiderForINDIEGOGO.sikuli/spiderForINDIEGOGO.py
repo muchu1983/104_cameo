@@ -6,10 +6,10 @@ from java.awt.datatransfer import StringSelection
 sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
 strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"
 dicPng = {"chrome_logo": "localpng_chrome_logo.png",
+          "chrome_close":"chrome_close.png",
           "chrome_home":"chrome_home.png",
           "chrome_stop": "1456214096530.png",
           "chrome_reload":"1456214122362.png",
-          "chrome_url_bar":"localpng_url_text_bar.png",
           "chrome_download_finished":"localpng_download_finished.png",
           "page_end_about":"1456062534102.png",
           "page_end_camp":"1456215300454.png",
@@ -40,7 +40,11 @@ dicPng = {"chrome_logo": "localpng_chrome_logo.png",
 #open chrome
 def openChrome():
     closeApp("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe")
+    wait(0.5)
     openApp("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe")
+    wait(dicPng["chrome_home"], 300)
+    click(dicPng["chrome_home"])
+    waitVanish(dicPng["chrome_stop"], 300)
     goExplorePage()
     waitVanish(dicPng["chrome_stop"], 300)
     wait(dicPng["chrome_reload"], 300)
@@ -88,9 +92,7 @@ def unfoldUCBShowmore():
     wait(dicPng["page_blur_story"], 300)
 #type url on chrome
 def typeUrlOnChrome(strUrlText=None):
-    click(dicPng["chrome_home"])
-    waitVanish(dicPng["chrome_stop"], 300)
-    click(dicPng["chrome_url_bar"])
+    type("l", KeyModifier.CTRL)
     wait(0.5)
     delOriginText()
     pasteClipboardText(strText=strUrlText)
