@@ -38,9 +38,9 @@ dicPng = {"chrome_logo": "localpng_chrome_logo.png",
           }
 #open chrome
 def openChrome():
-    type("d", KeyModifier.WIN)
-    wait(dicPng["chrome_logo"], 300)
-    click(dicPng["chrome_logo"])
+    closeApp("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe")
+    openApp("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe")
+    goExplorePage()
     waitVanish(dicPng["chrome_stop"], 300)
     wait(dicPng["chrome_reload"], 300)
 # delete origin text

@@ -110,9 +110,9 @@ dicPng = {<span class="str">"chrome_logo"</span>: <img src="localpng_chrome_logo
           }
 <span class="cmt">#open chrome
 </span><span class="kw">def</span> openChrome():
-    <span class="skw">type</span>(<span class="str">"d"</span>, KeyModifier.WIN)
-    <span class="skw">wait</span>(dicPng[<span class="str">"chrome_logo"</span>], <span class="dig">300</span>)
-    <span class="skw">click</span>(dicPng[<span class="str">"chrome_logo"</span>])
+    closeApp(<span class="str">"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"</span>)
+    openApp(<span class="str">"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"</span>)
+    goExplorePage()
     waitVanish(dicPng[<span class="str">"chrome_stop"</span>], <span class="dig">300</span>)
     <span class="skw">wait</span>(dicPng[<span class="str">"chrome_reload"</span>], <span class="dig">300</span>)
 <span class="cmt"># delete origin text
