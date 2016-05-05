@@ -40,7 +40,7 @@ dicPng = {"chrome_logo": "localpng_chrome_logo.png",
           }
 #open chrome
 def openChrome():
-    if appChrome:
+    if appChrome is not None:
         appChrome.close()
     appChrome = openApp("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe")
     wait(dicPng["chrome_home"], 300)

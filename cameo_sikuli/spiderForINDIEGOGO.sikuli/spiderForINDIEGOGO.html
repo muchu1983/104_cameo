@@ -112,7 +112,7 @@ dicPng = {<span class="str">"chrome_logo"</span>: <img src="localpng_chrome_logo
           }
 <span class="cmt">#open chrome
 </span><span class="kw">def</span> openChrome():
-    <span class="kw">if</span> appChrome:
+    <span class="kw">if</span> appChrome <span class="kw">is</span> <span class="kw">not</span> None:
         appChrome.close()
     appChrome = openApp(<span class="str">"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"</span>)
     <span class="skw">wait</span>(dicPng[<span class="str">"chrome_home"</span>], <span class="dig">300</span>)
