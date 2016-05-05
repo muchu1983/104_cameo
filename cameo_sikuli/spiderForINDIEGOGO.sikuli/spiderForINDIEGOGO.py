@@ -5,7 +5,8 @@ from java.awt import Toolkit
 from java.awt.datatransfer import StringSelection
 sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
 strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"
-appChrome = None
+#"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
+appChrome = App("Google Chrome")
 dicPng = {"chrome_logo": "localpng_chrome_logo.png",
           "chrome_close":"chrome_close.png",
           "chrome_home":"chrome_home.png",
@@ -40,11 +41,9 @@ dicPng = {"chrome_logo": "localpng_chrome_logo.png",
           }
 #open chrome
 def openChrome():
-    global appChrome
-    if appChrome:
+    if appChrome.isRunning():
         appChrome.close()
-    appChrome = App.open("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe")
-    print(appChrome)
+    appChrome.open()
     wait(dicPng["chrome_home"], 300)
     click(dicPng["chrome_home"])
     waitVanish(dicPng["chrome_stop"], 300)

@@ -77,7 +77,8 @@
 <span class="kw">from</span> java.awt.datatransfer <span class="kw">import</span> StringSelection
 sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
 strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"</span>
-appChrome = None
+<span class="cmt">#"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
+</span>appChrome = App(<span class="str">"Google Chrome"</span>)
 dicPng = {<span class="str">"chrome_logo"</span>: <img src="localpng_chrome_logo.png" />,
           <span class="str">"chrome_close"</span>:<img src="chrome_close.png" />,
           <span class="str">"chrome_home"</span>:<img src="chrome_home.png" />,
@@ -112,11 +113,9 @@ dicPng = {<span class="str">"chrome_logo"</span>: <img src="localpng_chrome_logo
           }
 <span class="cmt">#open chrome
 </span><span class="kw">def</span> openChrome():
-    <span class="kw">global</span> appChrome
-    <span class="kw">if</span> appChrome:
+    <span class="kw">if</span> appChrome.isRunning():
         appChrome.close()
-    appChrome = App.open(<span class="str">"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"</span>)
-    <span class="kw">print</span>(appChrome)
+    appChrome.open()
     <span class="skw">wait</span>(dicPng[<span class="str">"chrome_home"</span>], <span class="dig">300</span>)
     <span class="skw">click</span>(dicPng[<span class="str">"chrome_home"</span>])
     waitVanish(dicPng[<span class="str">"chrome_stop"</span>], <span class="dig">300</span>)
