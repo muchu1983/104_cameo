@@ -5,7 +5,6 @@ from java.awt import Toolkit
 from java.awt.datatransfer import StringSelection
 sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
 strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"
-appChrome = App("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe")
 dicPng = {"chrome_close":"chrome_close.png",
           "chrome_home":"chrome_home.png",
           "chrome_stop": "1456214096530.png",
@@ -38,14 +37,12 @@ dicPng = {"chrome_close":"chrome_close.png",
           "os_save_btn":"localpng_save_btn.png",
           }
 #open chrome
-def openChrome():
+def openChrome(): 
     if exists(dicPng["chrome_close"]):
         click(dicPng["chrome_close"])
-    appChrome.open()
+    openApp("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe")
     wait(dicPng["chrome_home"], 300)
     click(dicPng["chrome_home"])
-    waitVanish(dicPng["chrome_stop"], 300)
-    goExplorePage()
     waitVanish(dicPng["chrome_stop"], 300)
     wait(dicPng["chrome_reload"], 300)
 # delete origin text
