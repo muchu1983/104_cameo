@@ -77,6 +77,37 @@
 <span class="kw">from</span> java.awt.datatransfer <span class="kw">import</span> StringSelection
 sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
 strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"</span>
+dicPng = {<span class="str">"chrome_logo"</span>: <img src="localpng_chrome_logo.png" />,
+          <span class="str">"chrome_stop"</span>: <img src="1456214096530.png" />,
+          <span class="str">"chrome_reload"</span>:<img src="1456214122362.png" />,
+          <span class="str">"chrome_url_bar"</span>:<img src="localpng_url_text_bar.png" />,
+          <span class="str">"chrome_download_finished"</span>:<img src="localpng_download_finished.png" />,
+          <span class="str">"page_end_about"</span>:<img src="1456062534102.png" />,
+          <span class="str">"page_end_camp"</span>:<img src="1456215300454.png" />,
+          <span class="str">"page_cate_more"</span>:<img src="1457250780994.png" />,
+          <span class="str">"page_ucb_more"</span>:<img src="1457668772685.png" />,
+          <span class="str">"page_blur_story"</span>:<img src="1456873739809.png" />,
+          <span class="str">"page_focus_story"</span>:<img src="1456229536809.png" />,
+          <span class="str">"page_blur_updates"</span>:<img src="1456232941269.png" />,
+          <span class="str">"page_focus_updates"</span>:<img src="1456232962072.png" />,
+          <span class="str">"page_blur_comments"</span>:<img src="1456232986275.png" />,
+          <span class="str">"page_focus_comments"</span>:<img src="1456233002434.png" />,
+          <span class="str">"page_blur_backers"</span>:<img src="1456233023222.png" />,
+          <span class="str">"page_focus_backers"</span>:<img src="1457063099388.png" />,
+          <span class="str">"page_blur_gallery"</span>:<img src="1456828715470.png" />,
+          <span class="str">"page_focus_gallery"</span>:<img src="1456828751430.png" />,
+          <span class="str">"page_focus_profile"</span>:<img src="1456297470021.png" />,
+          <span class="str">"page_blur_camp"</span>:<img src="1456297490082.png" />,
+          <span class="str">"page_focus_camp"</span>:<img src="1456297519988.png" />,
+          <span class="str">"papge_story_details"</span>:<img src="1456229579631.png" />,
+          <span class="str">"page_details_about"</span>:<img src="1456229635107.png" />,
+          <span class="str">"page_details_close"</span>:<img src="1456232782492.png" />,
+          <span class="str">"page_explore"</span>:<img src="1455771252801.png" />,
+          <span class="str">"os_foldername_bar"</span>:Pattern(<img src="localpng_foldername_input_bar.png" />).targetOffset(<span class="dig">10</span>,<span class="dig">0</span>),
+          <span class="str">"os_filename_bar"</span>:Pattern(<img src="localpng_filename_input_bar.png" />).targetOffset(<span class="dig">36</span>,<span class="dig">0</span>),
+          <span class="str">"os_right_save_as"</span>:<img src="localpng_right_click_save_as.png" />,
+          <span class="str">"os_save_btn"</span>:<img src="localpng_save_btn.png" />,
+          }
 <span class="cmt">#open chrome
 </span><span class="kw">def</span> openChrome():
     <span class="skw">type</span>(<span class="str">"d"</span>, KeyModifier.WIN)

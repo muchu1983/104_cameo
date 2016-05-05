@@ -5,6 +5,37 @@ from java.awt import Toolkit
 from java.awt.datatransfer import StringSelection
 sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
 strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"
+dicPng = {"chrome_logo": "localpng_chrome_logo.png",
+          "chrome_stop": "1456214096530.png",
+          "chrome_reload":"1456214122362.png",
+          "chrome_url_bar":"localpng_url_text_bar.png",
+          "chrome_download_finished":"localpng_download_finished.png",
+          "page_end_about":"1456062534102.png",
+          "page_end_camp":"1456215300454.png",
+          "page_cate_more":"1457250780994.png",
+          "page_ucb_more":"1457668772685.png",
+          "page_blur_story":"1456873739809.png",
+          "page_focus_story":"1456229536809.png",
+          "page_blur_updates":"1456232941269.png",
+          "page_focus_updates":"1456232962072.png",
+          "page_blur_comments":"1456232986275.png",
+          "page_focus_comments":"1456233002434.png",
+          "page_blur_backers":"1456233023222.png",
+          "page_focus_backers":"1457063099388.png",
+          "page_blur_gallery":"1456828715470.png",
+          "page_focus_gallery":"1456828751430.png",
+          "page_focus_profile":"1456297470021.png",
+          "page_blur_camp":"1456297490082.png",
+          "page_focus_camp":"1456297519988.png",
+          "papge_story_details":"1456229579631.png",
+          "page_details_about":"1456229635107.png",
+          "page_details_close":"1456232782492.png",
+          "page_explore":"1455771252801.png",
+          "os_foldername_bar":Pattern("localpng_foldername_input_bar.png").targetOffset(10,0),
+          "os_filename_bar":Pattern("localpng_filename_input_bar.png").targetOffset(36,0),
+          "os_right_save_as":"localpng_right_click_save_as.png",
+          "os_save_btn":"localpng_save_btn.png",
+          }
 #open chrome
 def openChrome():
     type("d", KeyModifier.WIN)
