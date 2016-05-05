@@ -116,6 +116,7 @@ dicPng = {<span class="str">"chrome_logo"</span>: <img src="localpng_chrome_logo
     <span class="kw">if</span> appChrome:
         appChrome.close()
     appChrome = openApp(<span class="str">"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"</span>)
+    <span class="kw">print</span>(appChrome)
     <span class="skw">wait</span>(dicPng[<span class="str">"chrome_home"</span>], <span class="dig">300</span>)
     <span class="skw">click</span>(dicPng[<span class="str">"chrome_home"</span>])
     waitVanish(dicPng[<span class="str">"chrome_stop"</span>], <span class="dig">300</span>)

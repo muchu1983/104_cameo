@@ -44,6 +44,7 @@ def openChrome():
     if appChrome:
         appChrome.close()
     appChrome = openApp("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe")
+    print(appChrome)
     wait(dicPng["chrome_home"], 300)
     click(dicPng["chrome_home"])
     waitVanish(dicPng["chrome_stop"], 300)
