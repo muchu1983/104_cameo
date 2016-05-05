@@ -172,6 +172,7 @@ dicPng = {<span class="str">"chrome_close"</span>:<img src="chrome_close.png" />
     <span class="skw">wait</span>(dicPng[<span class="str">"chrome_reload"</span>], <span class="dig">300</span>)
 <span class="cmt"># go to explore page
 </span><span class="kw">def</span> goExplorePage():
+    openChrome()
     typeUrlOnChrome(strUrlText=<span class="str">"https://www.indiegogo.com/explore"</span>)
     <span class="skw">wait</span>(dicPng[<span class="str">"page_explore"</span>], <span class="dig">300</span>)
     waitVanish(dicPng[<span class="str">"chrome_stop"</span>], <span class="dig">300</span>)
@@ -224,7 +225,6 @@ dicPng = {<span class="str">"chrome_close"</span>:<img src="chrome_close.png" />
     <span class="skw">wait</span>(dicPng[<span class="str">"chrome_download_finished"</span>], <span class="dig">300</span>)<span class="cmt">#wait save complete</span>
 <span class="cmt">#download explore pages
 </span><span class="kw">def</span> downloadExplorePages():
-    openChrome()
     goExplorePage()
     strExploreFolderPath = strBaseResFolderPath + <span class="str">r"\source_html\INDIEGOGO"</span>
     <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strExploreFolderPath):

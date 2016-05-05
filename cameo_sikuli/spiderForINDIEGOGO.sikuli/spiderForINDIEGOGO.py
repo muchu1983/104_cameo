@@ -100,6 +100,7 @@ def typeUrlOnChrome(strUrlText=None):
     wait(dicPng["chrome_reload"], 300)
 # go to explore page
 def goExplorePage():
+    openChrome()
     typeUrlOnChrome(strUrlText="https://www.indiegogo.com/explore")
     wait(dicPng["page_explore"], 300)
     waitVanish(dicPng["chrome_stop"], 300)
@@ -152,7 +153,6 @@ def saveCurrentPage(strFolderPath=None, strFilename="default.html"):
     wait(dicPng["chrome_download_finished"], 300)#wait save complete
 #download explore pages
 def downloadExplorePages():
-    openChrome()
     goExplorePage()
     strExploreFolderPath = strBaseResFolderPath + r"\source_html\INDIEGOGO"
     if not os.path.exists(strExploreFolderPath):
