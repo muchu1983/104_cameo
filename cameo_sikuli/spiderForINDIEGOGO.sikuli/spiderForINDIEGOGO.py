@@ -6,7 +6,7 @@ from java.awt.datatransfer import StringSelection
 sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
 strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"
 dicPng = {"chrome_logo": "localpng_chrome_logo.png",
-          "chrome_home":home.png,
+          "chrome_home":"chrome_home.png",
           "chrome_stop": "1456214096530.png",
           "chrome_reload":"1456214122362.png",
           "chrome_url_bar":"localpng_url_text_bar.png",
