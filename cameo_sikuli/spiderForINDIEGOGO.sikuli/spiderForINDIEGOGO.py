@@ -39,10 +39,10 @@ dicPng = {"chrome_logo": "localpng_chrome_logo.png",
 #open chrome
 def openChrome():
     type("d", KeyModifier.WIN)
-    wait("localpng_chrome_logo.png", 300)
-    click("localpng_chrome_logo.png")
-    waitVanish("1456214096530.png", 300)
-    wait("1456214122362.png", 300)
+    wait(dicPng["chrome_logo"], 300)
+    click(dicPng["chrome_logo"])
+    waitVanish(dicPng["chrome_stop"], 300)
+    wait(dicPng["chrome_reload"], 300)
 # delete origin text
 def delOriginText():
     type("a", KeyModifier.CTRL)
@@ -58,54 +58,54 @@ def pasteClipboardText(strText=None):
 #roll to page end
 def rollToPageEnd():
     type(Key.END)
-    wait("1456062534102.png", 300)
+    wait(dicPng["page_end_about"], 300)
 # open all project
 def unfoldCategoryPage():
     rollToPageEnd()
     for uptime in range(6):
         type(Key.UP)
-    wait("1456215300454.png", 300)
-    while(exists("1457250780994.png")):
-        click("1457250780994.png")
-        waitVanish("1456215300454.png", 300)
+    wait(dicPng["page_end_camp"], 300)
+    while(exists(dicPng["page_cate_more"])):
+        click(dicPng["page_cate_more"])
+        waitVanish(dicPng["page_end_camp"], 300)
         wait(5)
         rollToPageEnd()
         for uptime in range(6):
             type(Key.UP)
             wait(0.5)
-        wait("1456215300454.png", 300)
+        wait(dicPng["page_end_camp"], 300)
 #unfold (updates comments backers) showmore
 def unfoldUCBShowmore():
-    while(not exists("1456062534102.png")):
+    while(not exists(dicPng["page_end_about"])):
         type(Key.PAGE_DOWN)
         wait(0.5)
-        if exists("1457668772685.png"):
-            click("1457668772685.png")
-            waitVanish("1457668772685.png", 300)
+        if exists(dicPng["page_ucb_more"]):
+            click(dicPng["page_ucb_more"])
+            waitVanish(dicPng["page_ucb_more"], 300)
             wait(2)
     type(Key.HOME)
-    wait("1456873739809.png", 300)
+    wait(dicPng["page_blur_story"], 300)
 #type url on chrome
 def typeUrlOnChrome(strUrlText=None):
-    click("localpng_url_text_bar.png")
+    click(dicPng["chrome_url_bar"])
     wait(0.5)
     delOriginText()
     pasteClipboardText(strText=strUrlText)
     wait(0.5)
     type(Key.ENTER)
     wait(0.5)
-    waitVanish("1456214096530.png", 300)
-    wait("1456214122362.png", 300)
+    waitVanish(dicPng["chrome_stop"], 300)
+    wait(dicPng["chrome_reload"], 300)
 # go to explore page
 def goExplorePage():
     typeUrlOnChrome(strUrlText="https://www.indiegogo.com/explore")
-    wait("1455771252801.png", 300)
-    waitVanish("1456214096530.png", 300)
-    wait("1456214122362.png", 300)
+    wait(dicPng["page_explore"], 300)
+    waitVanish(dicPng["chrome_stop"], 300)
+    wait(dicPng["chrome_reload"], 300)
 #choose folder at save progress
 def typeFolderPath(strFolderPath=None):
-    wait(Pattern("localpng_foldername_input_bar.png").targetOffset(10,0), 300)
-    click(Pattern("localpng_foldername_input_bar.png").targetOffset(10,0))
+    wait(dicPng["os_foldername_bar"], 300)
+    click(dicPng["os_foldername_bar"])
     wait(0.5)
     delOriginText()
     pasteClipboardText(strText=strFolderPath)
@@ -114,40 +114,40 @@ def typeFolderPath(strFolderPath=None):
     wait(0.5)
 #rightclick on image to save current page
 def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None):
-    waitVanish("1456214096530.png", 300)
-    wait("1456214122362.png", 300)
+    waitVanish(dicPng["chrome_stop"], 300)
+    wait(dicPng["chrome_reload"], 300)
     rightClick(onImage)
-    wait("localpng_right_click_save_as.png", 300)
-    click("localpng_right_click_save_as.png")
-    wait("localpng_save_btn.png", 300)
+    wait(dicPng["os_right_save_as"], 300)
+    click(dicPng["os_right_save_as"])
+    wait(dicPng["os_save_btn"], 300)
     if strFolderPath != None:
         typeFolderPath(strFolderPath)
-    click(Pattern("localpng_filename_input_bar.png").targetOffset(36,0))
+    click(dicPng["os_filename_bar"])
     wait(0.5)
     delOriginText()
     wait(0.5)
     pasteClipboardText(strText=strFilename)
     wait(0.5)
-    click("localpng_save_btn.png")
+    click(dicPng["os_save_btn"])
     wait(0.5)
-    wait("localpng_download_finished.png", 300)#wait save complete
+    wait(dicPng["chrome_download_finished"], 300)#wait save complete
 #ask chrome save current page
 def saveCurrentPage(strFolderPath=None, strFilename="default.html"):
-    waitVanish("1456214096530.png", 300)
-    wait("1456214122362.png", 300)
+    waitVanish(dicPng["chrome_stop"], 300)
+    wait(dicPng["chrome_reload"], 300)
     type("s", KeyModifier.CTRL)
-    wait("localpng_save_btn.png", 300)
+    wait(dicPng["os_save_btn"], 300)
     if strFolderPath != None:
         typeFolderPath(strFolderPath)
-    click(Pattern("localpng_filename_input_bar.png").targetOffset(36,0))
+    click(dicPng["os_filename_bar"])
     wait(0.5)
     delOriginText()
     wait(0.5)
     pasteClipboardText(strText=strFilename)
     wait(0.5)
-    click("localpng_save_btn.png")
+    click(dicPng["os_save_btn"])
     wait(0.5)
-    wait("localpng_download_finished.png", 300)#wait save complete
+    wait(dicPng["chrome_download_finished"], 300)#wait save complete
 #download explore pages
 def downloadExplorePages():
     openChrome()
@@ -169,8 +169,8 @@ def downloadCategoryPages():
         if not os.path.exists(strCategoryFilePath):#check category.html
             openChrome()
             typeUrlOnChrome(strUrlText=strCategoryUrl)
-            waitVanish("1456214096530.png", 300)
-            wait("1456214122362.png", 300)
+            waitVanish(dicPng["chrome_stop"], 300)
+            wait(dicPng["chrome_reload"], 300)
             unfoldCategoryPage()
             saveCurrentPage(strFolderPath=strCategoryFolderPath, strFilename="category.html")
     catUrlListFile.close()
@@ -211,55 +211,55 @@ def downloadProjectPages(strTargetCategory=None):
         if isProjHtmlFileMissing:
             openChrome()
             typeUrlOnChrome(strUrlText=strProjUrl)
-            wait("1456229536809.png", 300)
+            wait(dicPng["page_focus_story"], 300)
             wait(0.5)
         else:
             continue #skip this url
         if not os.path.exists(strProjDetailsFilePath):#check detail.html
-            while(not exists("1456229579631.png")):
+            while(not exists(dicPng["papge_story_details"])):
                 type(Key.PAGE_DOWN)
                 wait(0.5)
-            click("1456229579631.png")
-            wait("1456229635107.png", 300)
+            click(dicPng["papge_story_details"])
+            wait(dicPng["page_details_about"], 300)
             #save see more details
-            rightClickSaveCurrentPage(onImage="1456229635107.png", strFolderPath=strProjectsFolderPath, strFilename=strProjDetailsFilename)
+            rightClickSaveCurrentPage(onImage=dicPng["page_details_about"], strFolderPath=strProjectsFolderPath, strFilename=strProjDetailsFilename)
             #close details
-            click("1456232782492.png")
-            wait("1456229579631.png", 300)
+            click(dicPng["page_details_close"])
+            wait(dicPng["papge_story_details"], 300)
             type(Key.HOME)       
-            wait("1456229536809.png", 300)
+            wait(dicPng["page_focus_story"], 300)
         if not os.path.exists(strProjStroyFilePath):#check story.html
             #save story
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjStoryFilename)
         if not os.path.exists(strProjUpdatesFilePath):#check updates.html
             #save updates
-            wait("1456232941269.png", 300)
-            click("1456232941269.png")
-            wait("1456232962072.png", 300)
+            wait(dicPng["page_blur_updates"], 300)
+            click(dicPng["page_blur_updates"])
+            wait(dicPng["page_focus_updates"], 300)
             #unfoldUCBShowmore()
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjUpdatesFilename)
         if not os.path.exists(strProjCommentsFilePath):#check comments.html
             #save comments
-            wait("1456232986275.png", 300)
-            click("1456232986275.png")
-            wait("1456233002434.png", 300)
+            wait(dicPng["page_blur_comments"], 300)
+            click(dicPng["page_blur_comments"])
+            wait(dicPng["page_focus_comments"], 300)
             #unfoldUCBShowmore()
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjCommentsFilename)
         if not os.path.exists(strProjBackersFilePath):#check backers.html
             #save backers
-            wait("1456233023222.png", 300)
-            click("1456233023222.png")
-            wait("1457063099388.png", 300)
+            wait(dicPng["page_blur_backers"], 300)
+            click(dicPng["page_blur_backers"])
+            wait(dicPng["page_focus_backers"], 300)
             #unfoldUCBShowmore()
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjBackersFilename)
         #gallery may not exists
         strProjGalleryFilename = strProjName+"_gallery.html"
         strProjGalleryFilePath = strProjectsFolderPath + "\\" + strProjGalleryFilename            
-        if (not os.path.exists(strProjGalleryFilePath)) and exists("1456828715470.png"):#check gallery.html
+        if (not os.path.exists(strProjGalleryFilePath)) and exists(dicPng["page_blur_gallery"]):#check gallery.html
             #save gallery
-            wait("1456828715470.png", 300)
-            click("1456828715470.png")
-            wait("1456828751430.png", 300)
+            wait(dicPng["page_blur_gallery"], 300)
+            click(dicPng["page_blur_gallery"])
+            wait(dicPng["page_focus_gallery"], 300)
             saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjGalleryFilename)
     projUrlListFile.close()
 #download individuals pages
@@ -287,13 +287,13 @@ def downloadIndividualsPages(strTargetCategory=None):
         if isIndividualsHtmlFileMissing:
             openChrome()
             typeUrlOnChrome(strUrlText=strIndividualsUrl)
-            wait("1456297470021.png", 300)
+            wait(dicPng["page_focus_profile"], 300)
         if not os.path.exists(strIndividualsProfileFilePath):#check profile.html
             saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsProfileFilename)
         if not os.path.exists(strIndividualsCampaignsFilePath):#check campaigns.html        
-            wait("1456297490082.png", 300)
-            click("1456297490082.png")
-            wait("1456297519988.png", 300)        
+            wait(dicPng["page_blur_camp"], 300)
+            click(dicPng["page_blur_camp"])
+            wait(dicPng["page_focus_camp"], 300)        
             saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsCampaignsFilename)
     individualsUrlListFile.close()
 #main entry point
