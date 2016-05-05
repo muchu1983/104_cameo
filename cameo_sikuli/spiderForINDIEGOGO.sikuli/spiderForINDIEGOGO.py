@@ -6,6 +6,7 @@ from java.awt.datatransfer import StringSelection
 sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
 strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"
 dicPng = {"chrome_logo": "localpng_chrome_logo.png",
+          "chrome_home":home.png,
           "chrome_stop": "1456214096530.png",
           "chrome_reload":"1456214122362.png",
           "chrome_url_bar":"localpng_url_text_bar.png",
@@ -87,6 +88,8 @@ def unfoldUCBShowmore():
     wait(dicPng["page_blur_story"], 300)
 #type url on chrome
 def typeUrlOnChrome(strUrlText=None):
+    click(dicPng["chrome_home"])
+    waitVanish(dicPng["chrome_stop"], 300)
     click(dicPng["chrome_url_bar"])
     wait(0.5)
     delOriginText()
