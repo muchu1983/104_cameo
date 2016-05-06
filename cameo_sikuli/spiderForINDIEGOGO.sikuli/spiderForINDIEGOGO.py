@@ -5,7 +5,7 @@ from java.awt import Toolkit
 from java.awt.datatransfer import StringSelection
 sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
 strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"
-dicPng = {"chrome_close":"chrome_close.png",
+dicPng = {"chrome_close":Pattern("1462540770090.png").targetOffset(-24,-1),
           "chrome_home":"chrome_home.png",
           "chrome_stop": "1456214096530.png",
           "chrome_reload":"1456214122362.png",
