@@ -14,7 +14,7 @@ echo +++ SIKULIX_HOME specified but not useable %SIKULIX_HOME%
 set SIKULIX_HOME=%~dp0
 
 :YESHOME
-set PARMS=-Xms64M -Xmx512M -Dfile.encoding=UTF-8 -Dsikuli.FromCommandLine
+set PARMS=-Xms64M -Xmx1024M -Dfile.encoding=UTF-8 -Dsikuli.FromCommandLine
 
 if not defined JAVA_HOME goto CHECKJAVA
 IF EXIST "%JAVA_HOME%\bin\java.exe" goto JAVA_OK
