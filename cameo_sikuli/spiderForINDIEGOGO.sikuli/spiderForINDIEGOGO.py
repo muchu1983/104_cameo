@@ -314,7 +314,7 @@ if __name__ == "__main__":
             #lstStrArgs[2] is target category arg
             downloadIndividualsPages(strTargetCategory=lstStrArgs[2])
         popup(u"spider action completed ^^y")
-    except Exception as e:
+    except Exception, e:
         print(e)
         popup(u"spider exception found!!")
     finally:
