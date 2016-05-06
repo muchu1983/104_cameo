@@ -96,6 +96,9 @@ class SpiderForBNEXT:
         #取得 Db 中尚未下載的 Tag 名稱
         lstStrNotObtainedTagName = self.db.fetchallNotObtainedTagName()
         for strNotObtainedTagName in lstStrNotObtainedTagName:
+            if u"/" in strNotObtainedTagName:
+                # skip tag 名稱中有包含 u"/" 的 tag，避免 url 錯誤
+                continue
             strTagUrl = strTagWebsiteDomain + u"/" + strNotObtainedTagName
             #tag 第0頁
             intPageNum = 0
