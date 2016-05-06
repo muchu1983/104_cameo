@@ -78,14 +78,17 @@ class UtilityTest(unittest.TestCase):
     #測試 geopy
     def test_geopy(self):
         logging.info("UtilityTest.test_geopy")
-        self.utility.geopy()
+        print(self.utility.geopy())
         
     #測試 解析 list_of_country_by_continent_on_wikipedia.html
     def test_parseListOfCountryWikiPage(self):
         logging.info("UtilityTest.test_parseListOfCountryWikiPage")
         self.utility.parseListOfCountryWikiPage()
         
-
+    #測試 dateparser 模組
+    def test_dateparser(self):
+        logging.info("UtilityTest.test_dateparser")
+        print(self.utility.parseStrDateByDateparser(strOriginDateStr="3 days ago"))
 #測試開始
 if __name__ == "__main__":
     unittest.main(exit=False)

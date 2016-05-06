@@ -10,6 +10,7 @@ import os
 import re
 import json
 import datetime
+import dateparser
 from scrapy import Selector
 from geopy.geocoders import GoogleV3
 #共用工具程式
@@ -137,7 +138,7 @@ class Utility:
     def geopy(self):
         geolocator = GoogleV3()
         location, (x, y) = geolocator.geocode("tainan", exactly_one=True)
-        print(location)
+        return location
         
     #解析 list_of_country_by_continent_on_wikipedia.html
     def parseListOfCountryWikiPage(self):
@@ -199,6 +200,10 @@ class Utility:
                 if unicode(strCountryName.lower().strip()) == dicCountryData["name"]:
                     strContinentNameMatched = strContinentName
         return strContinentNameMatched
+        
+    #以 dateparser 模組轉換日期
+    def parseStrDateByDateparser(self, strOriginDateStr=None):
+        return dateparser.parse(strOriginDateStr)
         
     #使用 國家對照表 查找 洲別 資料
     def getContinentByCountryName(self, strCountryName=None):
