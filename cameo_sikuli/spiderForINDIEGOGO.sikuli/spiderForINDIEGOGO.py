@@ -301,16 +301,20 @@ def downloadIndividualsPages(strTargetCategory=None):
     individualsUrlListFile.close()
 #main entry point
 if __name__ == "__main__":
-    lstStrArgs = sys.argv
-    if lstStrArgs[1] == "explore":
-        downloadExplorePages()
-    if lstStrArgs[1] == "category":
-        downloadCategoryPages()
-    if lstStrArgs[1] == "project": 
-        #lstStrArgs[2] is target category arg
-        downloadProjectPages(strTargetCategory=lstStrArgs[2])
-    if lstStrArgs[1] == "individuals":
-        #lstStrArgs[2] is target category arg
-        downloadIndividualsPages(strTargetCategory=lstStrArgs[2])
-    popup(u"spider action completed")
-    exit()
+    try:
+        lstStrArgs = sys.argv
+        if lstStrArgs[1] == "explore":
+            downloadExplorePages()
+        if lstStrArgs[1] == "category":
+            downloadCategoryPages()
+        if lstStrArgs[1] == "project": 
+            #lstStrArgs[2] is target category arg
+            downloadProjectPages(strTargetCategory=lstStrArgs[2])
+        if lstStrArgs[1] == "individuals":
+            #lstStrArgs[2] is target category arg
+            downloadIndividualsPages(strTargetCategory=lstStrArgs[2])
+        popup(u"spider action completed ^^y")
+    except:
+        popup(u"spider exception found!!")
+    finally:
+        exit()
