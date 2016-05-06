@@ -133,7 +133,7 @@ def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None
     wait(0.5)
     click(dicPng["os_save_btn"])
     wait(0.5)
-    wait(dicPng["chrome_download_finished"], 300)#wait save complete
+    wait(dicPng["chrome_download_finished"], 600)#wait save complete
 #ask chrome save current page
 def saveCurrentPage(strFolderPath=None, strFilename="default.html"):
     waitVanish(dicPng["chrome_stop"], 300)
@@ -150,7 +150,7 @@ def saveCurrentPage(strFolderPath=None, strFilename="default.html"):
     wait(0.5)
     click(dicPng["os_save_btn"])
     wait(0.5)
-    wait(dicPng["chrome_download_finished"], 300)#wait save complete
+    wait(dicPng["chrome_download_finished"], 600)#wait save complete
 #download explore pages
 def downloadExplorePages():
     goExplorePage()
