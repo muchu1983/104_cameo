@@ -40,6 +40,7 @@ dicPng = {"chrome_close":"chrome_close.png",
 def openChrome(): 
     if exists(dicPng["chrome_close"]):
         click(dicPng["chrome_close"])
+    wait(0.5)
     openApp("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe")
     wait(dicPng["chrome_home"], 300)
     click(dicPng["chrome_home"])
