@@ -41,6 +41,15 @@ class UtilityTest(unittest.TestCase):
         self.assertEquals("Europe", self.utility.getContinentByCountryName("Sweden"))
         self.assertEquals("Europe", self.utility.getContinentByCountryName("Slovenia"))
         
+    #測試 取得國家所屬的洲名稱 wiki 版本
+    def test_getContinentByCountryNameWikiVersion(self):
+        logging.info("UtilityTest.test_getContinentByCountryNameWikiVersion")
+        self.assertEquals("AS", self.utility.getContinentByCountryNameWikiVersion("JaPaN"))
+        self.assertEquals("NA", self.utility.getContinentByCountryNameWikiVersion("United sTaTeS"))
+        self.assertEquals("EU", self.utility.getContinentByCountryNameWikiVersion("UnIted Kingdom"))
+        self.assertEquals("EU", self.utility.getContinentByCountryNameWikiVersion("Sweden"))
+        self.assertEquals("EU", self.utility.getContinentByCountryNameWikiVersion("Slovenia"))
+        
     #測試 轉換 剩餘日期表示字串 成 純數字
     def test_translateTimeleftTextToPureNum(self):
         logging.info("UtilityTest.test_translateTimeleftTextToPureNum")

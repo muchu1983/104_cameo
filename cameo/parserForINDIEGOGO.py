@@ -230,7 +230,7 @@ class ParserForINDIEGOGO:
                         strCountry
                     #strContinent
                     self.dicParsedResultOfProject[strProjUrl]["strContinent"] = \
-                        self.utility.getContinentByCountryName(strCountry)
+                        self.utility.getContinentByCountryNameWikiVersion(strCountry)
                     #strDescription
                     self.dicParsedResultOfProject[strProjUrl]["strDescription"] = \
                         root.css("div.i-musty-background div:nth-of-type(1)::text").extract_first().strip()
@@ -619,7 +619,7 @@ class ParserForINDIEGOGO:
                     strCity
                 #strContinent
                 self.dicParsedResultOfProfile[strIndividualsUrl]["strContinent"] = \
-                    self.utility.getContinentByCountryName(strCountry)
+                    self.utility.getContinentByCountryNameWikiVersion(strCountry)
                 #intBackedCount and intCreatedCount
                 lstStrStatsEmText = root.css("ul.i-stats li em::text").extract()
                 intCreatedCount = 0

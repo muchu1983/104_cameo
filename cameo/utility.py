@@ -15,6 +15,12 @@ from geopy.geocoders import GoogleV3
 #共用工具程式
 class Utility:
     
+    #建構子
+    def __init__(self):
+        self.strListOfCountryByContinentJsonFilePath = u"cameo_res\\list_of_country_by_continent.json"
+        if not os.path.exists(self.strListOfCountryByContinentJsonFilePath): #建立 list_of_country_by_continent.json
+            self.parseListOfCountryWikiPage()
+    
     #儲存檔案
     def overwriteSaveAs(self, strFilePath=None, unicodeData=None):
         with open(strFilePath, "w+") as file:
@@ -135,21 +141,51 @@ class Utility:
         
     #解析 list_of_country_by_continent_on_wikipedia.html
     def parseListOfCountryWikiPage(self):
-        strWikiPageFilePath = u"cameo_res\\list_of_country_by_continent_on_wikipedia.html"
+        strLOCBCWikiPageFilePath = u"cameo_res\\list_of_country_by_continent_on_wikipedia.html"
         strParsedResultJsonFilePath = u"cameo_res\\list_of_country_by_continent.json"
-        with open(strWikiPageFilePath, "r") as wikiPageFile:
-            strPageSource = wikiPageFile.read()
+        dicCountryNameCodeMapping = {}
+        strISO3166WikiPageFilePath = u"cameo_res\\iso_3166_1_on_wikipedia.html"
+        with open(strISO3166WikiPageFilePath, "r") as pageISO3166File: #parse iso_3166_1_on_wikipedia.html
+            strPageSource = pageISO3166File.read()
+            root = Selector(text=strPageSource)
+            elesCountryTr = root.css("table.wikitable:nth-of-type(1) tbody tr")
+            for eleCountryTr in elesCountryTr:
+                strCountryNameText = eleCountryTr.css("td:nth-of-type(1) a::text").extract_first().lower()
+                strCountryCodeText = eleCountryTr.css("td:nth-of-type(2) a span::text").extract_first()
+                dicCountryNameCodeMapping[strCountryNameText] = strCountryCodeText
+        with open(strLOCBCWikiPageFilePath, "r") as pageLOCBCFile: #parse list_of_country_by_continent_on_wikipedia.html
+            strPageSource = pageLOCBCFile.read()
             root = Selector(text=strPageSource)
             elesContinentTable = root.css("table.wikitable")
             dicParsedResult = {}
-            dicContinentName = {"1":"Africa", "2":"Asia", "3":"Europe", "4":"North America",
-                                "5":"South America", "6":"Oceania", "7":"Antarctica"}
-            intCurrentTableIndex = 0 
-            for eleContinentTable in elesContinentTable:
-                intCurrentTableIndex = intCurrentTableIndex+1
+            dicContinentName = {0:"AF", 1:"AS", 2:"EU", 3:"NA",
+                           4:"SA", 5:"OC", 6:"AN"}
+            for intCurrentTableIndex, eleContinentTable in enumerate(elesContinentTable):
+                lstDicCountryData = []
                 lstStrCountryName = eleContinentTable.css("tr td:nth-of-type(2) i > a::text, tr td:nth-of-type(2) b > a::text").extract()
-                dicParsedResult[dicContinentName[str(intCurrentTableIndex)]] = lstStrCountryName
+                for strCountryName in lstStrCountryName:
+                    dicCountryData = {}
+                    #country name
+                    dicCountryData["name"] = strCountryName.lower()
+                    #country iso-3316-1 code
+                    dicCountryData["code"] = None
+                    for strCountryNameKey in dicCountryNameCodeMapping:
+                        if re.search(dicCountryData["name"], strCountryNameKey):
+                            dicCountryData["code"] = dicCountryNameCodeMapping[strCountryNameKey]
+                    lstDicCountryData.append(dicCountryData)
+                dicParsedResult[dicContinentName[intCurrentTableIndex]] = lstDicCountryData
             self.writeObjectToJsonFile(dicData=dicParsedResult, strJsonFilePath=strParsedResultJsonFilePath)
+            
+    #使用 wiki 頁面 查找 洲別 資料 (list_of_country_by_continent.json)
+    def getContinentByCountryNameWikiVersion(self, strCountryName=None):
+        dicListOfCountryByContinent = self.readObjectFromJsonFile(strJsonFilePath=self.strListOfCountryByContinentJsonFilePath)
+        strContinentNameMatched = None
+        for strContinentName in dicListOfCountryByContinent:
+            lstDicCountryData = dicListOfCountryByContinent[strContinentName]
+            for dicCountryData in lstDicCountryData:
+                if unicode(strCountryName.lower().strip()) in dicCountryData["name"]:
+                    strContinentNameMatched = strContinentName
+        return strContinentNameMatched
         
     #使用 國家對照表 查找 洲別 資料
     def getContinentByCountryName(self, strCountryName=None):
