@@ -55,7 +55,7 @@ class UtilityTest(unittest.TestCase):
     #測試 取得檔案的建立日期
     def test_getCtimeOfFile(self):
         logging.info("UtilityTest.test_getCtimeOfFile")
-        self.assertEquals(u"2016-03-03", self.utility.getCtimeOfFile(strFilePath=u"cameo\\utility.py"))
+        self.assertEquals(u"2016-04-28", self.utility.getCtimeOfFile(strFilePath=u"cameo\\utility.py"))
         
     #測試 geopy
     def test_geopy(self):
