@@ -174,7 +174,20 @@ class Utility:
                             dicCountryData["code"] = dicCountryNameCodeMapping[strCountryNameKey]
                     lstDicCountryData.append(dicCountryData)
                 dicParsedResult[dicContinentName[intCurrentTableIndex]] = lstDicCountryData
+            #自訂資料區
+            dicParsedResult["NA"].append({"name":"united states", "code":"US"})
             self.writeObjectToJsonFile(dicData=dicParsedResult, strJsonFilePath=strParsedResultJsonFilePath)
+            
+    #取得國家簡碼 IOS-3166-1
+    def getCountryCode(self, strCountryName=None):
+        dicListOfCountryByContinent = self.readObjectFromJsonFile(strJsonFilePath=self.strListOfCountryByContinentJsonFilePath)
+        strCountryCodeMatched = None
+        for strContinentName in dicListOfCountryByContinent:
+            lstDicCountryData = dicListOfCountryByContinent[strContinentName]
+            for dicCountryData in lstDicCountryData:
+                if unicode(strCountryName.lower().strip()) == dicCountryData["name"]:
+                    strCountryCodeMatched = dicCountryData["code"]
+        return strCountryCodeMatched
             
     #使用 wiki 頁面 查找 洲別 資料 (list_of_country_by_continent.json)
     def getContinentByCountryNameWikiVersion(self, strCountryName=None):
@@ -183,7 +196,7 @@ class Utility:
         for strContinentName in dicListOfCountryByContinent:
             lstDicCountryData = dicListOfCountryByContinent[strContinentName]
             for dicCountryData in lstDicCountryData:
-                if unicode(strCountryName.lower().strip()) in dicCountryData["name"]:
+                if unicode(strCountryName.lower().strip()) == dicCountryData["name"]:
                     strContinentNameMatched = strContinentName
         return strContinentNameMatched
         

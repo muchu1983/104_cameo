@@ -50,6 +50,15 @@ class UtilityTest(unittest.TestCase):
         self.assertEquals("EU", self.utility.getContinentByCountryNameWikiVersion("Sweden"))
         self.assertEquals("EU", self.utility.getContinentByCountryNameWikiVersion("Slovenia"))
         
+    #測試 取得國家簡碼
+    def test_getCountryCode(self):
+        logging.info("UtilityTest.test_getCountryCode")
+        self.assertEquals("JP", self.utility.getCountryCode("JaPaN"))
+        self.assertEquals("US", self.utility.getCountryCode("United sTaTeS"))
+        self.assertEquals("GB", self.utility.getCountryCode("UnIted Kingdom"))
+        self.assertEquals("SE", self.utility.getCountryCode("Sweden"))
+        self.assertEquals("SI", self.utility.getCountryCode("Slovenia"))
+        
     #測試 轉換 剩餘日期表示字串 成 純數字
     def test_translateTimeleftTextToPureNum(self):
         logging.info("UtilityTest.test_translateTimeleftTextToPureNum")

@@ -227,7 +227,7 @@ class ParserForINDIEGOGO:
                     #strCountry
                     strCountry = root.css("div.campaignTrustTeaser-item:nth-of-type(2) div.campaignTrustTeaser-text div.ng-binding:nth-of-type(3)::text").extract_first().strip()
                     self.dicParsedResultOfProject[strProjUrl]["strCountry"] = \
-                        strCountry
+                        self.utility.getCountryCode(strCountry)
                     #strContinent
                     self.dicParsedResultOfProject[strProjUrl]["strContinent"] = \
                         self.utility.getContinentByCountryNameWikiVersion(strCountry)
@@ -614,7 +614,7 @@ class ParserForINDIEGOGO:
                     elif len(lstStrLocationPart) == 1:
                         strCountry = lstStrLocationPart[0].strip()
                 self.dicParsedResultOfProfile[strIndividualsUrl]["strCountry"] = \
-                    strCountry
+                    self.utility.getCountryCode(strCountry)
                 self.dicParsedResultOfProfile[strIndividualsUrl]["strCity"] = \
                     strCity
                 #strContinent
