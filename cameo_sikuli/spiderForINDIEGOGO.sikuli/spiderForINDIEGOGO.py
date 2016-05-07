@@ -45,18 +45,15 @@ dicPng = {"chrome_close":Pattern("1462540770090.png").targetOffset(-24,-1),
           }
 sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
 strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"
-appChrome = App("Google Chrome")
 #open chrome
 def openChrome():
-    #if exists(dicPng["chrome_close"]):
-    #    click(dicPng["chrome_close"])
-    while appChrome.isRunning():#close all chrome instance
-        appChrome.close()
-        wait(1)
+    if exists(dicPng["chrome_close"]):
+        #close prev chrome
+        click(dicPng["chrome_close"])
     #open new chrome
     App.open("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe --incognito")
-    while not appChrome.isRunning():#wait to running
-        wait(1)
+    #wait to running
+    wait(2)
     wait(dicPng["chrome_home"], 300)
     click(dicPng["chrome_home"])
     waitVanish(dicPng["chrome_stop"], 300)
