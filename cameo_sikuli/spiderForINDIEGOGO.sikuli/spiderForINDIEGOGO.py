@@ -47,10 +47,9 @@ sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
 strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"
 #open chrome
 def openChrome():
-    #if exists(dicPng["chrome_close"]):
-    #    click(dicPng["chrome_close"])
     #close prev chrome
-    App.close("Google Chrome")
+    if exists(dicPng["chrome_close"]):
+        click(dicPng["chrome_close"])
     wait(2)
     #re-open new chrome
     App.open("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe --incognito")
