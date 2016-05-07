@@ -194,11 +194,12 @@ class Utility:
     def getContinentByCountryNameWikiVersion(self, strCountryName=None):
         dicListOfCountryByContinent = self.readObjectFromJsonFile(strJsonFilePath=self.strListOfCountryByContinentJsonFilePath)
         strContinentNameMatched = None
-        for strContinentName in dicListOfCountryByContinent:
-            lstDicCountryData = dicListOfCountryByContinent[strContinentName]
-            for dicCountryData in lstDicCountryData:
-                if unicode(strCountryName.lower().strip()) == dicCountryData["name"]:
-                    strContinentNameMatched = strContinentName
+        if strCountryName:# is not None
+            for strContinentName in dicListOfCountryByContinent:
+                lstDicCountryData = dicListOfCountryByContinent[strContinentName]
+                for dicCountryData in lstDicCountryData:
+                    if unicode(strCountryName.lower().strip()) == dicCountryData["name"]:
+                        strContinentNameMatched = strContinentName
         return strContinentNameMatched
         
     #以 dateparser 模組轉換日期

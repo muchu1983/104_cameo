@@ -49,6 +49,7 @@ class UtilityTest(unittest.TestCase):
         self.assertEquals("EU", self.utility.getContinentByCountryNameWikiVersion("UnIted Kingdom"))
         self.assertEquals("EU", self.utility.getContinentByCountryNameWikiVersion("Sweden"))
         self.assertEquals("EU", self.utility.getContinentByCountryNameWikiVersion("Slovenia"))
+        self.assertIsNone(self.utility.getContinentByCountryNameWikiVersion(None))
         
     #測試 取得國家簡碼
     def test_getCountryCode(self):
