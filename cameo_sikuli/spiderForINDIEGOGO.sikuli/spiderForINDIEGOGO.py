@@ -11,8 +11,6 @@ import sys
 import re
 from java.awt import Toolkit
 from java.awt.datatransfer import StringSelection
-sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
-strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"
 dicPng = {"chrome_close":Pattern("1462540770090.png").targetOffset(-24,-1),
           "chrome_home":"chrome_home.png",
           "chrome_stop": "1456214096530.png",
@@ -45,12 +43,20 @@ dicPng = {"chrome_close":Pattern("1462540770090.png").targetOffset(-24,-1),
           "os_right_save_as":"localpng_right_click_save_as.png",
           "os_save_btn":"localpng_save_btn.png",
           }
+sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
+strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"
+appChrome = App("Google Chrome")
 #open chrome
-def openChrome(): 
-    if exists(dicPng["chrome_close"]):
-        click(dicPng["chrome_close"])
-    wait(2)
+def openChrome():
+    #if exists(dicPng["chrome_close"]):
+    #    click(dicPng["chrome_close"])
+    while appChrome.isRunning():#close all chrome instance
+        appChrome.close()
+        wait(1)
+    #open new chrome
     App.open("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe --incognito")
+    while not appChrome.isRunning():#wait to running
+        wait(1)
     wait(dicPng["chrome_home"], 300)
     click(dicPng["chrome_home"])
     waitVanish(dicPng["chrome_stop"], 300)
