@@ -24,25 +24,25 @@ class SpiderForINDIEGOGO:
     #下載及解析 explore 頁面
     def handleExplorePage(self, arg1=None):
         #download html
-        call([r"cameo_sikuli\runsikulix.cmd",
+        call([r"cameo_sikuli\runsikulix.cmd", "-c",
               r"-r", r"cameo_sikuli\spiderForINDIEGOGO.sikuli",
               r"--args", r"explore"])
     
     #下載及解析 category 頁面
     def handleCategoryPage(self, arg1=None):
-        call([r"cameo_sikuli\runsikulix.cmd",
+        call([r"cameo_sikuli\runsikulix.cmd", "-c",
               r"-r", r"cameo_sikuli\spiderForINDIEGOGO.sikuli",
               r"--args", r"category"])
 
     #下載及解析 project 頁面
     def handleProjectPage(self, arg1=None):
-        call([r"cameo_sikuli\runsikulix.cmd",
+        call([r"cameo_sikuli\runsikulix.cmd", "-c",
               r"-r", r"cameo_sikuli\spiderForINDIEGOGO.sikuli",
               r"--args", r"project", arg1])
 
     #下載及解析 individuals 頁面
     def handleIndividualsPage(self, arg1=None):
-        call([r"cameo_sikuli\runsikulix.cmd",
+        call([r"cameo_sikuli\runsikulix.cmd", "-c",
               r"-r", r"cameo_sikuli\spiderForINDIEGOGO.sikuli",
               r"--args", r"individuals", arg1])
               

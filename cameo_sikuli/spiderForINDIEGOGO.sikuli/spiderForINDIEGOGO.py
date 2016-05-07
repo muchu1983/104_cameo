@@ -315,7 +315,7 @@ if __name__ == "__main__":
             downloadIndividualsPages(strTargetCategory=lstStrArgs[2])
         popup(u"spider action completed ^^y")
     except Exception, ex:
-        print(ex)
+        print ex
         popup(u"spider found exception!!")
     finally:
         exit()
