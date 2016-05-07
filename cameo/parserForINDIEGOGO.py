@@ -424,8 +424,10 @@ class ParserForINDIEGOGO:
                         strUpdateContent = strUpdateContent + strUpdateContentParagraph.strip()
                     dicUpdateData["strUpdateContent"] = strUpdateContent
                     #strUpdateDate
+                    strOriginUpdateDate = elementUpdate.css("h2.activityUpdate-timestamp::text").extract_first().strip()
                     dicUpdateData["strUpdateDate"] = \
-                        elementUpdate.css("h2.activityUpdate-timestamp::text").extract_first().strip()
+                        self.utility.parseStrDateByDateparser(strOriginDate=strOriginUpdateDate,
+                                                  strBaseDate=self.utility.getCtimeOfFile(strFilePath=strProjUpdatesFilePath))
                     #intComment 無法取得
                     dicUpdateData["intComment"] = None
                     #intLike 無法取得
@@ -551,9 +553,8 @@ class ParserForINDIEGOGO:
                     lstStrEstimateDeliveryText = elementReward.css("perk-description div[ng-if*=estimated_delivery_date] span::text").extract()
                     if len(lstStrEstimateDeliveryText) == 2 and lstStrEstimateDeliveryText[0].strip() == "Estimated delivery:":
                         strRewardDeliveryDate = lstStrEstimateDeliveryText[1].strip()
-                    dicRewardData["strRewardDeliveryDate"] = strRewardDeliveryDate
+                    dicRewardData["strRewardDeliveryDate"] = self.utility.parseStrDateByDateparser(strOriginDate=strRewardDeliveryDate)
                     #intRewardRetailPrice 零售價出現格式不統一難以取得
-                    intRewardRetailPrice = 0
                     dicRewardData["intRewardRetailPrice"] = None
                     lstDicRewardData.append(dicRewardData)
                 self.dicParsedResultOfReward[strProjUrl] = lstDicRewardData

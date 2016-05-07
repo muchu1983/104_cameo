@@ -91,6 +91,8 @@ class UtilityTest(unittest.TestCase):
         print(self.utility.parseStrDateByDateparser(strOriginDate="3 days ago"))
         print(self.utility.parseStrDateByDateparser(strOriginDate="3 days ago", strBaseDate="2015-5-7"))
         print(self.utility.parseStrDateByDateparser(strOriginDate="3 days ago", strBaseDate="2017-5-7"))
+        print(self.utility.parseStrDateByDateparser(strOriginDate="July 2016"))
+        self.assertIsNone(self.utility.parseStrDateByDateparser(strOriginDate=None))
 #測試開始
 if __name__ == "__main__":
     unittest.main(exit=False)

@@ -203,10 +203,14 @@ class Utility:
         
     #以 dateparser 模組轉換日期
     def parseStrDateByDateparser(self, strOriginDate=None, strBaseDate=datetime.datetime.now().strftime("%Y-%m-%d")):
+        strParsedDateBaseOnGivenBaseDate = None
         dtBaseDate = datetime.datetime.strptime(strBaseDate, "%Y-%m-%d")
-        timedeltaNowToBase = datetime.datetime.now() - dtBaseDate
-        dtParsedDateBaseOnNow = dateparser.parse(strOriginDate)
-        strParsedDateBaseOnGivenBaseDate = (dtParsedDateBaseOnNow - timedeltaNowToBase).strftime("%Y-%m-%d")
+        dToday = datetime.date.today()
+        dtToday = datetime.datetime.combine(dToday, datetime.datetime.min.time())
+        timedeltaNowToBase = dtToday - dtBaseDate
+        if strOriginDate: #is not None
+            dtParsedDateBaseOnNow = dateparser.parse(strOriginDate)
+            strParsedDateBaseOnGivenBaseDate = (dtParsedDateBaseOnNow - timedeltaNowToBase).strftime("%Y-%m-%d")
         return strParsedDateBaseOnGivenBaseDate
         
     #使用 國家對照表 查找 洲別 資料
