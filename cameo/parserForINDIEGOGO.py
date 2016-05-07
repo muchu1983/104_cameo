@@ -543,10 +543,17 @@ class ParserForINDIEGOGO:
                         intRewardLimit = int(elementAvailability.css("b:nth-of-type(2)::text").extract_first().strip())
                     dicRewardData["intRewardLimit"] = intRewardLimit
                     #strRewardShipTo
-                    strShipsToText = elementReward.css("ships-to-countries span.shipsTo-label::text").extract_first()
+                    strShipsToLabelText = elementReward.css("ships-to-countries span.shipsTo-label::text").extract_first()
+                    lstStrShipsToValueText = elementReward.css("ships-to-countries span.shipsTo-value::text").extract()
                     strRewardShipTo = None
-                    if strShipsToText != None:
-                        strRewardShipTo = re.search("^Ships (.*)$", strShipsToText.strip()).group(1)
+                    if lstStrShipsToValueText: #is not None
+                        strRewardShipTo = u""
+                        for strShipsToValueText in lstStrShipsToValueText:
+                            strRewardShipTo = strRewardShipTo + strShipsToValueText.strip()
+                    elif strShipsToLabelText: #is not None
+                        strRewardShipTo = re.search("^Ships (.*)$", strShipsToLabelText.strip()).group(1)
+                    else:
+                        strRewardShipTo = None
                     dicRewardData["strRewardShipTo"] = strRewardShipTo
                     #strRewardDeliveryDate
                     strRewardDeliveryDate = None

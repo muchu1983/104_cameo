@@ -183,11 +183,12 @@ class Utility:
     def getCountryCode(self, strCountryName=None):
         dicListOfCountryByContinent = self.readObjectFromJsonFile(strJsonFilePath=self.strListOfCountryByContinentJsonFilePath)
         strCountryCodeMatched = None
-        for strContinentName in dicListOfCountryByContinent:
-            lstDicCountryData = dicListOfCountryByContinent[strContinentName]
-            for dicCountryData in lstDicCountryData:
-                if unicode(strCountryName.lower().strip()) == dicCountryData["name"]:
-                    strCountryCodeMatched = dicCountryData["code"]
+        if strCountryName: # is not None
+            for strContinentName in dicListOfCountryByContinent:
+                lstDicCountryData = dicListOfCountryByContinent[strContinentName]
+                for dicCountryData in lstDicCountryData:
+                    if unicode(strCountryName.lower().strip()) == dicCountryData["name"]:
+                        strCountryCodeMatched = dicCountryData["code"]
         return strCountryCodeMatched
             
     #使用 wiki 頁面 查找 洲別 資料 (list_of_country_by_continent.json)

@@ -59,6 +59,7 @@ class UtilityTest(unittest.TestCase):
         self.assertEquals("GB", self.utility.getCountryCode("UnIted Kingdom"))
         self.assertEquals("SE", self.utility.getCountryCode("Sweden"))
         self.assertEquals("SI", self.utility.getCountryCode("Slovenia"))
+        self.assertIsNone(self.utility.getCountryCode(None))
         
     #測試 轉換 剩餘日期表示字串 成 純數字
     def test_translateTimeleftTextToPureNum(self):
