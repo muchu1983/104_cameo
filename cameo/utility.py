@@ -202,8 +202,12 @@ class Utility:
         return strContinentNameMatched
         
     #以 dateparser 模組轉換日期
-    def parseStrDateByDateparser(self, strOriginDateStr=None):
-        return dateparser.parse(strOriginDateStr)
+    def parseStrDateByDateparser(self, strOriginDate=None, strBaseDate=datetime.datetime.now().strftime("%Y-%m-%d")):
+        dtBaseDate = datetime.datetime.strptime(strBaseDate, "%Y-%m-%d")
+        timedeltaBaseToNow = dtBaseDate - datetime.datetime.now()
+        print(timedeltaBaseToNow)
+        strParsedDate = dateparser.parse(strOriginDate)
+        return strParsedDate
         
     #使用 國家對照表 查找 洲別 資料
     def getContinentByCountryName(self, strCountryName=None):

@@ -88,7 +88,7 @@ class UtilityTest(unittest.TestCase):
     #測試 dateparser 模組
     def test_dateparser(self):
         logging.info("UtilityTest.test_dateparser")
-        print(self.utility.parseStrDateByDateparser(strOriginDateStr="3 days ago"))
+        print(self.utility.parseStrDateByDateparser(strOriginDate="3 days ago"))
 #測試開始
 if __name__ == "__main__":
     unittest.main(exit=False)

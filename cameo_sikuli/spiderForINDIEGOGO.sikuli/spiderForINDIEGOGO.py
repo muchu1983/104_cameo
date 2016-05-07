@@ -41,7 +41,7 @@ def openChrome():
     if exists(dicPng["chrome_close"]):
         click(dicPng["chrome_close"])
     wait(2)
-    openApp("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe")
+    openApp("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe --incognito")
     wait(dicPng["chrome_home"], 300)
     click(dicPng["chrome_home"])
     waitVanish(dicPng["chrome_stop"], 300)
