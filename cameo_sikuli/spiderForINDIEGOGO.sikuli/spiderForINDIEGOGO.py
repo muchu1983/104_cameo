@@ -50,7 +50,7 @@ def openChrome():
     if exists(dicPng["chrome_close"]):
         click(dicPng["chrome_close"])
     wait(2)
-    openApp("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe --incognito")
+    App.open("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe --incognito")
     wait(dicPng["chrome_home"], 300)
     click(dicPng["chrome_home"])
     waitVanish(dicPng["chrome_stop"], 300)
@@ -317,6 +317,8 @@ def downloadIndividualsPages(strTargetCategory=None):
 #main entry point
 if __name__ == "__main__":
     try:
+        print(getFindFailedResponse())
+        setFindFailedResponse(PROMPT)
         lstStrArgs = sys.argv
         if lstStrArgs[1] == "explore":
             downloadExplorePages()
@@ -328,6 +330,6 @@ if __name__ == "__main__":
         if lstStrArgs[1] == "individuals":
             #lstStrArgs[2] is target category arg
             downloadIndividualsPages(strTargetCategory=lstStrArgs[2])
-        popup(u"spider action completed ^^y")
+        popup(u"spider action completed. ^.^y")
     finally:
         exit()
