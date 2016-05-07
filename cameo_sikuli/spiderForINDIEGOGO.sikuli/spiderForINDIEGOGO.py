@@ -317,8 +317,6 @@ def downloadIndividualsPages(strTargetCategory=None):
 #main entry point
 if __name__ == "__main__":
     try:
-        print(getFindFailedResponse())
-        setFindFailedResponse(PROMPT)
         lstStrArgs = sys.argv
         if lstStrArgs[1] == "explore":
             downloadExplorePages()
@@ -331,5 +329,8 @@ if __name__ == "__main__":
             #lstStrArgs[2] is target category arg
             downloadIndividualsPages(strTargetCategory=lstStrArgs[2])
         popup(u"spider action completed. ^.^y")
+    except FindFailed, ff:
+        print(str(ff))
+        popup(u"spider error! >_<||")
     finally:
         exit()
