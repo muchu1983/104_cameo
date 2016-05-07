@@ -1,3 +1,11 @@
+# -*- coding: utf-8 -*-
+"""
+Copyright (C) 2015, MuChu Hsu
+Contributed by Muchu Hsu (muchu1983@gmail.com)
+This file is part of BSD license
+
+<https://opensource.org/licenses/BSD-3-Clause>
+"""
 import os
 import sys
 import re
@@ -14,6 +22,7 @@ dicPng = {"chrome_close":Pattern("1462540770090.png").targetOffset(-24,-1),
           "page_end_camp":"1456215300454.png",
           "page_cate_more":"1457250780994.png",
           "page_ucb_more":"1457668772685.png",
+          "papge_new_style_check":xxxxxxx,
           "page_blur_story":"1456873739809.png",
           "page_focus_story":"1456229536809.png",
           "page_blur_updates":"1456232941269.png",
@@ -199,21 +208,27 @@ def downloadProjectPages(strTargetCategory=None):
         if not os.path.exists(strProjStroyFilePath):#check story.html
             isProjHtmlFileMissing = True
         strProjUpdatesFilename = strProjName+"_updates.html"
-        strProjUpdatesFilePath = strProjectsFolderPath + "\\" + strProjUpdatesFilename        
+        strProjUpdatesFilePath = strProjectsFolderPath + "\\" + strProjUpdatesFilename
         if not os.path.exists(strProjUpdatesFilePath):#check updates.html
             isProjHtmlFileMissing = True
         strProjCommentsFilename = strProjName+"_comments.html"
-        strProjCommentsFilePath = strProjectsFolderPath + "\\" + strProjCommentsFilename                
+        strProjCommentsFilePath = strProjectsFolderPath + "\\" + strProjCommentsFilename
         if not os.path.exists(strProjCommentsFilePath):#check comments.html
             isProjHtmlFileMissing = True
         strProjBackersFilename = strProjName+"_backers.html"
-        strProjBackersFilePath = strProjectsFolderPath + "\\" + strProjBackersFilename                        
+        strProjBackersFilePath = strProjectsFolderPath + "\\" + strProjBackersFilename
         if not os.path.exists(strProjBackersFilePath):#check backers.html
             isProjHtmlFileMissing = True
         #open chrome 
         if isProjHtmlFileMissing:
             openChrome()
             typeUrlOnChrome(strUrlText=strProjUrl)
+            wait(0.5)
+            #check page style
+            while(exists(dicPng["papge_new_style_check"])):
+                openChrome() #reopen chrome for load standard style
+                typeUrlOnChrome(strUrlText=strProjUrl)
+                wait(0.5)
             wait(dicPng["page_focus_story"], 300)
             wait(0.5)
         else:
