@@ -474,7 +474,8 @@ class ParserForINDIEGOGO:
                     #strCommentDate
                     strOriginCommentDate = elementComment.css("div.commentLayout-header:nth-of-type(1) span.commentNote::text").extract_first().strip()
                     dicCommentData["strCommentDate"] = \
-                        self.utility.parseStrDateByDateparser(strOriginDateStr=strOriginCommentDate)
+                        self.utility.parseStrDateByDateparser(strOriginDate=strOriginCommentDate,
+                                                  strBaseDate=self.utility.getCtimeOfFile(strFilePath=strProjCommentsFilePath))
                     lstDicCommentData.append(dicCommentData)
                 self.dicParsedResultOfComment[strProjUrl] = lstDicCommentData
                 
