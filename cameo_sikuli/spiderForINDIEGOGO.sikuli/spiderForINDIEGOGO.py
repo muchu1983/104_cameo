@@ -233,10 +233,14 @@ def downloadProjectPages(strTargetCategory=None):
                 openChrome() #reopen chrome for load standard style
                 typeUrlOnChrome(strUrlText=strProjUrl)
                 wait(0.5)
-            wait(dicPng["page_focus_story"], 300)
-            wait(0.5)
         else:
             continue #skip this url
+        #check page not found
+        if exists(dicPng["page_not_found"]):
+            continue #skip this url
+        #wait load completed
+        wait(dicPng["page_focus_story"], 300)
+        wait(0.5)
         if not os.path.exists(strProjDetailsFilePath):#check detail.html
             while(not exists(dicPng["papge_story_details"])):
                 type(Key.PAGE_DOWN)
@@ -309,7 +313,11 @@ def downloadIndividualsPages(strTargetCategory=None):
         if isIndividualsHtmlFileMissing:
             openChrome()
             typeUrlOnChrome(strUrlText=strIndividualsUrl)
-            wait(dicPng["page_focus_profile"], 300)
+        #check page not found
+        if exists(dicPng["page_not_found"]):
+            continue #skip this url
+        #wait load completed
+        wait(dicPng["page_focus_profile"], 300)
         if not os.path.exists(strIndividualsProfileFilePath):#check profile.html
             saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsProfileFilename)
         if not os.path.exists(strIndividualsCampaignsFilePath):#check campaigns.html        
