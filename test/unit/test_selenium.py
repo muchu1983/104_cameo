@@ -29,9 +29,9 @@ class SeleniumTest(unittest.TestCase):
     def test_selenium(self):
         chromedriver = ".\cameo_res\chromedriver.exe"
         driver = webdriver.Chrome(chromedriver)
-        driver.get("http://www.bnext.com.tw/")
+        driver.get("https://tw.money.yahoo.com/currency")
         source = driver.page_source
-        f = open("bnext.html", "w+")
+        f = open("currency.html", "w+")
         f.write(source.encode("utf-8"))
         f.close()
         
