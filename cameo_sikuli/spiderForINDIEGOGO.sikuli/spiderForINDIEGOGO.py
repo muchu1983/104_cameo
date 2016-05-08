@@ -313,6 +313,8 @@ def downloadIndividualsPages(strTargetCategory=None):
         if isIndividualsHtmlFileMissing:
             openChrome()
             typeUrlOnChrome(strUrlText=strIndividualsUrl)
+        else:
+            continue #skip this url
         #check page not found
         if exists(dicPng["page_not_found"]):
             continue #skip this url
