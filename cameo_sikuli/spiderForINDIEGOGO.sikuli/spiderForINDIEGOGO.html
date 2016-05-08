@@ -83,46 +83,49 @@ This file is part of BSD license
 <span class="kw">import</span> re
 <span class="kw">from</span> java.awt <span class="kw">import</span> Toolkit
 <span class="kw">from</span> java.awt.datatransfer <span class="kw">import</span> StringSelection
+dicPng = {<span class="str">"chrome_close"</span>:Pattern(<img src="chrome_close.png" />).targetOffset(-<span class="dig">24</span>,-<span class="dig">1</span>),
+          <span class="str">"chrome_home"</span>:<img src="chrome_home.png" />,
+          <span class="str">"chrome_stop"</span>: <img src="chrome_stop.png" />,
+          <span class="str">"chrome_reload"</span>:<img src="chrome_reload.png" />,
+          <span class="str">"chrome_download_finished"</span>:<img src="chrome_download_finished.png" />,
+          <span class="str">"page_end_about"</span>:<img src="page_end_about.png" />,
+          <span class="str">"page_end_camp"</span>:<img src="page_end_camp.png" />,
+          <span class="str">"page_cate_more"</span>:<img src="page_cate_more.png" />,
+          <span class="str">"page_ucb_more"</span>:<img src="page_ucb_more.png" />,
+          <span class="str">"papge_new_style_check"</span>:<img src="page_new_style_check.png" />,
+          <span class="str">"page_blur_story"</span>:<img src="page_blur_story.png" />,
+          <span class="str">"page_focus_story"</span>:<img src="page_focus_story.png" />,
+          <span class="str">"page_blur_updates"</span>:<img src="page_blur_updates.png" />,
+          <span class="str">"page_focus_updates"</span>:<img src="page_focus_updates.png" />,
+          <span class="str">"page_blur_comments"</span>:<img src="page_blur_comments.png" />,
+          <span class="str">"page_focus_comments"</span>:<img src="page_focus_comments.png" />,
+          <span class="str">"page_blur_backers"</span>:<img src="page_blur_backers.png" />,
+          <span class="str">"page_focus_backers"</span>:<img src="page_focus_backers.png" />,
+          <span class="str">"page_blur_gallery"</span>:<img src="page_blur_gallery.png" />,
+          <span class="str">"page_focus_gallery"</span>:<img src="page_focus_gallery.png" />,
+          <span class="str">"page_focus_profile"</span>:<img src="page_focus_profile.png" />,
+          <span class="str">"page_blur_camp"</span>:<img src="page_blur_camp.png" />,
+          <span class="str">"page_focus_camp"</span>:<img src="page_focus_camp.png" />,
+          <span class="str">"papge_story_details"</span>:<img src="papge_story_details.png" />,
+          <span class="str">"page_details_about"</span>:<img src="page_details_about.png" />,
+          <span class="str">"page_details_close"</span>:<img src="page_details_close.png" />,
+          <span class="str">"page_explore"</span>:<img src="page_explore.png" />,
+          <span class="str">"os_foldername_bar"</span>:Pattern(<img src="os_foldername_bar.png" />).targetOffset(<span class="dig">10</span>,<span class="dig">0</span>),
+          <span class="str">"os_filename_bar"</span>:Pattern(<img src="os_filename_bar.png" />).targetOffset(<span class="dig">36</span>,<span class="dig">0</span>),
+          <span class="str">"os_right_save_as"</span>:<img src="os_right_save_as.png" />,
+          <span class="str">"os_save_btn"</span>:<img src="os_save_btn.png" />,
+          }
 sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
 strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"</span>
-dicPng = {<span class="str">"chrome_close"</span>:Pattern(<img src="1462540770090.png" />).targetOffset(-<span class="dig">24</span>,-<span class="dig">1</span>),
-          <span class="str">"chrome_home"</span>:<img src="chrome_home.png" />,
-          <span class="str">"chrome_stop"</span>: <img src="1456214096530.png" />,
-          <span class="str">"chrome_reload"</span>:<img src="1456214122362.png" />,
-          <span class="str">"chrome_download_finished"</span>:<img src="localpng_download_finished.png" />,
-          <span class="str">"page_end_about"</span>:<img src="1456062534102.png" />,
-          <span class="str">"page_end_camp"</span>:<img src="1456215300454.png" />,
-          <span class="str">"page_cate_more"</span>:<img src="1457250780994.png" />,
-          <span class="str">"page_ucb_more"</span>:<img src="1457668772685.png" />,
-          <span class="str">"papge_new_style_check"</span>:<img src="page_new_style_check.png" />,
-          <span class="str">"page_blur_story"</span>:<img src="1456873739809.png" />,
-          <span class="str">"page_focus_story"</span>:<img src="1456229536809.png" />,
-          <span class="str">"page_blur_updates"</span>:<img src="1456232941269.png" />,
-          <span class="str">"page_focus_updates"</span>:<img src="1456232962072.png" />,
-          <span class="str">"page_blur_comments"</span>:<img src="1456232986275.png" />,
-          <span class="str">"page_focus_comments"</span>:<img src="1456233002434.png" />,
-          <span class="str">"page_blur_backers"</span>:<img src="1456233023222.png" />,
-          <span class="str">"page_focus_backers"</span>:<img src="1457063099388.png" />,
-          <span class="str">"page_blur_gallery"</span>:<img src="1456828715470.png" />,
-          <span class="str">"page_focus_gallery"</span>:<img src="1456828751430.png" />,
-          <span class="str">"page_focus_profile"</span>:<img src="1456297470021.png" />,
-          <span class="str">"page_blur_camp"</span>:<img src="1456297490082.png" />,
-          <span class="str">"page_focus_camp"</span>:<img src="1456297519988.png" />,
-          <span class="str">"papge_story_details"</span>:<img src="1456229579631.png" />,
-          <span class="str">"page_details_about"</span>:<img src="1456229635107.png" />,
-          <span class="str">"page_details_close"</span>:<img src="1456232782492.png" />,
-          <span class="str">"page_explore"</span>:<img src="1455771252801.png" />,
-          <span class="str">"os_foldername_bar"</span>:Pattern(<img src="localpng_foldername_input_bar.png" />).targetOffset(<span class="dig">10</span>,<span class="dig">0</span>),
-          <span class="str">"os_filename_bar"</span>:Pattern(<img src="localpng_filename_input_bar.png" />).targetOffset(<span class="dig">36</span>,<span class="dig">0</span>),
-          <span class="str">"os_right_save_as"</span>:<img src="localpng_right_click_save_as.png" />,
-          <span class="str">"os_save_btn"</span>:<img src="localpng_save_btn.png" />,
-          }
 <span class="cmt">#open chrome
 </span><span class="kw">def</span> openChrome():
-    <span class="kw">if</span> exists(dicPng[<span class="str">"chrome_close"</span>]):
+    <span class="cmt">#close prev chrome
+</span>    <span class="kw">if</span> exists(dicPng[<span class="str">"chrome_close"</span>]):
         <span class="skw">click</span>(dicPng[<span class="str">"chrome_close"</span>])
     <span class="skw">wait</span>(<span class="dig">2</span>)
-    openApp(<span class="str">"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe --incognito"</span>)
+    <span class="cmt">#re-open new chrome
+</span>    App.open(<span class="str">"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe --incognito"</span>)
+    <span class="skw">wait</span>(<span class="dig">2</span>)<span class="cmt">#wait to running</span>
     <span class="skw">wait</span>(dicPng[<span class="str">"chrome_home"</span>], <span class="dig">300</span>)
     <span class="skw">click</span>(dicPng[<span class="str">"chrome_home"</span>])
     waitVanish(dicPng[<span class="str">"chrome_stop"</span>], <span class="dig">300</span>)
@@ -400,7 +403,10 @@ dicPng = {<span class="str">"chrome_close"</span>:Pattern(<img src="146254077009
         <span class="kw">if</span> lstStrArgs[<span class="dig">1</span>] == <span class="str">"individuals"</span>:
             <span class="cmt">#lstStrArgs[2] is target category arg
 </span>            downloadIndividualsPages(strTargetCategory=lstStrArgs[<span class="dig">2</span>])
-        <span class="skw">popup</span>(<span class="str">u"spider action completed ^^y"</span>)
+        <span class="skw">popup</span>(<span class="str">u"spider action completed. ^.^y"</span>)
+    <span class="kw">except</span> FindFailed, ff:
+        <span class="kw">print</span>(str(ff))
+        <span class="skw">popup</span>(<span class="str">u"spider error! &gt;_&lt;||"</span>)
     <span class="kw">finally</span>:
         exit()
 </pre>
