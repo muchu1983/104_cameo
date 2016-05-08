@@ -128,35 +128,35 @@ class ParserForBNEXT:
             with open(strNewsHtmlFilePath, "r") as newsHtmlFile:
                 strPageSource = newsHtmlFile.read()
                 root = Selector(text=strPageSource)
-                #解析 news.html
-                #檢查 news 是否為看板新聞
-                eleBoardLabel = root.css("span.board-label").extract_first()
-                if eleBoardLabel: # is not None
-                    # rename news 檔名為 xxx_news.html.error
-                    os.rename(strNewsHtmlFilePath, strNewsHtmlFilePath + u".error")
-                    logging.warning("%s is board news,skip parse it."%strNewsHtmlFilePath)
-                    continue #略過該筆 news
-                #strSiteName
-                dicNewsData["strSiteName"] = u"BNEXT"
-                #strUrl
-                strUrl = root.css("div.fb-like::attr(data-href)").extract_first()
-                dicNewsData["strUrl"] = strUrl
-                #strTitle
-                strTitle = root.css("div.main_title::text").extract_first()
-                dicNewsData["strTitle"] = strTitle
-                #strContent
-                lstStrContent = root.css("div.content.htmlview *:not(script)::text").extract()
-                strContent = re.sub("\s", "", u"".join(lstStrContent)) #接合 新聞內容 並去除空白字元
-                dicNewsData["strContent"] = strContent.strip()
-                #lstStrKeyword
-                lstStrKeyword = root.css("div.tag_box a.tag_link::text").extract()
-                dicNewsData["lstStrKeyword"] = lstStrKeyword
-                #strPublishDate
-                strPublishDate = root.css("div.info_box span.info:nth-of-type(2)::text").extract_first()
-                strPublishDate = re.sub("[^0-9-]", "", re.sub("/", "-", strPublishDate)) #date format 2016-04-24
-                dicNewsData["strPublishDate"] = strPublishDate
-                #strCrawlDate
-                dicNewsData["strCrawlDate"] = self.utility.getCtimeOfFile(strFilePath=strNewsHtmlFilePath)
+            #解析 news.html
+            #檢查 news 是否為看板新聞
+            eleBoardLabel = root.css("span.board-label").extract_first()
+            if eleBoardLabel: # is not None
+                # rename news 檔名為 xxx_news.html.error
+                os.rename(strNewsHtmlFilePath, strNewsHtmlFilePath + u".error")
+                logging.warning("%s is board news,skip parse it."%strNewsHtmlFilePath)
+                continue #略過該筆 news
+            #strSiteName
+            dicNewsData["strSiteName"] = u"BNEXT"
+            #strUrl
+            strUrl = root.css("div.fb-like::attr(data-href)").extract_first()
+            dicNewsData["strUrl"] = strUrl
+            #strTitle
+            strTitle = root.css("div.main_title::text").extract_first()
+            dicNewsData["strTitle"] = strTitle
+            #strContent
+            lstStrContent = root.css("div.content.htmlview *:not(script)::text").extract()
+            strContent = re.sub("\s", "", u"".join(lstStrContent)) #接合 新聞內容 並去除空白字元
+            dicNewsData["strContent"] = strContent.strip()
+            #lstStrKeyword
+            lstStrKeyword = root.css("div.tag_box a.tag_link::text").extract()
+            dicNewsData["lstStrKeyword"] = lstStrKeyword
+            #strPublishDate
+            strPublishDate = root.css("div.info_box span.info:nth-of-type(2)::text").extract_first()
+            strPublishDate = re.sub("[^0-9-]", "", re.sub("/", "-", strPublishDate)) #date format 2016-04-24
+            dicNewsData["strPublishDate"] = strPublishDate
+            #strCrawlDate
+            dicNewsData["strCrawlDate"] = self.utility.getCtimeOfFile(strFilePath=strNewsHtmlFilePath)
             #將 新聞資料物件 加入 json
             self.dicParsedResultOfNews.append(dicNewsData)
             #每一千筆資料另存一個 json
