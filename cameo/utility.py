@@ -212,7 +212,8 @@ class Utility:
         timedeltaNowToBase = dtToday - dtBaseDate
         if strOriginDate: #is not None
             dtParsedDateBaseOnNow = dateparser.parse(strOriginDate)
-            strParsedDateBaseOnGivenBaseDate = (dtParsedDateBaseOnNow - timedeltaNowToBase).strftime("%Y-%m-%d")
+            if dtParsedDateBaseOnNow:#is not None
+                strParsedDateBaseOnGivenBaseDate = (dtParsedDateBaseOnNow - timedeltaNowToBase).strftime("%Y-%m-%d")
         return strParsedDateBaseOnGivenBaseDate
         
     #使用 國家對照表 查找 洲別 資料
