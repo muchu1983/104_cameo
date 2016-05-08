@@ -129,6 +129,13 @@ class ParserForBNEXT:
                 strPageSource = newsHtmlFile.read()
                 root = Selector(text=strPageSource)
                 #解析 news.html
+                #檢查 news 是否為看板新聞
+                eleBoardLabel = root.css("span.board-label").extract_first()
+                if eleBoardLabel: # is not None
+                    # rename news 檔名為 xxx_news.html.error
+                    os.rename(strNewsHtmlFilePath, strNewsHtmlFilePath + u".error")
+                    logging.warning("%s is board news,skip parse it."%strNewsHtmlFilePath)
+                    continue #略過該筆 news
                 #strSiteName
                 dicNewsData["strSiteName"] = u"BNEXT"
                 #strUrl
