@@ -26,7 +26,11 @@ class ApiTest(unittest.TestCase):
     #測試 幣別轉換 api
     def test_exchangeCurrency(self):
         logging.info("ApiTest.test_exchangeCurrency")
-        apis.exchangeCurrency(fMoney=100.0)
+        print(apis.exchangeCurrency(fMoney=1000.0))
+        print(apis.exchangeCurrency(fMoney=1000.0, strFrom="USD", strTo="USD"))
+        print(apis.exchangeCurrency(fMoney=1000.0, strFrom="USD", strTo="TWD"))
+        print(apis.exchangeCurrency(fMoney=1000.0, strFrom="TWD", strTo="USD"))
+        print(apis.exchangeCurrency(fMoney=1000.0, strFrom="JPY", strTo="TWD"))
 
 #測試開始
 if __name__ == "__main__":
