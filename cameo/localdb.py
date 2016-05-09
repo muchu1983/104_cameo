@@ -7,10 +7,17 @@ This file is part of BSD license
 <https://opensource.org/licenses/BSD-3-Clause>
 """
 from bennu.localdb import SQLite3Db
+from bennu.localdb import MongoDb
 """
 本地端資料庫存取
 """
-
+#匯率API
+class LocalDbForCurrencyApi:
+    
+    #建構子
+    def __init__(self):
+        self.mongodb = MongoDb().getClient().localdb
+        
 #數位時代
 class LocalDbForBNEXT:
     
