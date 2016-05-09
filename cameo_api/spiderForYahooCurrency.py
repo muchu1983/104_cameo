@@ -49,7 +49,6 @@ class SpiderForYahooCurrency:
         
     #更新 匯率 資料
     def updateExRateData(self):
-        logging.info("start update ex-rate data...")
         self.driver.get("https://tw.money.yahoo.com/currency")
         #亞洲、美洲、歐非
         elesAreaTabLi = self.driver.find_elements_by_css_selector("ul.sub-tabs.D-ib li")
@@ -65,13 +64,15 @@ class SpiderForYahooCurrency:
                 strCurrencyName = re.match("https://tw.money.yahoo.com/currency/(USD...)=X", strExRateHref).group(1)
                 strUSDollar = eleExRateTr.find_element_by_css_selector("td.Ta-end:nth-of-type(3)").text
                 # update DB
+                logging.info("start update ex-rate data...")
                 self.db.ex_rate.update_one({"strCurrencyName":strCurrencyName},
                                    {"$set": {"strDate":datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                                           "strCurrencyName":strCurrencyName,
-                                          "strUSDollar":strUSDollar}
+                                          "fUSDollar":float(strUSDollar)
+                                          }
                                    }, 
                                    upsert=True) #upsert = update or insert if data not exists (有則更新，無則新增)
+                logging.info("ex-rate data updated.")
             #準備切換至下一個 area tab
             elesAreaTabLi = self.driver.find_elements_by_css_selector("ul.sub-tabs.D-ib li")
             intCurrentAreaTab = (intCurrentAreaTab+1)%3
-        logging.info("update ex-rate data stoped.")

@@ -21,17 +21,18 @@ def start_flask_server():
     #啟動 spider 抓取 yahoo 網頁並更新匯率資料庫
     spider = SpiderForYahooCurrency()
     spiderThread = SpiderThread(spiderInstance=spider)
-    spiderThread.start()
+    spiderThread.start() #啟動執行緒
     #啟動 flask server
     app.run(host="0.0.0.0", port=5000, debug=True, use_reloader=False)
     
-#取得指定貨幣匯率 GET
-@app.route("/currency", methods=["GET"])
-def getCurrency():
+#轉換貨幣至指定幣別 GET
+@app.route("/ex_currency", methods=["GET"])
+def exchangeCurrency():
     strDate = request.args.get("date", None, type=str) #歷史匯率(暫不處理)
     strMoney = request.args.get("money", 0.0, type=float) #金額
-    strFromCurrency = request.args.get("from", "USD", type=str) #原幣別
+    strFromCurrency = request.args.get("from", "TWD", type=str) #原始幣別
     strToCurrency = request.args.get("to", "TWD", type=str) #目標幣別
+    
     return jsonify(date=strDate,
                money=strMoney,
                form=strFromCurrency,
@@ -51,7 +52,7 @@ class SpiderThread(threading.Thread):
             self.spider.runSpider()
         except Exception as ex:
             logging.warning("spider did not work.")
-            print(ex)
+            logging.warning(ex)
         finally:
             logging.info("SpiderThread stoped.")
     
