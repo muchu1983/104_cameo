@@ -13,6 +13,7 @@ from flask import Flask
 from flask import request
 from flask import jsonify
 from cameo_api.spiderForYahooCurrency import SpiderForYahooCurrency
+import cameo_api.apis as apis
 
 app = Flask(__name__.split(".")[0])
 
@@ -29,12 +30,11 @@ def start_flask_server():
 @app.route("/ex_currency", methods=["GET"])
 def exchangeCurrency():
     strDate = request.args.get("date", None, type=str) #歷史匯率(暫不處理)
-    strMoney = request.args.get("money", 0.0, type=float) #金額
-    strFromCurrency = request.args.get("from", "TWD", type=str) #原始幣別
-    strToCurrency = request.args.get("to", "TWD", type=str) #目標幣別
-    
-    return jsonify(date=strDate,
-               money=strMoney,
+    fMoney = request.args.get("money", 0.0, type=float) #金額
+    strFromCurrency = request.args.get("from", "TWD", type=str).upper() #原始幣別
+    strToCurrency = request.args.get("to", "TWD", type=str).upper() #目標幣別
+    fResultMoney = apis.exchangeCurrency(fMoney=fMoney, strFrom=strFromCurrency, strTo=strToCurrency)
+    return jsonify(fResultMoney=fResultMoney,
                form=strFromCurrency,
                to=strToCurrency)
                
