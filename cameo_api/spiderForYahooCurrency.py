@@ -44,11 +44,12 @@ class SpiderForYahooCurrency:
     #執行 spider
     def runSpider(self):
         self.initDriver() #init selenium driver
-        self.updateCurrencyData()
+        self.updateExRateData()
         self.quitDriver() #quit selenium driver
         
     #更新 匯率 資料
-    def updateCurrencyData(self):
+    def updateExRateData(self):
+        logging.info("start update ex-rate data...")
         self.driver.get("https://tw.money.yahoo.com/currency")
         #亞洲、美洲、歐非
         elesAreaTabLi = self.driver.find_elements_by_css_selector("ul.sub-tabs.D-ib li")
@@ -73,3 +74,4 @@ class SpiderForYahooCurrency:
             #準備切換至下一個 area tab
             elesAreaTabLi = self.driver.find_elements_by_css_selector("ul.sub-tabs.D-ib li")
             intCurrentAreaTab = (intCurrentAreaTab+1)%3
+        logging.info("update ex-rate data stoped.")

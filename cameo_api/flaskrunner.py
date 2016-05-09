@@ -7,7 +7,8 @@ This file is part of BSD license
 <https://opensource.org/licenses/BSD-3-Clause>
 """
 import json
-import thread
+import threading
+import logging
 from flask import Flask
 from flask import request
 from flask import jsonify
@@ -19,9 +20,10 @@ app = Flask(__name__.split(".")[0])
 def start_flask_server():
     #啟動 spider 抓取 yahoo 網頁並更新匯率資料庫
     spider = SpiderForYahooCurrency()
-    thread.start_new_thread(spider.runSpider, ())
+    spiderThread = SpiderThread(spiderInstance=spider)
+    spiderThread.start()
     #啟動 flask server
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True, use_reloader=False)
     
 #取得指定貨幣匯率 GET
 @app.route("/currency", methods=["GET"])
@@ -34,6 +36,24 @@ def getCurrency():
                money=strMoney,
                form=strFromCurrency,
                to=strToCurrency)
+               
+#獨立執行 更新匯率資料庫 spider
+class SpiderThread(threading.Thread):
+    #thread 建構子
+    def __init__(self, spiderInstance=None):
+        threading.Thread.__init__(self) #初始化父層 Thread
+        self.spider = spiderInstance
+        
+    #run
+    def run(self):
+        try:
+            logging.info("SpiderThread running...")
+            self.spider.runSpider()
+        except Exception:
+            logging.warning("spider did not work.")
+        finally:
+            logging.info("SpiderThread stoped.")
     
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
     start_flask_server()

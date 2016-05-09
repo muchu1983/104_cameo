@@ -24,10 +24,10 @@ class SpiderForYahooCurrencyTest(unittest.TestCase):
     def tearDown(self):
         self.spider.quitDriver()
 
-    #測試 取得 匯率 json
-    def test_updateCurrencyHtml(self):
-        logging.info("SpiderForYahooCurrencyTest.test_updateCurrencyHtml")
-        self.spider.updateCurrencyData()
+    #測試 自動更新 匯率資料
+    def test_updateExRateData(self):
+        logging.info("SpiderForYahooCurrencyTest.test_updateExRateData")
+        self.spider.updateExRateData()
         
 #測試開始
 if __name__ == "__main__":
