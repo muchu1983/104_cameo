@@ -49,8 +49,9 @@ class SpiderThread(threading.Thread):
         try:
             logging.info("SpiderThread running...")
             self.spider.runSpider()
-        except Exception:
+        except Exception as ex:
             logging.warning("spider did not work.")
+            print(ex)
         finally:
             logging.info("SpiderThread stoped.")
     
