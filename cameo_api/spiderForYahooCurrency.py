@@ -10,6 +10,7 @@ from selenium import webdriver
 import os
 import logging
 import time
+import datetime
 import re
 import random
 from cameo.localdb import LocalDbForCurrencyApi
@@ -60,12 +61,13 @@ class SpiderForYahooCurrency:
             elesExRateTr = self.driver.find_elements_by_css_selector("tbody tr.Bd-b")
             for eleExRateTr in elesExRateTr:
                 strExRateHref = eleExRateTr.find_element_by_css_selector("td.Ta-start a").get_attribute("href")
-                strExRateName = re.match("https://tw.money.yahoo.com/currency/(USD...)=X", strExRateHref).group(1)
-                strPrice = eleExRateTr.find_element_by_css_selector("td.Ta-end:nth-of-type(3)").text
+                strCurrencyName = re.match("https://tw.money.yahoo.com/currency/(USD...)=X", strExRateHref).group(1)
+                strUSDollar = eleExRateTr.find_element_by_css_selector("td.Ta-end:nth-of-type(3)").text
                 # update DB
-                self.db.ex_rate.update_one({"strExRateName":strExRateName},
-                                   {"$set": {"strExRateName":strExRateName,
-                                          "strPrice":strPrice}
+                self.db.ex_rate.update_one({"strCurrencyName":strCurrencyName},
+                                   {"$set": {"strDate":datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                                          "strCurrencyName":strCurrencyName,
+                                          "strUSDollar":strUSDollar}
                                    }, 
                                    upsert=True)
             #準備切換至下一個 area tab
