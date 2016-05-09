@@ -69,7 +69,7 @@ class SpiderForYahooCurrency:
                                           "strCurrencyName":strCurrencyName,
                                           "strUSDollar":strUSDollar}
                                    }, 
-                                   upsert=True)
+                                   upsert=True) #upsert = update or insert if data not exists (有則更新，無則新增)
             #準備切換至下一個 area tab
             elesAreaTabLi = self.driver.find_elements_by_css_selector("ul.sub-tabs.D-ib li")
             intCurrentAreaTab = (intCurrentAreaTab+1)%3
