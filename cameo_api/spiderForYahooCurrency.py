@@ -54,9 +54,9 @@ class SpiderForYahooCurrency:
         elesAreaTabLi = self.driver.find_elements_by_css_selector("ul.sub-tabs.D-ib li")
         intCurrentAreaTab = 0
         while len(elesAreaTabLi) == 3:
-            time.sleep(random.randint(2,5))
+            time.sleep(random.randint(20,30))
             elesAreaTabLi[intCurrentAreaTab].click()
-            time.sleep(random.randint(2,5))
+            time.sleep(random.randint(20,30))
             #解析 匯率資料
             elesExRateTr = self.driver.find_elements_by_css_selector("tbody tr.Bd-b")
             for eleExRateTr in elesExRateTr:
