@@ -229,8 +229,8 @@ def downloadProjectPages(strTargetCategory=None):
             openChrome()
             typeUrlOnChrome(strUrlText=strProjUrl)
             wait(0.5)
-            #check page style
-            while(exists(dicPng["papge_new_style_check"])):
+            #check page "style" or "something not right" show?
+            while(exists(dicPng["papge_new_style_check"]) or exists(dicPng["page_not_right"])):
                 openChrome() #reopen chrome for load standard style
                 typeUrlOnChrome(strUrlText=strProjUrl)
                 wait(0.5)
@@ -314,6 +314,12 @@ def downloadIndividualsPages(strTargetCategory=None):
         if isIndividualsHtmlFileMissing:
             openChrome()
             typeUrlOnChrome(strUrlText=strIndividualsUrl)
+            wait(0.5)
+            #check page "something not right" show?
+            while(exists(dicPng["page_not_right"])):
+                openChrome()
+                typeUrlOnChrome(strUrlText=strIndividualsUrl)
+                wait(0.5)
         else:
             continue #skip this url
         #check page not found
