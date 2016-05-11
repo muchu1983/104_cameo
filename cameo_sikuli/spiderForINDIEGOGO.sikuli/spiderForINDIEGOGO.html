@@ -104,8 +104,6 @@ dicPng = {<span class="str">"chrome_close"</span>:Pattern(<img src="chrome_close
           <span class="str">"page_blur_gallery"</span>:<img src="page_blur_gallery.png" />,
           <span class="str">"page_focus_gallery"</span>:<img src="page_focus_gallery.png" />,
           <span class="str">"page_focus_profile"</span>:<img src="page_focus_profile.png" />,
-          <span class="str">"page_blur_camp"</span>:<img src="page_blur_camp.png" />,
-          <span class="str">"page_focus_camp"</span>:<img src="page_focus_camp.png" />,
           <span class="str">"papge_story_details"</span>:<img src="papge_story_details.png" />,
           <span class="str">"page_details_about"</span>:<img src="page_details_about.png" />,
           <span class="str">"page_details_close"</span>:<img src="page_details_close.png" />,
@@ -175,17 +173,29 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
             <span class="skw">wait</span>(<span class="dig">2</span>)
     <span class="skw">type</span>(Key.HOME)
     <span class="skw">wait</span>(dicPng[<span class="str">"page_blur_story"</span>], <span class="dig">300</span>)
+<span class="cmt">#pause if interruption page found
+</span><span class="kw">def</span> checkAndPauseForYourInterruption():
+    <span class="kw">if</span> exists(dicPng[<span class="str">"page_your_interruption"</span>]):
+        <span class="skw">popup</span>(<span class="str">u"spider paused! （╯‵□′）╯︵┴─┴"</span>)
 <span class="cmt">#type url on chrome
 </span><span class="kw">def</span> typeUrlOnChrome(strUrlText=None):
-    <span class="skw">type</span>(<span class="str">"l"</span>, KeyModifier.CTRL)
-    <span class="skw">wait</span>(<span class="dig">0.5</span>)
-    delOriginText()
-    pasteClipboardText(strText=strUrlText)
-    <span class="skw">wait</span>(<span class="dig">0.5</span>)
-    <span class="skw">type</span>(Key.ENTER)
-    <span class="skw">wait</span>(<span class="dig">0.5</span>)
-    waitVanish(dicPng[<span class="str">"chrome_stop"</span>], <span class="dig">300</span>)
-    <span class="skw">wait</span>(dicPng[<span class="str">"chrome_reload"</span>], <span class="dig">300</span>)
+    <span class="kw">while</span> True:
+        <span class="skw">type</span>(<span class="str">"l"</span>, KeyModifier.CTRL)
+        <span class="skw">wait</span>(<span class="dig">0.5</span>)
+        delOriginText()
+        pasteClipboardText(strText=strUrlText)
+        <span class="skw">wait</span>(<span class="dig">0.5</span>)
+        <span class="skw">type</span>(Key.ENTER)
+        <span class="skw">wait</span>(<span class="dig">0.5</span>)
+        waitVanish(dicPng[<span class="str">"chrome_stop"</span>], <span class="dig">300</span>)
+        <span class="skw">wait</span>(dicPng[<span class="str">"chrome_reload"</span>], <span class="dig">300</span>)
+        <span class="cmt">#check page "something not right" show?
+</span>        <span class="kw">if</span> exists(dicPng[<span class="str">"page_not_right"</span>]):
+            <span class="cmt">#restart chrome and run typeUrlOnChrome again
+</span>            openChrome()
+        <span class="kw">else</span>:
+            <span class="cmt">#ok everything is right, go out while loop
+</span>            <span class="kw">break</span>
 <span class="cmt"># go to explore page
 </span><span class="kw">def</span> goExplorePage():
     openChrome()
@@ -207,6 +217,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
 </span><span class="kw">def</span> rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None):
     waitVanish(dicPng[<span class="str">"chrome_stop"</span>], <span class="dig">300</span>)
     <span class="skw">wait</span>(dicPng[<span class="str">"chrome_reload"</span>], <span class="dig">300</span>)
+    checkAndPauseForYourInterruption()
     <span class="skw">rightClick</span>(onImage)
     <span class="skw">wait</span>(dicPng[<span class="str">"os_right_save_as"</span>], <span class="dig">300</span>)
     <span class="skw">click</span>(dicPng[<span class="str">"os_right_save_as"</span>])
@@ -226,6 +237,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
 </span><span class="kw">def</span> saveCurrentPage(strFolderPath=None, strFilename=<span class="str">"default.html"</span>):
     waitVanish(dicPng[<span class="str">"chrome_stop"</span>], <span class="dig">300</span>)
     <span class="skw">wait</span>(dicPng[<span class="str">"chrome_reload"</span>], <span class="dig">300</span>)
+    checkAndPauseForYourInterruption()
     <span class="skw">type</span>(<span class="str">"s"</span>, KeyModifier.CTRL)
     <span class="skw">wait</span>(dicPng[<span class="str">"os_save_btn"</span>], <span class="dig">300</span>)
     <span class="kw">if</span> strFolderPath != None:
@@ -388,11 +400,6 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
             openChrome()
             typeUrlOnChrome(strUrlText=strIndividualsUrl)
             <span class="skw">wait</span>(<span class="dig">0.5</span>)
-            <span class="cmt">#check page "something not right" show?
-</span>            <span class="kw">while</span>(exists(dicPng[<span class="str">"page_not_right"</span>])):
-                openChrome()
-                typeUrlOnChrome(strUrlText=strIndividualsUrl)
-                <span class="skw">wait</span>(<span class="dig">0.5</span>)
         <span class="kw">else</span>:
             <span class="kw">continue</span> <span class="cmt">#skip this url</span>
         <span class="cmt">#check page not found
@@ -402,10 +409,11 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
 </span>        <span class="skw">wait</span>(dicPng[<span class="str">"page_focus_profile"</span>], <span class="dig">300</span>)
         <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strIndividualsProfileFilePath):<span class="cmt">#check profile.html</span>
             saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsProfileFilename)
-        <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strIndividualsCampaignsFilePath):<span class="cmt">#check campaigns.html        </span>
-            <span class="skw">wait</span>(dicPng[<span class="str">"page_blur_camp"</span>], <span class="dig">300</span>)
-            <span class="skw">click</span>(dicPng[<span class="str">"page_blur_camp"</span>])
-            <span class="skw">wait</span>(dicPng[<span class="str">"page_focus_camp"</span>], <span class="dig">300</span>)
+        <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strIndividualsCampaignsFilePath):<span class="cmt">#check campaigns.html</span>
+            strIndividualsCampaignsUrl = strIndividualsUrl + <span class="str">u"/campaigns"</span>
+            openChrome()
+            typeUrlOnChrome(strUrlText=strIndividualsCampaignsUrl)
+            <span class="skw">wait</span>(<span class="dig">0.5</span>)
             saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsCampaignsFilename)
     individualsUrlListFile.close()
 <span class="cmt">#main entry point

@@ -32,8 +32,6 @@ dicPng = {"chrome_close":Pattern("chrome_close.png").targetOffset(-24,-1),
           "page_blur_gallery":"page_blur_gallery.png",
           "page_focus_gallery":"page_focus_gallery.png",
           "page_focus_profile":"page_focus_profile.png",
-          "page_blur_camp":"page_blur_camp.png",
-          "page_focus_camp":"page_focus_camp.png",
           "papge_story_details":"papge_story_details.png",
           "page_details_about":"page_details_about.png",
           "page_details_close":"page_details_close.png",
@@ -109,15 +107,23 @@ def checkAndPauseForYourInterruption():
         popup(u"spider paused! （╯‵□′）╯︵┴─┴")
 #type url on chrome
 def typeUrlOnChrome(strUrlText=None):
-    type("l", KeyModifier.CTRL)
-    wait(0.5)
-    delOriginText()
-    pasteClipboardText(strText=strUrlText)
-    wait(0.5)
-    type(Key.ENTER)
-    wait(0.5)
-    waitVanish(dicPng["chrome_stop"], 300)
-    wait(dicPng["chrome_reload"], 300)
+    while True:
+        type("l", KeyModifier.CTRL)
+        wait(0.5)
+        delOriginText()
+        pasteClipboardText(strText=strUrlText)
+        wait(0.5)
+        type(Key.ENTER)
+        wait(0.5)
+        waitVanish(dicPng["chrome_stop"], 300)
+        wait(dicPng["chrome_reload"], 300)
+        #check page "something not right" show?
+        if exists(dicPng["page_not_right"]):
+            #restart chrome and run typeUrlOnChrome again
+            openChrome()
+        else:
+            #ok everything is right, go out while loop
+            break
 # go to explore page
 def goExplorePage():
     openChrome()
@@ -313,8 +319,8 @@ def downloadIndividualsPages(strTargetCategory=None):
         strIndividualsProfileFilePath = strIndividualsFolderPath + "\\" + strIndividualsProfileFilename
         if not os.path.exists(strIndividualsProfileFilePath):#check profile.html
             isIndividualsHtmlFileMissing = True
-        strIndividualsCampaignsFilename = strIndividualsId+"_campaigns.html"       
-        strIndividualsCampaignsFilePath = strIndividualsFolderPath + "\\" + strIndividualsCampaignsFilename        
+        strIndividualsCampaignsFilename = strIndividualsId+"_campaigns.html"
+        strIndividualsCampaignsFilePath = strIndividualsFolderPath + "\\" + strIndividualsCampaignsFilename
         if not os.path.exists(strIndividualsCampaignsFilePath):#check campaigns.html  
             isIndividualsHtmlFileMissing = True
         #open chrome
@@ -322,11 +328,6 @@ def downloadIndividualsPages(strTargetCategory=None):
             openChrome()
             typeUrlOnChrome(strUrlText=strIndividualsUrl)
             wait(0.5)
-            #check page "something not right" show?
-            while(exists(dicPng["page_not_right"])):
-                openChrome()
-                typeUrlOnChrome(strUrlText=strIndividualsUrl)
-                wait(0.5)
         else:
             continue #skip this url
         #check page not found
@@ -337,9 +338,10 @@ def downloadIndividualsPages(strTargetCategory=None):
         if not os.path.exists(strIndividualsProfileFilePath):#check profile.html
             saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsProfileFilename)
         if not os.path.exists(strIndividualsCampaignsFilePath):#check campaigns.html
-            wait(dicPng["page_blur_camp"], 300)
-            click(dicPng["page_blur_camp"])
-            wait(dicPng["page_focus_camp"], 300)
+            strIndividualsCampaignsUrl = strIndividualsUrl + u"/campaigns"
+            openChrome()
+            typeUrlOnChrome(strUrlText=strIndividualsCampaignsUrl)
+            wait(0.5)
             saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsCampaignsFilename)
     individualsUrlListFile.close()
 #main entry point
