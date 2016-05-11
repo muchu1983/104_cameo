@@ -139,6 +139,7 @@ def typeFolderPath(strFolderPath=None):
 def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None):
     waitVanish(dicPng["chrome_stop"], 300)
     wait(dicPng["chrome_reload"], 300)
+    checkAndPauseForYourInterruption()
     rightClick(onImage)
     wait(dicPng["os_right_save_as"], 300)
     click(dicPng["os_right_save_as"])
@@ -158,6 +159,7 @@ def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None
 def saveCurrentPage(strFolderPath=None, strFilename="default.html"):
     waitVanish(dicPng["chrome_stop"], 300)
     wait(dicPng["chrome_reload"], 300)
+    checkAndPauseForYourInterruption()
     type("s", KeyModifier.CTRL)
     wait(dicPng["os_save_btn"], 300)
     if strFolderPath != None:
@@ -337,9 +339,7 @@ def downloadIndividualsPages(strTargetCategory=None):
         if not os.path.exists(strIndividualsCampaignsFilePath):#check campaigns.html
             wait(dicPng["page_blur_camp"], 300)
             click(dicPng["page_blur_camp"])
-            while (not exists(dicPng["page_focus_camp"])):
-                wait(0.5)
-                checkAndPauseForYourInterruption()
+            wait(dicPng["page_focus_camp"], 300)
             saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsCampaignsFilename)
     individualsUrlListFile.close()
 #main entry point
