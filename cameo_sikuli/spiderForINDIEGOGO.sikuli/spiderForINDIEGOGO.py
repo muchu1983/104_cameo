@@ -103,6 +103,10 @@ def unfoldUCBShowmore():
             wait(2)
     type(Key.HOME)
     wait(dicPng["page_blur_story"], 300)
+#pause if interruption page found
+def checkAndPauseForYourInterruption():
+    if exists(dicPng["page_your_interruption"]):
+        popup(u"spider paused! （╯‵□′）╯︵┴─┴")
 #type url on chrome
 def typeUrlOnChrome(strUrlText=None):
     type("l", KeyModifier.CTRL)
@@ -330,10 +334,12 @@ def downloadIndividualsPages(strTargetCategory=None):
         wait(dicPng["page_focus_profile"], 300)
         if not os.path.exists(strIndividualsProfileFilePath):#check profile.html
             saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsProfileFilename)
-        if not os.path.exists(strIndividualsCampaignsFilePath):#check campaigns.html        
+        if not os.path.exists(strIndividualsCampaignsFilePath):#check campaigns.html
             wait(dicPng["page_blur_camp"], 300)
             click(dicPng["page_blur_camp"])
-            wait(dicPng["page_focus_camp"], 300)        
+            while (not exists(dicPng["page_focus_camp"])):
+                wait(0.5)
+                checkAndPauseForYourInterruption()
             saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsCampaignsFilename)
     individualsUrlListFile.close()
 #main entry point
