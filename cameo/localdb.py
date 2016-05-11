@@ -18,6 +18,35 @@ class LocalDbForCurrencyApi:
     def __init__(self):
         self.mongodb = MongoDb().getClient().localdb
         
+#投資界
+class LocalDbForPEDAILY:
+    
+    #建構子
+    def __init__(self):
+        self.db = SQLite3Db(strResFolderPath="cameo_res")
+        self.initialDb()
+        
+    #初取化資料庫
+    def initialDb(self):
+        strSQLCreateTable = ("CREATE TABLE IF NOT EXISTS pedaily_news("
+                             "id INTEGER PRIMARY KEY,"
+                             "strNewsUrl TEXT NOT NULL,"
+                             "intCategoryId INTEGER NOT NULL,"
+                             "isGot BOOLEAN NOT NULL)")
+        self.db.commitSQL(strSQL=strSQLCreateTable)
+        strSQLCreateTable = ("CREATE TABLE IF NOT EXISTS pedaily_category("
+                             "id INTEGER PRIMARY KEY,"
+                             "strCategoryName TEXT NOT NULL,"
+                             "isGot BOOLEAN NOT NULL)")
+        self.db.commitSQL(strSQL=strSQLCreateTable)
+        
+    #清除測試資料 (clear table)
+    def clearTestData(self):
+        strSQL = "DELETE FROM pedaily_news"
+        self.db.commitSQL(strSQL=strSQL)
+        strSQL = "DELETE FROM pedaily_category"
+        self.db.commitSQL(strSQL=strSQL)
+        
 #數位時代
 class LocalDbForBNEXT:
     

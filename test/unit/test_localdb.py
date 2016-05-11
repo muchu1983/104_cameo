@@ -10,6 +10,7 @@ import unittest
 import logging
 from cameo.localdb import LocalDbForTECHORANGE
 from cameo.localdb import LocalDbForBNEXT
+from cameo.localdb import LocalDbForPEDAILY
 """
 測試 本地端資料庫存取
 """
@@ -36,7 +37,7 @@ class LocalDbTest(unittest.TestCase):
         self.assertFalse(db.checkNewsIsGot(strNewsUrl="http://news/for/unit/test"))
         db.updateNewsStatusIsGot(strNewsUrl="http://news/for/unit/test")
         self.assertTrue(db.checkNewsIsGot(strNewsUrl="http://news/for/unit/test"))
-        db.clearTestData()
+        db.clearTestData() #清除測試資料
         
     #測試 bnext 本地端資料庫存取
     def test_localdb_for_bnext(self):
@@ -51,7 +52,13 @@ class LocalDbTest(unittest.TestCase):
         self.assertFalse(db.checkNewsIsGot(strNewsUrl="http://news/for/unit/test"))
         db.updateNewsStatusIsGot(strNewsUrl="http://news/for/unit/test")
         self.assertTrue(db.checkNewsIsGot(strNewsUrl="http://news/for/unit/test"))
-        db.clearTestData()
+        db.clearTestData() #清除測試資料
+        
+    #測試 pedaily 本地端資料庫存取
+    def test_localdb_for_pedaily(self):
+        logging.info("LocalDbTest.test_localdb_for_pedaily")
+        db = LocalDbForPEDAILY()
+        db.clearTestData() #清除測試資料
 
 #測試開始
 if __name__ == "__main__":
