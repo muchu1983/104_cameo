@@ -111,6 +111,7 @@ dicPng = {<span class="str">"chrome_close"</span>:Pattern(<img src="chrome_close
           <span class="str">"page_details_close"</span>:<img src="page_details_close.png" />,
           <span class="str">"page_explore"</span>:<img src="page_explore.png" />,
           <span class="str">"page_not_found"</span>:<img src="page_not_found.png" />,
+          <span class="str">"page_not_right"</span>:<img src="page_not_right.png" />,
           <span class="str">"os_foldername_bar"</span>:Pattern(<img src="os_foldername_bar.png" />).targetOffset(<span class="dig">10</span>,<span class="dig">0</span>),
           <span class="str">"os_filename_bar"</span>:Pattern(<img src="os_filename_bar.png" />).targetOffset(<span class="dig">36</span>,<span class="dig">0</span>),
           <span class="str">"os_right_save_as"</span>:<img src="os_right_save_as.png" />,
@@ -305,10 +306,14 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
                 openChrome() <span class="cmt">#reopen chrome for load standard style</span>
                 typeUrlOnChrome(strUrlText=strProjUrl)
                 <span class="skw">wait</span>(<span class="dig">0.5</span>)
-            <span class="skw">wait</span>(dicPng[<span class="str">"page_focus_story"</span>], <span class="dig">300</span>)
-            <span class="skw">wait</span>(<span class="dig">0.5</span>)
         <span class="kw">else</span>:
             <span class="kw">continue</span> <span class="cmt">#skip this url</span>
+        <span class="cmt">#check page not found
+</span>        <span class="kw">if</span> exists(dicPng[<span class="str">"page_not_found"</span>]):
+            <span class="kw">continue</span> <span class="cmt">#skip this url</span>
+        <span class="cmt">#wait load completed
+</span>        <span class="skw">wait</span>(dicPng[<span class="str">"page_focus_story"</span>], <span class="dig">300</span>)
+        <span class="skw">wait</span>(<span class="dig">0.5</span>)
         <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strProjDetailsFilePath):<span class="cmt">#check detail.html</span>
             <span class="kw">while</span>(<span class="kw">not</span> exists(dicPng[<span class="str">"papge_story_details"</span>])):
                 <span class="skw">type</span>(Key.PAGE_DOWN)
@@ -381,7 +386,13 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
 </span>        <span class="kw">if</span> isIndividualsHtmlFileMissing:
             openChrome()
             typeUrlOnChrome(strUrlText=strIndividualsUrl)
-            <span class="skw">wait</span>(dicPng[<span class="str">"page_focus_profile"</span>], <span class="dig">300</span>)
+        <span class="kw">else</span>:
+            <span class="kw">continue</span> <span class="cmt">#skip this url</span>
+        <span class="cmt">#check page not found
+</span>        <span class="kw">if</span> exists(dicPng[<span class="str">"page_not_found"</span>]):
+            <span class="kw">continue</span> <span class="cmt">#skip this url</span>
+        <span class="cmt">#wait load completed
+</span>        <span class="skw">wait</span>(dicPng[<span class="str">"page_focus_profile"</span>], <span class="dig">300</span>)
         <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strIndividualsProfileFilePath):<span class="cmt">#check profile.html</span>
             saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsProfileFilename)
         <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strIndividualsCampaignsFilePath):<span class="cmt">#check campaigns.html        </span>
