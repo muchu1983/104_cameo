@@ -77,71 +77,61 @@ class SpiderForPEDAILY:
         strIndexHtmlFilePath = strIndexHtmlFolderPath + u"\\index.html"
         self.utility.overwriteSaveAs(strFilePath=strIndexHtmlFilePath, unicodeData=self.driver.page_source)
         
-    #找出下一頁 tag 的 element
-    def findNextPageElements(self):
-        elesNextPageA = []
-        elesPageA = self.driver.find_elements_by_css_selector("ul.pagination li a")
-        for elePageA in elesPageA:
-            if elePageA.text == ">":
-                elesNextPageA.append(elePageA)
-        return elesNextPageA
+    #click 加載更多
+    def clickLoadMoreElement(self):
+        try:
+            eleLoadMoreBtn = self.driver.find_element_by_css_selector("div.box-loadmore a")
+            strLoadMoreBtnStyle = eleLoadMoreBtn.get_attribute("style")
+            while u"none" not in strLoadMoreBtnStyle:
+                time.sleep(random.randint(2,5)) #sleep random time
+                eleLoadMoreBtn.click()
+                time.sleep(random.randint(2,5)) #sleep random time
+                eleLoadMoreBtn = self.driver.find_element_by_css_selector("div.box-loadmore a")
+                strLoadMoreBtnStyle = eleLoadMoreBtn.get_attribute("style")
+        except NoSuchElementException:
+            logging.info("selenium driver can't find the loadmore button.")
+            return
         
     #下載 category 頁面
     def downloadCategoryPage(self, uselessArg1=None):
-        logging.info("download tag page")
-        strTagHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\BNEXT\\tag"
-        if not os.path.exists(strTagHtmlFolderPath):
-            os.mkdir(strTagHtmlFolderPath) #mkdir source_html/BNEXT/tag/
-        strTagWebsiteDomain = self.strWebsiteDomain + u"/search/tag"
-        #取得 Db 中尚未下載的 Tag 名稱
-        lstStrNotObtainedTagName = self.db.fetchallNotObtainedTagName()
-        for strNotObtainedTagName in lstStrNotObtainedTagName:
-            if u"/" in strNotObtainedTagName:
-                # skip tag 名稱中有包含 u"/" 的 tag，避免 url 錯誤
-                continue
-            strTagUrl = strTagWebsiteDomain + u"/" + strNotObtainedTagName
-            #tag 第0頁
-            intPageNum = 0
+        logging.info("download category page")
+        strCategoryHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\PEDAILY\\category"
+        if not os.path.exists(strCategoryHtmlFolderPath):
+            os.mkdir(strCategoryHtmlFolderPath) #mkdir source_html/PEDAILY/category/
+        #取得 Db 中尚未下載的 category 名稱
+        lstStrNotObtainedTCategoryName = self.db.fetchallNotObtainedCategoryName()
+        for strNotObtainedTCategoryName in lstStrNotObtainedTCategoryName:
+            strCategoryUrl = self.strWebsiteDomain + u"/" + strNotObtainedTCategoryName
+            #category 頁面
             time.sleep(random.randint(2,5)) #sleep random time
-            self.driver.get(strTagUrl)
+            self.driver.get(strCategoryUrl)
+            self.clickLoadMoreElement() #點開 加載更多 按鈕
             #儲存 html
-            strTagHtmlFilePath = strTagHtmlFolderPath + u"\\%d_%s_tag.html"%(intPageNum, strNotObtainedTagName)
-            self.utility.overwriteSaveAs(strFilePath=strTagHtmlFilePath, unicodeData=self.driver.page_source)
-            #tag 下一頁
-            elesNextPageA = self.findNextPageElements()
-            while len(elesNextPageA) != 0:
-                time.sleep(random.randint(2,5)) #sleep random time
-                intPageNum = intPageNum+1
-                strTagUrl = elesNextPageA[0].get_attribute("href")
-                self.driver.get(strTagUrl)
-                #儲存 html
-                strTagHtmlFilePath = strTagHtmlFolderPath + u"\\%d_%s_tag.html"%(intPageNum, strNotObtainedTagName)
-                self.utility.overwriteSaveAs(strFilePath=strTagHtmlFilePath, unicodeData=self.driver.page_source)
-                #tag 再下一頁
-                elesNextPageA = self.findNextPageElements()
+            strCategoryHtmlFilePath = strCategoryHtmlFolderPath + u"\\%s_category.html"%(strNotObtainedTCategoryName)
+            self.utility.overwriteSaveAs(strFilePath=strCategoryHtmlFilePath, unicodeData=self.driver.page_source)
             #更新tag DB 為已抓取 (isGot = 1)
-            self.db.updateTagStatusIsGot(strTagName=strNotObtainedTagName)
-            logging.info("got tag %s"%strNotObtainedTagName)
+            #self.db.updateCategoryStatusIsGot(strCategoryName=strNotObtainedTCategoryName)
+            logging.info("got category %s"%strNotObtainedTCategoryName)
             
-    #下載 news 頁面 (strTagName == None 會自動找尋已下載完成之 tag，但若未先執行 parser tag 即使 tag 已下載完成亦無法下載 news)
-    def downloadNewsPage(self, strTagName=None):
-        if strTagName is None:
-            #未指定 tag
-            lstStrObtainedTagName = self.db.fetchallCompletedObtainedTagName()
-            for strObtainedTagName in lstStrObtainedTagName:
-                self.downloadNewsPageWithGivenTagName(strTagName=strObtainedTagName)
+    #下載 news 頁面 (strCategoryName == None 會自動找尋已下載完成之 category)
+    def downloadNewsPage(self, strCategoryName=None):
+        if strCategoryName is None:
+            #未指定 category
+            lstStrObtainedCategoryName = self.db.fetchallCompletedObtainedCategoryName()
+            for strObtainedCategoryName in lstStrObtainedCategoryName:
+                self.downloadNewsPageWithGivenCategoryName(strCategoryName=strObtainedCategoryName)
         else:
-            #有指定 tag 名稱
-            self.downloadNewsPageWithGivenTagName(strTagName=strTagName)
+            #有指定 category 名稱
+            self.downloadNewsPageWithGivenCategoryName(strCategoryName=strCategoryName)
             
-    #下載 news 頁面 (指定 tag 名稱)
-    def downloadNewsPageWithGivenTagName(self, strTagName=None):
-        logging.info("download news page with tag %s"%strTagName)
-        strNewsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\BNEXT\\news"
+    #下載 news 頁面 (指定 category 名稱)
+    def downloadNewsPageWithGivenCategoryName(self, strCategoryName=None):
+        logging.info("download news page with category %s"%strCategoryName)
+        strNewsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\PEDAILY\\news"
         if not os.path.exists(strNewsHtmlFolderPath):
-            os.mkdir(strNewsHtmlFolderPath) #mkdir source_html/BNEXT/news/
-        #取得 DB 紀錄中，指定 strTagName tag 的 news url
-        lstStrNewsUrl = self.db.fetchallNewsUrlByTagName(strTagName=strTagName)
+            os.mkdir(strNewsHtmlFolderPath) #mkdir source_html/PEDAILY/news/
+        #取得 DB 紀錄中，指定 strCategoryName category 的 news url
+        lstStrNewsUrl = self.db.fetchallNewsUrlByCategoryName(strCategoryName=strCategoryName)
         intDownloadedNewsCount = 0#紀錄下載 news 頁面數量
         timeStart = time.time() #計時開始時間點
         timeEnd = None #計時結束時間點
@@ -156,10 +146,10 @@ class SpiderForPEDAILY:
                 intDownloadedNewsCount = intDownloadedNewsCount+1
                 time.sleep(random.randint(2,5)) #sleep random time
                 self.driver.get(strNewsUrl)
-                #儲存 html
-                strNewsName = re.match("^http://www.bnext.com.tw/article/view/id/([0-9]*)$", strNewsUrl).group(1)
-                strNewsHtmlFilePath = strNewsHtmlFolderPath + u"\\%s_news.html"%strNewsName
-                self.utility.overwriteSaveAs(strFilePath=strNewsHtmlFilePath, unicodeData=self.driver.page_source)
+                #儲存 html (pedaily.cn 將 news 儲放在不同台的 server)
+                #strNewsName = re.match("^http://www.bnext.com.tw/article/view/id/([0-9]*)$", strNewsUrl).group(1)
+                #strNewsHtmlFilePath = strNewsHtmlFolderPath + u"\\%s_news.html"%strNewsName
+                #self.utility.overwriteSaveAs(strFilePath=strNewsHtmlFilePath, unicodeData=self.driver.page_source)
                 #更新news DB 為已抓取 (isGot = 1)
-                self.db.updateNewsStatusIsGot(strNewsUrl=strNewsUrl)
+                #self.db.updateNewsStatusIsGot(strNewsUrl=strNewsUrl)
             

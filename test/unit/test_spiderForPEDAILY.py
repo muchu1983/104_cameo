@@ -24,17 +24,17 @@ class SpiderForPEDAILYTest(unittest.TestCase):
     #收尾
     def tearDown(self):
         self.spider.quitDriver()
-    
+    """
     #測試抓取 index page
     def test_downloadIndexPage(self):
         logging.info("SpiderForPEDAILYTest.test_downloadIndexPage")
         self.spider.downloadIndexPage()
     """
-    #測試抓取 tag page
+    #測試抓取 category page
     def test_downloadCategoryPage(self):
         logging.info("SpiderForPEDAILYTest.test_downloadCategoryPage")
         self.spider.downloadCategoryPage()
-    
+    """
     #測試抓取 news page
     def test_downloadNewsPage(self):
         logging.info("SpiderForPEDAILYTest.test_downloadNewsPage")

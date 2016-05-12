@@ -23,7 +23,7 @@ class ParserForPEDAILYTest(unittest.TestCase):
     #收尾
     def tearDown(self):
         pass
-    
+    """
     #測試 解析 index.html
     def test_parseIndexPage(self):
         logging.info("ParserForPEDAILYTest.test_parseIndexPage")
@@ -35,7 +35,7 @@ class ParserForPEDAILYTest(unittest.TestCase):
         logging.info("ParserForPEDAILYTest.test_parseCategoryPage")
         parser = ParserForPEDAILY()
         parser.parseCategoryPage()
-    
+    """
     #測試 解析 news.html 並建立 news.json
     def test_parseNewsPageThenCreateNewsJson(self):
         logging.info("ParserForPEDAILYTest.test_parseNewsPageThenCreateNewsJson")

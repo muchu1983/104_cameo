@@ -70,28 +70,25 @@ class ParserForPEDAILY:
                 
     #解析 category.html
     def parseCategoryPage(self, uselessArg1=None):
-        strTagResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\BNEXT\\tag"
-        if not os.path.exists(strTagResultFolderPath):
-            os.mkdir(strTagResultFolderPath) #mkdir parsed_result/BNEXT/tag/
-        strTagHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\BNEXT\\tag"
-        self.dicParsedResultOfTag = {} #清空 dicParsedResultOfTag 資料 (暫無用處)
-        #取得已下載完成的 strTagName list
-        lstStrObtainedTagName = self.db.fetchallCompletedObtainedTagName()
-        for strObtainedTagName in lstStrObtainedTagName: #tag loop
-            strTagSuffixes = u"_%s_tag.html"%strObtainedTagName
-            lstStrTagHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strTagHtmlFolderPath, strSuffixes=strTagSuffixes)
-            for strTagHtmlFilePath in lstStrTagHtmlFilePath: #tag page loop
-                logging.info("parse %s"%strTagHtmlFilePath)
-                with open(strTagHtmlFilePath, "r") as tagHtmlFile:
-                    strPageSource = tagHtmlFile.read()
-                    root = Selector(text=strPageSource)
-                    #解析 news URL
-                    lstStrNewsUrl = root.css("div#search_list div.item_box div.div_tr div.item_text a.item_title::attr(href)").extract()
-                    for strNewsUrl in lstStrNewsUrl: #news loop
-                        #儲存 news url 及 news tag mapping 至 DB
-                        if strNewsUrl.startswith("/article/view/id/"): #filter remove AD and px... url
-                            strNewsUrl = self.strWebsiteDomain + strNewsUrl
-                            self.db.insertNewsUrlAndNewsTagMappingIfNotExists(strNewsUrl=strNewsUrl, strTagName=strObtainedTagName)
+        strCategoryResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\PEDAILY\\category"
+        if not os.path.exists(strCategoryResultFolderPath):
+            os.mkdir(strCategoryResultFolderPath) #mkdir parsed_result/PEDAILY/category/
+        strCategoryHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\PEDAILY\\category"
+        self.dicParsedResultOfCategory = {} #清空 dicParsedResultOfCategory 資料 (暫無用處)
+        #取得已下載完成的 strCategoryName list
+        lstStrObtainedCategoryName = self.db.fetchallCompletedObtainedCategoryName()
+        for strObtainedCategoryName in lstStrObtainedCategoryName: #category loop
+            strCategoryHtmlFilePath = strCategoryHtmlFolderPath + u"\\%s_category.html"%strObtainedCategoryName
+            logging.info("parse %s"%strCategoryHtmlFilePath)
+            with open(strCategoryHtmlFilePath, "r") as categoryHtmlFile:
+                strPageSource = categoryHtmlFile.read()
+                root = Selector(text=strPageSource)
+                #解析 news URL
+                lstStrNewsUrl = root.css("div.news-list ul#newslist-all li h3 a::attr(href)").extract()
+                for strNewsUrl in lstStrNewsUrl: #news loop
+                    #儲存 news url 至 DB
+                    print(strNewsUrl)
+                    #self.db.insertNewsUrlIfNotExists(strNewsUrl=strNewsUrl, strCategoryName=strObtainedCategoryName)
     
     #解析 news.html 之二 (產生 news.json )
     def parseNewsPageThenCreateNewsJson(self, uselessArg1=None):
