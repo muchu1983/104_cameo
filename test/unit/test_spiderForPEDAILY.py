@@ -8,12 +8,12 @@ This file is part of BSD license
 """
 import unittest
 import logging
-from cameo.spiderForBNEXT import SpiderForBNEXT
+from cameo.spiderForPEDAILY import SpiderForPEDAILY
 """
-測試 抓取 BNEXT
+測試 抓取 PEDAILY
 """
 
-class SpiderForBNEXTTest(unittest.TestCase):
+class SpiderForPEDAILYTest(unittest.TestCase):
 
     #準備
     def setUp(self):

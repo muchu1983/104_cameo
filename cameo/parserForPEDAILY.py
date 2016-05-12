@@ -14,12 +14,12 @@ import logging
 import urllib
 from scrapy import Selector
 from cameo.utility import Utility
-from cameo.localdb import LocalDbForBNEXT
+from cameo.localdb import LocalDbForPEDAILY
 """
 從 source_html 的 HTML 檔案解析資料
 結果放置於 parsed_result 下
 """
-class ParserForBNEXT:
+class ParserForPEDAILY:
     #建構子
     def __init__(self):
         self.utility = Utility()

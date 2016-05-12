@@ -13,11 +13,11 @@ import logging
 import re
 import random
 from cameo.utility import Utility
-from cameo.localdb import LocalDbForBNEXT
+from cameo.localdb import LocalDbForPEDAILY
 """
-抓取 數位時代 html 存放到 source_html 
+抓取 投資界 html 存放到 source_html 
 """
-class SpiderForBNEXT:
+class SpiderForPEDAILY:
     
     #建構子
     def __init__(self):

@@ -9,11 +9,11 @@ This file is part of BSD license
 import unittest
 import logging
 import json
-from cameo.parserForBNEXT import ParserForBNEXT
+from cameo.parserForPEDAILY import ParserForPEDAILY
 """
-測試 解析 數位時代 頁面
+測試 解析 投資界 頁面
 """
-class ParserForBNEXTTest(unittest.TestCase):
+class ParserForPEDAILYTest(unittest.TestCase):
 
     #準備
     def setUp(self):
