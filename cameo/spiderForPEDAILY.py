@@ -23,9 +23,9 @@ class SpiderForPEDAILY:
     def __init__(self):
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
-        self.strWebsiteDomain = u"http://www.pedaily.cn/"
+        self.strWebsiteDomain = u"http://www.pedaily.cn"
         self.dicSubCommandHandler = {"index":self.downloadIndexPage,
-                             "category":self.downloadTagPage,
+                             "category":self.downloadCategoryPage,
                              "news":self.downloadNewsPage}
         self.utility = Utility()
         self.db = LocalDbForPEDAILY()
@@ -67,13 +67,12 @@ class SpiderForPEDAILY:
         
     #下載 index 頁面 
     def downloadIndexPage(self, uselessArg1=None):
-        TODO.here()
         logging.info("download index page")
-        strIndexHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\BNEXT"
+        strIndexHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\PEDAILY"
         if not os.path.exists(strIndexHtmlFolderPath):
-            os.mkdir(strIndexHtmlFolderPath) #mkdir source_html/BNEXT/
-        #數位時代首頁
-        self.driver.get("http://www.bnext.com.tw")
+            os.mkdir(strIndexHtmlFolderPath) #mkdir source_html/PEDAILY/
+        #投資界首頁
+        self.driver.get("http://www.pedaily.cn/")
         #儲存 html
         strIndexHtmlFilePath = strIndexHtmlFolderPath + u"\\index.html"
         self.utility.overwriteSaveAs(strFilePath=strIndexHtmlFilePath, unicodeData=self.driver.page_source)
@@ -87,8 +86,8 @@ class SpiderForPEDAILY:
                 elesNextPageA.append(elePageA)
         return elesNextPageA
         
-    #下載 tag 頁面
-    def downloadTagPag(self, uselessArg1=None):
+    #下載 category 頁面
+    def downloadCategoryPage(self, uselessArg1=None):
         logging.info("download tag page")
         strTagHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\BNEXT\\tag"
         if not os.path.exists(strTagHtmlFolderPath):

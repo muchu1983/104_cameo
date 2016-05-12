@@ -23,26 +23,24 @@ class ParserForPEDAILY:
     #建構子
     def __init__(self):
         self.utility = Utility()
-        self.db = LocalDbForBNEXT()
+        self.db = LocalDbForPEDAILY()
         self.dicSubCommandHandler = {"index":[self.parseIndexPage],
-                                     "tag":[self.parseTagPage],
-                                     "news":[self.findMoreTagByParseNewsPage],
+                                     "category":[self.parseCategoryPage],
                                      "json":[self.parseNewsPageThenCreateNewsJson]}
-        self.strWebsiteDomain = u"http://www.bnext.com.tw"
+        self.strWebsiteDomain = u"http://www.pedaily.cn"
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
         self.intNewsJsonNum = 0 #news.json 檔案編號
         self.intMaxNewsPerNewsJsonFile = 1000 #每個 news.json 儲存的 news 之最大數量
-        self.dicParsedResultOfTag = {} #tag.json 資料
+        self.dicParsedResultOfCategory = {} #category.json 資料
         self.dicParsedResultOfNews = [] #news.json 資料
         
     #取得 parser 使用資訊
     def getUseageMessage(self):
-        return ("- BNEXT -\n"
+        return ("- PEDAILY -\n"
                 "useage:\n"
                 "index - parse index.html then insert tag into DB \n"
-                "tag - parse tag.html then insert news and newstag into DB \n"
-                "news - parse news.html then insert tag into DB \n"
+                "category - parse category.html then insert news into DB \n"
                 "json - parse news.html then create json \n")
                 
     #執行 parser
@@ -56,22 +54,22 @@ class ParserForPEDAILY:
     
     #解析 index.html
     def parseIndexPage(self, uselessArg1=None):
-        strIndexResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\BNEXT"
+        strIndexResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\PEDAILY"
         if not os.path.exists(strIndexResultFolderPath):
-            os.mkdir(strIndexResultFolderPath) #mkdir parsed_result/BNEXT/
-        strIndexHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\BNEXT"
+            os.mkdir(strIndexResultFolderPath) #mkdir parsed_result/PEDAILY/
+        strIndexHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\PEDAILY"
         strIndexHtmlFilePath = strIndexHtmlFolderPath + u"\\index.html"
         with open(strIndexHtmlFilePath, "r") as indexHtmlFile:
             strPageSource = indexHtmlFile.read()
             root = Selector(text=strPageSource)
-            lstStrHotTagUrl = root.css("div#keyword_block div a::attr(href)").extract()
-            for strHotTagUrl in lstStrHotTagUrl:
-                strHotTagName = re.match("^/search/tag/(.*)$", strHotTagUrl).group(1)
-                strHotTagName = urllib.quote(strHotTagName.encode("utf-8")) #url encode
-                self.db.insertTagIfNotExists(strTagName=strHotTagName)
+            lstStrCategoryUrl = root.css("div.footer ul.main li.box-fix-d dl dt:nth-of-type(3) ul li a::attr(href)").extract()
+            for strCategoryUrl in lstStrCategoryUrl:
+                strCategoryName = re.match("^http://www.pedaily.cn/(.*)/$", strCategoryUrl).group(1)
+                strCategoryName = urllib.quote(strCategoryName.encode("utf-8")) #url encode
+                self.db.insertCategoryIfNotExists(strCategoryName=strCategoryName)
                 
-    #解析 tag.html
-    def parseTagPage(self, uselessArg1=None):
+    #解析 category.html
+    def parseCategoryPage(self, uselessArg1=None):
         strTagResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\BNEXT\\tag"
         if not os.path.exists(strTagResultFolderPath):
             os.mkdir(strTagResultFolderPath) #mkdir parsed_result/BNEXT/tag/
@@ -94,24 +92,7 @@ class ParserForPEDAILY:
                         if strNewsUrl.startswith("/article/view/id/"): #filter remove AD and px... url
                             strNewsUrl = self.strWebsiteDomain + strNewsUrl
                             self.db.insertNewsUrlAndNewsTagMappingIfNotExists(strNewsUrl=strNewsUrl, strTagName=strObtainedTagName)
-                    
-    #解析 news.html 之一 (取得更多 tag)
-    def findMoreTagByParseNewsPage(self, uselessArg1=None):
-        strNewsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\BNEXT\\news"
-        #讀取 news.html
-        lstStrNewsHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strNewsHtmlFolderPath, strSuffixes=u"_news.html")
-        for strNewsHtmlFilePath in lstStrNewsHtmlFilePath:
-            logging.info("parse %s"%strNewsHtmlFilePath)
-            with open(strNewsHtmlFilePath, "r") as newsHtmlFile:
-                strPageSource = newsHtmlFile.read()
-                root = Selector(text=strPageSource)
-                #解析 news.html
-                lstStrTagUrl = root.css("div.tag_box a.tag_link::attr(href)").extract()
-                for strTagUrl in lstStrTagUrl:
-                    strTagName = re.match("^/search/tag/(.*)$", strTagUrl).group(1)
-                    strTagName = urllib.quote(strTagName.encode("utf-8")) #url encode
-                    self.db.insertTagIfNotExists(strTagName=strTagName)
-        
+    
     #解析 news.html 之二 (產生 news.json )
     def parseNewsPageThenCreateNewsJson(self, uselessArg1=None):
         strNewsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\BNEXT\\news"

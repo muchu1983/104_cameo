@@ -26,28 +26,22 @@ class ParserForPEDAILYTest(unittest.TestCase):
     
     #測試 解析 index.html
     def test_parseIndexPage(self):
-        logging.info("ParserForBNEXTTest.test_parseIndexPage")
-        parser = ParserForBNEXT()
+        logging.info("ParserForPEDAILYTest.test_parseIndexPage")
+        parser = ParserForPEDAILY()
         parser.parseIndexPage()
-    
-    #測試 解析 tag.html
-    def test_parseTagPage(self):
-        logging.info("ParserForBNEXTTest.test_parseTagPage")
-        parser = ParserForBNEXT()
-        parser.parseTagPage()
-    
-    #測試 解析 news.html 以找出更多 tag
-    def test_findMoreTagByParseNewsPage(self):
-        logging.info("ParserForBNEXTTest.test_findMoreTagByParseNewsPage")
-        parser = ParserForBNEXT()
-        parser.findMoreTagByParseNewsPage()
+    """
+    #測試 解析 category.html
+    def test_parseCategoryPage(self):
+        logging.info("ParserForPEDAILYTest.test_parseCategoryPage")
+        parser = ParserForPEDAILY()
+        parser.parseCategoryPage()
     
     #測試 解析 news.html 並建立 news.json
     def test_parseNewsPageThenCreateNewsJson(self):
-        logging.info("ParserForBNEXTTest.test_parseNewsPageThenCreateNewsJson")
-        parser = ParserForBNEXT()
+        logging.info("ParserForPEDAILYTest.test_parseNewsPageThenCreateNewsJson")
+        parser = ParserForPEDAILY()
         parser.parseNewsPageThenCreateNewsJson()
-    
+    """
 #測試開始
 if __name__ == "__main__":
     unittest.main(exit=False)
