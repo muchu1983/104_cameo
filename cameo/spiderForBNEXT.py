@@ -25,7 +25,7 @@ class SpiderForBNEXT:
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
         self.strWebsiteDomain = u"http://www.bnext.com.tw"
         self.dicSubCommandHandler = {"index":self.downloadIndexPage,
-                                     "tag":self.downloadTagPag,
+                                     "tag":self.downloadTagPage,
                                      "news":self.downloadNewsPage}
         self.utility = Utility()
         self.db = LocalDbForBNEXT()
@@ -87,7 +87,7 @@ class SpiderForBNEXT:
         return elesNextPageA
         
     #下載 tag 頁面
-    def downloadTagPag(self, uselessArg1=None):
+    def downloadTagPage(self, uselessArg1=None):
         logging.info("download tag page")
         strTagHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\BNEXT\\tag"
         if not os.path.exists(strTagHtmlFolderPath):

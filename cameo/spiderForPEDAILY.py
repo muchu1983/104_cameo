@@ -23,21 +23,21 @@ class SpiderForPEDAILY:
     def __init__(self):
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
-        self.strWebsiteDomain = u"http://www.bnext.com.tw"
+        self.strWebsiteDomain = u"http://www.pedaily.cn/"
         self.dicSubCommandHandler = {"index":self.downloadIndexPage,
-                                     "tag":self.downloadTagPag,
-                                     "news":self.downloadNewsPage}
+                             "category":self.downloadTagPage,
+                             "news":self.downloadNewsPage}
         self.utility = Utility()
-        self.db = LocalDbForBNEXT()
+        self.db = LocalDbForPEDAILY()
         self.driver = None
         
     #取得 spider 使用資訊
     def getUseageMessage(self):
-        return ("- BNEXT -\n"
+        return ("- PEDAILY -\n"
                 "useage:\n"
-                "index - download entry page of BNEXT \n"
-                "tag - download not obtained tag page \n"
-                "news [tag] - download not obtained news [of given tag] \n")
+                "index - download entry page of PEDAILY \n"
+                "category - download not obtained category page \n"
+                "news [category] - download not obtained news [of given category] \n")
     
     #取得 selenium driver 物件
     def getDriver(self):
@@ -65,8 +65,9 @@ class SpiderForPEDAILY:
         self.dicSubCommandHandler[strSubcommand](strArg1)
         self.quitDriver() #quit selenium driver
         
-    #下載 index 頁面
+    #下載 index 頁面 
     def downloadIndexPage(self, uselessArg1=None):
+        TODO.here()
         logging.info("download index page")
         strIndexHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\BNEXT"
         if not os.path.exists(strIndexHtmlFolderPath):

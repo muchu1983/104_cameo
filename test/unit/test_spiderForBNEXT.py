@@ -33,7 +33,7 @@ class SpiderForBNEXTTest(unittest.TestCase):
     #測試抓取 tag page
     def test_downloadTagPage(self):
         logging.info("SpiderForBNEXTTest.test_downloadTagPage")
-        self.spider.downloadTagPag()
+        self.spider.downloadTagPage()
     
     #測試抓取 news page
     def test_downloadNewsPage(self):
