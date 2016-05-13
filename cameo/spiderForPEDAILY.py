@@ -164,13 +164,17 @@ class SpiderForPEDAILY:
                     timeStart = timeEnd
                 intDownloadedNewsCount = intDownloadedNewsCount+1
                 time.sleep(random.randint(5,9)) #sleep random time
-                self.restartDriver()
-                self.driver.get(strNewsUrl)
-                #儲存 html (pedaily.cn 將 news 儲放在不同台的 server)
-                strNewsServerName = re.match("^http://([a-z]*).pedaily.cn/.*/([0-9]*).shtml$", strNewsUrl).group(1)
-                strNewsName = re.match("^http://([a-z]*).pedaily.cn/.*/([0-9]*).shtml$", strNewsUrl).group(2)
-                strNewsHtmlFilePath = strNewsHtmlFolderPath + u"\\%s_%s_news.html"%(strNewsName, strNewsServerName)
-                self.utility.overwriteSaveAs(strFilePath=strNewsHtmlFilePath, unicodeData=self.driver.page_source)
-                #更新news DB 為已抓取 (isGot = 1)
-                self.db.updateNewsStatusIsGot(strNewsUrl=strNewsUrl)
+                try:
+                    self.driver.get(strNewsUrl)
+                    #儲存 html (記錄 news 儲放的 xxx.pedaily.cn server 名稱)
+                    strNewsServerName = re.match("^http://([a-z]*).pedaily.cn/.*/([0-9]*).shtml$", strNewsUrl).group(1)
+                    strNewsName = re.match("^http://([a-z]*).pedaily.cn/.*/([0-9]*).shtml$", strNewsUrl).group(2)
+                    strNewsHtmlFilePath = strNewsHtmlFolderPath + u"\\%s_%s_news.html"%(strNewsName, strNewsServerName)
+                    self.utility.overwriteSaveAs(strFilePath=strNewsHtmlFilePath, unicodeData=self.driver.page_source)
+                    #更新news DB 為已抓取 (isGot = 1)
+                    self.db.updateNewsStatusIsGot(strNewsUrl=strNewsUrl)
+                except:
+                    logging.warnning("selenium driver crashed. skip get news: %s"%strNewsUrl)
+                finally:
+                    self.restartDriver() #重啟 
             
