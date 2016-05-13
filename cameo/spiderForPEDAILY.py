@@ -6,12 +6,13 @@ This file is part of BSD license
 
 <https://opensource.org/licenses/BSD-3-Clause>
 """
-from selenium import webdriver
 import os
 import time
 import logging
 import re
 import random
+from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 from cameo.utility import Utility
 from cameo.localdb import LocalDbForPEDAILY
 """
