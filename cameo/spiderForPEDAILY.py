@@ -125,14 +125,19 @@ class SpiderForPEDAILY:
             strCategoryUrl = self.strWebsiteDomain + u"/" + strNotObtainedTCategoryName
             #category 頁面
             time.sleep(random.randint(2,5)) #sleep random time
-            self.driver.get(strCategoryUrl)
-            self.clickLoadMoreElement() #點開 加載更多 按鈕
-            #儲存 html
-            strCategoryHtmlFilePath = strCategoryHtmlFolderPath + u"\\%s_category.html"%(strNotObtainedTCategoryName)
-            self.utility.overwriteSaveAs(strFilePath=strCategoryHtmlFilePath, unicodeData=self.driver.page_source)
-            #更新tag DB 為已抓取 (isGot = 1)
-            self.db.updateCategoryStatusIsGot(strCategoryName=strNotObtainedTCategoryName)
-            logging.info("got category %s"%strNotObtainedTCategoryName)
+            try:
+                self.driver.get(strCategoryUrl)
+                self.clickLoadMoreElement() #點開 加載更多 按鈕
+                #儲存 html
+                strCategoryHtmlFilePath = strCategoryHtmlFolderPath + u"\\%s_category.html"%(strNotObtainedTCategoryName)
+                self.utility.overwriteSaveAs(strFilePath=strCategoryHtmlFilePath, unicodeData=self.driver.page_source)
+                #更新tag DB 為已抓取 (isGot = 1)
+                self.db.updateCategoryStatusIsGot(strCategoryName=strNotObtainedTCategoryName)
+                logging.info("got category %s"%strNotObtainedTCategoryName)
+            except:
+                logging.warnning("selenium driver crashed. skip get category: %s"%strCategoryUrl)
+            finally:
+                self.restartDriver() #重啟 
             
     #下載 news 頁面 (strCategoryName == None 會自動找尋已下載完成之 category)
     def downloadNewsPage(self, strCategoryName=None):
