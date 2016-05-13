@@ -50,12 +50,16 @@ class SpiderForPEDAILY:
     def initDriver(self):
         if self.driver is None:
             self.driver = self.getDriver()
-            self.driver.implicitly_wait(300) #設定等待時間
         
     #終止 selenium driver 物件
     def quitDriver(self):
         self.driver.quit()
         self.driver = None
+        
+    #重啟 selenium driver 物件
+    def restartDriver(self):
+        self.quitDriver()
+        self.initDriver()
         
     #執行 spider
     def runSpider(self, lstSubcommand=None):
@@ -160,6 +164,7 @@ class SpiderForPEDAILY:
                     timeStart = timeEnd
                 intDownloadedNewsCount = intDownloadedNewsCount+1
                 time.sleep(random.randint(5,9)) #sleep random time
+                self.restartDriver()
                 self.driver.get(strNewsUrl)
                 #儲存 html (pedaily.cn 將 news 儲放在不同台的 server)
                 strNewsServerName = re.match("^http://([a-z]*).pedaily.cn/.*/([0-9]*).shtml$", strNewsUrl).group(1)
