@@ -81,13 +81,13 @@ class SpiderForPEDAILY:
     #click 加載更多
     def clickLoadMoreElement(self):
         try:
-            eleLoadMoreBtn = self.driver.find_element_by_css_selector("div.box-loadmore a")
+            eleLoadMoreBtn = self.driver.find_element_by_css_selector("a#loadmore")
             strLoadMoreBtnStyle = eleLoadMoreBtn.get_attribute("style")
             while u"none" not in strLoadMoreBtnStyle:
                 time.sleep(random.randint(2,5)) #sleep random time
                 eleLoadMoreBtn.click()
                 time.sleep(random.randint(2,5)) #sleep random time
-                eleLoadMoreBtn = self.driver.find_element_by_css_selector("div.box-loadmore a")
+                eleLoadMoreBtn = self.driver.find_element_by_css_selector("a#loadmore")
                 strLoadMoreBtnStyle = eleLoadMoreBtn.get_attribute("style")
         except NoSuchElementException:
             logging.info("selenium driver can't find the loadmore button.")
