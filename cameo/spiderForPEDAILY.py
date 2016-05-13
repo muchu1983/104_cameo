@@ -50,6 +50,7 @@ class SpiderForPEDAILY:
     def initDriver(self):
         if self.driver is None:
             self.driver = self.getDriver()
+            self.driver.implicitly_wait(300) #設定等待時間
         
     #終止 selenium driver 物件
     def quitDriver(self):
