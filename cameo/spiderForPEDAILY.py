@@ -110,7 +110,7 @@ class SpiderForPEDAILY:
             strCategoryHtmlFilePath = strCategoryHtmlFolderPath + u"\\%s_category.html"%(strNotObtainedTCategoryName)
             self.utility.overwriteSaveAs(strFilePath=strCategoryHtmlFilePath, unicodeData=self.driver.page_source)
             #更新tag DB 為已抓取 (isGot = 1)
-            #self.db.updateCategoryStatusIsGot(strCategoryName=strNotObtainedTCategoryName)
+            self.db.updateCategoryStatusIsGot(strCategoryName=strNotObtainedTCategoryName)
             logging.info("got category %s"%strNotObtainedTCategoryName)
             
     #下載 news 頁面 (strCategoryName == None 會自動找尋已下載完成之 category)
@@ -147,9 +147,10 @@ class SpiderForPEDAILY:
                 time.sleep(random.randint(2,5)) #sleep random time
                 self.driver.get(strNewsUrl)
                 #儲存 html (pedaily.cn 將 news 儲放在不同台的 server)
-                #strNewsName = re.match("^http://www.bnext.com.tw/article/view/id/([0-9]*)$", strNewsUrl).group(1)
-                #strNewsHtmlFilePath = strNewsHtmlFolderPath + u"\\%s_news.html"%strNewsName
-                #self.utility.overwriteSaveAs(strFilePath=strNewsHtmlFilePath, unicodeData=self.driver.page_source)
+                strNewsServerName = re.match("^http://([a-z]*).pedaily.cn/.*/([0-9]*).shtml$", strNewsUrl).group(1)
+                strNewsName = re.match("^http://([a-z]*).pedaily.cn/.*/([0-9]*).shtml$", strNewsUrl).group(2)
+                strNewsHtmlFilePath = strNewsHtmlFolderPath + u"\\%s_%s_news.html"%(strNewsName, strNewsServerName)
+                self.utility.overwriteSaveAs(strFilePath=strNewsHtmlFilePath, unicodeData=self.driver.page_source)
                 #更新news DB 為已抓取 (isGot = 1)
-                #self.db.updateNewsStatusIsGot(strNewsUrl=strNewsUrl)
+                self.db.updateNewsStatusIsGot(strNewsUrl=strNewsUrl)
             

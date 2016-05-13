@@ -87,16 +87,16 @@ class ParserForPEDAILY:
                 lstStrNewsUrl = root.css("div.news-list ul#newslist-all li h3 a::attr(href)").extract()
                 for strNewsUrl in lstStrNewsUrl: #news loop
                     #儲存 news url 至 DB
-                    print(strNewsUrl)
-                    #self.db.insertNewsUrlIfNotExists(strNewsUrl=strNewsUrl, strCategoryName=strObtainedCategoryName)
+                    if strNewsUrl.endswith(".shtml"):
+                        self.db.insertNewsUrlIfNotExists(strNewsUrl=strNewsUrl, strCategoryName=strObtainedCategoryName)
     
-    #解析 news.html 之二 (產生 news.json )
+    #解析 news.html 產生 news.json (pedaily.cn 將 news 儲放在不同台的 server)
     def parseNewsPageThenCreateNewsJson(self, uselessArg1=None):
-        strNewsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\BNEXT\\news"
+        strNewsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\PEDAILY\\news"
         if not os.path.exists(strNewsResultFolderPath):
-            os.mkdir(strNewsResultFolderPath) #mkdir parsed_result/BNEXT/news/
-        strNewsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\BNEXT\\news"
-        self.dicParsedResultOfNews = [] #清空 news.json 資料
+            os.mkdir(strNewsResultFolderPath) #mkdir parsed_result/PEDAILY/news/
+        strNewsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\PEDAILY\\news"
+        self.dicParsedResultOfNews = [] #清空 news.json 暫存資料
         self.intNewsJsonNum = 0 #計數器歸零
         #讀取 news.html
         lstStrNewsHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strNewsHtmlFolderPath, strSuffixes=u"_news.html")
@@ -107,13 +107,6 @@ class ParserForPEDAILY:
                 strPageSource = newsHtmlFile.read()
                 root = Selector(text=strPageSource)
             #解析 news.html
-            #檢查 news 是否為看板新聞
-            eleBoardLabel = root.css("span.board-label").extract_first()
-            if eleBoardLabel: # is not None
-                # rename news 檔名為 xxx_news.html.error
-                os.rename(strNewsHtmlFilePath, strNewsHtmlFilePath + u".error")
-                logging.warning("%s is board news,skip parse it."%strNewsHtmlFilePath)
-                continue #略過該筆 news
             #strSiteName
             dicNewsData["strSiteName"] = u"BNEXT"
             #strUrl

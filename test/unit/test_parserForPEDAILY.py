@@ -29,7 +29,7 @@ class ParserForPEDAILYTest(unittest.TestCase):
         logging.info("ParserForPEDAILYTest.test_parseIndexPage")
         parser = ParserForPEDAILY()
         parser.parseIndexPage()
-    """
+    
     #測試 解析 category.html
     def test_parseCategoryPage(self):
         logging.info("ParserForPEDAILYTest.test_parseCategoryPage")
@@ -41,7 +41,7 @@ class ParserForPEDAILYTest(unittest.TestCase):
         logging.info("ParserForPEDAILYTest.test_parseNewsPageThenCreateNewsJson")
         parser = ParserForPEDAILY()
         parser.parseNewsPageThenCreateNewsJson()
-    """
+    
 #測試開始
 if __name__ == "__main__":
     unittest.main(exit=False)
