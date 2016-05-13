@@ -14,6 +14,8 @@ from cameo.spiderForTECHORANGE import SpiderForTECHORANGE
 from cameo.parserForTECHORANGE import ParserForTECHORANGE
 from cameo.spiderForBNEXT import SpiderForBNEXT
 from cameo.parserForBNEXT import ParserForBNEXT
+from cameo.spiderForPEDAILY import SpiderForPEDAILY
+from cameo.parserForPEDAILY import ParserForPEDAILY
 from cameo.cleaner import CleanerForINDIEGOGO
 from cameo.reporter import ReporterForINDIEGOGO
 from cameo.reporter import ReporterForWEBACKERS
@@ -27,16 +29,18 @@ class CameoShell:
         self.intShellStateCode = 0 #0-已關閉，1-已開啟，
         self.strTargetSite = None
         self.dicSpiders = {"indiegogo":SpiderForINDIEGOGO(),
-                           "webackers":SpiderForWEBACKERS(),
-                           "techorange":SpiderForTECHORANGE(),
-                           "bnext":SpiderForBNEXT()}
+                      "webackers":SpiderForWEBACKERS(),
+                      "techorange":SpiderForTECHORANGE(),
+                      "bnext":SpiderForBNEXT(),
+                      "pedaily":SpiderForPEDAILY()}
         self.dicParsers = {"indiegogo":ParserForINDIEGOGO(),
-                           "webackers":ParserForWEBACKERS(),
-                           "techorange":ParserForTECHORANGE(),
-                           "bnext":ParserForBNEXT()}
+                      "webackers":ParserForWEBACKERS(),
+                      "techorange":ParserForTECHORANGE(),
+                      "bnext":ParserForBNEXT(),
+                      "pedaily":ParserForPEDAILY()}
         self.dicCleaners = {"indiegogo":CleanerForINDIEGOGO()}
         self.dicReporters = {"indiegogo":ReporterForINDIEGOGO(),
-                             "webackers":ReporterForWEBACKERS()}
+                       "webackers":ReporterForWEBACKERS()}
         
     #顯示目前的目標網站
     def listSiteMessage(self):
