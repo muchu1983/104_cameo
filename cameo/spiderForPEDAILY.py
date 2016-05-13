@@ -158,7 +158,7 @@ class SpiderForPEDAILY:
                     logging.info("download 10 news cost %f sec"%timeCost)
                     timeStart = timeEnd
                 intDownloadedNewsCount = intDownloadedNewsCount+1
-                time.sleep(random.randint(2,5)) #sleep random time
+                time.sleep(random.randint(5,9)) #sleep random time
                 self.driver.get(strNewsUrl)
                 #儲存 html (pedaily.cn 將 news 儲放在不同台的 server)
                 strNewsServerName = re.match("^http://([a-z]*).pedaily.cn/.*/([0-9]*).shtml$", strNewsUrl).group(1)
