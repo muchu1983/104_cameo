@@ -83,10 +83,23 @@ class SpiderForPEDAILY:
         try:
             eleLoadMoreBtn = self.driver.find_element_by_css_selector("a#loadmore")
             strLoadMoreBtnStyle = eleLoadMoreBtn.get_attribute("style")
+            intNewsCount = len(self.driver.find_elements_by_css_selector("div.news-list ul#newslist-all li"))
+            intClickCount = 0
             while u"none" not in strLoadMoreBtnStyle:
                 time.sleep(random.randint(2,5)) #sleep random time
                 eleLoadMoreBtn.click()
                 time.sleep(random.randint(2,5)) #sleep random time
+                # 檢查 intNewsCount 數量是否有增加
+                intClickCount = (intClickCount+1)%50 # 每 click 50 次檢查一次
+                logging.info("click loadmore button. (%d/50)"%intClickCount)
+                if intClickCount == 0:
+                    intNewNewsCount = len(self.driver.find_elements_by_css_selector("div.news-list ul#newslist-all li"))
+                    if intNewsCount == intNewNewsCount:
+                        break # click 50次 沒有新的 news ，中斷 click loop
+                    else:
+                        #持續有發現新的 news ，更新 intClickCount
+                        logging.info("news count： %d -> %d"%(intNewsCount, intNewNewsCount))
+                        intNewsCount = intNewNewsCount
                 eleLoadMoreBtn = self.driver.find_element_by_css_selector("a#loadmore")
                 strLoadMoreBtnStyle = eleLoadMoreBtn.get_attribute("style")
         except NoSuchElementException:
