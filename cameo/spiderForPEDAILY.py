@@ -181,7 +181,7 @@ class SpiderForPEDAILY:
                     #更新news DB 為已抓取 (isGot = 1)
                     self.db.updateNewsStatusIsGot(strNewsUrl=strNewsUrl)
                 except:
-                    logging.warnning("selenium driver crashed. skip get news: %s"%strNewsUrl)
+                    logging.warning("selenium driver crashed. skip get news: %s"%strNewsUrl)
                 finally:
                     self.restartDriver() #重啟 
             
