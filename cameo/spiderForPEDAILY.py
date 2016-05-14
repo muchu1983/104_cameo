@@ -135,7 +135,7 @@ class SpiderForPEDAILY:
                 self.db.updateCategoryStatusIsGot(strCategoryName=strNotObtainedTCategoryName)
                 logging.info("got category %s"%strNotObtainedTCategoryName)
             except:
-                logging.warnning("selenium driver crashed. skip get category: %s"%strCategoryUrl)
+                logging.warning("selenium driver crashed. skip get category: %s"%strCategoryUrl)
             finally:
                 self.restartDriver() #重啟 
             
