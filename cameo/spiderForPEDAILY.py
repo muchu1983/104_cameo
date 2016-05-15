@@ -94,16 +94,18 @@ class SpiderForPEDAILY:
             intClickCount = 0
             while u"none" not in strLoadMoreBtnStyle: #click loop
                 time.sleep(random.randint(2,5)) #sleep random time
-                logging.info("click loadmore button. (%d/50)"%intClickCount)
+                logging.info("click loadmore button. (%d/15)"%intClickCount)
                 eleLoadMoreBtn.click()
                 time.sleep(random.randint(2,5)) #sleep random time
                 # 檢查 intNewsCount 數量是否有增加
-                intClickCount = (intClickCount+1)%50 # 每 click 50 次檢查一次
+                intClickCount = (intClickCount+1)%15 # 每 click 15 次檢查一次
                 if intClickCount == 0:
                     intNewNewsCount = len(self.driver.find_elements_by_css_selector("div.news-list ul#newslist-all li"))
                     logging.info("news count: %d -> %d"%(intNewsCount, intNewNewsCount))
-                    if intNewsCount == intNewNewsCount:
-                        break # click 50次 沒有新的 news ，中斷 click loop
+                    if intNewsCount == intNewNewsCount or intNewNewsCount >= 8800:
+                        # click 15次 沒有發現新的 news ，中斷 click loop
+                        # 或是 news 總數量超過 8800 筆，也中斷 click loop
+                        break
                     else:
                         #持續有發現新的 news ，更新 intClickCount
                         intNewsCount = intNewNewsCount

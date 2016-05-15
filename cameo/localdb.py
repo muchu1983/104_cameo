@@ -112,6 +112,20 @@ class LocalDbForPEDAILY:
         strSQL = "UPDATE pedaily_news SET isGot=1 WHERE strNewsUrl='%s'"%strNewsUrl
         self.db.commitSQL(strSQL=strSQL)
         
+    #取得所有已完成下載的 news url
+    def fetchallCompletedObtainedNewsUrl(self):
+        strSQL = "SELECT strNewsUrl FROM pedaily_news WHERE isGot=1"
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        lstStrNewsUrl = []
+        for rowData in lstRowData:
+            lstStrNewsUrl.append(rowData["strNewsUrl"])
+        return lstStrNewsUrl
+        
+    #更新 news 尚未開始下載狀態
+    def updateNewsStatusIsNotGot(self, strNewsUrl=None):
+        strSQL = "UPDATE pedaily_news SET isGot=0 WHERE strNewsUrl='%s'"%strNewsUrl
+        self.db.commitSQL(strSQL=strSQL)
+        
     #清除測試資料 (clear table)
     def clearTestData(self):
         strSQL = "DELETE FROM pedaily_news"

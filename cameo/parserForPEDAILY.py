@@ -98,38 +98,50 @@ class ParserForPEDAILY:
         strNewsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\PEDAILY\\news"
         self.dicParsedResultOfNews = [] #清空 news.json 暫存資料
         self.intNewsJsonNum = 0 #計數器歸零
-        #讀取 news.html
-        lstStrNewsHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strNewsHtmlFolderPath, strSuffixes=u"_news.html")
-        for strNewsHtmlFilePath in lstStrNewsHtmlFilePath:
-            logging.info("parse %s"%strNewsHtmlFilePath)
+        #pedaily 網頁錯誤率較高，改用 news 資料表作為 parse 的主要 loop
+        #若發現 html 檔案不存在或有錯誤，直接將 news 資料 isGot 設為 0 (未抓取)
+        lstStrNewsUrl = self.db.fetchallCompletedObtainedNewsUrl()
+        for strNewsUrl in lstStrNewsUrl: #url loop
+            logging.info("parse %s"%strNewsUrl)
             dicNewsData = {} #新聞資料物件
+            strNewsServerName = re.match("^http://([a-z]*).pedaily.cn/.*/([0-9]*).shtml$", strNewsUrl).group(1)
+            strNewsName = re.match("^http://([a-z]*).pedaily.cn/.*/([0-9]*).shtml$", strNewsUrl).group(2)
+            strNewsHtmlFilePath = strNewsHtmlFolderPath + u"\\%s_%s_news.html"%(strNewsName, strNewsServerName)
+            if not os.path.exists(strNewsHtmlFilePath):
+                logging.warning("%s news html file not exists, set news isGot=0"%strNewsUrl)
+                self.db.updateNewsStatusIsNotGot(strNewsUrl=strNewsUrl)
+                continue #skip it
             with open(strNewsHtmlFilePath, "r") as newsHtmlFile:
                 strPageSource = newsHtmlFile.read()
                 root = Selector(text=strPageSource)
             #解析 news.html
-            #strSiteName
-            dicNewsData["strSiteName"] = u"BNEXT"
-            #strUrl
-            strUrl = root.css("div.fb-like::attr(data-href)").extract_first()
-            dicNewsData["strUrl"] = strUrl
-            #strTitle
-            strTitle = root.css("div.main_title::text").extract_first()
-            dicNewsData["strTitle"] = strTitle
-            #strContent
-            lstStrContent = root.css("div.content.htmlview *:not(script)::text").extract()
-            strContent = re.sub("\s", "", u"".join(lstStrContent)) #接合 新聞內容 並去除空白字元
-            dicNewsData["strContent"] = strContent.strip()
-            #lstStrKeyword
-            lstStrKeyword = root.css("div.tag_box a.tag_link::text").extract()
-            dicNewsData["lstStrKeyword"] = lstStrKeyword
-            #strPublishDate
-            strPublishDate = root.css("div.info_box span.info:nth-of-type(2)::text").extract_first()
-            strPublishDate = re.sub("[^0-9-]", "", re.sub("/", "-", strPublishDate)) #date format 2016-04-24
-            dicNewsData["strPublishDate"] = strPublishDate
-            #strCrawlDate
-            dicNewsData["strCrawlDate"] = self.utility.getCtimeOfFile(strFilePath=strNewsHtmlFilePath)
-            #將 新聞資料物件 加入 json
-            self.dicParsedResultOfNews.append(dicNewsData)
+            try:
+                #strSiteName
+                dicNewsData["strSiteName"] = u"PEDAILY"
+                #strUrl
+                dicNewsData["strUrl"] = strNewsUrl
+                #strTitle
+                strTitle = root.css("div.news-show h1:nth-of-type(1)::text").extract_first()
+                dicNewsData["strTitle"] = strTitle
+                #strContent
+                lstStrContent = root.css("div.news-content *:not(script)::text").extract()
+                strContent = re.sub("\s", "", u"".join(lstStrContent)) #接合 新聞內容 並去除空白字元
+                dicNewsData["strContent"] = strContent.strip()
+                #lstStrKeyword
+                lstStrKeyword = root.css("div.news-tag div.tag a::text").extract()
+                dicNewsData["lstStrKeyword"] = lstStrKeyword
+                #strPublishDate
+                strOriginPublishDate = root.css("div.box-l span.date::text").extract_first()
+                strPublishDate = datetime.datetime.strptime(strOriginPublishDate, "%Y-%m-%d %H:%M").strftime("%Y-%m-%d") #date format 2016-04-24
+                dicNewsData["strPublishDate"] = strPublishDate
+                #strCrawlDate
+                dicNewsData["strCrawlDate"] = self.utility.getCtimeOfFile(strFilePath=strNewsHtmlFilePath)
+                #將 新聞資料物件 加入 json
+                self.dicParsedResultOfNews.append(dicNewsData)
+            except:
+                logging.warning("parse %s fail, set news isGot=0"%strNewsUrl)
+                self.db.updateNewsStatusIsNotGot(strNewsUrl=strNewsUrl)
+                continue #skip it
             #每一千筆資料另存一個 json
             if len(self.dicParsedResultOfNews) == self.intMaxNewsPerNewsJsonFile:
                 self.intNewsJsonNum = self.intNewsJsonNum + self.intMaxNewsPerNewsJsonFile

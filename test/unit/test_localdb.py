@@ -70,6 +70,9 @@ class LocalDbTest(unittest.TestCase):
         self.assertFalse(db.checkNewsIsGot(strNewsUrl="http://news/for/unit/test"))
         db.updateNewsStatusIsGot(strNewsUrl="http://news/for/unit/test")
         self.assertTrue(db.checkNewsIsGot(strNewsUrl="http://news/for/unit/test"))
+        self.assertEquals(db.fetchallCompletedObtainedNewsUrl(), ["http://news/for/unit/test"])
+        db.updateNewsStatusIsNotGot(strNewsUrl="http://news/for/unit/test")
+        self.assertFalse(db.checkNewsIsGot(strNewsUrl="http://news/for/unit/test"))
         db.clearTestData() #清除本次測試資料
 
 #測試開始
