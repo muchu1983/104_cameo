@@ -116,30 +116,53 @@ class ParserForPEDAILY:
                 root = Selector(text=strPageSource)
             #解析 news.html
             try:
-                #strSiteName
-                dicNewsData["strSiteName"] = u"PEDAILY"
-                #strUrl
-                dicNewsData["strUrl"] = strNewsUrl
-                #strTitle
-                strTitle = root.css("div.news-show h1:nth-of-type(1)::text").extract_first()
-                dicNewsData["strTitle"] = strTitle
-                #strContent
-                lstStrContent = root.css("div.news-content *:not(script)::text").extract()
-                strContent = re.sub("\s", "", u"".join(lstStrContent)) #接合 新聞內容 並去除空白字元
-                dicNewsData["strContent"] = strContent.strip()
-                #lstStrKeyword
-                lstStrKeyword = root.css("div.news-tag div.tag a::text").extract()
-                dicNewsData["lstStrKeyword"] = lstStrKeyword
-                #strPublishDate
-                strOriginPublishDate = root.css("div.box-l span.date::text").extract_first()
-                strPublishDate = datetime.datetime.strptime(strOriginPublishDate, "%Y-%m-%d %H:%M").strftime("%Y-%m-%d") #date format 2016-04-24
-                dicNewsData["strPublishDate"] = strPublishDate
-                #strCrawlDate
-                dicNewsData["strCrawlDate"] = self.utility.getCtimeOfFile(strFilePath=strNewsHtmlFilePath)
+                if strNewsUrl.startswith("http://newseed."):#newseed.pedaily.cn 格式與其他 server 不同
+                    #strSiteName
+                    dicNewsData["strSiteName"] = u"PEDAILY"
+                    #strUrl
+                    dicNewsData["strUrl"] = strNewsUrl
+                    #strTitle
+                    strTitle = root.css("div div h1::text").extract_first()
+                    dicNewsData["strTitle"] = strTitle
+                    #strContent
+                    lstStrContent = root.css("div.news-content *:not(script)::text").extract()
+                    strContent = re.sub("\s", "", u"".join(lstStrContent)) #接合 新聞內容 並去除空白字元
+                    dicNewsData["strContent"] = strContent.strip()
+                    #lstStrKeyword
+                    lstStrKeyword = root.css("div.news-keyword span a::text").extract()
+                    dicNewsData["lstStrKeyword"] = lstStrKeyword
+                    #strPublishDate
+                    strOriginPublishDate = root.css("div.info div span.date::text").extract_first()
+                    strPublishDate = datetime.datetime.strptime(strOriginPublishDate, "%Y-%m-%d %H:%M").strftime("%Y-%m-%d") #date format 2016-04-24
+                    dicNewsData["strPublishDate"] = strPublishDate
+                    #strCrawlDate
+                    dicNewsData["strCrawlDate"] = self.utility.getCtimeOfFile(strFilePath=strNewsHtmlFilePath)
+                else:# (news|if|pe|people).pedaily.cn 
+                    #strSiteName
+                    dicNewsData["strSiteName"] = u"PEDAILY"
+                    #strUrl
+                    dicNewsData["strUrl"] = strNewsUrl
+                    #strTitle
+                    strTitle = root.css("div.news-show h1:nth-of-type(1)::text").extract_first()
+                    dicNewsData["strTitle"] = strTitle
+                    #strContent
+                    lstStrContent = root.css("div.news-content *:not(script)::text").extract()
+                    strContent = re.sub("\s", "", u"".join(lstStrContent)) #接合 新聞內容 並去除空白字元
+                    dicNewsData["strContent"] = strContent.strip()
+                    #lstStrKeyword
+                    lstStrKeyword = root.css("div.news-tag div.tag a::text").extract()
+                    dicNewsData["lstStrKeyword"] = lstStrKeyword
+                    #strPublishDate
+                    strOriginPublishDate = root.css("div.box-l span.date::text").extract_first()
+                    strPublishDate = datetime.datetime.strptime(strOriginPublishDate, "%Y-%m-%d %H:%M").strftime("%Y-%m-%d") #date format 2016-04-24
+                    dicNewsData["strPublishDate"] = strPublishDate
+                    #strCrawlDate
+                    dicNewsData["strCrawlDate"] = self.utility.getCtimeOfFile(strFilePath=strNewsHtmlFilePath)
                 #將 新聞資料物件 加入 json
                 self.dicParsedResultOfNews.append(dicNewsData)
-            except:
+            except Exception as ex:
                 logging.warning("parse %s fail, set news isGot=0"%strNewsUrl)
+                logging.warning(ex)
                 self.db.updateNewsStatusIsNotGot(strNewsUrl=strNewsUrl)
                 continue #skip it
             #每一千筆資料另存一個 json
