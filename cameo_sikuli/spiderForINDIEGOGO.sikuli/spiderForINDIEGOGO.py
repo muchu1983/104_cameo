@@ -40,6 +40,7 @@ dicPng = {"chrome_close":Pattern("chrome_close.png").targetOffset(-24,-1),
           "page_not_right":"page_not_right.png",
           "page_your_interruption":"page_your_interruption.png",
           "page_currently_updated":"currently_updated.png",
+          "page_under_review":"page_under_review.png",
           "os_foldername_bar":Pattern("os_foldername_bar.png").targetOffset(10,0),
           "os_filename_bar":Pattern("os_filename_bar.png").targetOffset(36,0),
           "os_right_save_as":"os_right_save_as.png",
@@ -248,8 +249,8 @@ def downloadProjectPages(strTargetCategory=None):
                 openChrome() #reopen chrome for load standard style
                 typeUrlOnChrome(strUrlText=strProjUrl)
                 wait(0.5)
-            if exists(dicPng["page_currently_updated"]):
-                #page is currently updated, skip this url
+            if (exists(dicPng["page_currently_updated"]) or exists(dicPng["page_under_review"])):
+                #page is currently updated or under review, skip this url
                 continue
         else:
             continue #skip this url
