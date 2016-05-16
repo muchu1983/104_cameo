@@ -116,7 +116,10 @@ class ParserForPEDAILY:
                 root = Selector(text=strPageSource)
             #解析 news.html
             try:
-                if strNewsUrl.startswith("http://newseed."):#newseed.pedaily.cn 格式與其他 server 不同
+                # 檢查網頁是否有 newseed 圖片
+                lstStrNewseedLogoImgSrc = root.css("a.site-logo img::attr(src)").extract()
+                #newseed.pedaily.cn 格式與其他 server 不同
+                if len(lstStrNewseedLogoImgSrc) == 1 and "http://pic.pedaily.cn/newseed/logo.png" in lstStrNewseedLogoImgSrc[0]:
                     #strSiteName
                     dicNewsData["strSiteName"] = u"PEDAILY"
                     #strUrl
