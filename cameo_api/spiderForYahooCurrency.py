@@ -13,7 +13,8 @@ import time
 import datetime
 import re
 import random
-from cameo.localdb import LocalDbForCurrencyApi
+from cameo.externaldb import ExternalDbForCurrencyApi
+#from cameo.localdb import LocalDbForCurrencyApi #測試用本地端 db
 
 """
 抓取 https://tw.money.yahoo.com/currency 即時匯率
@@ -23,7 +24,8 @@ class SpiderForYahooCurrency:
     #建構子
     def __init__(self):
         self.driver = None
-        self.db = LocalDbForCurrencyApi().mongodb
+        self.db = ExternalDbForCurrencyApi().mongodb
+        #self.db = LocalDbForCurrencyApi().mongodb #測試用本地端 db
         
     #取得 selenium driver 物件
     def getDriver(self):

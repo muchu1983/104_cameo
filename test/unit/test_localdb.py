@@ -8,6 +8,7 @@ This file is part of BSD license
 """
 import unittest
 import logging
+from cameo.localdb import LocalDbForCurrencyApi
 from cameo.localdb import LocalDbForTECHORANGE
 from cameo.localdb import LocalDbForBNEXT
 from cameo.localdb import LocalDbForPEDAILY
@@ -23,6 +24,12 @@ class LocalDbTest(unittest.TestCase):
     #收尾
     def tearDown(self):
         pass
+        
+    #測試 幣別轉換API 本地端資料庫存取
+    def test_localdb_for_currency_api(self):
+        self.db = LocalDbForCurrencyApi()
+        logging.info("LocalDbTest.test_getMongoDbClient")
+        self.assertIsNotNone(self.db.mongodb)
 
     #測試 techorange 本地端資料庫存取
     def test_localdb_for_techorange(self):
