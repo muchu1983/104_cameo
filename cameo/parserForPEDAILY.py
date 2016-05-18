@@ -101,11 +101,7 @@ class ParserForPEDAILY:
         #pedaily 網頁錯誤率較高，改用 news 資料表作為 parse 的主要 loop
         #若發現 html 檔案不存在或有錯誤，直接將 news 資料 isGot 設為 0 (未抓取)
         lstStrNewsUrl = self.db.fetchallCompletedObtainedNewsUrl()
-        intStopPoint = 0 ###################################
         for strNewsUrl in lstStrNewsUrl: #url loop
-            intStopPoint = intStopPoint + 1 #############################
-            if intStopPoint >= 14000:###########################
-                continue #####################################
             logging.info("parse %s"%strNewsUrl)
             dicNewsData = {} #新聞資料物件
             strNewsServerName = re.match("^http://([a-z]*).pedaily.cn/.*/([0-9]*).shtml$", strNewsUrl).group(1)
