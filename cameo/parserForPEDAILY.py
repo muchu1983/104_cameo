@@ -105,7 +105,7 @@ class ParserForPEDAILY:
         for strNewsUrl in lstStrNewsUrl: #url loop
             intStopPoint = intStopPoint + 1 #############################
             if intStopPoint >= 14000:###########################
-                break #####################################
+                continue #####################################
             logging.info("parse %s"%strNewsUrl)
             dicNewsData = {} #新聞資料物件
             strNewsServerName = re.match("^http://([a-z]*).pedaily.cn/.*/([0-9]*).shtml$", strNewsUrl).group(1)
