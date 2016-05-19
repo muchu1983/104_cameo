@@ -69,14 +69,15 @@ class SpiderForYahooCurrency:
                 strUSDollar = eleExRateTr.find_element_by_css_selector("td.Ta-end:nth-of-type(3)").text
                 # update DB
                 logging.info("start update ex-rate data...")
+                strTimeNow = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 self.db.ModelExRate.update_one({"strCurrencyName":strCurrencyName},
-                                   {"$set": {"strDate":datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                                   {"$set": {"strDate":strTimeNow,
                                           "strCurrencyName":strCurrencyName,
                                           "fUSDollar":float(strUSDollar)
                                           }
                                    }, 
                                    upsert=True) #upsert = update or insert if data not exists (有則更新，無則新增)
-                logging.info("ex-rate data updated.")
+                logging.info("ex-rate data updated. [%s]"%strTimeNow)
             #準備切換至下一個 area tab
             elesAreaTabLi = self.driver.find_elements_by_css_selector("ul.sub-tabs.D-ib li")
             intCurrentAreaTab = (intCurrentAreaTab+1)%3
