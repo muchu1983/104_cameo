@@ -69,7 +69,7 @@ class SpiderForYahooCurrency:
                 strUSDollar = eleExRateTr.find_element_by_css_selector("td.Ta-end:nth-of-type(3)").text
                 # update DB
                 logging.info("start update ex-rate data...")
-                self.db.ex_rate.update_one({"strCurrencyName":strCurrencyName},
+                self.db.ModelExRate.update_one({"strCurrencyName":strCurrencyName},
                                    {"$set": {"strDate":datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                                           "strCurrencyName":strCurrencyName,
                                           "fUSDollar":float(strUSDollar)
