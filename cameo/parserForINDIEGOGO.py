@@ -560,7 +560,14 @@ class ParserForINDIEGOGO:
                     lstStrEstimateDeliveryText = elementReward.css("perk-description div[ng-if*=estimated_delivery_date] span::text").extract()
                     if len(lstStrEstimateDeliveryText) == 2 and lstStrEstimateDeliveryText[0].strip() == "Estimated delivery:":
                         strRewardDeliveryDate = lstStrEstimateDeliveryText[1].strip()
-                    dicRewardData["strRewardDeliveryDate"] = self.utility.parseStrDateByDateparser(strOriginDate=strRewardDeliveryDate)
+                        strRewardDeliveryDate = self.utility.parseStrDateByDateparser(strOriginDate=strRewardDeliveryDate)
+                        if strRewardDeliveryDate: # is not None
+                            #強制設定為 每月 1 號 ex 2016-05-20 -> 2016-05-01
+                            lstStrRewardDeliveryDate = list(strRewardDeliveryDate)
+                            lstStrRewardDeliveryDate[-1] = "1"
+                            lstStrRewardDeliveryDate[-2] = "0"
+                            strRewardDeliveryDate = "".join(lstStrRewardDeliveryDate)
+                    dicRewardData["strRewardDeliveryDate"] = strRewardDeliveryDate
                     #intRewardRetailPrice 零售價出現格式不統一難以取得
                     dicRewardData["intRewardRetailPrice"] = None
                     lstDicRewardData.append(dicRewardData)
