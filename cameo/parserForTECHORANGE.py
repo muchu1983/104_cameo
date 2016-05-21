@@ -130,9 +130,13 @@ class ParserForTECHORANGE:
                 #strTitle
                 dicNewsData["strTitle"] = root.css("header.entry-header h2.entry-title::text").extract_first().strip()
                 #strContent
-                # filter 項目：作者、日期、tag、分享計數、分享總數、標題、上一頁、下一頁、java script、廣告…
+                # filter 項目：'by'作者、日期、tag、分享計數、分享總數、標題、上一頁、下一頁、java script、廣告…
                 strCssNotFilter = ":not(span.entry-author):not(span.entry-date):not(a[rel=tag]):not(div.digit):not(span.share-count):not(h2.entry-title):not(a[rel=prev]):not(a[rel=next]):not(script):not(span#lineAtDesc)"
                 lstStrContent = root.css("section.single-wrapper div.post *%s::text"%strCssNotFilter).extract()
+                #移除 作者
+                strAuthorName = root.css("span.entry-author a::text").extract_first()
+                if strAuthorName in lstStrContent:
+                    lstStrContent.remove(strAuthorName)
                 strContent = re.sub("\s", "", u"".join(lstStrContent)) #接合 新聞內容 並去除空白字元
                 dicNewsData["strContent"] = strContent.strip()
                 #lstStrKeyword
