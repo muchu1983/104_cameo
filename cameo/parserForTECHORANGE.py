@@ -130,7 +130,7 @@ class ParserForTECHORANGE:
                 #strTitle
                 dicNewsData["strTitle"] = root.css("header.entry-header h2.entry-title::text").extract_first().strip()
                 #strContent
-                strCssNotFilter = ":not(script):not(h2.entry-title):not(p.prev-post>a):not(p.next-post>a):not(iframe):not(span.entry-author>a):not(sapn.entry-date):not(span.entry-tags>a)"
+                strCssNotFilter = ":not(script):not(h2.entry-title):not(a[rel=prev]):not(a[rel=next]):not(iframe):not(span.entry-author):not(sapn.entry-date):not(a[rel=tag])"
                 lstStrContent = root.css("section.single-wrapper div.post *%s::text"%strCssNotFilter).extract()
                 strContent = re.sub("\s", "", u"".join(lstStrContent)) #接合 新聞內容 並去除空白字元
                 dicNewsData["strContent"] = strContent.strip()
