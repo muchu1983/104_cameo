@@ -11,14 +11,17 @@ import re
 import json
 import datetime
 import dateparser
+import pkg_resources
 from scrapy import Selector
 from geopy.geocoders import GoogleV3
+from bennu.filesystemutility import FileSystemUtility
 #共用工具程式
 class Utility:
     
     #建構子
     def __init__(self):
-        self.strListOfCountryByContinentJsonFilePath = u"cameo_res\\list_of_country_by_continent.json"
+        self.fsUtil = FileSystemUtility()
+        self.strListOfCountryByContinentJsonFilePath = self.fsUtil.getPackageResourcePath(strPackageName="cameo_res", strResourceName="list_of_country_by_continent.json")
         if not os.path.exists(self.strListOfCountryByContinentJsonFilePath): #建立 list_of_country_by_continent.json
             self.parseListOfCountryWikiPage()
     
@@ -142,10 +145,10 @@ class Utility:
         
     #解析 list_of_country_by_continent_on_wikipedia.html
     def parseListOfCountryWikiPage(self):
-        strLOCBCWikiPageFilePath = u"cameo_res\\list_of_country_by_continent_on_wikipedia.html"
-        strParsedResultJsonFilePath = u"cameo_res\\list_of_country_by_continent.json"
+        strLOCBCWikiPageFilePath = self.fsUtil.getPackageResourcePath(strPackageName="cameo_res", strResourceName="list_of_country_by_continent_on_wikipedia.html")
+        strParsedResultJsonFilePath = self.fsUtil.getPackageResourcePath(strPackageName="cameo_res", strResourceName="list_of_country_by_continent.json")
         dicCountryNameCodeMapping = {}
-        strISO3166WikiPageFilePath = u"cameo_res\\iso_3166_1_on_wikipedia.html"
+        strISO3166WikiPageFilePath = self.fsUtil.getPackageResourcePath(strPackageName="cameo_res", strResourceName="iso_3166_1_on_wikipedia.html")
         with open(strISO3166WikiPageFilePath, "r") as pageISO3166File: #parse iso_3166_1_on_wikipedia.html
             strPageSource = pageISO3166File.read()
             root = Selector(text=strPageSource)

@@ -13,7 +13,7 @@ with open("README.txt") as file:
 
 setup(
     name = "pycameo",
-    version = "0.1.1a5",
+    version = "0.1.1a8",
     author = "MuChu Hsu",
     author_email = "muchu1983@gmail.com",
     maintainer = "MuChu Hsu",
