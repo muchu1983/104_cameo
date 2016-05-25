@@ -13,6 +13,7 @@ import time
 import datetime
 import re
 import random
+import pkg_resources
 from cameo.externaldb import ExternalDbForCurrencyApi
 #from cameo.localdb import LocalDbForCurrencyApi #測試用本地端 db
 
@@ -29,9 +30,9 @@ class SpiderForYahooCurrency:
         
     #取得 selenium driver 物件
     def getDriver(self):
-        #chromeDriverExeFilePath = "cameo_res\\chromedriver.exe"
+        #chromeDriverExeFilePath = pkg_resources.resource_filename("cameo_res", "chromedriver.exe")
         #driver = webdriver.Chrome(chromeDriverExeFilePath)
-        phantomjsDriverExeFilePath = "cameo_res\\phantomjs.exe"
+        phantomjsDriverExeFilePath = pkg_resources.resource_filename("cameo_res", "phantomjs.exe")
         driver = webdriver.PhantomJS(phantomjsDriverExeFilePath)
         return driver
         

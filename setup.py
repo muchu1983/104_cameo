@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Copyright (C) 2015, MuChu Hsu
 Contributed by Muchu Hsu (muchu1983@gmail.com)
@@ -11,20 +12,22 @@ with open("README.txt") as file:
     long_description = file.read()
 
 setup(
-    name = "104_cameo",
-    version = "0.1.0.dev1",
-    keywords = ["104", "cameo"],
-    description = "cameo scrapy project",
+    name = "pycameo",
+    version = "0.1.1a5",
     author = "MuChu Hsu",
     author_email = "muchu1983@gmail.com",
-    license = "BSD 3-Clause License",
+    maintainer = "MuChu Hsu",
+    maintainer_email = "muchu1983@gmail.com",
     url="https://github.com/muchu1983/104_cameo",
+    description = "cameo scrapy project",
     long_description=long_description,
+    download_url="https://pypi.python.org/pypi/cameo",
+    platforms = "python 2.7",
+    license = "BSD 3-Clause License",
     packages = find_packages(),
     include_package_data = True,
-    install_requires = ["PyInstaller>=3.1","scrapy>=1.0.5"],
-    platforms = "python 2.7",
-    entry_points={"console_scripts":["cameo=cameo.launcher:entry_point"]},
+    install_requires = ["scrapy>=1.0.5", "dateparser>=0.3.5", "geopy>=1.11.0", "bennu>=0.4.1a4"],
+    entry_points={"console_scripts":["pycameo=cameo.launcher:entry_point"]},
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Environment :: Win32 (MS Windows)",
