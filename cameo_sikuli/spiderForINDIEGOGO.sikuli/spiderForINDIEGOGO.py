@@ -293,9 +293,9 @@ def downloadIndividualsPages(strTargetCategory=None):
         if isIndividualsHtmlFileMissing:
             #delete remaining project html files
             for strIndividualsHtmlFileExtension in lstStrIndividualsHtmlFileExtension:
-            strIndividualsHtmlFilePath = strIndividualsFolderPath + os.sep + strIndividualsId + strIndividualsHtmlFileExtension
-            if os.path.exists(strIndividualsHtmlFilePath):
-                os.remove(strIndividualsHtmlFilePath)
+                strIndividualsHtmlFilePath = strIndividualsFolderPath + os.sep + strIndividualsId + strIndividualsHtmlFileExtension
+                if os.path.exists(strIndividualsHtmlFilePath):
+                    os.remove(strIndividualsHtmlFilePath)
             openChrome() #open chrome
             typeUrlOnChrome(strUrlText=strIndividualsUrl)
             wait(0.5)
