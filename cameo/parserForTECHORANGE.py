@@ -117,36 +117,47 @@ class ParserForTECHORANGE:
         lstStrNewsHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strNewsHtmlFolderPath, strSuffixes=u"_news.html")
         for strNewsHtmlFilePath in lstStrNewsHtmlFilePath:
             logging.info("parse %s"%strNewsHtmlFilePath)
-            dicNewsData = {} #新聞資料物件
-            with open(strNewsHtmlFilePath, "r") as newsHtmlFile:
-                strPageSource = newsHtmlFile.read()
-                root = Selector(text=strPageSource)
-                #解析 news.html
-                #strSiteName
-                dicNewsData["strSiteName"] = u"TECHORANGE"
-                #strUrl
-                strNewsUrl = root.css("tbody tr td div.facebook a::attr(page_href)").extract_first().strip()
-                dicNewsData["strUrl"] = strNewsUrl
-                #strTitle
-                dicNewsData["strTitle"] = root.css("header.entry-header h2.entry-title::text").extract_first().strip()
-                #strContent
-                # filter 項目：'by'作者、日期、tag、分享計數、分享總數、標題、上一頁、下一頁、java script、廣告…
-                strCssNotFilter = ":not(span.entry-author):not(span.entry-date):not(a[rel=tag]):not(div.digit):not(span.share-count):not(h2.entry-title):not(a[rel=prev]):not(a[rel=next]):not(script):not(span#lineAtDesc)"
-                lstStrContent = root.css("section.single-wrapper div.post *%s::text"%strCssNotFilter).extract()
-                #移除 作者
-                strAuthorName = root.css("span.entry-author a::text").extract_first()
-                if strAuthorName in lstStrContent:
-                    lstStrContent.remove(strAuthorName)
-                strContent = re.sub("\s", "", u"".join(lstStrContent)) #接合 新聞內容 並去除空白字元
-                dicNewsData["strContent"] = strContent.strip()
-                #lstStrKeyword
-                dicNewsData["lstStrKeyword"] = root.css("div.entry-meta-box-inner span.entry-tags span a::text").extract()
-                #strPublishDate
-                dicNewsData["strPublishDate"] = root.css("div.entry-meta-box-inner span.entry-date::text").extract_first().strip()
-                #strCrawlDate
-                dicNewsData["strCrawlDate"] = self.utility.getCtimeOfFile(strFilePath=strNewsHtmlFilePath)
-            #將 新聞資料物件 加入 json
-            self.dicParsedResultOfNews.append(dicNewsData)
+            try:
+                dicNewsData = {} #新聞資料物件
+                with open(strNewsHtmlFilePath, "r") as newsHtmlFile:
+                    strPageSource = newsHtmlFile.read()
+                    root = Selector(text=strPageSource)
+                    #解析 news.html
+                    #strSiteName
+                    dicNewsData["strSiteName"] = u"TECHORANGE"
+                    #strUrl
+                    strNewsUrl = root.css("tbody tr td div.facebook a::attr(page_href)").extract_first().strip()
+                    dicNewsData["strUrl"] = strNewsUrl
+                    #strTitle
+                    dicNewsData["strTitle"] = root.css("header.entry-header h2.entry-title::text").extract_first().strip()
+                    #strContent
+                    # filter 項目：'by'作者、日期、tag、分享計數、分享總數、標題、上一頁、下一頁、java script、廣告…
+                    strCssNotFilter = ":not(span.entry-author):not(span.entry-date):not(a[rel=tag]):not(div.digit):not(span.share-count):not(h2.entry-title):not(a[rel=prev]):not(a[rel=next]):not(script):not(span#lineAtDesc)"
+                    lstStrContent = root.css("section.single-wrapper div.post *%s::text"%strCssNotFilter).extract()
+                    #移除 作者
+                    strAuthorName = root.css("span.entry-author a::text").extract_first()
+                    if strAuthorName in lstStrContent:
+                        lstStrContent.remove(strAuthorName)
+                    strContent = re.sub("\s", "", u"".join(lstStrContent)) #接合 新聞內容 並去除空白字元
+                    dicNewsData["strContent"] = strContent.strip()
+                    #lstStrKeyword
+                    dicNewsData["lstStrKeyword"] = root.css("div.entry-meta-box-inner span.entry-tags span a::text").extract()
+                    #strPublishDate
+                    dicNewsData["strPublishDate"] = root.css("div.entry-meta-box-inner span.entry-date::text").extract_first().strip()
+                    #strCrawlDate
+                    dicNewsData["strCrawlDate"] = self.utility.getCtimeOfFile(strFilePath=strNewsHtmlFilePath)
+                #將 新聞資料物件 加入 json
+                self.dicParsedResultOfNews.append(dicNewsData)
+                ##test
+                strNewsName = re.match(u"^.*news\\(?P<newsName>[.*])_news.html$", strNewsHtmlFilePath).group("newsName")
+                print(strNewsName)
+                ##test
+            except:
+                logging.error("parse %s fail skip it"%strNewsHtmlFilePath)
+                # set isGot = 0
+                strNewsName = re.match(u"^.*news\\(?P<newsName>[.*])_news.html$", strNewsHtmlFilePath).group("newsName")
+                #self.db.updateNewsStatusIsNotGot(strNewsUrlPart=strNewsName)
+                continue #skip it
             #每一千筆資料另存一個 json
             if len(self.dicParsedResultOfNews) == self.intMaxNewsPerNewsJsonFile:
                 self.intNewsJsonNum = self.intNewsJsonNum + self.intMaxNewsPerNewsJsonFile

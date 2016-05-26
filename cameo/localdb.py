@@ -334,6 +334,11 @@ class LocalDbForTECHORANGE:
         strSQL = "UPDATE techorange_news SET isGot=1 WHERE strNewsUrl='%s'"%strNewsUrl
         self.db.commitSQL(strSQL=strSQL)
         
+    #更新 news 為未完成下載狀態 (指定 部分 url )
+    def updateNewsStatusIsNotGot(self, strNewsUrlPart=None):
+        strSQL = "UPDATE techorange_news SET isGot=0 WHERE strNewsUrl LIKE'%" + strNewsUrlPart + "%'"
+        self.db.commitSQL(strSQL=strSQL)
+        
     #清除測試資料 (clear table)
     def clearTestData(self):
         strSQL = "DELETE FROM techorange_news"
