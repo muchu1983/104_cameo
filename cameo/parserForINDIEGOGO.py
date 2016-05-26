@@ -318,11 +318,11 @@ class ParserForINDIEGOGO:
                     self.dicParsedResultOfProject[strProjUrl]["intFundTarget"] = intFundTarget
                     #fFundProgress
                     if isIndemand:
-                        self.dicParsedResultOfProject[strProjUrl]["fFundProgress"] = float(intIndemandFundedPersentage) / 100
+                        self.dicParsedResultOfProject[strProjUrl]["fFundProgress"] = float(intIndemandFundedPersentage)
                     elif isClosed:
                         self.dicParsedResultOfProject[strProjUrl]["fFundProgress"] = None
                     else:
-                        self.dicParsedResultOfProject[strProjUrl]["fFundProgress"] = float(intFundingPersentage) / 100
+                        self.dicParsedResultOfProject[strProjUrl]["fFundProgress"] = float(intFundingPersentage)
                     #strCurrency
                     if isIndemand:
                         strCurrencyText = root.css("div.preOrder-combinedBalance div.ng-binding span.currency em::text").extract_first().strip()
@@ -424,10 +424,19 @@ class ParserForINDIEGOGO:
                         strUpdateContent = strUpdateContent + strUpdateContentParagraph.strip()
                     dicUpdateData["strUpdateContent"] = strUpdateContent
                     #strUpdateDate
+                    strUpdateDate = None
                     strOriginUpdateDate = elementUpdate.css("h2.activityUpdate-timestamp::text").extract_first().strip()
-                    dicUpdateData["strUpdateDate"] = \
-                        self.utility.parseStrDateByDateparser(strOriginDate=strOriginUpdateDate,
-                                                  strBaseDate=self.utility.getCtimeOfFile(strFilePath=strProjUpdatesFilePath))
+                    strParsedUpdateDate = self.utility.parseStrDateByDateparser(strOriginDate=strOriginUpdateDate,
+                                                               strBaseDate=self.utility.getCtimeOfFile(strFilePath=strProjUpdatesFilePath))
+                    #如果原文字含有 months ago 將轉換後的日期強制設定為 01 號
+                    if "month" in strOriginUpdateDate.lower():
+                        lstStrParsedUpdateDate = list(strParsedUpdateDate)
+                        lstStrParsedUpdateDate[-1] = "1"
+                        lstStrParsedUpdateDate[-2] = "0"
+                        strUpdateDate = "".join(lstStrParsedUpdateDate)
+                    else:
+                        strUpdateDate = strParsedUpdateDate
+                    dicUpdateData["strUpdateDate"] = strUpdateDate
                     #intComment 無法取得
                     dicUpdateData["intComment"] = None
                     #intLike 無法取得
@@ -474,10 +483,20 @@ class ParserForINDIEGOGO:
                         strCommentContent = strCommentContent + strCommentContentParagraph.strip()
                     dicCommentData["strCommentContent"] = strCommentContent
                     #strCommentDate
+                    strCommentDate = None
                     strOriginCommentDate = elementComment.css("div.commentLayout-header:nth-of-type(1) span.commentNote::text").extract_first().strip()
-                    dicCommentData["strCommentDate"] = \
-                        self.utility.parseStrDateByDateparser(strOriginDate=strOriginCommentDate,
-                                                  strBaseDate=self.utility.getCtimeOfFile(strFilePath=strProjCommentsFilePath))
+                    strParsedCommentDate = self.utility.parseStrDateByDateparser(strOriginDate=strOriginCommentDate,
+                                                                strBaseDate=self.utility.getCtimeOfFile(strFilePath=strProjCommentsFilePath))
+                    #如果原文字含有 months ago 將轉換後的日期強制設定為 01 號
+                    if "month" in strOriginCommentDate.lower():
+                        lstStrParsedCommentDate = list(strParsedCommentDate)
+                        lstStrParsedCommentDate[-1] = "1"
+                        lstStrParsedCommentDate[-2] = "0"
+                        strCommentDate = "".join(lstStrParsedCommentDate)
+                    else:
+                        strCommentDate = strParsedCommentDate
+                    dicCommentData["strCommentDate"] = strCommentDate
+                    #加入 Comment 資料
                     lstDicCommentData.append(dicCommentData)
                 self.dicParsedResultOfComment[strProjUrl] = lstDicCommentData
                 
