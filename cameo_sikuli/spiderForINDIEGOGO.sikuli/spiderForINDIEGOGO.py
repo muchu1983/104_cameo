@@ -23,14 +23,6 @@ dicPng = {"chrome_close":Pattern("chrome_close.png").targetOffset(-24,-1),
           "papge_new_style_check":"page_new_style_check.png",
           "page_blur_story":"page_blur_story.png",
           "page_focus_story":"page_focus_story.png",
-          "page_blur_updates":"page_blur_updates.png",
-          "page_focus_updates":"page_focus_updates.png",
-          "page_blur_comments":"page_blur_comments.png",
-          "page_focus_comments":"page_focus_comments.png",
-          "page_blur_backers":"page_blur_backers.png",
-          "page_focus_backers":"page_focus_backers.png",
-          "page_blur_gallery":"page_blur_gallery.png",
-          "page_focus_gallery":"page_focus_gallery.png",
           "page_focus_profile":"page_focus_profile.png",
           "papge_story_details":"papge_story_details.png",
           "page_details_about":"page_details_about.png",
@@ -217,31 +209,21 @@ def downloadProjectPages(strTargetCategory=None):
     projUrlListFile = open(strProjUrlListFilePath, "r") 
     for strProjUrl in projUrlListFile:
         strProjName = re.search("^https://www.indiegogo.com/projects/(.*)/.{4}$", strProjUrl).group(1)
+        strProjUrl = strProjUrl[:-5] # remove "/pica"
         #check html file exists
         isProjHtmlFileMissing = False
-        strProjDetailsFilename = strProjName+"_details.html"
-        strProjDetailsFilePath = strProjectsFolderPath + "\\" + strProjDetailsFilename
-        if not os.path.exists(strProjDetailsFilePath):#check detail.html
-            isProjHtmlFileMissing = True
-        strProjStoryFilename = strProjName+"_story.html"
-        strProjStroyFilePath = strProjectsFolderPath + "\\" + strProjStoryFilename
-        if not os.path.exists(strProjStroyFilePath):#check story.html
-            isProjHtmlFileMissing = True
-        strProjUpdatesFilename = strProjName+"_updates.html"
-        strProjUpdatesFilePath = strProjectsFolderPath + "\\" + strProjUpdatesFilename
-        if not os.path.exists(strProjUpdatesFilePath):#check updates.html
-            isProjHtmlFileMissing = True
-        strProjCommentsFilename = strProjName+"_comments.html"
-        strProjCommentsFilePath = strProjectsFolderPath + "\\" + strProjCommentsFilename
-        if not os.path.exists(strProjCommentsFilePath):#check comments.html
-            isProjHtmlFileMissing = True
-        strProjBackersFilename = strProjName+"_backers.html"
-        strProjBackersFilePath = strProjectsFolderPath + "\\" + strProjBackersFilename
-        if not os.path.exists(strProjBackersFilePath):#check backers.html
-            isProjHtmlFileMissing = True
-        #open chrome 
+        lstStrProjHtmlFileExtension = ["_details.html", "_story.html", "_updates.html", "_comments.html", "_backers.html"]
+        for strProjHtmlFileExtension in lstStrProjHtmlFileExtension:
+            strProjHtmlFilePath = strProjectsFolderPath + os.sep + strProjName + strProjHtmlFileExtension
+            if not os.path.exists(strProjHtmlFilePath):
+                isProjHtmlFileMissing = True
         if isProjHtmlFileMissing:
-            openChrome()
+            #delete remaining project html files
+            for strProjHtmlFileExtension in lstStrProjHtmlFileExtension:
+                strProjHtmlFilePath = strProjectsFolderPath + os.sep + strProjName + strProjHtmlFileExtension
+                if os.path.exists(strProjHtmlFilePath):
+                    os.remove(strProjHtmlFilePath)
+            openChrome() #open chrome 
             typeUrlOnChrome(strUrlText=strProjUrl)
             wait(0.5)
             #check page "style" or "something not right" show?
@@ -249,63 +231,46 @@ def downloadProjectPages(strTargetCategory=None):
                 openChrome() #reopen chrome for load standard style
                 typeUrlOnChrome(strUrlText=strProjUrl)
                 wait(0.5)
-            if (exists(dicPng["page_currently_updated"]) or exists(dicPng["page_under_review"])):
-                #page is currently updated or under review, skip this url
-                continue
         else:
             continue #skip this url
-        #check page not found
-        if exists(dicPng["page_not_found"]):
+        #check page not found or is currently updated or under review
+        if exists(dicPng["page_not_found"]) or exists(dicPng["page_currently_updated"]) or exists(dicPng["page_under_review"]):
             continue #skip this url
         #wait load completed
         wait(dicPng["page_focus_story"], 300)
         wait(0.5)
-        if not os.path.exists(strProjDetailsFilePath):#check detail.html
-            while(not exists(dicPng["papge_story_details"])):
-                type(Key.PAGE_DOWN)
-                wait(0.5)
-            click(dicPng["papge_story_details"])
-            wait(dicPng["page_details_about"], 300)
-            #save see more details
-            rightClickSaveCurrentPage(onImage=dicPng["page_details_about"], strFolderPath=strProjectsFolderPath, strFilename=strProjDetailsFilename)
-            #close details
-            click(dicPng["page_details_close"])
-            wait(dicPng["papge_story_details"], 300)
-            type(Key.HOME)       
-            wait(dicPng["page_focus_story"], 300)
-        if not os.path.exists(strProjStroyFilePath):#check story.html
-            #save story
-            saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjStoryFilename)
-        if not os.path.exists(strProjUpdatesFilePath):#check updates.html
-            #save updates
-            wait(dicPng["page_blur_updates"], 300)
-            click(dicPng["page_blur_updates"])
-            wait(dicPng["page_focus_updates"], 300)
-            #unfoldUCBShowmore()
-            saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjUpdatesFilename)
-        if not os.path.exists(strProjCommentsFilePath):#check comments.html
-            #save comments
-            wait(dicPng["page_blur_comments"], 300)
-            click(dicPng["page_blur_comments"])
-            wait(dicPng["page_focus_comments"], 300)
-            #unfoldUCBShowmore()
-            saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjCommentsFilename)
-        if not os.path.exists(strProjBackersFilePath):#check backers.html
-            #save backers
-            wait(dicPng["page_blur_backers"], 300)
-            click(dicPng["page_blur_backers"])
-            wait(dicPng["page_focus_backers"], 300)
-            #unfoldUCBShowmore()
-            saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjBackersFilename)
-        #gallery may not exists
-        strProjGalleryFilename = strProjName+"_gallery.html"
-        strProjGalleryFilePath = strProjectsFolderPath + "\\" + strProjGalleryFilename            
-        if (not os.path.exists(strProjGalleryFilePath)) and exists(dicPng["page_blur_gallery"]):#check gallery.html
-            #save gallery
-            wait(dicPng["page_blur_gallery"], 300)
-            click(dicPng["page_blur_gallery"])
-            wait(dicPng["page_focus_gallery"], 300)
-            saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjGalleryFilename)
+        while(not exists(dicPng["papge_story_details"])):
+            type(Key.PAGE_DOWN)
+            wait(0.5)
+        click(dicPng["papge_story_details"])
+        wait(dicPng["page_details_about"], 300)
+        #save see more details html 
+        rightClickSaveCurrentPage(onImage=dicPng["page_details_about"], strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_details.html")
+        #close details
+        click(dicPng["page_details_close"])
+        wait(dicPng["papge_story_details"], 300)
+        type(Key.HOME)
+        wait(dicPng["page_focus_story"], 300)
+        #save story html
+        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_story.html")
+        #save updates html
+        openChrome()
+        typeUrlOnChrome(strUrlText=strProjUrl + "#/updates")
+        wait(0.5)
+        #unfoldUCBShowmore()
+        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_updates.html")
+        #save comments html
+        openChrome()
+        typeUrlOnChrome(strUrlText=strProjUrl + "#/comments")
+        wait(0.5)
+        #unfoldUCBShowmore()
+        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_comments.html")
+        #save backers html
+        openChrome()
+        typeUrlOnChrome(strUrlText=strProjUrl + "#/backers")
+        wait(0.5)
+        #unfoldUCBShowmore()
+        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_backers.html")
     projUrlListFile.close()
 #download individuals pages
 def downloadIndividualsPages(strTargetCategory=None):
@@ -320,17 +285,18 @@ def downloadIndividualsPages(strTargetCategory=None):
         strIndividualsId = re.search("^https://www.indiegogo.com/individuals/(.*)$", strIndividualsUrl).group(1)
         #check html exists
         isIndividualsHtmlFileMissing = False
-        strIndividualsProfileFilename = strIndividualsId+"_profile.html"
-        strIndividualsProfileFilePath = strIndividualsFolderPath + "\\" + strIndividualsProfileFilename
-        if not os.path.exists(strIndividualsProfileFilePath):#check profile.html
-            isIndividualsHtmlFileMissing = True
-        strIndividualsCampaignsFilename = strIndividualsId+"_campaigns.html"
-        strIndividualsCampaignsFilePath = strIndividualsFolderPath + "\\" + strIndividualsCampaignsFilename
-        if not os.path.exists(strIndividualsCampaignsFilePath):#check campaigns.html  
-            isIndividualsHtmlFileMissing = True
-        #open chrome
+        lstStrIndividualsHtmlFileExtension = ["_profile.html", "_campaigns.html"]
+        for strIndividualsHtmlFileExtension in lstStrIndividualsHtmlFileExtension:
+            strIndividualsHtmlFilePath = strIndividualsFolderPath + os.sep + strIndividualsId + strIndividualsHtmlFileExtension
+            if not os.path.exists(strIndividualsHtmlFilePath):
+                isIndividualsHtmlFileMissing = True
         if isIndividualsHtmlFileMissing:
-            openChrome()
+            #delete remaining project html files
+            for strIndividualsHtmlFileExtension in lstStrIndividualsHtmlFileExtension:
+            strIndividualsHtmlFilePath = strIndividualsFolderPath + os.sep + strIndividualsId + strIndividualsHtmlFileExtension
+            if os.path.exists(strIndividualsHtmlFilePath):
+                os.remove(strIndividualsHtmlFilePath)
+            openChrome() #open chrome
             typeUrlOnChrome(strUrlText=strIndividualsUrl)
             wait(0.5)
         else:
@@ -340,14 +306,14 @@ def downloadIndividualsPages(strTargetCategory=None):
             continue #skip this url
         #wait load completed
         wait(dicPng["page_focus_profile"], 300)
-        if not os.path.exists(strIndividualsProfileFilePath):#check profile.html
-            saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsProfileFilename)
-        if not os.path.exists(strIndividualsCampaignsFilePath):#check campaigns.html
-            strIndividualsCampaignsUrl = strIndividualsUrl + u"/campaigns"
-            openChrome()
-            typeUrlOnChrome(strUrlText=strIndividualsCampaignsUrl)
-            wait(0.5)
-            saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsCampaignsFilename)
+        #save profile html
+        saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsId + "_profile.html")
+        #save campaigns html 
+        strIndividualsCampaignsUrl = strIndividualsUrl + u"/campaigns"
+        openChrome()
+        typeUrlOnChrome(strUrlText=strIndividualsCampaignsUrl)
+        wait(0.5)
+        saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsId + "_campaigns.html")
     individualsUrlListFile.close()
 #main entry point
 if __name__ == "__main__":

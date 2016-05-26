@@ -95,14 +95,6 @@ dicPng = {<span class="str">"chrome_close"</span>:Pattern(<img src="chrome_close
           <span class="str">"papge_new_style_check"</span>:<img src="page_new_style_check.png" />,
           <span class="str">"page_blur_story"</span>:<img src="page_blur_story.png" />,
           <span class="str">"page_focus_story"</span>:<img src="page_focus_story.png" />,
-          <span class="str">"page_blur_updates"</span>:<img src="page_blur_updates.png" />,
-          <span class="str">"page_focus_updates"</span>:<img src="page_focus_updates.png" />,
-          <span class="str">"page_blur_comments"</span>:<img src="page_blur_comments.png" />,
-          <span class="str">"page_focus_comments"</span>:<img src="page_focus_comments.png" />,
-          <span class="str">"page_blur_backers"</span>:<img src="page_blur_backers.png" />,
-          <span class="str">"page_focus_backers"</span>:<img src="page_focus_backers.png" />,
-          <span class="str">"page_blur_gallery"</span>:<img src="page_blur_gallery.png" />,
-          <span class="str">"page_focus_gallery"</span>:<img src="page_focus_gallery.png" />,
           <span class="str">"page_focus_profile"</span>:<img src="page_focus_profile.png" />,
           <span class="str">"papge_story_details"</span>:<img src="papge_story_details.png" />,
           <span class="str">"page_details_about"</span>:<img src="page_details_about.png" />,
@@ -289,31 +281,21 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     projUrlListFile = open(strProjUrlListFilePath, <span class="str">"r"</span>)
     <span class="kw">for</span> strProjUrl <span class="kw">in</span> projUrlListFile:
         strProjName = re.search(<span class="str">"^https://www.indiegogo.com/projects/(.*)/.{4}$"</span>, strProjUrl).group(<span class="dig">1</span>)
+        strProjUrl = strProjUrl[:-<span class="dig">5</span>] <span class="cmt"># remove "/pica"</span>
         <span class="cmt">#check html file exists
 </span>        isProjHtmlFileMissing = False
-        strProjDetailsFilename = strProjName+<span class="str">"_details.html"</span>
-        strProjDetailsFilePath = strProjectsFolderPath + <span class="str">"\\"</span> + strProjDetailsFilename
-        <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strProjDetailsFilePath):<span class="cmt">#check detail.html</span>
-            isProjHtmlFileMissing = True
-        strProjStoryFilename = strProjName+<span class="str">"_story.html"</span>
-        strProjStroyFilePath = strProjectsFolderPath + <span class="str">"\\"</span> + strProjStoryFilename
-        <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strProjStroyFilePath):<span class="cmt">#check story.html</span>
-            isProjHtmlFileMissing = True
-        strProjUpdatesFilename = strProjName+<span class="str">"_updates.html"</span>
-        strProjUpdatesFilePath = strProjectsFolderPath + <span class="str">"\\"</span> + strProjUpdatesFilename
-        <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strProjUpdatesFilePath):<span class="cmt">#check updates.html</span>
-            isProjHtmlFileMissing = True
-        strProjCommentsFilename = strProjName+<span class="str">"_comments.html"</span>
-        strProjCommentsFilePath = strProjectsFolderPath + <span class="str">"\\"</span> + strProjCommentsFilename
-        <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strProjCommentsFilePath):<span class="cmt">#check comments.html</span>
-            isProjHtmlFileMissing = True
-        strProjBackersFilename = strProjName+<span class="str">"_backers.html"</span>
-        strProjBackersFilePath = strProjectsFolderPath + <span class="str">"\\"</span> + strProjBackersFilename
-        <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strProjBackersFilePath):<span class="cmt">#check backers.html</span>
-            isProjHtmlFileMissing = True
-        <span class="cmt">#open chrome 
-</span>        <span class="kw">if</span> isProjHtmlFileMissing:
-            openChrome()
+        lstStrProjHtmlFileExtension = [<span class="str">"_details.html"</span>, <span class="str">"_story.html"</span>, <span class="str">"_updates.html"</span>, <span class="str">"_comments.html"</span>, <span class="str">"_backers.html"</span>]
+        <span class="kw">for</span> strProjHtmlFileExtension <span class="kw">in</span> lstStrProjHtmlFileExtension:
+            strProjHtmlFilePath = strProjectsFolderPath + os.sep + strProjName + strProjHtmlFileExtension
+            <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strProjHtmlFilePath):
+                isProjHtmlFileMissing = True
+        <span class="kw">if</span> isProjHtmlFileMissing:
+            <span class="cmt">#delete remaining project html files
+</span>            <span class="kw">for</span> strProjHtmlFileExtension <span class="kw">in</span> lstStrProjHtmlFileExtension:
+                strProjHtmlFilePath = strProjectsFolderPath + os.sep + strProjName + strProjHtmlFileExtension
+                <span class="kw">if</span> os.path.exists(strProjHtmlFilePath):
+                    os.remove(strProjHtmlFilePath)
+            openChrome() <span class="cmt">#open chrome </span>
             typeUrlOnChrome(strUrlText=strProjUrl)
             <span class="skw">wait</span>(<span class="dig">0.5</span>)
             <span class="cmt">#check page "style" or "something not right" show?
@@ -321,63 +303,46 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
                 openChrome() <span class="cmt">#reopen chrome for load standard style</span>
                 typeUrlOnChrome(strUrlText=strProjUrl)
                 <span class="skw">wait</span>(<span class="dig">0.5</span>)
-            <span class="kw">if</span> (exists(dicPng[<span class="str">"page_currently_updated"</span>]) <span class="kw">or</span> exists(dicPng[<span class="str">"page_under_review"</span>])):
-                <span class="cmt">#page is currently updated or under review, skip this url
-</span>                <span class="kw">continue</span>
         <span class="kw">else</span>:
             <span class="kw">continue</span> <span class="cmt">#skip this url</span>
-        <span class="cmt">#check page not found
-</span>        <span class="kw">if</span> exists(dicPng[<span class="str">"page_not_found"</span>]):
+        <span class="cmt">#check page not found or is currently updated or under review
+</span>        <span class="kw">if</span> exists(dicPng[<span class="str">"page_not_found"</span>]) <span class="kw">or</span> exists(dicPng[<span class="str">"page_currently_updated"</span>]) <span class="kw">or</span> exists(dicPng[<span class="str">"page_under_review"</span>]):
             <span class="kw">continue</span> <span class="cmt">#skip this url</span>
         <span class="cmt">#wait load completed
 </span>        <span class="skw">wait</span>(dicPng[<span class="str">"page_focus_story"</span>], <span class="dig">300</span>)
         <span class="skw">wait</span>(<span class="dig">0.5</span>)
-        <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strProjDetailsFilePath):<span class="cmt">#check detail.html</span>
-            <span class="kw">while</span>(<span class="kw">not</span> exists(dicPng[<span class="str">"papge_story_details"</span>])):
-                <span class="skw">type</span>(Key.PAGE_DOWN)
-                <span class="skw">wait</span>(<span class="dig">0.5</span>)
-            <span class="skw">click</span>(dicPng[<span class="str">"papge_story_details"</span>])
-            <span class="skw">wait</span>(dicPng[<span class="str">"page_details_about"</span>], <span class="dig">300</span>)
-            <span class="cmt">#save see more details
-</span>            rightClickSaveCurrentPage(onImage=dicPng[<span class="str">"page_details_about"</span>], strFolderPath=strProjectsFolderPath, strFilename=strProjDetailsFilename)
-            <span class="cmt">#close details
-</span>            <span class="skw">click</span>(dicPng[<span class="str">"page_details_close"</span>])
-            <span class="skw">wait</span>(dicPng[<span class="str">"papge_story_details"</span>], <span class="dig">300</span>)
-            <span class="skw">type</span>(Key.HOME)
-            <span class="skw">wait</span>(dicPng[<span class="str">"page_focus_story"</span>], <span class="dig">300</span>)
-        <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strProjStroyFilePath):<span class="cmt">#check story.html</span>
-            <span class="cmt">#save story
-</span>            saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjStoryFilename)
-        <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strProjUpdatesFilePath):<span class="cmt">#check updates.html</span>
-            <span class="cmt">#save updates
-</span>            <span class="skw">wait</span>(dicPng[<span class="str">"page_blur_updates"</span>], <span class="dig">300</span>)
-            <span class="skw">click</span>(dicPng[<span class="str">"page_blur_updates"</span>])
-            <span class="skw">wait</span>(dicPng[<span class="str">"page_focus_updates"</span>], <span class="dig">300</span>)
-            <span class="cmt">#unfoldUCBShowmore()
-</span>            saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjUpdatesFilename)
-        <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strProjCommentsFilePath):<span class="cmt">#check comments.html</span>
-            <span class="cmt">#save comments
-</span>            <span class="skw">wait</span>(dicPng[<span class="str">"page_blur_comments"</span>], <span class="dig">300</span>)
-            <span class="skw">click</span>(dicPng[<span class="str">"page_blur_comments"</span>])
-            <span class="skw">wait</span>(dicPng[<span class="str">"page_focus_comments"</span>], <span class="dig">300</span>)
-            <span class="cmt">#unfoldUCBShowmore()
-</span>            saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjCommentsFilename)
-        <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strProjBackersFilePath):<span class="cmt">#check backers.html</span>
-            <span class="cmt">#save backers
-</span>            <span class="skw">wait</span>(dicPng[<span class="str">"page_blur_backers"</span>], <span class="dig">300</span>)
-            <span class="skw">click</span>(dicPng[<span class="str">"page_blur_backers"</span>])
-            <span class="skw">wait</span>(dicPng[<span class="str">"page_focus_backers"</span>], <span class="dig">300</span>)
-            <span class="cmt">#unfoldUCBShowmore()
-</span>            saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjBackersFilename)
-        <span class="cmt">#gallery may not exists
-</span>        strProjGalleryFilename = strProjName+<span class="str">"_gallery.html"</span>
-        strProjGalleryFilePath = strProjectsFolderPath + <span class="str">"\\"</span> + strProjGalleryFilename
-        <span class="kw">if</span> (<span class="kw">not</span> os.path.exists(strProjGalleryFilePath)) <span class="kw">and</span> exists(dicPng[<span class="str">"page_blur_gallery"</span>]):<span class="cmt">#check gallery.html</span>
-            <span class="cmt">#save gallery
-</span>            <span class="skw">wait</span>(dicPng[<span class="str">"page_blur_gallery"</span>], <span class="dig">300</span>)
-            <span class="skw">click</span>(dicPng[<span class="str">"page_blur_gallery"</span>])
-            <span class="skw">wait</span>(dicPng[<span class="str">"page_focus_gallery"</span>], <span class="dig">300</span>)
-            saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjGalleryFilename)
+        <span class="kw">while</span>(<span class="kw">not</span> exists(dicPng[<span class="str">"papge_story_details"</span>])):
+            <span class="skw">type</span>(Key.PAGE_DOWN)
+            <span class="skw">wait</span>(<span class="dig">0.5</span>)
+        <span class="skw">click</span>(dicPng[<span class="str">"papge_story_details"</span>])
+        <span class="skw">wait</span>(dicPng[<span class="str">"page_details_about"</span>], <span class="dig">300</span>)
+        <span class="cmt">#save see more details html 
+</span>        rightClickSaveCurrentPage(onImage=dicPng[<span class="str">"page_details_about"</span>], strFolderPath=strProjectsFolderPath, strFilename=strProjName + <span class="str">"_details.html"</span>)
+        <span class="cmt">#close details
+</span>        <span class="skw">click</span>(dicPng[<span class="str">"page_details_close"</span>])
+        <span class="skw">wait</span>(dicPng[<span class="str">"papge_story_details"</span>], <span class="dig">300</span>)
+        <span class="skw">type</span>(Key.HOME)
+        <span class="skw">wait</span>(dicPng[<span class="str">"page_focus_story"</span>], <span class="dig">300</span>)
+        <span class="cmt">#save story html
+</span>        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + <span class="str">"_story.html"</span>)
+        <span class="cmt">#save updates html
+</span>        openChrome()
+        typeUrlOnChrome(strUrlText=strProjUrl + <span class="str">"#/updates"</span>)
+        <span class="skw">wait</span>(<span class="dig">0.5</span>)
+        <span class="cmt">#unfoldUCBShowmore()
+</span>        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + <span class="str">"_updates.html"</span>)
+        <span class="cmt">#save comments html
+</span>        openChrome()
+        typeUrlOnChrome(strUrlText=strProjUrl + <span class="str">"#/comments"</span>)
+        <span class="skw">wait</span>(<span class="dig">0.5</span>)
+        <span class="cmt">#unfoldUCBShowmore()
+</span>        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + <span class="str">"_comments.html"</span>)
+        <span class="cmt">#save backers html
+</span>        openChrome()
+        typeUrlOnChrome(strUrlText=strProjUrl + <span class="str">"#/backers"</span>)
+        <span class="skw">wait</span>(<span class="dig">0.5</span>)
+        <span class="cmt">#unfoldUCBShowmore()
+</span>        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + <span class="str">"_backers.html"</span>)
     projUrlListFile.close()
 <span class="cmt">#download individuals pages
 </span><span class="kw">def</span> downloadIndividualsPages(strTargetCategory=None):
@@ -392,17 +357,18 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         strIndividualsId = re.search(<span class="str">"^https://www.indiegogo.com/individuals/(.*)$"</span>, strIndividualsUrl).group(<span class="dig">1</span>)
         <span class="cmt">#check html exists
 </span>        isIndividualsHtmlFileMissing = False
-        strIndividualsProfileFilename = strIndividualsId+<span class="str">"_profile.html"</span>
-        strIndividualsProfileFilePath = strIndividualsFolderPath + <span class="str">"\\"</span> + strIndividualsProfileFilename
-        <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strIndividualsProfileFilePath):<span class="cmt">#check profile.html</span>
-            isIndividualsHtmlFileMissing = True
-        strIndividualsCampaignsFilename = strIndividualsId+<span class="str">"_campaigns.html"</span>
-        strIndividualsCampaignsFilePath = strIndividualsFolderPath + <span class="str">"\\"</span> + strIndividualsCampaignsFilename
-        <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strIndividualsCampaignsFilePath):<span class="cmt">#check campaigns.html  </span>
-            isIndividualsHtmlFileMissing = True
-        <span class="cmt">#open chrome
-</span>        <span class="kw">if</span> isIndividualsHtmlFileMissing:
-            openChrome()
+        lstStrIndividualsHtmlFileExtension = [<span class="str">"_profile.html"</span>, <span class="str">"_campaigns.html"</span>]
+        <span class="kw">for</span> strIndividualsHtmlFileExtension <span class="kw">in</span> lstStrIndividualsHtmlFileExtension:
+            strIndividualsHtmlFilePath = strIndividualsFolderPath + os.sep + strIndividualsId + strIndividualsHtmlFileExtension
+            <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strIndividualsHtmlFilePath):
+                isIndividualsHtmlFileMissing = True
+        <span class="kw">if</span> isIndividualsHtmlFileMissing:
+            <span class="cmt">#delete remaining project html files
+</span>            <span class="kw">for</span> strIndividualsHtmlFileExtension <span class="kw">in</span> lstStrIndividualsHtmlFileExtension:
+            strIndividualsHtmlFilePath = strIndividualsFolderPath + os.sep + strIndividualsId + strIndividualsHtmlFileExtension
+            <span class="kw">if</span> os.path.exists(strIndividualsHtmlFilePath):
+                os.remove(strIndividualsHtmlFilePath)
+            openChrome() <span class="cmt">#open chrome</span>
             typeUrlOnChrome(strUrlText=strIndividualsUrl)
             <span class="skw">wait</span>(<span class="dig">0.5</span>)
         <span class="kw">else</span>:
@@ -412,14 +378,14 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
             <span class="kw">continue</span> <span class="cmt">#skip this url</span>
         <span class="cmt">#wait load completed
 </span>        <span class="skw">wait</span>(dicPng[<span class="str">"page_focus_profile"</span>], <span class="dig">300</span>)
-        <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strIndividualsProfileFilePath):<span class="cmt">#check profile.html</span>
-            saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsProfileFilename)
-        <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strIndividualsCampaignsFilePath):<span class="cmt">#check campaigns.html</span>
-            strIndividualsCampaignsUrl = strIndividualsUrl + <span class="str">u"/campaigns"</span>
-            openChrome()
-            typeUrlOnChrome(strUrlText=strIndividualsCampaignsUrl)
-            <span class="skw">wait</span>(<span class="dig">0.5</span>)
-            saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsCampaignsFilename)
+        <span class="cmt">#save profile html
+</span>        saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsId + <span class="str">"_profile.html"</span>)
+        <span class="cmt">#save campaigns html 
+</span>        strIndividualsCampaignsUrl = strIndividualsUrl + <span class="str">u"/campaigns"</span>
+        openChrome()
+        typeUrlOnChrome(strUrlText=strIndividualsCampaignsUrl)
+        <span class="skw">wait</span>(<span class="dig">0.5</span>)
+        saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsId + <span class="str">"_campaigns.html"</span>)
     individualsUrlListFile.close()
 <span class="cmt">#main entry point
 </span><span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
