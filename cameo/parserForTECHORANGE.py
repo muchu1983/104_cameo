@@ -149,13 +149,14 @@ class ParserForTECHORANGE:
                 #將 新聞資料物件 加入 json
                 self.dicParsedResultOfNews.append(dicNewsData)
                 ##test
-                strNewsName = re.match(u"^.*news\\(?P<newsName>.*)_news.html$", strNewsHtmlFilePath).group("newsName")
+                strNewsHtmlFileName = strNewsHtmlFilePath.split(os.sep)[-1]
+                strNewsName = re.match(u"^(?P<newsName>.*)_news.html$", strNewsHtmlFileName).group("newsName")
                 print(strNewsName)
                 ##test
             except:
                 logging.error("parse %s fail skip it"%strNewsHtmlFilePath)
                 # set isGot = 0
-                strNewsName = re.match(u"^.*news\\(?P<newsName>.*)_news.html$", strNewsHtmlFilePath).group("newsName")
+                strNewsName = re.match(u"^.*\news\(?P<newsName>.*)_news.html$", strNewsHtmlFilePath).group("newsName")
                 #self.db.updateNewsStatusIsNotGot(strNewsUrlPart=strNewsName)
                 continue #skip it
             #每一千筆資料另存一個 json
