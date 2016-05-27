@@ -209,7 +209,7 @@ def downloadProjectPages(strTargetCategory=None):
     projUrlListFile = open(strProjUrlListFilePath, "r") 
     for strProjUrl in projUrlListFile:
         strProjName = re.search("^https://www.indiegogo.com/projects/(.*)/.{4}$", strProjUrl).group(1)
-        strProjUrl = strProjUrl[:-5] # remove "/pica"
+        strProjUrl = strProjUrl.strip()[:-5] # remove "/pica"
         #check html file exists
         isProjHtmlFileMissing = False
         lstStrProjHtmlFileExtension = ["_details.html", "_story.html", "_updates.html", "_comments.html", "_backers.html"]
