@@ -22,11 +22,11 @@ dicPng = {"chrome_close":Pattern("chrome_close.png").targetOffset(-24,-1),
           "page_ucb_more":"page_ucb_more.png",
           "papge_new_style_check":"page_new_style_check.png",
           "page_blur_story":"page_blur_story.png",
-          "page_focus_story":"page_focus_story.png",
-          "page_focus_profile":"page_focus_profile.png",
-          "papge_story_details":"papge_story_details.png",
-          "page_details_about":"page_details_about.png",
-          "page_details_close":"page_details_close.png",
+          "page_focus_story":"page_focus_story.png", #change
+          "page_focus_profile":"page_focus_profile.png", 
+          "papge_story_details":"papge_story_details.png", #change
+          "page_details_about":"page_details_about.png", #change
+          "page_details_close":"page_details_close.png", #change
           "page_explore":"page_explore.png",
           "page_not_found":"page_not_found.png",
           "page_not_right":"page_not_right.png",
@@ -226,8 +226,8 @@ def downloadProjectPages(strTargetCategory=None):
             openChrome() #open chrome 
             typeUrlOnChrome(strUrlText=strProjUrl)
             wait(0.5)
-            #check page "style" or "something not right" show?
-            while(exists(dicPng["papge_new_style_check"]) or exists(dicPng["page_not_right"])):
+            #check page "something not right" show?
+            while(exists(dicPng["page_not_right"])):
                 openChrome() #reopen chrome for load standard style
                 typeUrlOnChrome(strUrlText=strProjUrl)
                 wait(0.5)
@@ -237,11 +237,9 @@ def downloadProjectPages(strTargetCategory=None):
         if exists(dicPng["page_not_found"]) or exists(dicPng["page_currently_updated"]) or exists(dicPng["page_under_review"]):
             continue #skip this url
         #wait load completed
+        wait(dicPng["papge_new_style_check"], 300)
         wait(dicPng["page_focus_story"], 300)
-        wait(0.5)
-        while(not exists(dicPng["papge_story_details"])):
-            type(Key.PAGE_DOWN)
-            wait(0.5)
+        wait(dicPng["papge_story_details"], 300)
         click(dicPng["papge_story_details"])
         wait(dicPng["page_details_about"], 300)
         #save see more details html 
