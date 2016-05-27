@@ -20,11 +20,11 @@ dicPng = {"chrome_close":Pattern("chrome_close.png").targetOffset(-24,-1),
           "page_end_camp":"page_end_camp.png",
           "page_cate_more":"page_cate_more.png",
           "page_ucb_more":"page_ucb_more.png",
-          "papge_new_style_check":"page_new_style_check.png",
+          "page_new_style_check":"page_new_style_check.png",
           "page_blur_story":"page_blur_story.png",
           "page_focus_story":"page_focus_story.png",
           "page_focus_profile":"page_focus_profile.png", 
-          "papge_story_details":"page_story_details.png",
+          "page_story_details":"page_story_details.png",
           "page_details_about":"page_details_about.png",
           "page_details_close":"page_details_close.png",
           "page_explore":"page_explore.png",
@@ -237,16 +237,16 @@ def downloadProjectPages(strTargetCategory=None):
         if exists(dicPng["page_not_found"]) or exists(dicPng["page_currently_updated"]) or exists(dicPng["page_under_review"]):
             continue #skip this url
         #wait load completed
-        wait(dicPng["papge_new_style_check"], 300)
+        wait(dicPng["page_new_style_check"], 300)
         wait(dicPng["page_focus_story"], 300)
-        wait(dicPng["papge_story_details"], 300)
-        click(dicPng["papge_story_details"])
+        wait(dicPng["page_story_details"], 300)
+        click(dicPng["page_story_details"])
         wait(dicPng["page_details_about"], 300)
         #save see more details html 
         rightClickSaveCurrentPage(onImage=dicPng["page_details_about"], strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_details.html")
         #close details
         click(dicPng["page_details_close"])
-        wait(dicPng["papge_story_details"], 300)
+        wait(dicPng["page_story_details"], 300)
         type(Key.HOME)
         wait(dicPng["page_focus_story"], 300)
         #save story html
