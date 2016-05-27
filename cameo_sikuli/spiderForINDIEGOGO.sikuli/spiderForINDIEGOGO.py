@@ -22,11 +22,11 @@ dicPng = {"chrome_close":Pattern("chrome_close.png").targetOffset(-24,-1),
           "page_ucb_more":"page_ucb_more.png",
           "papge_new_style_check":"page_new_style_check.png",
           "page_blur_story":"page_blur_story.png",
-          "page_focus_story":"page_focus_story.png", #change
+          "page_focus_story":"page_focus_story.png",
           "page_focus_profile":"page_focus_profile.png", 
-          "papge_story_details":"papge_story_details.png", #change
-          "page_details_about":"page_details_about.png", #change
-          "page_details_close":"page_details_close.png", #change
+          "papge_story_details":"page_story_details.png",
+          "page_details_about":"page_details_about.png",
+          "page_details_close":"page_details_close.png",
           "page_explore":"page_explore.png",
           "page_not_found":"page_not_found.png",
           "page_not_right":"page_not_right.png",

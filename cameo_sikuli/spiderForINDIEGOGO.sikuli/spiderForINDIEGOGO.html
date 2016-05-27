@@ -96,7 +96,7 @@ dicPng = {<span class="str">"chrome_close"</span>:Pattern(<img src="chrome_close
           <span class="str">"page_blur_story"</span>:<img src="page_blur_story.png" />,
           <span class="str">"page_focus_story"</span>:<img src="page_focus_story.png" />,
           <span class="str">"page_focus_profile"</span>:<img src="page_focus_profile.png" />,
-          <span class="str">"papge_story_details"</span>:<img src="papge_story_details.png" />,
+          <span class="str">"papge_story_details"</span>:<img src="page_story_details.png" />,
           <span class="str">"page_details_about"</span>:<img src="page_details_about.png" />,
           <span class="str">"page_details_close"</span>:<img src="page_details_close.png" />,
           <span class="str">"page_explore"</span>:<img src="page_explore.png" />,
@@ -298,8 +298,8 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
             openChrome() <span class="cmt">#open chrome </span>
             typeUrlOnChrome(strUrlText=strProjUrl)
             <span class="skw">wait</span>(<span class="dig">0.5</span>)
-            <span class="cmt">#check page "style" or "something not right" show?
-</span>            <span class="kw">while</span>(exists(dicPng[<span class="str">"papge_new_style_check"</span>]) <span class="kw">or</span> exists(dicPng[<span class="str">"page_not_right"</span>])):
+            <span class="cmt">#check page "something not right" show?
+</span>            <span class="kw">while</span>(exists(dicPng[<span class="str">"page_not_right"</span>])):
                 openChrome() <span class="cmt">#reopen chrome for load standard style</span>
                 typeUrlOnChrome(strUrlText=strProjUrl)
                 <span class="skw">wait</span>(<span class="dig">0.5</span>)
@@ -309,11 +309,9 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
 </span>        <span class="kw">if</span> exists(dicPng[<span class="str">"page_not_found"</span>]) <span class="kw">or</span> exists(dicPng[<span class="str">"page_currently_updated"</span>]) <span class="kw">or</span> exists(dicPng[<span class="str">"page_under_review"</span>]):
             <span class="kw">continue</span> <span class="cmt">#skip this url</span>
         <span class="cmt">#wait load completed
-</span>        <span class="skw">wait</span>(dicPng[<span class="str">"page_focus_story"</span>], <span class="dig">300</span>)
-        <span class="skw">wait</span>(<span class="dig">0.5</span>)
-        <span class="kw">while</span>(<span class="kw">not</span> exists(dicPng[<span class="str">"papge_story_details"</span>])):
-            <span class="skw">type</span>(Key.PAGE_DOWN)
-            <span class="skw">wait</span>(<span class="dig">0.5</span>)
+</span>        <span class="skw">wait</span>(dicPng[<span class="str">"papge_new_style_check"</span>], <span class="dig">300</span>)
+        <span class="skw">wait</span>(dicPng[<span class="str">"page_focus_story"</span>], <span class="dig">300</span>)
+        <span class="skw">wait</span>(dicPng[<span class="str">"papge_story_details"</span>], <span class="dig">300</span>)
         <span class="skw">click</span>(dicPng[<span class="str">"papge_story_details"</span>])
         <span class="skw">wait</span>(dicPng[<span class="str">"page_details_about"</span>], <span class="dig">300</span>)
         <span class="cmt">#save see more details html 
@@ -365,9 +363,9 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         <span class="kw">if</span> isIndividualsHtmlFileMissing:
             <span class="cmt">#delete remaining project html files
 </span>            <span class="kw">for</span> strIndividualsHtmlFileExtension <span class="kw">in</span> lstStrIndividualsHtmlFileExtension:
-            strIndividualsHtmlFilePath = strIndividualsFolderPath + os.sep + strIndividualsId + strIndividualsHtmlFileExtension
-            <span class="kw">if</span> os.path.exists(strIndividualsHtmlFilePath):
-                os.remove(strIndividualsHtmlFilePath)
+                strIndividualsHtmlFilePath = strIndividualsFolderPath + os.sep + strIndividualsId + strIndividualsHtmlFileExtension
+                <span class="kw">if</span> os.path.exists(strIndividualsHtmlFilePath):
+                    os.remove(strIndividualsHtmlFilePath)
             openChrome() <span class="cmt">#open chrome</span>
             typeUrlOnChrome(strUrlText=strIndividualsUrl)
             <span class="skw">wait</span>(<span class="dig">0.5</span>)
