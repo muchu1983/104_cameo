@@ -220,6 +220,7 @@ def downloadProjectPages(strTargetCategory=None):
     strProjUrlListFilePath = strProjUrlListFilePathTemplate % (strTargetCategory)
     projUrlListFile = open(strProjUrlListFilePath, "r") 
     for strProjUrl in projUrlListFile:
+        wait(60) #wait 1 min per project
         strProjName = re.search("^https://www.indiegogo.com/projects/(.*)/.{4}$", strProjUrl).group(1)
         strProjUrl = strProjUrl.strip()[:-5] # remove "/pica"
         #check html file exists
