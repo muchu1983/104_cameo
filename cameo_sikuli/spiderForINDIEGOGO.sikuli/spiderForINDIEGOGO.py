@@ -21,7 +21,7 @@ dicPng = {"chrome_close":Pattern("chrome_close.png").targetOffset(-24,-1),
           "page_cate_more":"page_cate_more.png",
           "page_ucb_more":"page_ucb_more.png",
           "page_new_style_check":"page_new_style_check.png",
-          "page_blur_story":"page_blur_story.png",
+          "page_blur_story":"page_blur_story.png", #need to changn png
           "page_focus_story":"page_focus_story.png",
           "page_focus_profile":"page_focus_profile.png", 
           "page_story_details":"page_story_details.png",
