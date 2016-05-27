@@ -38,6 +38,11 @@ dicPng = {"chrome_close":Pattern("chrome_close.png").targetOffset(-24,-1),
           "os_right_save_as":"os_right_save_as.png",
           "os_save_btn":"os_save_btn.png",
           }
+lstStrCategoryName = ["animals", "art", "comic", "community", "dance",
+                "design", "education", "environment", "fashion",
+                "film", "food", "gaming", "health", "music", "photography",
+                "politics", "religion", "small_business", "sports",
+                "technology", "theatre", "transmedia", "video_web", "writing"]
 sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
 strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"
 #open chrome
@@ -200,6 +205,10 @@ def downloadCategoryPages():
     catUrlListFile.close()
 #download project pages
 def downloadProjectPages(strTargetCategory=None):
+    if strTargetCategory == "automode": #自動抓取所有分類的專案 html
+        for strCategoryName in lstStrCategoryName:
+            downloadProjectPages(strTargetCategory=strCategoryName)
+        return #自動完成就 return
     strProjUrlListFilePathTemplate = strBaseResFolderPath + r"\parsed_result\INDIEGOGO\%s\project_url_list.txt"
     strProjectsFolderPathTemplate = strBaseResFolderPath + r"\source_html\INDIEGOGO\%s\projects"   
     strProjectsFolderPath = strProjectsFolderPathTemplate % (strTargetCategory)
@@ -272,6 +281,10 @@ def downloadProjectPages(strTargetCategory=None):
     projUrlListFile.close()
 #download individuals pages
 def downloadIndividualsPages(strTargetCategory=None):
+    if strTargetCategory == "automode": #自動抓取所有分類的個人資料 html
+        for strCategoryName in lstStrCategoryName:
+            downloadIndividualsPages(strTargetCategory=strCategoryName)
+        return #自動完成就 return
     strIndividualsUrlListFilePathTemplate = strBaseResFolderPath + r"\parsed_result\INDIEGOGO\%s\individuals_url_list.txt"
     strIndividualsFolderPathTemplate = strBaseResFolderPath + r"\source_html\INDIEGOGO\%s\profiles"
     strIndividualsFolderPath = strIndividualsFolderPathTemplate % (strTargetCategory)

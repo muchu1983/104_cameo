@@ -52,8 +52,8 @@ class SpiderForINDIEGOGO:
                 "useage:\n"
                 "explore - download explore.html\n"
                 "category - download category.html\n"
-                "project category - download project's pages of given category\n"
-                "individuals category - download individuals's pages of given category\n")
+                "project category - download project's pages of given category, if category==automode means all category\n"
+                "individuals category - download individuals's pages of given category, if category==automode means all category\n")
                 
     #執行 spider
     def runSpider(self, lstSubcommand=None):
