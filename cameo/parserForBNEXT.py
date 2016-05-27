@@ -145,7 +145,7 @@ class ParserForBNEXT:
             strTitle = root.css("div.main_title::text").extract_first()
             dicNewsData["strTitle"] = strTitle
             #strContent
-            lstStrContent = root.css("div.content.htmlview *:not(script)::text").extract()
+            lstStrContent = root.css("div.content.htmlview *:not(script):not(h2.chk)::text").extract()
             strContent = re.sub("\s", "", u"".join(lstStrContent)) #接合 新聞內容 並去除空白字元
             dicNewsData["strContent"] = strContent.strip()
             #lstStrKeyword
