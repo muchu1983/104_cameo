@@ -9,6 +9,7 @@ This file is part of BSD license
 import os
 import sys
 import re
+import logging
 from java.awt import Toolkit
 from java.awt.datatransfer import StringSelection
 dicPng = {"chrome_close":Pattern("chrome_close.png").targetOffset(-24,-1),
@@ -142,6 +143,7 @@ def typeFolderPath(strFolderPath=None):
     wait(0.5)
 #rightclick on image to save current page
 def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None):
+    logging.info("prepare to save " + strFilename)
     waitVanish(dicPng["chrome_stop"], 300)
     wait(dicPng["chrome_reload"], 300)
     checkAndPauseForYourInterruption()
@@ -161,7 +163,8 @@ def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None
     wait(0.5)
     wait(dicPng["chrome_download_finished"], 600)#wait save complete
 #ask chrome save current page
-def saveCurrentPage(strFolderPath=None, strFilename="default.html"):
+def saveCurrentPage(strFolderPath=None, strFilename=None):
+    logging.info("prepare to save " + strFilename)
     waitVanish(dicPng["chrome_stop"], 300)
     wait(dicPng["chrome_reload"], 300)
     checkAndPauseForYourInterruption()
@@ -329,6 +332,7 @@ def downloadIndividualsPages(strTargetCategory=None):
 #main entry point
 if __name__ == "__main__":
     try:
+        logging.basicConfig(level=logging.INFO)
         lstStrArgs = sys.argv
         if lstStrArgs[1] == "explore":
             downloadExplorePages()
