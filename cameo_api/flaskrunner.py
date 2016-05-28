@@ -13,6 +13,7 @@ from flask import Flask
 from flask import request
 from flask import jsonify
 from cameo_api.spiderForYahooCurrency import SpiderForYahooCurrency
+from cameo_api.spiderForTwExchangeRates import SpiderForTwExchangeRates
 import cameo_api.apis as apis
 
 app = Flask(__name__.split(".")[0])
@@ -20,7 +21,7 @@ app = Flask(__name__.split(".")[0])
 #啟動 server
 def start_flask_server():
     #啟動 spider 抓取 yahoo 網頁並更新匯率資料庫
-    spider = SpiderForYahooCurrency()
+    spider = SpiderForTwExchangeRates()
     spiderThread = SpiderThread(spiderInstance=spider)
     spiderThread.start() #啟動執行緒
     #啟動 flask server
