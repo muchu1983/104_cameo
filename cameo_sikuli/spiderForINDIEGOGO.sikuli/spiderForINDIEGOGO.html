@@ -84,6 +84,17 @@ This file is part of BSD license
 <span class="kw">import</span> logging
 <span class="kw">from</span> java.awt <span class="kw">import</span> Toolkit
 <span class="kw">from</span> java.awt.datatransfer <span class="kw">import</span> StringSelection
+screen = Screen()
+dicRegion = {<span class="str">"regUp"</span>:Region(<span class="dig">0</span>,<span class="dig">0</span>,screen.getW(),screen.getH()/<span class="dig">2</span>),
+          <span class="str">"regDown"</span>:Region(<span class="dig">0</span>,screen.getH()/<span class="dig">2</span>,screen.getW(),screen.getH()/<span class="dig">2</span>),
+          <span class="str">"regLeft"</span>:Region(<span class="dig">0</span>,<span class="dig">0</span>,screen.getW()/<span class="dig">2</span>,screen.getH()),
+          <span class="str">"regRight"</span>:Region(screen.getW()/<span class="dig">2</span>,<span class="dig">0</span>,screen.getW()/<span class="dig">2</span>,screen.getH()),
+          <span class="str">"regNE"</span>:Region(screen.getW()/<span class="dig">2</span>,<span class="dig">0</span>,screen.getW()/<span class="dig">2</span>,screen.getH()/<span class="dig">2</span>),
+          <span class="str">"regSE"</span>:Region(screen.getW()/<span class="dig">2</span>,screen.getH()/<span class="dig">2</span>,screen.getW()/<span class="dig">2</span>,screen.getH()/<span class="dig">2</span>),
+          <span class="str">"regSW"</span>:Region(<span class="dig">0</span>,screen.getH()/<span class="dig">2</span>,screen.getW()/<span class="dig">2</span>,screen.getH()/<span class="dig">2</span>),
+          <span class="str">"regNW"</span>:Region(<span class="dig">0</span>,<span class="dig">0</span>,screen.getW()/<span class="dig">2</span>,screen.getH()/<span class="dig">2</span>),
+          <span class="str">"regCenter"</span>:Region(screen.getW()/<span class="dig">4</span>,screen.getH()/<span class="dig">4</span>,screen.getW()/<span class="dig">2</span>,screen.getH()/<span class="dig">2</span>)
+         }
 dicPng = {<span class="str">"chrome_close"</span>:Pattern(<img src="chrome_close.png" />).targetOffset(-<span class="dig">24</span>,-<span class="dig">1</span>),
           <span class="str">"chrome_home"</span>:<img src="chrome_home.png" />,
           <span class="str">"chrome_stop"</span>: <img src="chrome_stop.png" />,
@@ -103,6 +114,7 @@ dicPng = {<span class="str">"chrome_close"</span>:Pattern(<img src="chrome_close
           <span class="str">"page_not_found"</span>:<img src="page_not_found.png" />,
           <span class="str">"page_not_right"</span>:<img src="page_not_right.png" />,
           <span class="str">"page_your_interruption"</span>:<img src="page_your_interruption.png" />,
+          <span class="str">"page_proxy_error"</span>:<img src="page_proxy_error.png" />,
           <span class="str">"page_currently_updated"</span>:<img src="currently_updated.png" />,
           <span class="str">"page_under_review"</span>:<img src="page_under_review.png" />,
           <span class="str">"os_foldername_bar"</span>:Pattern(<img src="os_foldername_bar.png" />).targetOffset(<span class="dig">10</span>,<span class="dig">0</span>),
@@ -120,16 +132,16 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
 <span class="cmt">#open chrome
 </span><span class="kw">def</span> openChrome():
     <span class="cmt">#close prev chrome
-</span>    <span class="kw">if</span> exists(dicPng[<span class="str">"chrome_close"</span>]):
-        <span class="skw">click</span>(dicPng[<span class="str">"chrome_close"</span>])
+</span>    <span class="kw">if</span> dicRegion[<span class="str">"regNW"</span>].exists(dicPng[<span class="str">"chrome_close"</span>]):
+        dicRegion[<span class="str">"regNW"</span>].<span class="skw">click</span>(dicPng[<span class="str">"chrome_close"</span>])
     <span class="skw">wait</span>(<span class="dig">2</span>)
     <span class="cmt">#re-open new chrome
 </span>    App.open(<span class="str">"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe --incognito"</span>)
     <span class="skw">wait</span>(<span class="dig">2</span>)<span class="cmt">#wait to running</span>
-    <span class="skw">wait</span>(dicPng[<span class="str">"chrome_home"</span>], <span class="dig">300</span>)
-    <span class="skw">click</span>(dicPng[<span class="str">"chrome_home"</span>])
-    waitVanish(dicPng[<span class="str">"chrome_stop"</span>], <span class="dig">300</span>)
-    <span class="skw">wait</span>(dicPng[<span class="str">"chrome_reload"</span>], <span class="dig">300</span>)
+    dicRegion[<span class="str">"regNW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"chrome_home"</span>], <span class="dig">300</span>)
+    dicRegion[<span class="str">"regNW"</span>].<span class="skw">click</span>(dicPng[<span class="str">"chrome_home"</span>])
+    dicRegion[<span class="str">"regNW"</span>].waitVanish(dicPng[<span class="str">"chrome_stop"</span>], <span class="dig">300</span>)
+    dicRegion[<span class="str">"regNW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"chrome_reload"</span>], <span class="dig">300</span>)
 <span class="cmt"># delete origin text
 </span><span class="kw">def</span> delOriginText():
     <span class="skw">type</span>(<span class="str">"a"</span>, KeyModifier.CTRL)
@@ -145,37 +157,39 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
 <span class="cmt">#roll to page end
 </span><span class="kw">def</span> rollToPageEnd():
     <span class="skw">type</span>(Key.END)
-    <span class="skw">wait</span>(dicPng[<span class="str">"page_end_about"</span>], <span class="dig">300</span>)
+    dicRegion[<span class="str">"regLeft"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"page_end_about"</span>], <span class="dig">300</span>)
 <span class="cmt"># open all project
 </span><span class="kw">def</span> unfoldCategoryPage():
     rollToPageEnd()
     <span class="kw">for</span> uptime <span class="kw">in</span> range(<span class="dig">6</span>):
         <span class="skw">type</span>(Key.UP)
-    <span class="skw">wait</span>(dicPng[<span class="str">"page_end_camp"</span>], <span class="dig">300</span>)
-    <span class="kw">while</span>(exists(dicPng[<span class="str">"page_cate_more"</span>])):
-        <span class="skw">click</span>(dicPng[<span class="str">"page_cate_more"</span>])
-        waitVanish(dicPng[<span class="str">"page_end_camp"</span>], <span class="dig">300</span>)
+    dicRegion[<span class="str">"regLeft"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"page_end_camp"</span>], <span class="dig">300</span>)
+    <span class="kw">while</span>(dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_cate_more"</span>])):
+        dicRegion[<span class="str">"regUp"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_cate_more"</span>])
+        dicRegion[<span class="str">"regLeft"</span>].waitVanish(dicPng[<span class="str">"page_end_camp"</span>], <span class="dig">300</span>)
         <span class="skw">wait</span>(<span class="dig">5</span>)
         rollToPageEnd()
         <span class="kw">for</span> uptime <span class="kw">in</span> range(<span class="dig">6</span>):
             <span class="skw">type</span>(Key.UP)
             <span class="skw">wait</span>(<span class="dig">0.5</span>)
-        <span class="skw">wait</span>(dicPng[<span class="str">"page_end_camp"</span>], <span class="dig">300</span>)
+        dicRegion[<span class="str">"regLeft"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"page_end_camp"</span>], <span class="dig">300</span>)
 <span class="cmt">#unfold (updates comments backers) showmore
 </span><span class="kw">def</span> unfoldUCBShowmore():
-    <span class="kw">while</span>(<span class="kw">not</span> exists(dicPng[<span class="str">"page_end_about"</span>])):
+    <span class="kw">while</span>(<span class="kw">not</span> dicRegion[<span class="str">"regLeft"</span>].exists(dicPng[<span class="str">"page_end_about"</span>])):
         <span class="skw">type</span>(Key.PAGE_DOWN)
         <span class="skw">wait</span>(<span class="dig">0.5</span>)
-        <span class="kw">if</span> exists(dicPng[<span class="str">"page_ucb_more"</span>]):
-            <span class="skw">click</span>(dicPng[<span class="str">"page_ucb_more"</span>])
-            waitVanish(dicPng[<span class="str">"page_ucb_more"</span>], <span class="dig">300</span>)
+        <span class="kw">if</span> dicRegion[<span class="str">"regDown"</span>].exists(dicPng[<span class="str">"page_ucb_more"</span>]):
+            dicRegion[<span class="str">"regDown"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_ucb_more"</span>])
+            dicRegion[<span class="str">"regDown"</span>].waitVanish(dicPng[<span class="str">"page_ucb_more"</span>], <span class="dig">300</span>)
             <span class="skw">wait</span>(<span class="dig">2</span>)
     <span class="skw">type</span>(Key.HOME)
-    <span class="skw">wait</span>(dicPng[<span class="str">"page_blur_story"</span>], <span class="dig">300</span>)
+    dicRegion[<span class="str">"regLeft"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"page_blur_story"</span>], <span class="dig">300</span>)
 <span class="cmt">#pause if interruption page found
-</span><span class="kw">def</span> checkAndPauseForYourInterruption():
-    <span class="kw">if</span> exists(dicPng[<span class="str">"page_your_interruption"</span>]):
-        <span class="skw">popup</span>(<span class="str">u"spider paused! （╯‵□′）╯︵┴─┴"</span>)
+</span><span class="kw">def</span> checkAndPauseBeforeSave():
+    <span class="kw">if</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_your_interruption"</span>]):
+        <span class="skw">popup</span>(<span class="str">u"distil networks found us! （╯‵□′）╯︵┴─┴"</span>)
+    <span class="kw">if</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_proxy_error"</span>]):
+        <span class="skw">popup</span>(<span class="str">u"proxy error! （╯‵□′）╯︵┴─┴"</span>)
 <span class="cmt">#type url on chrome
 </span><span class="kw">def</span> typeUrlOnChrome(strUrlText=None):
     <span class="kw">while</span> True:
@@ -186,10 +200,10 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         <span class="skw">wait</span>(<span class="dig">0.5</span>)
         <span class="skw">type</span>(Key.ENTER)
         <span class="skw">wait</span>(<span class="dig">0.5</span>)
-        waitVanish(dicPng[<span class="str">"chrome_stop"</span>], <span class="dig">300</span>)
-        <span class="skw">wait</span>(dicPng[<span class="str">"chrome_reload"</span>], <span class="dig">300</span>)
+        dicRegion[<span class="str">"regNW"</span>].waitVanish(dicPng[<span class="str">"chrome_stop"</span>], <span class="dig">300</span>)
+        dicRegion[<span class="str">"regNW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"chrome_reload"</span>], <span class="dig">300</span>)
         <span class="cmt">#check page "something not right" show?
-</span>        <span class="kw">if</span> exists(dicPng[<span class="str">"page_not_right"</span>]):
+</span>        <span class="kw">if</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_not_right"</span>]):
             <span class="cmt">#restart chrome and run typeUrlOnChrome again
 </span>            openChrome()
         <span class="kw">else</span>:
@@ -199,13 +213,13 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
 </span><span class="kw">def</span> goExplorePage():
     openChrome()
     typeUrlOnChrome(strUrlText=<span class="str">"https://www.indiegogo.com/explore"</span>)
-    <span class="skw">wait</span>(dicPng[<span class="str">"page_explore"</span>], <span class="dig">300</span>)
-    waitVanish(dicPng[<span class="str">"chrome_stop"</span>], <span class="dig">300</span>)
-    <span class="skw">wait</span>(dicPng[<span class="str">"chrome_reload"</span>], <span class="dig">300</span>)
+    dicRegion[<span class="str">"regUp"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"page_explore"</span>], <span class="dig">300</span>)
+    dicRegion[<span class="str">"regNW"</span>].waitVanish(dicPng[<span class="str">"chrome_stop"</span>], <span class="dig">300</span>)
+    dicRegion[<span class="str">"regNW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"chrome_reload"</span>], <span class="dig">300</span>)
 <span class="cmt">#choose folder at save progress
 </span><span class="kw">def</span> typeFolderPath(strFolderPath=None):
-    <span class="skw">wait</span>(dicPng[<span class="str">"os_foldername_bar"</span>], <span class="dig">300</span>)
-    <span class="skw">click</span>(dicPng[<span class="str">"os_foldername_bar"</span>])
+    dicRegion[<span class="str">"regNW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"os_foldername_bar"</span>], <span class="dig">300</span>)
+    dicRegion[<span class="str">"regNW"</span>].<span class="skw">click</span>(dicPng[<span class="str">"os_foldername_bar"</span>])
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
     delOriginText()
     pasteClipboardText(strText=strFolderPath)
@@ -215,43 +229,43 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
 <span class="cmt">#rightclick on image to save current page
 </span><span class="kw">def</span> rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None):
     logging.info(<span class="str">"prepare to save "</span> + strFilename)
-    waitVanish(dicPng[<span class="str">"chrome_stop"</span>], <span class="dig">300</span>)
-    <span class="skw">wait</span>(dicPng[<span class="str">"chrome_reload"</span>], <span class="dig">300</span>)
-    checkAndPauseForYourInterruption()
+    dicRegion[<span class="str">"regNW"</span>].waitVanish(dicPng[<span class="str">"chrome_stop"</span>], <span class="dig">300</span>)
+    dicRegion[<span class="str">"regNW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"chrome_reload"</span>], <span class="dig">300</span>)
+    checkAndPauseBeforeSave()
     <span class="skw">rightClick</span>(onImage)
-    <span class="skw">wait</span>(dicPng[<span class="str">"os_right_save_as"</span>], <span class="dig">300</span>)
-    <span class="skw">click</span>(dicPng[<span class="str">"os_right_save_as"</span>])
-    <span class="skw">wait</span>(dicPng[<span class="str">"os_save_btn"</span>], <span class="dig">300</span>)
+    dicRegion[<span class="str">"regUp"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"os_right_save_as"</span>], <span class="dig">300</span>)
+    dicRegion[<span class="str">"regUp"</span>].<span class="skw">click</span>(dicPng[<span class="str">"os_right_save_as"</span>])
+    dicRegion[<span class="str">"regCenter"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"os_save_btn"</span>], <span class="dig">300</span>)
     <span class="kw">if</span> strFolderPath != None:
         typeFolderPath(strFolderPath)
-    <span class="skw">click</span>(dicPng[<span class="str">"os_filename_bar"</span>])
+    dicRegion[<span class="str">"regLeft"</span>].<span class="skw">click</span>(dicPng[<span class="str">"os_filename_bar"</span>])
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
     delOriginText()
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
     pasteClipboardText(strText=strFilename)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
-    <span class="skw">click</span>(dicPng[<span class="str">"os_save_btn"</span>])
+    dicRegion[<span class="str">"regCenter"</span>].<span class="skw">click</span>(dicPng[<span class="str">"os_save_btn"</span>])
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
-    <span class="skw">wait</span>(dicPng[<span class="str">"chrome_download_finished"</span>], <span class="dig">600</span>)<span class="cmt">#wait save complete</span>
+    dicRegion[<span class="str">"regSW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"chrome_download_finished"</span>], <span class="dig">600</span>)<span class="cmt">#wait save complete</span>
 <span class="cmt">#ask chrome save current page
 </span><span class="kw">def</span> saveCurrentPage(strFolderPath=None, strFilename=None):
     logging.info(<span class="str">"prepare to save "</span> + strFilename)
-    waitVanish(dicPng[<span class="str">"chrome_stop"</span>], <span class="dig">300</span>)
-    <span class="skw">wait</span>(dicPng[<span class="str">"chrome_reload"</span>], <span class="dig">300</span>)
-    checkAndPauseForYourInterruption()
+    dicRegion[<span class="str">"regNW"</span>].waitVanish(dicPng[<span class="str">"chrome_stop"</span>], <span class="dig">300</span>)
+    dicRegion[<span class="str">"regNW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"chrome_reload"</span>], <span class="dig">300</span>)
+    checkAndPauseBeforeSave()
     <span class="skw">type</span>(<span class="str">"s"</span>, KeyModifier.CTRL)
-    <span class="skw">wait</span>(dicPng[<span class="str">"os_save_btn"</span>], <span class="dig">300</span>)
+    dicRegion[<span class="str">"regCenter"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"os_save_btn"</span>], <span class="dig">300</span>)
     <span class="kw">if</span> strFolderPath != None:
         typeFolderPath(strFolderPath)
-    <span class="skw">click</span>(dicPng[<span class="str">"os_filename_bar"</span>])
+    dicRegion[<span class="str">"regLeft"</span>].<span class="skw">click</span>(dicPng[<span class="str">"os_filename_bar"</span>])
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
     delOriginText()
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
     pasteClipboardText(strText=strFilename)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
-    <span class="skw">click</span>(dicPng[<span class="str">"os_save_btn"</span>])
+    dicRegion[<span class="str">"regCenter"</span>].<span class="skw">click</span>(dicPng[<span class="str">"os_save_btn"</span>])
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
-    <span class="skw">wait</span>(dicPng[<span class="str">"chrome_download_finished"</span>], <span class="dig">600</span>)<span class="cmt">#wait save complete</span>
+    dicRegion[<span class="str">"regSW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"chrome_download_finished"</span>], <span class="dig">600</span>)<span class="cmt">#wait save complete</span>
 <span class="cmt">#download explore pages
 </span><span class="kw">def</span> downloadExplorePages():
     goExplorePage()
@@ -272,8 +286,8 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strCategoryFilePath):<span class="cmt">#check category.html</span>
             openChrome()
             typeUrlOnChrome(strUrlText=strCategoryUrl)
-            waitVanish(dicPng[<span class="str">"chrome_stop"</span>], <span class="dig">300</span>)
-            <span class="skw">wait</span>(dicPng[<span class="str">"chrome_reload"</span>], <span class="dig">300</span>)
+            dicRegion[<span class="str">"regNW"</span>].waitVanish(dicPng[<span class="str">"chrome_stop"</span>], <span class="dig">300</span>)
+            dicRegion[<span class="str">"regNW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"chrome_reload"</span>], <span class="dig">300</span>)
             unfoldCategoryPage()
             saveCurrentPage(strFolderPath=strCategoryFolderPath, strFilename=<span class="str">"category.html"</span>)
     catUrlListFile.close()
@@ -301,7 +315,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
             <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strProjHtmlFilePath):
                 isProjHtmlFileMissing = True
         <span class="kw">if</span> isProjHtmlFileMissing:
-            <span class="skw">wait</span>(<span class="dig">60</span>) <span class="cmt">#wait 1 min per project</span>
+            <span class="skw">wait</span>(<span class="dig">10</span>) <span class="cmt">#wait 10 sec per project</span>
             <span class="cmt">#delete remaining project html files
 </span>            <span class="kw">for</span> strProjHtmlFileExtension <span class="kw">in</span> lstStrProjHtmlFileExtension:
                 strProjHtmlFilePath = strProjectsFolderPath + os.sep + strProjName + strProjHtmlFileExtension
@@ -311,24 +325,24 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
             typeUrlOnChrome(strUrlText=strProjUrl)
             <span class="skw">wait</span>(<span class="dig">0.5</span>)
             <span class="cmt">#check page "something not right" show?
-</span>            <span class="kw">while</span>(exists(dicPng[<span class="str">"page_not_right"</span>])):
+</span>            <span class="kw">while</span>(dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_not_right"</span>])):
                 openChrome() <span class="cmt">#reopen chrome for load standard style</span>
                 typeUrlOnChrome(strUrlText=strProjUrl)
                 <span class="skw">wait</span>(<span class="dig">0.5</span>)
         <span class="kw">else</span>:
             <span class="kw">continue</span> <span class="cmt">#skip this url</span>
         <span class="cmt">#check page not found or is currently updated or under review
-</span>        <span class="kw">if</span> exists(dicPng[<span class="str">"page_not_found"</span>]) <span class="kw">or</span> exists(dicPng[<span class="str">"page_currently_updated"</span>]) <span class="kw">or</span> exists(dicPng[<span class="str">"page_under_review"</span>]):
+</span>        <span class="kw">if</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_not_found"</span>]) <span class="kw">or</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_currently_updated"</span>]) <span class="kw">or</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_under_review"</span>]):
             <span class="kw">continue</span> <span class="cmt">#skip this url</span>
         <span class="cmt">#wait load completed
-</span>        <span class="skw">wait</span>(dicPng[<span class="str">"page_new_style_check"</span>], <span class="dig">300</span>)
-        <span class="skw">wait</span>(dicPng[<span class="str">"page_focus_story"</span>], <span class="dig">300</span>)
+</span>        dicRegion[<span class="str">"regRight"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"page_new_style_check"</span>], <span class="dig">300</span>)
+        dicRegion[<span class="str">"regLeft"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"page_focus_story"</span>], <span class="dig">300</span>)
         <span class="cmt">#save story html
 </span>        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + <span class="str">"_story.html"</span>)
         <span class="cmt">#save see more details html 
-</span>        <span class="skw">wait</span>(dicPng[<span class="str">"page_story_details"</span>], <span class="dig">300</span>)
-        <span class="skw">click</span>(dicPng[<span class="str">"page_story_details"</span>])
-        <span class="skw">wait</span>(dicPng[<span class="str">"page_details_about"</span>], <span class="dig">300</span>)
+</span>        dicRegion[<span class="str">"regCenter"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"page_story_details"</span>], <span class="dig">300</span>)
+        dicRegion[<span class="str">"regCenter"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_story_details"</span>])
+        dicRegion[<span class="str">"regUp"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"page_details_about"</span>], <span class="dig">300</span>)
         rightClickSaveCurrentPage(onImage=dicPng[<span class="str">"page_details_about"</span>], strFolderPath=strProjectsFolderPath, strFilename=strProjName + <span class="str">"_details.html"</span>)
         <span class="cmt">#save updates html
 </span>        openChrome()
@@ -383,10 +397,10 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         <span class="kw">else</span>:
             <span class="kw">continue</span> <span class="cmt">#skip this url</span>
         <span class="cmt">#check page not found
-</span>        <span class="kw">if</span> exists(dicPng[<span class="str">"page_not_found"</span>]):
+</span>        <span class="kw">if</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_not_found"</span>]):
             <span class="kw">continue</span> <span class="cmt">#skip this url</span>
         <span class="cmt">#wait load completed
-</span>        <span class="skw">wait</span>(dicPng[<span class="str">"page_focus_profile"</span>], <span class="dig">300</span>)
+</span>        dicRegion[<span class="str">"regLeft"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"page_focus_profile"</span>], <span class="dig">300</span>)
         <span class="cmt">#save profile html
 </span>        saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsId + <span class="str">"_profile.html"</span>)
         <span class="cmt">#save campaigns html 
@@ -414,7 +428,10 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         <span class="skw">popup</span>(<span class="str">u"spider action completed. ^.^y"</span>)
     <span class="kw">except</span> FindFailed, ff:
         <span class="kw">print</span>(str(ff))
-        <span class="skw">popup</span>(<span class="str">u"spider error! &gt;_&lt;||"</span>)
+        <span class="skw">popup</span>(<span class="str">u"spider cant find png error! &gt;_&lt;||"</span>)
+    <span class="kw">except</span> Exception, ex:
+        <span class="kw">print</span>(str(ex))
+        <span class="skw">popup</span>(<span class="str">u"spider unknow error! &gt;_&lt;||"</span>)
     <span class="kw">finally</span>:
         exit()
 </pre>

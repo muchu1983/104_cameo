@@ -42,7 +42,7 @@ dicPng = {"chrome_close":Pattern("chrome_close.png").targetOffset(-24,-1),
           "page_not_found":"page_not_found.png",
           "page_not_right":"page_not_right.png",
           "page_your_interruption":"page_your_interruption.png",
-          "page_proxy_error":"", ##########
+          "page_proxy_error":"page_proxy_error.png",
           "page_currently_updated":"currently_updated.png",
           "page_under_review":"page_under_review.png",
           "os_foldername_bar":Pattern("os_foldername_bar.png").targetOffset(10,0),
