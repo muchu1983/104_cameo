@@ -12,6 +12,16 @@ import re
 import logging
 from java.awt import Toolkit
 from java.awt.datatransfer import StringSelection
+screen = Screen()
+dicRegion = {"regUp":Region(0,0,screen.getW(),screen.getH()/2),
+          "regDown":Region(0,screen.getH()/2,screen.getW(),screen.getH()/2),
+          "regLeft":Region(0,0,screen.getW()/2,screen.getH()),
+          "regRight":Region(screen.getW()/2,0,screen.getW()/2,screen.getH()),
+          "regNE":Region(screen.getW()/2,0,screen.getW()/2,screen.getH()/2),
+          "regSE":Region(screen.getW()/2,screen.getH()/2,screen.getW()/2,screen.getH()/2),
+          "regSW":Region(0,screen.getH()/2,screen.getW()/2,screen.getH()/2),
+          "regNW":Region(0,0,screen.getW()/2,screen.getH()/2)
+         }
 dicPng = {"chrome_close":Pattern("chrome_close.png").targetOffset(-24,-1),
           "chrome_home":"chrome_home.png",
           "chrome_stop": "chrome_stop.png",
@@ -54,10 +64,10 @@ def openChrome():
     #re-open new chrome
     App.open("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe --incognito")
     wait(2)#wait to running
-    wait(dicPng["chrome_home"], 300)
-    click(dicPng["chrome_home"])
-    waitVanish(dicPng["chrome_stop"], 300)
-    wait(dicPng["chrome_reload"], 300)
+    dicRegion["regUp"].wait(dicPng["chrome_home"], 300)
+    dicRegion["regUp"].click(dicPng["chrome_home"])
+    dicRegion["regUp"].waitVanish(dicPng["chrome_stop"], 300)
+    dicRegion["regUp"].wait(dicPng["chrome_reload"], 300)
 # delete origin text
 def delOriginText():
     type("a", KeyModifier.CTRL)
@@ -114,8 +124,8 @@ def typeUrlOnChrome(strUrlText=None):
         wait(0.5)
         type(Key.ENTER)
         wait(0.5)
-        waitVanish(dicPng["chrome_stop"], 300)
-        wait(dicPng["chrome_reload"], 300)
+        dicRegion["regUp"].waitVanish(dicPng["chrome_stop"], 300)
+        dicRegion["regUp"].wait(dicPng["chrome_reload"], 300)
         #check page "something not right" show?
         if exists(dicPng["page_not_right"]):
             #restart chrome and run typeUrlOnChrome again
@@ -132,8 +142,8 @@ def goExplorePage():
     wait(dicPng["chrome_reload"], 300)
 #choose folder at save progress
 def typeFolderPath(strFolderPath=None):
-    wait(dicPng["os_foldername_bar"], 300)
-    click(dicPng["os_foldername_bar"])
+    dicRegion["regLeft"].wait(dicPng["os_foldername_bar"], 300)
+    dicRegion["regLeft"].click(dicPng["os_foldername_bar"])
     wait(0.5)
     delOriginText()
     pasteClipboardText(strText=strFolderPath)
@@ -143,43 +153,43 @@ def typeFolderPath(strFolderPath=None):
 #rightclick on image to save current page
 def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None):
     logging.info("prepare to save " + strFilename)
-    waitVanish(dicPng["chrome_stop"], 300)
-    wait(dicPng["chrome_reload"], 300)
+    dicRegion["regUp"].waitVanish(dicPng["chrome_stop"], 300)
+    dicRegion["regUp"].wait(dicPng["chrome_reload"], 300)
     checkAndPauseForYourInterruption()
     rightClick(onImage)
-    wait(dicPng["os_right_save_as"], 300)
-    click(dicPng["os_right_save_as"])
-    wait(dicPng["os_save_btn"], 300)
+    dicRegion["regUp"].wait(dicPng["os_right_save_as"], 300)
+    dicRegion["regUp"].click(dicPng["os_right_save_as"])
+    dicRegion["regLeft"].wait(dicPng["os_save_btn"], 300)
     if strFolderPath != None:
         typeFolderPath(strFolderPath)
-    click(dicPng["os_filename_bar"])
+    dicRegion["regLeft"].click(dicPng["os_filename_bar"])
     wait(0.5)
     delOriginText()
     wait(0.5)
     pasteClipboardText(strText=strFilename)
     wait(0.5)
-    click(dicPng["os_save_btn"])
+    dicRegion["regLeft"].click(dicPng["os_save_btn"])
     wait(0.5)
-    wait(dicPng["chrome_download_finished"], 600)#wait save complete
+    dicRegion["regSW"].wait(dicPng["chrome_download_finished"], 600)#wait save complete
 #ask chrome save current page
 def saveCurrentPage(strFolderPath=None, strFilename=None):
     logging.info("prepare to save " + strFilename)
-    waitVanish(dicPng["chrome_stop"], 300)
-    wait(dicPng["chrome_reload"], 300)
+    dicRegion["regUp"].waitVanish(dicPng["chrome_stop"], 300)
+    dicRegion["regUp"].wait(dicPng["chrome_reload"], 300)
     checkAndPauseForYourInterruption()
     type("s", KeyModifier.CTRL)
-    wait(dicPng["os_save_btn"], 300)
+    dicRegion["regLeft"].wait(dicPng["os_save_btn"], 300)
     if strFolderPath != None:
         typeFolderPath(strFolderPath)
-    click(dicPng["os_filename_bar"])
+    dicRegion["regLeft"].click(dicPng["os_filename_bar"])
     wait(0.5)
     delOriginText()
     wait(0.5)
     pasteClipboardText(strText=strFilename)
     wait(0.5)
-    click(dicPng["os_save_btn"])
+    dicRegion["regLeft"].click(dicPng["os_save_btn"])
     wait(0.5)
-    wait(dicPng["chrome_download_finished"], 600)#wait save complete
+    dicRegion["regSW"].wait(dicPng["chrome_download_finished"], 600)#wait save complete
 #download explore pages
 def downloadExplorePages():
     goExplorePage()
@@ -249,14 +259,14 @@ def downloadProjectPages(strTargetCategory=None):
         if exists(dicPng["page_not_found"]) or exists(dicPng["page_currently_updated"]) or exists(dicPng["page_under_review"]):
             continue #skip this url
         #wait load completed
-        wait(dicPng["page_new_style_check"], 300)
-        wait(dicPng["page_focus_story"], 300)
+        dicRegion["regRight"].wait(dicPng["page_new_style_check"], 300)
+        dicRegion["regLeft"].wait(dicPng["page_focus_story"], 300)
         #save story html
         saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_story.html")
         #save see more details html 
-        wait(dicPng["page_story_details"], 300)
-        click(dicPng["page_story_details"])
-        wait(dicPng["page_details_about"], 300)
+        dicRegion["regRight"].wait(dicPng["page_story_details"], 300)
+        dicRegion["regRight"].click(dicPng["page_story_details"])
+        dicRegion["regUp"].wait(dicPng["page_details_about"], 300)
         rightClickSaveCurrentPage(onImage=dicPng["page_details_about"], strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_details.html")
         #save updates html
         openChrome()
