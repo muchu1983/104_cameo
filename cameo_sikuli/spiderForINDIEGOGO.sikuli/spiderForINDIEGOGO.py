@@ -239,7 +239,7 @@ def downloadProjectPages(strTargetCategory=None):
             if not os.path.exists(strProjHtmlFilePath):
                 isProjHtmlFileMissing = True
         if isProjHtmlFileMissing:
-            wait(60) #wait 1 min per project
+            wait(10) #wait 10 sec per project
             #delete remaining project html files
             for strProjHtmlFileExtension in lstStrProjHtmlFileExtension:
                 strProjHtmlFilePath = strProjectsFolderPath + os.sep + strProjName + strProjHtmlFileExtension
@@ -352,6 +352,9 @@ if __name__ == "__main__":
         popup(u"spider action completed. ^.^y")
     except FindFailed, ff:
         print(str(ff))
-        popup(u"spider error! >_<||")
+        popup(u"spider cant find png error! >_<||")
+    except Exception, ex:
+        print(str(ex))
+        popup(u"spider unknow error! >_<||")
     finally:
         exit()
