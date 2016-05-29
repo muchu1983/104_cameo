@@ -20,7 +20,8 @@ dicRegion = {"regUp":Region(0,0,screen.getW(),screen.getH()/2),
           "regNE":Region(screen.getW()/2,0,screen.getW()/2,screen.getH()/2),
           "regSE":Region(screen.getW()/2,screen.getH()/2,screen.getW()/2,screen.getH()/2),
           "regSW":Region(0,screen.getH()/2,screen.getW()/2,screen.getH()/2),
-          "regNW":Region(0,0,screen.getW()/2,screen.getH()/2)
+          "regNW":Region(0,0,screen.getW()/2,screen.getH()/2),
+          "regCenter":Region(screen.getW()/4,screen.getH()/4,screen.getW()/2,screen.getH()/2)
          }
 dicPng = {"chrome_close":Pattern("chrome_close.png").targetOffset(-24,-1),
           "chrome_home":"chrome_home.png",
@@ -41,6 +42,7 @@ dicPng = {"chrome_close":Pattern("chrome_close.png").targetOffset(-24,-1),
           "page_not_found":"page_not_found.png",
           "page_not_right":"page_not_right.png",
           "page_your_interruption":"page_your_interruption.png",
+          "page_proxy_error":"", ##########
           "page_currently_updated":"currently_updated.png",
           "page_under_review":"page_under_review.png",
           "os_foldername_bar":Pattern("os_foldername_bar.png").targetOffset(10,0),
@@ -111,9 +113,11 @@ def unfoldUCBShowmore():
     type(Key.HOME)
     dicRegion["regLeft"].wait(dicPng["page_blur_story"], 300)
 #pause if interruption page found
-def checkAndPauseForYourInterruption():
+def checkAndPauseBeforeSave():
     if dicRegion["regUp"].exists(dicPng["page_your_interruption"]):
-        popup(u"spider paused! （╯‵□′）╯︵┴─┴")
+        popup(u"distil networks found us! （╯‵□′）╯︵┴─┴")
+    if dicRegion["regUp"].exists(dicPng["page_proxy_error"]):
+        popup(u"proxy error! （╯‵□′）╯︵┴─┴")
 #type url on chrome
 def typeUrlOnChrome(strUrlText=None):
     while True:
@@ -142,8 +146,8 @@ def goExplorePage():
     dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
 #choose folder at save progress
 def typeFolderPath(strFolderPath=None):
-    dicRegion["regLeft"].wait(dicPng["os_foldername_bar"], 300)
-    dicRegion["regLeft"].click(dicPng["os_foldername_bar"])
+    dicRegion["regNW"].wait(dicPng["os_foldername_bar"], 300)
+    dicRegion["regNW"].click(dicPng["os_foldername_bar"])
     wait(0.5)
     delOriginText()
     pasteClipboardText(strText=strFolderPath)
@@ -155,11 +159,11 @@ def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None
     logging.info("prepare to save " + strFilename)
     dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 300)
     dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
-    checkAndPauseForYourInterruption()
+    checkAndPauseBeforeSave()
     rightClick(onImage)
     dicRegion["regUp"].wait(dicPng["os_right_save_as"], 300)
     dicRegion["regUp"].click(dicPng["os_right_save_as"])
-    dicRegion["regLeft"].wait(dicPng["os_save_btn"], 300)
+    dicRegion["regCenter"].wait(dicPng["os_save_btn"], 300)
     if strFolderPath != None:
         typeFolderPath(strFolderPath)
     dicRegion["regLeft"].click(dicPng["os_filename_bar"])
@@ -168,7 +172,7 @@ def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None
     wait(0.5)
     pasteClipboardText(strText=strFilename)
     wait(0.5)
-    dicRegion["regLeft"].click(dicPng["os_save_btn"])
+    dicRegion["regCenter"].click(dicPng["os_save_btn"])
     wait(0.5)
     dicRegion["regSW"].wait(dicPng["chrome_download_finished"], 600)#wait save complete
 #ask chrome save current page
@@ -176,9 +180,9 @@ def saveCurrentPage(strFolderPath=None, strFilename=None):
     logging.info("prepare to save " + strFilename)
     dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 300)
     dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
-    checkAndPauseForYourInterruption()
+    checkAndPauseBeforeSave()
     type("s", KeyModifier.CTRL)
-    dicRegion["regLeft"].wait(dicPng["os_save_btn"], 300)
+    dicRegion["regCenter"].wait(dicPng["os_save_btn"], 300)
     if strFolderPath != None:
         typeFolderPath(strFolderPath)
     dicRegion["regLeft"].click(dicPng["os_filename_bar"])
@@ -187,7 +191,7 @@ def saveCurrentPage(strFolderPath=None, strFilename=None):
     wait(0.5)
     pasteClipboardText(strText=strFilename)
     wait(0.5)
-    dicRegion["regLeft"].click(dicPng["os_save_btn"])
+    dicRegion["regCenter"].click(dicPng["os_save_btn"])
     wait(0.5)
     dicRegion["regSW"].wait(dicPng["chrome_download_finished"], 600)#wait save complete
 #download explore pages
@@ -264,8 +268,8 @@ def downloadProjectPages(strTargetCategory=None):
         #save story html
         saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_story.html")
         #save see more details html 
-        dicRegion["regRight"].wait(dicPng["page_story_details"], 300)
-        dicRegion["regRight"].click(dicPng["page_story_details"])
+        dicRegion["regCenter"].wait(dicPng["page_story_details"], 300)
+        dicRegion["regCenter"].click(dicPng["page_story_details"])
         dicRegion["regUp"].wait(dicPng["page_details_about"], 300)
         rightClickSaveCurrentPage(onImage=dicPng["page_details_about"], strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_details.html")
         #save updates html
