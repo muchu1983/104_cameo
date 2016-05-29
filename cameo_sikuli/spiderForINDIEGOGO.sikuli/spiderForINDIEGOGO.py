@@ -58,8 +58,8 @@ strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_co
 #open chrome
 def openChrome():
     #close prev chrome
-    if exists(dicPng["chrome_close"]):
-        click(dicPng["chrome_close"])
+    if dicRegion["regUp"].exists(dicPng["chrome_close"]):
+        dicRegion["regUp"].click(dicPng["chrome_close"])
     wait(2)
     #re-open new chrome
     App.open("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe --incognito")
@@ -83,36 +83,36 @@ def pasteClipboardText(strText=None):
 #roll to page end
 def rollToPageEnd():
     type(Key.END)
-    wait(dicPng["page_end_about"], 300)
+    dicRegion["regLeft"].wait(dicPng["page_end_about"], 300)
 # open all project
 def unfoldCategoryPage():
     rollToPageEnd()
     for uptime in range(6):
         type(Key.UP)
-    wait(dicPng["page_end_camp"], 300)
-    while(exists(dicPng["page_cate_more"])):
-        click(dicPng["page_cate_more"])
-        waitVanish(dicPng["page_end_camp"], 300)
+    dicRegion["regLeft"].wait(dicPng["page_end_camp"], 300)
+    while(dicRegion["regUp"].exists(dicPng["page_cate_more"])):
+        dicRegion["regUp"].click(dicPng["page_cate_more"])
+        dicRegion["regLeft"].waitVanish(dicPng["page_end_camp"], 300)
         wait(5)
         rollToPageEnd()
         for uptime in range(6):
             type(Key.UP)
             wait(0.5)
-        wait(dicPng["page_end_camp"], 300)
+        dicRegion["regLeft"].wait(dicPng["page_end_camp"], 300)
 #unfold (updates comments backers) showmore
 def unfoldUCBShowmore():
-    while(not exists(dicPng["page_end_about"])):
+    while(not dicRegion["regLeft"].exists(dicPng["page_end_about"])):
         type(Key.PAGE_DOWN)
         wait(0.5)
-        if exists(dicPng["page_ucb_more"]):
-            click(dicPng["page_ucb_more"])
-            waitVanish(dicPng["page_ucb_more"], 300)
+        if exists(dicRegion["regDown"].dicPng["page_ucb_more"]):
+            dicRegion["regDown"].click(dicPng["page_ucb_more"])
+            dicRegion["regDown"].waitVanish(dicPng["page_ucb_more"], 300)
             wait(2)
     type(Key.HOME)
-    wait(dicPng["page_blur_story"], 300)
+    dicRegion["regLeft"].wait(dicPng["page_blur_story"], 300)
 #pause if interruption page found
 def checkAndPauseForYourInterruption():
-    if exists(dicPng["page_your_interruption"]):
+    if dicRegion["regUp"].exists(dicPng["page_your_interruption"]):
         popup(u"spider paused! （╯‵□′）╯︵┴─┴")
 #type url on chrome
 def typeUrlOnChrome(strUrlText=None):
@@ -127,7 +127,7 @@ def typeUrlOnChrome(strUrlText=None):
         dicRegion["regUp"].waitVanish(dicPng["chrome_stop"], 300)
         dicRegion["regUp"].wait(dicPng["chrome_reload"], 300)
         #check page "something not right" show?
-        if exists(dicPng["page_not_right"]):
+        if dicRegion["regUp"].exists(dicPng["page_not_right"]):
             #restart chrome and run typeUrlOnChrome again
             openChrome()
         else:
@@ -137,9 +137,9 @@ def typeUrlOnChrome(strUrlText=None):
 def goExplorePage():
     openChrome()
     typeUrlOnChrome(strUrlText="https://www.indiegogo.com/explore")
-    wait(dicPng["page_explore"], 300)
-    waitVanish(dicPng["chrome_stop"], 300)
-    wait(dicPng["chrome_reload"], 300)
+    dicRegion["regUp"].wait(dicPng["page_explore"], 300)
+    dicRegion["regUp"].waitVanish(dicPng["chrome_stop"], 300)
+    dicRegion["regUp"].wait(dicPng["chrome_reload"], 300)
 #choose folder at save progress
 def typeFolderPath(strFolderPath=None):
     dicRegion["regLeft"].wait(dicPng["os_foldername_bar"], 300)
@@ -210,8 +210,8 @@ def downloadCategoryPages():
         if not os.path.exists(strCategoryFilePath):#check category.html
             openChrome()
             typeUrlOnChrome(strUrlText=strCategoryUrl)
-            waitVanish(dicPng["chrome_stop"], 300)
-            wait(dicPng["chrome_reload"], 300)
+            dicRegion["regUp"].waitVanish(dicPng["chrome_stop"], 300)
+            dicRegion["regUp"].wait(dicPng["chrome_reload"], 300)
             unfoldCategoryPage()
             saveCurrentPage(strFolderPath=strCategoryFolderPath, strFilename="category.html")
     catUrlListFile.close()
@@ -249,14 +249,14 @@ def downloadProjectPages(strTargetCategory=None):
             typeUrlOnChrome(strUrlText=strProjUrl)
             wait(0.5)
             #check page "something not right" show?
-            while(exists(dicPng["page_not_right"])):
+            while(dicRegion["regUp"].exists(dicPng["page_not_right"])):
                 openChrome() #reopen chrome for load standard style
                 typeUrlOnChrome(strUrlText=strProjUrl)
                 wait(0.5)
         else:
             continue #skip this url
         #check page not found or is currently updated or under review
-        if exists(dicPng["page_not_found"]) or exists(dicPng["page_currently_updated"]) or exists(dicPng["page_under_review"]):
+        if exists(dicRegion["regUp"].dicPng["page_not_found"]) or dicRegion["regUp"].exists(dicPng["page_currently_updated"]) or dicRegion["regUp"].exists(dicPng["page_under_review"]):
             continue #skip this url
         #wait load completed
         dicRegion["regRight"].wait(dicPng["page_new_style_check"], 300)
@@ -321,10 +321,10 @@ def downloadIndividualsPages(strTargetCategory=None):
         else:
             continue #skip this url
         #check page not found
-        if exists(dicPng["page_not_found"]):
+        if exists(dicRegion["regUp"].dicPng["page_not_found"]):
             continue #skip this url
         #wait load completed
-        wait(dicPng["page_focus_profile"], 300)
+        wait(dicRegion["regLeft"].dicPng["page_focus_profile"], 300)
         #save profile html
         saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsId + "_profile.html")
         #save campaigns html 
