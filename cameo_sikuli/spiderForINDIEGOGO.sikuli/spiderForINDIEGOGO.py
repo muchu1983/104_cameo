@@ -92,8 +92,8 @@ def unfoldCategoryPage():
     for uptime in range(6):
         type(Key.UP)
     dicRegion["regLeft"].wait(dicPng["page_end_camp"], 300)
-    while(dicRegion["regUp"].exists(dicPng["page_cate_more"])):
-        dicRegion["regUp"].click(dicPng["page_cate_more"])
+    while(dicRegion["regCenter"].exists(dicPng["page_cate_more"])):
+        dicRegion["regCenter"].click(dicPng["page_cate_more"])
         dicRegion["regLeft"].waitVanish(dicPng["page_end_camp"], 300)
         wait(5)
         rollToPageEnd()
@@ -111,7 +111,7 @@ def unfoldUCBShowmore():
             dicRegion["regDown"].waitVanish(dicPng["page_ucb_more"], 300)
             wait(2)
     type(Key.HOME)
-    dicRegion["regLeft"].wait(dicPng["page_blur_story"], 300)
+    dicRegion["regSW"].wait(dicPng["page_blur_story"], 300)
 #pause if interruption page found
 def checkAndPauseBeforeSave():
     if dicRegion["regUp"].exists(dicPng["page_your_interruption"]):
@@ -161,8 +161,8 @@ def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None
     dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
     checkAndPauseBeforeSave()
     rightClick(onImage)
-    dicRegion["regUp"].wait(dicPng["os_right_save_as"], 300)
-    dicRegion["regUp"].click(dicPng["os_right_save_as"])
+    dicRegion["regCenter"].wait(dicPng["os_right_save_as"], 300)
+    dicRegion["regCenter"].click(dicPng["os_right_save_as"])
     dicRegion["regCenter"].wait(dicPng["os_save_btn"], 300)
     if strFolderPath != None:
         typeFolderPath(strFolderPath)
@@ -264,7 +264,7 @@ def downloadProjectPages(strTargetCategory=None):
             continue #skip this url
         #wait load completed
         dicRegion["regRight"].wait(dicPng["page_new_style_check"], 300)
-        dicRegion["regLeft"].wait(dicPng["page_focus_story"], 300)
+        dicRegion["regSW"].wait(dicPng["page_focus_story"], 300)
         #save story html
         saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_story.html")
         #save see more details html 
