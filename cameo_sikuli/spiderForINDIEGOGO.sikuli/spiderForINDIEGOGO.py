@@ -31,7 +31,7 @@ dicPng = {"chrome_close":Pattern("chrome_close.png").targetOffset(-24,-1),
           "page_end_about":"page_end_about.png",
           "page_end_camp":"page_end_camp.png",
           "page_cate_more":"page_cate_more.png",
-          "page_ucb_more":"page_ucb_more.png", ##change
+          "page_ucb_more":"page_ucb_more.png", #different between before click and after click
           "page_new_style_check":"page_new_style_check.png",
           "page_blur_story":"page_blur_story.png",
           "page_focus_story":"page_focus_story.png",
@@ -276,19 +276,19 @@ def downloadProjectPages(strTargetCategory=None):
         openChrome()
         typeUrlOnChrome(strUrlText=strProjUrl + "#/updates")
         wait(0.5)
-        unfoldUCBShowmore()
+        #unfoldUCBShowmore()
         saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_updates.html")
         #save comments html
         openChrome()
         typeUrlOnChrome(strUrlText=strProjUrl + "#/comments")
         wait(0.5)
-        unfoldUCBShowmore()
+        #unfoldUCBShowmore()
         saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_comments.html")
         #save backers html
         openChrome()
         typeUrlOnChrome(strUrlText=strProjUrl + "#/backers")
         wait(0.5)
-        unfoldUCBShowmore()
+        #unfoldUCBShowmore()
         saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_backers.html")
     projUrlListFile.close()
 #download individuals pages
