@@ -104,7 +104,7 @@ def unfoldUCBShowmore():
     while(not dicRegion["regLeft"].exists(dicPng["page_end_about"])):
         type(Key.PAGE_DOWN)
         wait(0.5)
-        if exists(dicRegion["regDown"].dicPng["page_ucb_more"]):
+        if dicRegion["regDown"].exists(dicPng["page_ucb_more"]):
             dicRegion["regDown"].click(dicPng["page_ucb_more"])
             dicRegion["regDown"].waitVanish(dicPng["page_ucb_more"], 300)
             wait(2)
@@ -256,7 +256,7 @@ def downloadProjectPages(strTargetCategory=None):
         else:
             continue #skip this url
         #check page not found or is currently updated or under review
-        if exists(dicRegion["regUp"].dicPng["page_not_found"]) or dicRegion["regUp"].exists(dicPng["page_currently_updated"]) or dicRegion["regUp"].exists(dicPng["page_under_review"]):
+        if dicRegion["regUp"].exists(dicPng["page_not_found"]) or dicRegion["regUp"].exists(dicPng["page_currently_updated"]) or dicRegion["regUp"].exists(dicPng["page_under_review"]):
             continue #skip this url
         #wait load completed
         dicRegion["regRight"].wait(dicPng["page_new_style_check"], 300)
@@ -321,10 +321,10 @@ def downloadIndividualsPages(strTargetCategory=None):
         else:
             continue #skip this url
         #check page not found
-        if exists(dicRegion["regUp"].dicPng["page_not_found"]):
+        if dicRegion["regUp"].exists(dicPng["page_not_found"]):
             continue #skip this url
         #wait load completed
-        wait(dicRegion["regLeft"].dicPng["page_focus_profile"], 300)
+        dicRegion["regLeft"].wait(dicPng["page_focus_profile"], 300)
         #save profile html
         saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsId + "_profile.html")
         #save campaigns html 
