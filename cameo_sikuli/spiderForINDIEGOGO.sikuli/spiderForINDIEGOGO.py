@@ -27,7 +27,6 @@ dicPng = {"chrome_close":Pattern("chrome_close.png").targetOffset(-24,-1),
           "page_focus_profile":"page_focus_profile.png", 
           "page_story_details":"page_story_details.png",
           "page_details_about":"page_details_about.png",
-          "page_details_close":"page_details_close.png",
           "page_explore":"page_explore.png",
           "page_not_found":"page_not_found.png",
           "page_not_right":"page_not_right.png",
@@ -252,18 +251,13 @@ def downloadProjectPages(strTargetCategory=None):
         #wait load completed
         wait(dicPng["page_new_style_check"], 300)
         wait(dicPng["page_focus_story"], 300)
+        #save story html
+        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_story.html")
+        #save see more details html 
         wait(dicPng["page_story_details"], 300)
         click(dicPng["page_story_details"])
         wait(dicPng["page_details_about"], 300)
-        #save see more details html 
         rightClickSaveCurrentPage(onImage=dicPng["page_details_about"], strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_details.html")
-        #close details
-        click(dicPng["page_details_close"])
-        wait(dicPng["page_story_details"], 300)
-        type(Key.HOME)
-        wait(dicPng["page_focus_story"], 300)
-        #save story html
-        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_story.html")
         #save updates html
         openChrome()
         typeUrlOnChrome(strUrlText=strProjUrl + "#/updates")

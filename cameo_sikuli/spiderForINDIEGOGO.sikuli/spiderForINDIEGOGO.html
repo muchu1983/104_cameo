@@ -81,6 +81,7 @@ This file is part of BSD license
 <span class="kw">import</span> os
 <span class="kw">import</span> sys
 <span class="kw">import</span> re
+<span class="kw">import</span> logging
 <span class="kw">from</span> java.awt <span class="kw">import</span> Toolkit
 <span class="kw">from</span> java.awt.datatransfer <span class="kw">import</span> StringSelection
 dicPng = {<span class="str">"chrome_close"</span>:Pattern(<img src="chrome_close.png" />).targetOffset(-<span class="dig">24</span>,-<span class="dig">1</span>),
@@ -98,7 +99,6 @@ dicPng = {<span class="str">"chrome_close"</span>:Pattern(<img src="chrome_close
           <span class="str">"page_focus_profile"</span>:<img src="page_focus_profile.png" />,
           <span class="str">"page_story_details"</span>:<img src="page_story_details.png" />,
           <span class="str">"page_details_about"</span>:<img src="page_details_about.png" />,
-          <span class="str">"page_details_close"</span>:<img src="page_details_close.png" />,
           <span class="str">"page_explore"</span>:<img src="page_explore.png" />,
           <span class="str">"page_not_found"</span>:<img src="page_not_found.png" />,
           <span class="str">"page_not_right"</span>:<img src="page_not_right.png" />,
@@ -214,6 +214,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
 <span class="cmt">#rightclick on image to save current page
 </span><span class="kw">def</span> rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None):
+    logging.info(<span class="str">"prepare to save "</span> + strFilename)
     waitVanish(dicPng[<span class="str">"chrome_stop"</span>], <span class="dig">300</span>)
     <span class="skw">wait</span>(dicPng[<span class="str">"chrome_reload"</span>], <span class="dig">300</span>)
     checkAndPauseForYourInterruption()
@@ -233,7 +234,8 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
     <span class="skw">wait</span>(dicPng[<span class="str">"chrome_download_finished"</span>], <span class="dig">600</span>)<span class="cmt">#wait save complete</span>
 <span class="cmt">#ask chrome save current page
-</span><span class="kw">def</span> saveCurrentPage(strFolderPath=None, strFilename=<span class="str">"default.html"</span>):
+</span><span class="kw">def</span> saveCurrentPage(strFolderPath=None, strFilename=None):
+    logging.info(<span class="str">"prepare to save "</span> + strFilename)
     waitVanish(dicPng[<span class="str">"chrome_stop"</span>], <span class="dig">300</span>)
     <span class="skw">wait</span>(dicPng[<span class="str">"chrome_reload"</span>], <span class="dig">300</span>)
     checkAndPauseForYourInterruption()
@@ -299,6 +301,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
             <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strProjHtmlFilePath):
                 isProjHtmlFileMissing = True
         <span class="kw">if</span> isProjHtmlFileMissing:
+            <span class="skw">wait</span>(<span class="dig">60</span>) <span class="cmt">#wait 1 min per project</span>
             <span class="cmt">#delete remaining project html files
 </span>            <span class="kw">for</span> strProjHtmlFileExtension <span class="kw">in</span> lstStrProjHtmlFileExtension:
                 strProjHtmlFilePath = strProjectsFolderPath + os.sep + strProjName + strProjHtmlFileExtension
@@ -320,18 +323,13 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         <span class="cmt">#wait load completed
 </span>        <span class="skw">wait</span>(dicPng[<span class="str">"page_new_style_check"</span>], <span class="dig">300</span>)
         <span class="skw">wait</span>(dicPng[<span class="str">"page_focus_story"</span>], <span class="dig">300</span>)
-        <span class="skw">wait</span>(dicPng[<span class="str">"page_story_details"</span>], <span class="dig">300</span>)
-        <span class="skw">click</span>(dicPng[<span class="str">"page_story_details"</span>])
-        <span class="skw">wait</span>(dicPng[<span class="str">"page_details_about"</span>], <span class="dig">300</span>)
-        <span class="cmt">#save see more details html 
-</span>        rightClickSaveCurrentPage(onImage=dicPng[<span class="str">"page_details_about"</span>], strFolderPath=strProjectsFolderPath, strFilename=strProjName + <span class="str">"_details.html"</span>)
-        <span class="cmt">#close details
-</span>        <span class="skw">click</span>(dicPng[<span class="str">"page_details_close"</span>])
-        <span class="skw">wait</span>(dicPng[<span class="str">"page_story_details"</span>], <span class="dig">300</span>)
-        <span class="skw">type</span>(Key.HOME)
-        <span class="skw">wait</span>(dicPng[<span class="str">"page_focus_story"</span>], <span class="dig">300</span>)
         <span class="cmt">#save story html
 </span>        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + <span class="str">"_story.html"</span>)
+        <span class="cmt">#save see more details html 
+</span>        <span class="skw">wait</span>(dicPng[<span class="str">"page_story_details"</span>], <span class="dig">300</span>)
+        <span class="skw">click</span>(dicPng[<span class="str">"page_story_details"</span>])
+        <span class="skw">wait</span>(dicPng[<span class="str">"page_details_about"</span>], <span class="dig">300</span>)
+        rightClickSaveCurrentPage(onImage=dicPng[<span class="str">"page_details_about"</span>], strFolderPath=strProjectsFolderPath, strFilename=strProjName + <span class="str">"_details.html"</span>)
         <span class="cmt">#save updates html
 </span>        openChrome()
         typeUrlOnChrome(strUrlText=strProjUrl + <span class="str">"#/updates"</span>)
@@ -401,6 +399,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
 <span class="cmt">#main entry point
 </span><span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
     <span class="kw">try</span>:
+        logging.basicConfig(level=logging.INFO)
         lstStrArgs = sys.argv
         <span class="kw">if</span> lstStrArgs[<span class="dig">1</span>] == <span class="str">"explore"</span>:
             downloadExplorePages()
