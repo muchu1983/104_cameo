@@ -58,16 +58,16 @@ strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_co
 #open chrome
 def openChrome():
     #close prev chrome
-    if dicRegion["regUp"].exists(dicPng["chrome_close"]):
-        dicRegion["regUp"].click(dicPng["chrome_close"])
+    if dicRegion["regNW"].exists(dicPng["chrome_close"]):
+        dicRegion["regNW"].click(dicPng["chrome_close"])
     wait(2)
     #re-open new chrome
     App.open("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe --incognito")
     wait(2)#wait to running
-    dicRegion["regUp"].wait(dicPng["chrome_home"], 300)
-    dicRegion["regUp"].click(dicPng["chrome_home"])
-    dicRegion["regUp"].waitVanish(dicPng["chrome_stop"], 300)
-    dicRegion["regUp"].wait(dicPng["chrome_reload"], 300)
+    dicRegion["regNW"].wait(dicPng["chrome_home"], 300)
+    dicRegion["regNW"].click(dicPng["chrome_home"])
+    dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 300)
+    dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
 # delete origin text
 def delOriginText():
     type("a", KeyModifier.CTRL)
@@ -124,8 +124,8 @@ def typeUrlOnChrome(strUrlText=None):
         wait(0.5)
         type(Key.ENTER)
         wait(0.5)
-        dicRegion["regUp"].waitVanish(dicPng["chrome_stop"], 300)
-        dicRegion["regUp"].wait(dicPng["chrome_reload"], 300)
+        dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 300)
+        dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
         #check page "something not right" show?
         if dicRegion["regUp"].exists(dicPng["page_not_right"]):
             #restart chrome and run typeUrlOnChrome again
@@ -138,8 +138,8 @@ def goExplorePage():
     openChrome()
     typeUrlOnChrome(strUrlText="https://www.indiegogo.com/explore")
     dicRegion["regUp"].wait(dicPng["page_explore"], 300)
-    dicRegion["regUp"].waitVanish(dicPng["chrome_stop"], 300)
-    dicRegion["regUp"].wait(dicPng["chrome_reload"], 300)
+    dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 300)
+    dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
 #choose folder at save progress
 def typeFolderPath(strFolderPath=None):
     dicRegion["regLeft"].wait(dicPng["os_foldername_bar"], 300)
@@ -153,8 +153,8 @@ def typeFolderPath(strFolderPath=None):
 #rightclick on image to save current page
 def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None):
     logging.info("prepare to save " + strFilename)
-    dicRegion["regUp"].waitVanish(dicPng["chrome_stop"], 300)
-    dicRegion["regUp"].wait(dicPng["chrome_reload"], 300)
+    dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 300)
+    dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
     checkAndPauseForYourInterruption()
     rightClick(onImage)
     dicRegion["regUp"].wait(dicPng["os_right_save_as"], 300)
@@ -174,8 +174,8 @@ def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None
 #ask chrome save current page
 def saveCurrentPage(strFolderPath=None, strFilename=None):
     logging.info("prepare to save " + strFilename)
-    dicRegion["regUp"].waitVanish(dicPng["chrome_stop"], 300)
-    dicRegion["regUp"].wait(dicPng["chrome_reload"], 300)
+    dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 300)
+    dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
     checkAndPauseForYourInterruption()
     type("s", KeyModifier.CTRL)
     dicRegion["regLeft"].wait(dicPng["os_save_btn"], 300)
@@ -210,8 +210,8 @@ def downloadCategoryPages():
         if not os.path.exists(strCategoryFilePath):#check category.html
             openChrome()
             typeUrlOnChrome(strUrlText=strCategoryUrl)
-            dicRegion["regUp"].waitVanish(dicPng["chrome_stop"], 300)
-            dicRegion["regUp"].wait(dicPng["chrome_reload"], 300)
+            dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 300)
+            dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
             unfoldCategoryPage()
             saveCurrentPage(strFolderPath=strCategoryFolderPath, strFilename="category.html")
     catUrlListFile.close()
