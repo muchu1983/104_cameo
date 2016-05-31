@@ -17,7 +17,7 @@ class CleanerForINDIEGOGO:
     def __init__(self):
         self.strBasedir = "cameo_res\\source_html\\INDIEGOGO"
     
-    def remove_readonly(funcRmtree, strPath, _):
+    def removeReadonly(funcRmtree, strPath, _):
         os.chmod(strPath, stat.S_IWRITE)
         funcRmtree(strPath)
     
@@ -26,4 +26,4 @@ class CleanerForINDIEGOGO:
             for dir in dirs:
                 if dir.endswith("_files"):
                     strDirPath = base + "\\" + dir
-                    shutil.rmtree(strDirPath, onerror=remove_readonly)
+                    shutil.rmtree(strDirPath, onerror=self.removeReadonly)
