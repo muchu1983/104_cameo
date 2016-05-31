@@ -18,12 +18,12 @@ class CleanerForINDIEGOGO:
         self.strBasedir = "cameo_res\\source_html\\INDIEGOGO"
     
     def rmtreeOnError(self, funcRmtree, strPath, _):
-        os.chmod(strPath, stat.S_IWRITE)
+        os.chmod(strPath, stat.S_IWRITE) #chmod to writeable
         funcRmtree(strPath)
     
     def clean(self):
         for base, dirs, files in os.walk(self.strBasedir):
             for dir in dirs:
                 if dir.endswith("_files"):
-                    strDirPath = base + "\\" + dir
+                    strDirPath = u"" + base + "\\" + dir
                     shutil.rmtree(strDirPath, onerror=self.rmtreeOnError)
