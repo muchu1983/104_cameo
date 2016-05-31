@@ -17,7 +17,7 @@ class CleanerForINDIEGOGO:
     def __init__(self):
         self.strBasedir = "cameo_res\\source_html\\INDIEGOGO"
     
-    def removeReadonly(funcRmtree, strPath, _):
+    def removeReadonly(self, funcRmtree, strPath, _):
         os.chmod(strPath, stat.S_IWRITE)
         funcRmtree(strPath)
     
