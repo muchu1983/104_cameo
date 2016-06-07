@@ -140,7 +140,7 @@ class ParserForTECHORANGE:
                     if strAuthorName in lstStrContent:
                         lstStrContent.remove(strAuthorName)
                     strContent = re.sub("\s", "", u"".join(lstStrContent)) #接合 新聞內容 並去除空白字元
-                    dicNewsData["strContent"] = strContent.strip().strip("、")
+                    dicNewsData["strContent"] = strContent.strip().strip(u"、")
                     #lstStrKeyword
                     dicNewsData["lstStrKeyword"] = root.css("div.entry-meta-box-inner span.entry-tags span a::text").extract()
                     #strPublishDate
