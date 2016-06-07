@@ -11,6 +11,13 @@ from bennu.localdb import MongoDb
 """
 本地端資料庫存取
 """
+#匯入json
+class LocalDbForJsonImporter:
+    
+    #建構子
+    def __init__(self):
+        self.mongodb = MongoDb().getClient().localdb
+        
 #匯率API
 class LocalDbForCurrencyApi:
     
