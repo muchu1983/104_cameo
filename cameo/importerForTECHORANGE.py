@@ -82,7 +82,8 @@ class ImporterForTECHORANGE:
                     lstStrNewsUrl = []
                     if docFindResult: #is not None
                         lstStrNewsUrl = docFindResult["lstStrNewsUrl"]
-                        lstStrNewsUrl.append(dicNewsData["strUrl"])
+                        if dicNewsData["strUrl"] not in lstStrNewsUrl:
+                            lstStrNewsUrl.append(dicNewsData["strUrl"])
                     else:#docFindResult is None
                         lstStrNewsUrl = []
                     self.db.ModelTag.update_one({"strTag":strKeyword},
