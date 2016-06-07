@@ -53,6 +53,7 @@ class ImporterForTECHORANGE:
                 #logging.info("import %s to DataBase"%strUrl)
                 docFindResult = self.db.ModelNews.find_one({"strUrl":strUrl})
                 intNewsId = 0
+                #upsert into ModelNews
                 if docFindResult: #is not None
                     intNewsId = docFindResult["intNewsId"]
                 else:#docFindResult is None
@@ -60,14 +61,32 @@ class ImporterForTECHORANGE:
                 self.db.ModelNews.update_one({"strUrl":strUrl},
                                      {"$set":{"intNewsId":intNewsId,
                                             "strUrl":dicNewsData["strUrl"],
-                                            "strCategory":"",
+                                            "strCrawlDate":re.sub("-", "/", dicNewsData["strCrawlDate"]),
+                                            "strSiteName":dicNewsData["strSiteName"],
                                             "strTitle":dicNewsData["strTitle"],
                                             "strContent":dicNewsData["strContent"],
                                             "strDate":re.sub("-", "/", dicNewsData["strPublishDate"]),
+                                            "lstStrTag":dicNewsData["lstStrKeyword"],
                                             "lstStrAttachment":[],
+                                            "strCategory":"",
                                             "intCategoryId":0,
                                             "intHit":0,
                                             "strSubCategory":""
                                             }
                                       },
                                       upsert=True)
+                #upsert into ModelTag
+                lstStrKeyword = dicNewsData["lstStrKeyword"]
+                for strKeyword in lstStrKeyword:
+                    docFindResult = self.db.ModelTag.find_one({"strTag":strKeyword})
+                    lstStrNewsUrl = []
+                    if docFindResult: #is not None
+                        lstStrNewsUrl = docFindResult["lstStrNewsUrl"]
+                        lstStrNewsUrl.append(dicNewsData["strUrl"])
+                    else:#docFindResult is None
+                        lstStrNewsUrl = []
+                    self.db.ModelTag.update_one({"strTag":strKeyword},
+                                        {"$set":{"strTag":strKeyword,
+                                               "lstStrNewsUrl":lstStrNewsUrl}},
+                                        upsert=True)
+                                      
