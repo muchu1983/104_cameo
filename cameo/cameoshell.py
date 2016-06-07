@@ -12,10 +12,13 @@ from cameo.spiderForWEBACKERS import SpiderForWEBACKERS
 from cameo.parserForWEBACKERS import ParserForWEBACKERS
 from cameo.spiderForTECHORANGE import SpiderForTECHORANGE
 from cameo.parserForTECHORANGE import ParserForTECHORANGE
+from cameo.importerForTECHORANGE import ImporterForTECHORANGE
 from cameo.spiderForBNEXT import SpiderForBNEXT
 from cameo.parserForBNEXT import ParserForBNEXT
+from cameo.importerForBNEXT import ImporterForBNEXT
 from cameo.spiderForPEDAILY import SpiderForPEDAILY
 from cameo.parserForPEDAILY import ParserForPEDAILY
+from cameo.importerForPEDAILY import ImporterForPEDAILY
 from cameo.cleaner import CleanerForINDIEGOGO
 from cameo.reporter import ReporterForINDIEGOGO
 from cameo.reporter import ReporterForWEBACKERS
@@ -38,6 +41,9 @@ class CameoShell:
                       "techorange":ParserForTECHORANGE(),
                       "bnext":ParserForBNEXT(),
                       "pedaily":ParserForPEDAILY()}
+        self.dicImporters = {"techorange":ImporterForTECHORANGE(),
+                        "bnext":ImporterForBNEXT(),
+                        "pedaily":ImporterForPEDAILY()}
         self.dicCleaners = {"indiegogo":CleanerForINDIEGOGO()}
         self.dicReporters = {"indiegogo":ReporterForINDIEGOGO(),
                        "webackers":ReporterForWEBACKERS()}
@@ -75,6 +81,7 @@ class CameoShell:
                        "chsite - change site\n"
                        "spider - run spider\n"
                        "parser - run parser\n"
+                       "importer - run importer\n"
                        "clean - clean _files dirs\n"
                        "report - report result of site\n")
         print(strHelpText)
@@ -112,6 +119,16 @@ class CameoShell:
         self.listSiteMessage()
         if self.strTargetSite != None:
             print(self.dicReporters[self.strTargetSite].getReportMessage())
+            
+    #顯示 importer 訊息
+    def printImporterMessage(self):
+        self.listSiteMessage()
+        if self.strTargetSite != None:
+            print(self.dicImporters[self.strTargetSite].getUseageMessage())
+            lstStrInputCommand = raw_input("import[%s]>>>"%self.strTargetSite).split(" ")
+            print("import start... [%s]"%self.strTargetSite)
+            self.dicImporters[self.strTargetSite].runImporter(lstStrInputCommand)
+            print("[%s] imported\n"%self.strTargetSite)
         
     #開啟 shell
     def openShell(self):
@@ -131,6 +148,8 @@ class CameoShell:
                 self.printSpiderMessage()
             elif input == "parser":
                 self.printParserMessage()
+            elif input == "importer":
+                self.printImporterMessage()
             elif input == "clean":
                 self.printCleanerMessage()
             elif input == "report":
