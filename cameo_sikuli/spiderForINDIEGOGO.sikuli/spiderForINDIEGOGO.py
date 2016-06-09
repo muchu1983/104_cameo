@@ -40,7 +40,7 @@ dicPng = {"chrome_close":Pattern("chrome_close.png").targetOffset(-24,-1),
           "page_details_about":"page_details_about.png",
           "page_explore":"page_explore.png",
           "page_not_found":"page_not_found.png",
-          "page_not_found_2":"",#add png
+          "page_not_found_2":"page_not_found_2.png",
           "page_not_right":"page_not_right.png",
           "page_your_interruption":"page_your_interruption.png",
           "page_proxy_error":"page_proxy_error.png",

@@ -112,7 +112,7 @@ dicPng = {<span class="str">"chrome_close"</span>:Pattern(<img src="chrome_close
           <span class="str">"page_details_about"</span>:<img src="page_details_about.png" />,
           <span class="str">"page_explore"</span>:<img src="page_explore.png" />,
           <span class="str">"page_not_found"</span>:<img src="page_not_found.png" />,
-          <span class="str">"page_not_found_2"</span>:<span class="str">""</span>,<span class="cmt">#add png</span>
+          <span class="str">"page_not_found_2"</span>:<img src="page_not_found_2.png" />,
           <span class="str">"page_not_right"</span>:<img src="page_not_right.png" />,
           <span class="str">"page_your_interruption"</span>:<img src="page_your_interruption.png" />,
           <span class="str">"page_proxy_error"</span>:<img src="page_proxy_error.png" />,
@@ -333,7 +333,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         <span class="kw">else</span>:
             <span class="kw">continue</span> <span class="cmt">#skip this url</span>
         <span class="cmt">#check page not found or is currently updated or under review
-</span>        <span class="kw">if</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_not_found"</span>]) <span class="kw">or</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_currently_updated"</span>]) <span class="kw">or</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_under_review"</span>]):
+</span>        <span class="kw">if</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_not_found"</span>]) <span class="kw">or</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_not_found_2"</span>]) <span class="kw">or</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_currently_updated"</span>]) <span class="kw">or</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_under_review"</span>]):
             <span class="kw">continue</span> <span class="cmt">#skip this url</span>
         <span class="cmt">#wait load completed
 </span>        dicRegion[<span class="str">"regRight"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"page_new_style_check"</span>], <span class="dig">300</span>)
