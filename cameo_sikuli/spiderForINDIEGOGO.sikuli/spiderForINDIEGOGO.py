@@ -40,6 +40,7 @@ dicPng = {"chrome_close":Pattern("chrome_close.png").targetOffset(-24,-1),
           "page_details_about":"page_details_about.png",
           "page_explore":"page_explore.png",
           "page_not_found":"page_not_found.png",
+          "page_not_found_2":"",#add png
           "page_not_right":"page_not_right.png",
           "page_your_interruption":"page_your_interruption.png",
           "page_proxy_error":"page_proxy_error.png",
@@ -260,7 +261,7 @@ def downloadProjectPages(strTargetCategory=None):
         else:
             continue #skip this url
         #check page not found or is currently updated or under review
-        if dicRegion["regUp"].exists(dicPng["page_not_found"]) or dicRegion["regUp"].exists(dicPng["page_currently_updated"]) or dicRegion["regUp"].exists(dicPng["page_under_review"]):
+        if dicRegion["regUp"].exists(dicPng["page_not_found"]) or dicRegion["regUp"].exists(dicPng["page_not_found_2"]) or dicRegion["regUp"].exists(dicPng["page_currently_updated"]) or dicRegion["regUp"].exists(dicPng["page_under_review"]):
             continue #skip this url
         #wait load completed
         dicRegion["regRight"].wait(dicPng["page_new_style_check"], 300)

@@ -103,7 +103,7 @@ dicPng = {<span class="str">"chrome_close"</span>:Pattern(<img src="chrome_close
           <span class="str">"page_end_about"</span>:<img src="page_end_about.png" />,
           <span class="str">"page_end_camp"</span>:<img src="page_end_camp.png" />,
           <span class="str">"page_cate_more"</span>:<img src="page_cate_more.png" />,
-          <span class="str">"page_ucb_more"</span>:<img src="page_ucb_more.png" />,
+          <span class="str">"page_ucb_more"</span>:<img src="page_ucb_more.png" />, <span class="cmt">#different between before click and after click</span>
           <span class="str">"page_new_style_check"</span>:<img src="page_new_style_check.png" />,
           <span class="str">"page_blur_story"</span>:<img src="page_blur_story.png" />,
           <span class="str">"page_focus_story"</span>:<img src="page_focus_story.png" />,
@@ -112,6 +112,7 @@ dicPng = {<span class="str">"chrome_close"</span>:Pattern(<img src="chrome_close
           <span class="str">"page_details_about"</span>:<img src="page_details_about.png" />,
           <span class="str">"page_explore"</span>:<img src="page_explore.png" />,
           <span class="str">"page_not_found"</span>:<img src="page_not_found.png" />,
+          <span class="str">"page_not_found_2"</span>:<span class="str">""</span>,<span class="cmt">#add png</span>
           <span class="str">"page_not_right"</span>:<img src="page_not_right.png" />,
           <span class="str">"page_your_interruption"</span>:<img src="page_your_interruption.png" />,
           <span class="str">"page_proxy_error"</span>:<img src="page_proxy_error.png" />,
@@ -164,8 +165,8 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     <span class="kw">for</span> uptime <span class="kw">in</span> range(<span class="dig">6</span>):
         <span class="skw">type</span>(Key.UP)
     dicRegion[<span class="str">"regLeft"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"page_end_camp"</span>], <span class="dig">300</span>)
-    <span class="kw">while</span>(dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_cate_more"</span>])):
-        dicRegion[<span class="str">"regUp"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_cate_more"</span>])
+    <span class="kw">while</span>(dicRegion[<span class="str">"regCenter"</span>].exists(dicPng[<span class="str">"page_cate_more"</span>])):
+        dicRegion[<span class="str">"regCenter"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_cate_more"</span>])
         dicRegion[<span class="str">"regLeft"</span>].waitVanish(dicPng[<span class="str">"page_end_camp"</span>], <span class="dig">300</span>)
         <span class="skw">wait</span>(<span class="dig">5</span>)
         rollToPageEnd()
@@ -183,7 +184,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
             dicRegion[<span class="str">"regDown"</span>].waitVanish(dicPng[<span class="str">"page_ucb_more"</span>], <span class="dig">300</span>)
             <span class="skw">wait</span>(<span class="dig">2</span>)
     <span class="skw">type</span>(Key.HOME)
-    dicRegion[<span class="str">"regLeft"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"page_blur_story"</span>], <span class="dig">300</span>)
+    dicRegion[<span class="str">"regSW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"page_blur_story"</span>], <span class="dig">300</span>)
 <span class="cmt">#pause if interruption page found
 </span><span class="kw">def</span> checkAndPauseBeforeSave():
     <span class="kw">if</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_your_interruption"</span>]):
@@ -233,8 +234,8 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     dicRegion[<span class="str">"regNW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"chrome_reload"</span>], <span class="dig">300</span>)
     checkAndPauseBeforeSave()
     <span class="skw">rightClick</span>(onImage)
-    dicRegion[<span class="str">"regUp"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"os_right_save_as"</span>], <span class="dig">300</span>)
-    dicRegion[<span class="str">"regUp"</span>].<span class="skw">click</span>(dicPng[<span class="str">"os_right_save_as"</span>])
+    dicRegion[<span class="str">"regCenter"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"os_right_save_as"</span>], <span class="dig">300</span>)
+    dicRegion[<span class="str">"regCenter"</span>].<span class="skw">click</span>(dicPng[<span class="str">"os_right_save_as"</span>])
     dicRegion[<span class="str">"regCenter"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"os_save_btn"</span>], <span class="dig">300</span>)
     <span class="kw">if</span> strFolderPath != None:
         typeFolderPath(strFolderPath)
@@ -336,7 +337,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
             <span class="kw">continue</span> <span class="cmt">#skip this url</span>
         <span class="cmt">#wait load completed
 </span>        dicRegion[<span class="str">"regRight"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"page_new_style_check"</span>], <span class="dig">300</span>)
-        dicRegion[<span class="str">"regLeft"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"page_focus_story"</span>], <span class="dig">300</span>)
+        dicRegion[<span class="str">"regSW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"page_focus_story"</span>], <span class="dig">300</span>)
         <span class="cmt">#save story html
 </span>        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + <span class="str">"_story.html"</span>)
         <span class="cmt">#save see more details html 
