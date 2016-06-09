@@ -12,6 +12,7 @@ from cameo.localdb import LocalDbForCurrencyApi
 from cameo.localdb import LocalDbForTECHORANGE
 from cameo.localdb import LocalDbForBNEXT
 from cameo.localdb import LocalDbForPEDAILY
+from cameo.localdb import LocalDbForINSIDE
 """
 測試 本地端資料庫存取
 """
@@ -24,7 +25,7 @@ class LocalDbTest(unittest.TestCase):
     #收尾
     def tearDown(self):
         pass
-        
+    
     #測試 幣別轉換API 本地端資料庫存取
     def test_localdb_for_currency_api(self):
         self.db = LocalDbForCurrencyApi()
@@ -80,6 +81,24 @@ class LocalDbTest(unittest.TestCase):
         db.updateNewsStatusIsGot(strNewsUrl="http://news/for/unit/test")
         self.assertTrue(db.checkNewsIsGot(strNewsUrl="http://news/for/unit/test"))
         self.assertEquals(db.fetchallCompletedObtainedNewsUrl(), ["http://news/for/unit/test"])
+        db.updateNewsStatusIsNotGot(strNewsUrl="http://news/for/unit/test")
+        self.assertFalse(db.checkNewsIsGot(strNewsUrl="http://news/for/unit/test"))
+        db.clearTestData() #清除本次測試資料
+    
+    #測試 inside 本地端資料庫存取
+    def test_localdb_for_inside(self):
+        logging.info("LocalDbTest.test_localdb_for_inside")
+        db = LocalDbForINSIDE()
+        db.clearTestData() #清除前次測試資料
+        db.insertTagIfNotExists(strTagPage1Url="http://tag_for_unit_test/p1")
+        self.assertEquals(db.fetchallNotObtainedTagPage1Url()[0], "http://tag_for_unit_test/p1")
+        db.updateTagStatusIsGot(strTagPage1Url="http://tag_for_unit_test/p1")
+        self.assertEquals(db.fetchallCompletedObtainedTagPage1Url()[0], "http://tag_for_unit_test/p1")
+        db.insertNewsUrlAndNewsTagMappingIfNotExists(strNewsUrl="http://news/for/unit/test", strTagPage1Url="http://tag_for_unit_test/p1")
+        self.assertEquals(db.fetchallNewsUrlByTagPage1Url(strTagPage1Url="http://tag_for_unit_test/p1")[0], "http://news/for/unit/test")
+        self.assertFalse(db.checkNewsIsGot(strNewsUrl="http://news/for/unit/test"))
+        db.updateNewsStatusIsGot(strNewsUrl="http://news/for/unit/test")
+        self.assertTrue(db.checkNewsIsGot(strNewsUrl="http://news/for/unit/test"))
         db.updateNewsStatusIsNotGot(strNewsUrl="http://news/for/unit/test")
         self.assertFalse(db.checkNewsIsGot(strNewsUrl="http://news/for/unit/test"))
         db.clearTestData() #清除本次測試資料

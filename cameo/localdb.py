@@ -25,6 +25,116 @@ class LocalDbForCurrencyApi:
     def __init__(self):
         self.mongodb = MongoDb().getClient().localdb
         
+#硬塞的
+class LocalDbForINSIDE:
+    
+    #建構子
+    def __init__(self):
+        self.db = SQLite3Db(strResFolderPath="cameo_res")
+        self.initialDb()
+        
+    #初取化資料庫
+    def initialDb(self):
+        strSQLCreateTable = ("CREATE TABLE IF NOT EXISTS inside_news("
+                             "id INTEGER PRIMARY KEY,"
+                             "strNewsUrl TEXT NOT NULL,"
+                             "isGot BOOLEAN NOT NULL)")
+        self.db.commitSQL(strSQL=strSQLCreateTable)
+        strSQLCreateTable = ("CREATE TABLE IF NOT EXISTS inside_tag("
+                             "id INTEGER PRIMARY KEY,"
+                             "strTagPage1Url TEXT NOT NULL,"
+                             "isGot BOOLEAN NOT NULL)")
+        self.db.commitSQL(strSQL=strSQLCreateTable)
+        strSQLCreateTable = ("CREATE TABLE IF NOT EXISTS inside_newstag("
+                             "id INTEGER PRIMARY KEY,"
+                             "strNewsUrl TEXT NOT NULL,"
+                             "strTagPage1Url TEXT NOT NULL)")
+        self.db.commitSQL(strSQL=strSQLCreateTable)
+        
+    #若無重覆，儲存Tag
+    def insertTagIfNotExists(self, strTagPage1Url=None):
+        strSQL = "SELECT * FROM inside_tag WHERE strTagPage1Url='%s'"%strTagPage1Url
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        if len(lstRowData) == 0:
+            strSQL = "INSERT INTO inside_tag VALUES(NULL, '%s', 0)"%strTagPage1Url
+            self.db.commitSQL(strSQL=strSQL)
+            
+    #取得所有未完成下載的 Tag 第一頁 url
+    def fetchallNotObtainedTagPage1Url(self):
+        strSQL = "SELECT strTagPage1Url FROM inside_tag WHERE isGot=0"
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        lstStrTagPage1Url = []
+        for rowData in lstRowData:
+            lstStrTagPage1Url.append(rowData["strTagPage1Url"])
+        return lstStrTagPage1Url
+        
+    #取得所有已完成下載的 Tag 第一頁 url
+    def fetchallCompletedObtainedTagPage1Url(self):
+        strSQL = "SELECT strTagPage1Url FROM inside_tag WHERE isGot=1"
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        lstStrTagPage1Url = []
+        for rowData in lstRowData:
+            lstStrTagPage1Url.append(rowData["strTagPage1Url"])
+        return lstStrTagPage1Url
+        
+    #更新 Tag 為已完成下載狀態
+    def updateTagStatusIsGot(self, strTagPage1Url=None):
+        strSQL = "UPDATE inside_tag SET isGot=1 WHERE strTagPage1Url='%s'"%strTagPage1Url
+        self.db.commitSQL(strSQL=strSQL)
+        
+    #儲存 news URL 以及 URL 所對應的 tag 
+    def insertNewsUrlAndNewsTagMappingIfNotExists(self, strNewsUrl=None, strTagPage1Url=None):
+        #insert news url if not exists
+        strSQL = "SELECT * FROM inside_news WHERE strNewsUrl='%s'"%strNewsUrl
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        if len(lstRowData) == 0:
+            strSQL = "INSERT INTO inside_news VALUES(NULL, '%s', 0)"%strNewsUrl
+            self.db.commitSQL(strSQL=strSQL)
+        #insert news tag mapping if not exists
+        strSQL = "SELECT * FROM inside_newstag WHERE strNewsUrl='%s' AND strTagPage1Url='%s'"%(strNewsUrl, strTagPage1Url)
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        if len(lstRowData) == 0:
+            strSQL = "INSERT INTO inside_newstag VALUES(NULL, '%s', '%s')"%(strNewsUrl, strTagPage1Url)
+            self.db.commitSQL(strSQL=strSQL)
+        
+    #取得指定 tag 的 news url
+    def fetchallNewsUrlByTagPage1Url(self, strTagPage1Url=None):
+        strSQL = "SELECT * FROM inside_newstag WHERE strTagPage1Url='%s'"%strTagPage1Url
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        lstStrNewsUrl = []
+        for rowData in lstRowData:
+            lstStrNewsUrl.append(rowData["strNewsUrl"])
+        return lstStrNewsUrl
+        
+    #檢查 news 是否已下載
+    def checkNewsIsGot(self, strNewsUrl=None):
+        isGot = True
+        strSQL = "SELECT * FROM inside_news WHERE strNewsUrl='%s'"%strNewsUrl
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        for rowData in lstRowData:
+            if rowData["isGot"] == 0:
+                isGot = False
+        return isGot
+        
+    #更新 news 為已完成下載狀態
+    def updateNewsStatusIsGot(self, strNewsUrl=None):
+        strSQL = "UPDATE inside_news SET isGot=1 WHERE strNewsUrl='%s'"%strNewsUrl
+        self.db.commitSQL(strSQL=strSQL)
+        
+    #更新 news 為尚未開始下載狀態
+    def updateNewsStatusIsNotGot(self, strNewsUrl=None):
+        strSQL = "UPDATE inside_news SET isGot=0 WHERE strNewsUrl='%s'"%strNewsUrl
+        self.db.commitSQL(strSQL=strSQL)
+        
+    #清除測試資料 (clear table)
+    def clearTestData(self):
+        strSQL = "DELETE FROM inside_news"
+        self.db.commitSQL(strSQL=strSQL)
+        strSQL = "DELETE FROM inside_tag"
+        self.db.commitSQL(strSQL=strSQL)
+        strSQL = "DELETE FROM inside_newstag"
+        self.db.commitSQL(strSQL=strSQL)
+        
 #投資界
 class LocalDbForPEDAILY:
     
