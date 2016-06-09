@@ -58,14 +58,14 @@ lstStrCategoryName = ["animals", "art", "comic", "community", "dance",
                 "technology", "theatre", "transmedia", "video_web", "writing"]
 sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
 strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"
-#open chrome
+#open tor brower
 def openTor():
-    #close prev chrome
+    #close prev tor
     if dicRegion["regNW"].exists(dicPng["tor_close"]):
         dicRegion["regNW"].click(dicPng["tor_close"])
     wait(2)
-    #re-open new chrome
-    App.open("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe --incognito")
+    #re-open new tor
+    App.open("C:\\Users\\Administrator\\Desktop\\Tor Browser\\Browser\\firefox.exe")
     wait(2)#wait to running
     dicRegion["regNW"].wait(dicPng["tor_home"], 300)
     dicRegion["regNW"].click(dicPng["tor_home"])

@@ -130,14 +130,14 @@ lstStrCategoryName = [<span class="str">"animals"</span>, <span class="str">"art
                 <span class="str">"technology"</span>, <span class="str">"theatre"</span>, <span class="str">"transmedia"</span>, <span class="str">"video_web"</span>, <span class="str">"writing"</span>]
 sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
 strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"</span>
-<span class="cmt">#open chrome
+<span class="cmt">#open tor brower
 </span><span class="kw">def</span> openTor():
-    <span class="cmt">#close prev chrome
+    <span class="cmt">#close prev tor
 </span>    <span class="kw">if</span> dicRegion[<span class="str">"regNW"</span>].exists(dicPng[<span class="str">"tor_close"</span>]):
         dicRegion[<span class="str">"regNW"</span>].<span class="skw">click</span>(dicPng[<span class="str">"tor_close"</span>])
     <span class="skw">wait</span>(<span class="dig">2</span>)
-    <span class="cmt">#re-open new chrome
-</span>    App.open(<span class="str">"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe --incognito"</span>)
+    <span class="cmt">#re-open new tor
+</span>    App.open(<span class="str">"C:\\Users\\Administrator\\Desktop\\Tor Browser\\Browser\\firefox.exe"</span>)
     <span class="skw">wait</span>(<span class="dig">2</span>)<span class="cmt">#wait to running</span>
     dicRegion[<span class="str">"regNW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"tor_home"</span>], <span class="dig">300</span>)
     dicRegion[<span class="str">"regNW"</span>].<span class="skw">click</span>(dicPng[<span class="str">"tor_home"</span>])
