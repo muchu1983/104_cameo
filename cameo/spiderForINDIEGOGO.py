@@ -20,8 +20,8 @@ class SpiderForINDIEGOGO:
                              "category":self.handleCategoryPage,
                              "project":self.handleProjectPage,
                              "individuals":self.handleIndividualsPage,}
-        self.strSikuliFolderPath = r"cameo_sikuli\spiderForINDIEGOGO_chrome.sikuli"
-        #self.strSikuliFolderPath = r"cameo_sikuli\spiderForINDIEGOGO_tor.sikuli"
+        #self.strSikuliFolderPath = r"cameo_sikuli\spiderForINDIEGOGO_chrome.sikuli"
+        self.strSikuliFolderPath = r"cameo_sikuli\spiderForINDIEGOGO_tor.sikuli"
     
     #下載及解析 explore 頁面
     def handleExplorePage(self, arg1=None):

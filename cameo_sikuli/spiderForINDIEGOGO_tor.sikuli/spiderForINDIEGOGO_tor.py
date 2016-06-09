@@ -23,34 +23,34 @@ dicRegion = {"regUp":Region(0,0,screen.getW(),screen.getH()/2),
           "regNW":Region(0,0,screen.getW()/2,screen.getH()/2),
           "regCenter":Region(screen.getW()/4,screen.getH()/4,screen.getW()/2,screen.getH()/2)
          }
-dicPng = {"chrome_close":Pattern("chrome_close.png").targetOffset(-24,-1),
-          "chrome_home":"chrome_home.png",
-          "chrome_stop": "chrome_stop.png",
-          "chrome_reload":"chrome_reload.png",
-          "chrome_download_finished":"chrome_download_finished.png",
-          "page_end_about":"page_end_about.png",
-          "page_end_camp":"page_end_camp.png",
-          "page_cate_more":"page_cate_more.png",
-          "page_ucb_more":"page_ucb_more.png", #different between before click and after click
-          "page_new_style_check":"page_new_style_check.png",
-          "page_blur_story":"page_blur_story.png",
-          "page_focus_story":"page_focus_story.png",
-          "page_focus_profile":"page_focus_profile.png", 
-          "page_story_details":"page_story_details.png",
-          "page_details_about":"page_details_about.png",
-          "page_explore":"page_explore.png",
-          "page_not_found":"page_not_found.png",
-          "page_not_found_2":"page_not_found_2.png",
-          "page_not_right":"page_not_right.png",
-          "page_your_interruption":"page_your_interruption.png",
-          "page_proxy_error":"page_proxy_error.png",
-          "page_currently_updated":"currently_updated.png",
-          "page_under_review":"page_under_review.png",
-          "os_foldername_bar":Pattern("os_foldername_bar.png").targetOffset(10,0),
-          "os_filename_bar":Pattern("os_filename_bar.png").targetOffset(36,0),
-          "os_right_save_as":"os_right_save_as.png",
-          "os_save_btn":"os_save_btn.png",
-          }
+dicPng = {"tor_close":Pattern("chrome_close.png").targetOffset(-24,-1),
+        "tor_home":"chrome_home.png",
+        "tor_stop": "chrome_stop.png",
+        "tor_reload":"chrome_reload.png",
+        "tor_download_finished":"chrome_download_finished.png",
+        "page_end_about":"page_end_about.png",
+        "page_end_camp":"page_end_camp.png",
+        "page_cate_more":"page_cate_more.png",
+        "page_ucb_more":"page_ucb_more.png", #different between before click and after click
+        "page_new_style_check":"page_new_style_check.png",
+        "page_blur_story":"page_blur_story.png",
+        "page_focus_story":"page_focus_story.png",
+        "page_focus_profile":"page_focus_profile.png", 
+        "page_story_details":"page_story_details.png",
+        "page_details_about":"page_details_about.png",
+        "page_explore":"page_explore.png",
+        "page_not_found":"page_not_found.png",
+        "page_not_found_2":"page_not_found_2.png",
+        "page_not_right":"page_not_right.png",
+        "page_your_interruption":"page_your_interruption.png",
+        "page_proxy_error":"page_proxy_error.png",
+        "page_currently_updated":"currently_updated.png",
+        "page_under_review":"page_under_review.png",
+        "os_foldername_bar":Pattern("os_foldername_bar.png").targetOffset(10,0),
+        "os_filename_bar":Pattern("os_filename_bar.png").targetOffset(36,0),
+        "os_right_save_as":"os_right_save_as.png",
+        "os_save_btn":"os_save_btn.png",
+        }
 lstStrCategoryName = ["animals", "art", "comic", "community", "dance",
                 "design", "education", "environment", "fashion",
                 "film", "food", "gaming", "health", "music", "photography",
@@ -59,18 +59,18 @@ lstStrCategoryName = ["animals", "art", "comic", "community", "dance",
 sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
 strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"
 #open chrome
-def openChrome():
+def openTor():
     #close prev chrome
-    if dicRegion["regNW"].exists(dicPng["chrome_close"]):
-        dicRegion["regNW"].click(dicPng["chrome_close"])
+    if dicRegion["regNW"].exists(dicPng["tor_close"]):
+        dicRegion["regNW"].click(dicPng["tor_close"])
     wait(2)
     #re-open new chrome
     App.open("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe --incognito")
     wait(2)#wait to running
-    dicRegion["regNW"].wait(dicPng["chrome_home"], 300)
-    dicRegion["regNW"].click(dicPng["chrome_home"])
-    dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 300)
-    dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
+    dicRegion["regNW"].wait(dicPng["tor_home"], 300)
+    dicRegion["regNW"].click(dicPng["tor_home"])
+    dicRegion["regNW"].waitVanish(dicPng["tor_stop"], 300)
+    dicRegion["regNW"].wait(dicPng["tor_reload"], 300)
 # delete origin text
 def delOriginText():
     type("a", KeyModifier.CTRL)
@@ -129,22 +129,22 @@ def typeUrlOnChrome(strUrlText=None):
         wait(0.5)
         type(Key.ENTER)
         wait(0.5)
-        dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 300)
-        dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
+        dicRegion["regNW"].waitVanish(dicPng["tor_stop"], 300)
+        dicRegion["regNW"].wait(dicPng["tor_reload"], 300)
         #check page "something not right" show?
         if dicRegion["regUp"].exists(dicPng["page_not_right"]):
             #restart chrome and run typeUrlOnChrome again
-            openChrome()
+            openTor()
         else:
             #ok everything is right, go out while loop
             break
 # go to explore page
 def goExplorePage():
-    openChrome()
+    openTor()
     typeUrlOnChrome(strUrlText="https://www.indiegogo.com/explore")
     dicRegion["regUp"].wait(dicPng["page_explore"], 300)
-    dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 300)
-    dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
+    dicRegion["regNW"].waitVanish(dicPng["tor_stop"], 300)
+    dicRegion["regNW"].wait(dicPng["tor_reload"], 300)
 #choose folder at save progress
 def typeFolderPath(strFolderPath=None):
     dicRegion["regNW"].wait(dicPng["os_foldername_bar"], 300)
@@ -158,8 +158,8 @@ def typeFolderPath(strFolderPath=None):
 #rightclick on image to save current page
 def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None):
     logging.info("prepare to save " + strFilename)
-    dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 300)
-    dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
+    dicRegion["regNW"].waitVanish(dicPng["tor_stop"], 300)
+    dicRegion["regNW"].wait(dicPng["tor_reload"], 300)
     checkAndPauseBeforeSave()
     rightClick(onImage)
     dicRegion["regCenter"].wait(dicPng["os_right_save_as"], 300)
@@ -175,12 +175,12 @@ def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None
     wait(0.5)
     dicRegion["regCenter"].click(dicPng["os_save_btn"])
     wait(0.5)
-    dicRegion["regSW"].wait(dicPng["chrome_download_finished"], 600)#wait save complete
+    dicRegion["regSW"].wait(dicPng["tor_download_finished"], 600)#wait save complete
 #ask chrome save current page
 def saveCurrentPage(strFolderPath=None, strFilename=None):
     logging.info("prepare to save " + strFilename)
-    dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 300)
-    dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
+    dicRegion["regNW"].waitVanish(dicPng["tor_stop"], 300)
+    dicRegion["regNW"].wait(dicPng["tor_reload"], 300)
     checkAndPauseBeforeSave()
     type("s", KeyModifier.CTRL)
     dicRegion["regCenter"].wait(dicPng["os_save_btn"], 300)
@@ -194,7 +194,7 @@ def saveCurrentPage(strFolderPath=None, strFilename=None):
     wait(0.5)
     dicRegion["regCenter"].click(dicPng["os_save_btn"])
     wait(0.5)
-    dicRegion["regSW"].wait(dicPng["chrome_download_finished"], 600)#wait save complete
+    dicRegion["regSW"].wait(dicPng["tor_download_finished"], 600)#wait save complete
 #download explore pages
 def downloadExplorePages():
     goExplorePage()
@@ -213,10 +213,10 @@ def downloadCategoryPages():
             os.mkdir(strCategoryFolderPath) #mkdir category
         strCategoryFilePath = strCategoryFolderPath + r"\category.html"
         if not os.path.exists(strCategoryFilePath):#check category.html
-            openChrome()
+            openTor()
             typeUrlOnChrome(strUrlText=strCategoryUrl)
-            dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 300)
-            dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
+            dicRegion["regNW"].waitVanish(dicPng["tor_stop"], 300)
+            dicRegion["regNW"].wait(dicPng["tor_reload"], 300)
             unfoldCategoryPage()
             saveCurrentPage(strFolderPath=strCategoryFolderPath, strFilename="category.html")
     catUrlListFile.close()
@@ -250,12 +250,12 @@ def downloadProjectPages(strTargetCategory=None):
                 strProjHtmlFilePath = strProjectsFolderPath + os.sep + strProjName + strProjHtmlFileExtension
                 if os.path.exists(strProjHtmlFilePath):
                     os.remove(strProjHtmlFilePath)
-            openChrome() #open chrome 
+            openTor() #open chrome 
             typeUrlOnChrome(strUrlText=strProjUrl)
             wait(0.5)
             #check page "something not right" show?
             while(dicRegion["regUp"].exists(dicPng["page_not_right"])):
-                openChrome() #reopen chrome for load standard style
+                openTor() #reopen chrome for load standard style
                 typeUrlOnChrome(strUrlText=strProjUrl)
                 wait(0.5)
         else:
@@ -274,19 +274,19 @@ def downloadProjectPages(strTargetCategory=None):
         dicRegion["regUp"].wait(dicPng["page_details_about"], 300)
         rightClickSaveCurrentPage(onImage=dicPng["page_details_about"], strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_details.html")
         #save updates html
-        openChrome()
+        openTor()
         typeUrlOnChrome(strUrlText=strProjUrl + "#/updates")
         wait(0.5)
         #unfoldUCBShowmore()
         saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_updates.html")
         #save comments html
-        openChrome()
+        openTor()
         typeUrlOnChrome(strUrlText=strProjUrl + "#/comments")
         wait(0.5)
         #unfoldUCBShowmore()
         saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_comments.html")
         #save backers html
-        openChrome()
+        openTor()
         typeUrlOnChrome(strUrlText=strProjUrl + "#/backers")
         wait(0.5)
         #unfoldUCBShowmore()
@@ -320,7 +320,7 @@ def downloadIndividualsPages(strTargetCategory=None):
                 strIndividualsHtmlFilePath = strIndividualsFolderPath + os.sep + strIndividualsId + strIndividualsHtmlFileExtension
                 if os.path.exists(strIndividualsHtmlFilePath):
                     os.remove(strIndividualsHtmlFilePath)
-            openChrome() #open chrome
+            openTor() #open chrome
             typeUrlOnChrome(strUrlText=strIndividualsUrl)
             wait(0.5)
         else:
@@ -334,7 +334,7 @@ def downloadIndividualsPages(strTargetCategory=None):
         saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsId + "_profile.html")
         #save campaigns html 
         strIndividualsCampaignsUrl = strIndividualsUrl + u"/campaigns"
-        openChrome()
+        openTor()
         typeUrlOnChrome(strUrlText=strIndividualsCampaignsUrl)
         wait(0.5)
         saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsId + "_campaigns.html")
