@@ -65,10 +65,10 @@ def openTor():
     #close prev tor
     if dicRegion["regNW"].exists(dicPng["tor_close"]):
         dicRegion["regNW"].click(dicPng["tor_close"])
-    wait(2)
+    wait(10)
     #re-open new tor
     App.open("C:\\Users\\Administrator\\Desktop\\Tor Browser\\Browser\\firefox.exe")
-    wait(2)#wait to running
+    wait(10)#wait to running
     dicRegion["regNW"].wait(dicPng["tor_home"], 300)
     dicRegion["regNW"].click(dicPng["tor_home"])
     dicRegion["regNE"].waitVanish(dicPng["tor_stop"], 300)
