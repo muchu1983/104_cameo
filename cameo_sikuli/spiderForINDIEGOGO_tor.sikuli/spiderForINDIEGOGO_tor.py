@@ -70,8 +70,8 @@ def openTor():
     wait(2)#wait to running
     dicRegion["regNW"].wait(dicPng["tor_home"], 300)
     dicRegion["regNW"].click(dicPng["tor_home"])
-    dicRegion["regNW"].waitVanish(dicPng["tor_stop"], 300)
-    dicRegion["regNW"].wait(dicPng["tor_reload"], 300)
+    dicRegion["regNE"].waitVanish(dicPng["tor_stop"], 300)
+    dicRegion["regNE"].wait(dicPng["tor_reload"], 300)
     #maximized tor window
     if dicRegion["regUp"].exists(dicPng["tor_maximized_window"]):
         dicRegion["regUp"].click(dicPng["tor_maximized_window"])
@@ -133,8 +133,8 @@ def typeUrlOnChrome(strUrlText=None):
         wait(0.5)
         type(Key.ENTER)
         wait(0.5)
-        dicRegion["regNW"].waitVanish(dicPng["tor_stop"], 300)
-        dicRegion["regNW"].wait(dicPng["tor_reload"], 300)
+        dicRegion["regNE"].waitVanish(dicPng["tor_stop"], 300)
+        dicRegion["regNE"].wait(dicPng["tor_reload"], 300)
         #check page "something not right" show?
         if dicRegion["regUp"].exists(dicPng["page_not_right"]):
             #restart chrome and run typeUrlOnChrome again
@@ -147,8 +147,8 @@ def goExplorePage():
     openTor()
     typeUrlOnChrome(strUrlText="https://www.indiegogo.com/explore")
     dicRegion["regUp"].wait(dicPng["page_explore"], 300)
-    dicRegion["regNW"].waitVanish(dicPng["tor_stop"], 300)
-    dicRegion["regNW"].wait(dicPng["tor_reload"], 300)
+    dicRegion["regNE"].waitVanish(dicPng["tor_stop"], 300)
+    dicRegion["regNE"].wait(dicPng["tor_reload"], 300)
 #choose folder at save progress
 def typeFolderPath(strFolderPath=None):
     dicRegion["regNW"].wait(dicPng["os_foldername_bar"], 300)
@@ -162,8 +162,8 @@ def typeFolderPath(strFolderPath=None):
 #rightclick on image to save current page
 def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None):
     logging.info("prepare to save " + strFilename)
-    dicRegion["regNW"].waitVanish(dicPng["tor_stop"], 300)
-    dicRegion["regNW"].wait(dicPng["tor_reload"], 300)
+    dicRegion["regNE"].waitVanish(dicPng["tor_stop"], 300)
+    dicRegion["regNE"].wait(dicPng["tor_reload"], 300)
     checkAndPauseBeforeSave()
     rightClick(onImage)
     dicRegion["regCenter"].wait(dicPng["os_right_save_as"], 300)
@@ -183,8 +183,8 @@ def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None
 #ask chrome save current page
 def saveCurrentPage(strFolderPath=None, strFilename=None):
     logging.info("prepare to save " + strFilename)
-    dicRegion["regNW"].waitVanish(dicPng["tor_stop"], 300)
-    dicRegion["regNW"].wait(dicPng["tor_reload"], 300)
+    dicRegion["regNE"].waitVanish(dicPng["tor_stop"], 300)
+    dicRegion["regNE"].wait(dicPng["tor_reload"], 300)
     checkAndPauseBeforeSave()
     type("s", KeyModifier.CTRL)
     dicRegion["regCenter"].wait(dicPng["os_save_btn"], 300)
@@ -219,8 +219,8 @@ def downloadCategoryPages():
         if not os.path.exists(strCategoryFilePath):#check category.html
             openTor()
             typeUrlOnChrome(strUrlText=strCategoryUrl)
-            dicRegion["regNW"].waitVanish(dicPng["tor_stop"], 300)
-            dicRegion["regNW"].wait(dicPng["tor_reload"], 300)
+            dicRegion["regNE"].waitVanish(dicPng["tor_stop"], 300)
+            dicRegion["regNE"].wait(dicPng["tor_reload"], 300)
             unfoldCategoryPage()
             saveCurrentPage(strFolderPath=strCategoryFolderPath, strFilename="category.html")
     catUrlListFile.close()
