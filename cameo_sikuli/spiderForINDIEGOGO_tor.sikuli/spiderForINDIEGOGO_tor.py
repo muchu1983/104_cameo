@@ -136,7 +136,7 @@ def typeUrlOnTor(strUrlText=None):
         wait(0.5)
         dicRegion["regNE"].waitVanish(dicPng["tor_stop"], 300)
         dicRegion["regNE"].wait(dicPng["tor_reload"], 300)
-        wait(0.5)
+        wait(5)
         #recheck for server may redirect to home page
         dicRegion["regNE"].waitVanish(dicPng["tor_stop"], 300)
         dicRegion["regNE"].wait(dicPng["tor_reload"], 300)
