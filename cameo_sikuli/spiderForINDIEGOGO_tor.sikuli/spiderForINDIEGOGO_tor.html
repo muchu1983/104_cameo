@@ -96,6 +96,7 @@ dicRegion = {<span class="str">"regUp"</span>:Region(<span class="dig">0</span>,
           <span class="str">"regCenter"</span>:Region(screen.getW()/<span class="dig">4</span>,screen.getH()/<span class="dig">4</span>,screen.getW()/<span class="dig">2</span>,screen.getH()/<span class="dig">2</span>)
          }
 dicPng = {<span class="str">"tor_close"</span>:Pattern(<img src="tor_close.png" />).targetOffset(-<span class="dig">14</span>,<span class="dig">0</span>),
+        <span class="str">"tor_maximized_window"</span>:<img src="tor_maximized_window.png" />,
         <span class="str">"tor_home"</span>:<img src="tor_home.png" />,
         <span class="str">"tor_stop"</span>:<img src="tor_stop.png" />,
         <span class="str">"tor_reload"</span>:<img src="tor_reload.png" />,
@@ -143,6 +144,9 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     dicRegion[<span class="str">"regNW"</span>].<span class="skw">click</span>(dicPng[<span class="str">"tor_home"</span>])
     dicRegion[<span class="str">"regNW"</span>].waitVanish(dicPng[<span class="str">"tor_stop"</span>], <span class="dig">300</span>)
     dicRegion[<span class="str">"regNW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"tor_reload"</span>], <span class="dig">300</span>)
+    <span class="cmt">#maximized tor window
+</span>    <span class="kw">if</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"tor_maximized_window"</span>]):
+        dicRegion[<span class="str">"regUp"</span>].<span class="skw">click</span>(dicPng[<span class="str">"tor_maximized_window"</span>])
 <span class="cmt"># delete origin text
 </span><span class="kw">def</span> delOriginText():
     <span class="skw">type</span>(<span class="str">"a"</span>, KeyModifier.CTRL)

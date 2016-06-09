@@ -24,6 +24,7 @@ dicRegion = {"regUp":Region(0,0,screen.getW(),screen.getH()/2),
           "regCenter":Region(screen.getW()/4,screen.getH()/4,screen.getW()/2,screen.getH()/2)
          }
 dicPng = {"tor_close":Pattern("tor_close.png").targetOffset(-14,0),
+        "tor_maximized_window":"tor_maximized_window.png",
         "tor_home":"tor_home.png",
         "tor_stop":"tor_stop.png",
         "tor_reload":"tor_reload.png",
@@ -71,6 +72,9 @@ def openTor():
     dicRegion["regNW"].click(dicPng["tor_home"])
     dicRegion["regNW"].waitVanish(dicPng["tor_stop"], 300)
     dicRegion["regNW"].wait(dicPng["tor_reload"], 300)
+    #maximized tor window
+    if dicRegion["regUp"].exists(dicPng["tor_maximized_window"]):
+        dicRegion["regUp"].click(dicPng["tor_maximized_window"])
 # delete origin text
 def delOriginText():
     type("a", KeyModifier.CTRL)
