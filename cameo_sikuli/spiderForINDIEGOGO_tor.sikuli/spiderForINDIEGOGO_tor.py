@@ -28,6 +28,7 @@ dicPng = {"tor_close":Pattern("tor_close.png").targetOffset(-14,0),
         "tor_home":"tor_home.png",
         "tor_stop":"tor_stop.png",
         "tor_reload":"tor_reload.png",
+        "tor_not_now":"tor_not_now.png",
         "tor_download_finished":"tor_download_finished.png",
         "page_end_about":"page_end_about.png",
         "page_end_camp":"page_end_camp.png",
@@ -264,6 +265,9 @@ def downloadProjectPages(strTargetCategory=None):
                 wait(0.5)
         else:
             continue #skip this url
+        #click tor_not_now popup
+        if dicRegion["regNW"].exists(dicPng["tor_not_now"]):
+           dicRegion["regNW"].click(dicPng["tor_not_now"])
         #check page not found or is currently updated or under review
         if dicRegion["regUp"].exists(dicPng["page_not_found"]) or dicRegion["regUp"].exists(dicPng["page_not_found_2"]) or dicRegion["regUp"].exists(dicPng["page_currently_updated"]) or dicRegion["regUp"].exists(dicPng["page_under_review"]):
             continue #skip this url
