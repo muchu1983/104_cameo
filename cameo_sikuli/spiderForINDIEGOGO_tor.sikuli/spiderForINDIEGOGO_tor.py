@@ -124,8 +124,8 @@ def checkAndPauseBeforeSave():
         popup(u"distil networks found us! （╯‵□′）╯︵┴─┴")
     if dicRegion["regUp"].exists(dicPng["page_proxy_error"]):
         popup(u"proxy error! （╯‵□′）╯︵┴─┴")
-#type url on chrome
-def typeUrlOnChrome(strUrlText=None):
+#type url on tor
+def typeUrlOnTor(strUrlText=None):
     while True:
         type("l", KeyModifier.CTRL)
         wait(0.5)
@@ -136,9 +136,17 @@ def typeUrlOnChrome(strUrlText=None):
         wait(0.5)
         dicRegion["regNE"].waitVanish(dicPng["tor_stop"], 300)
         dicRegion["regNE"].wait(dicPng["tor_reload"], 300)
+        wait(0.5)
+        #recheck for server may redirect to home page
+        dicRegion["regNE"].waitVanish(dicPng["tor_stop"], 300)
+        dicRegion["regNE"].wait(dicPng["tor_reload"], 300)
+        wait(0.5)
+        #click tor_not_now popup
+        if dicRegion["regNW"].exists(dicPng["tor_not_now"]):
+           dicRegion["regNW"].click(dicPng["tor_not_now"])
         #check page "something not right" show?
         if dicRegion["regUp"].exists(dicPng["page_not_right"]):
-            #restart chrome and run typeUrlOnChrome again
+            #restart tor and run typeUrlOnTor again
             openTor()
         else:
             #ok everything is right, go out while loop
@@ -146,7 +154,7 @@ def typeUrlOnChrome(strUrlText=None):
 # go to explore page
 def goExplorePage():
     openTor()
-    typeUrlOnChrome(strUrlText="https://www.indiegogo.com/explore")
+    typeUrlOnTor(strUrlText="https://www.indiegogo.com/explore")
     dicRegion["regUp"].wait(dicPng["page_explore"], 300)
     dicRegion["regNE"].waitVanish(dicPng["tor_stop"], 300)
     dicRegion["regNE"].wait(dicPng["tor_reload"], 300)
@@ -181,7 +189,7 @@ def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None
     dicRegion["regCenter"].click(dicPng["os_save_btn"])
     wait(0.5)
     dicRegion["regSW"].wait(dicPng["tor_download_finished"], 600)#wait save complete
-#ask chrome save current page
+#ask tor save current page
 def saveCurrentPage(strFolderPath=None, strFilename=None):
     logging.info("prepare to save " + strFilename)
     dicRegion["regNE"].waitVanish(dicPng["tor_stop"], 300)
@@ -219,7 +227,7 @@ def downloadCategoryPages():
         strCategoryFilePath = strCategoryFolderPath + r"\category.html"
         if not os.path.exists(strCategoryFilePath):#check category.html
             openTor()
-            typeUrlOnChrome(strUrlText=strCategoryUrl)
+            typeUrlOnTor(strUrlText=strCategoryUrl)
             dicRegion["regNE"].waitVanish(dicPng["tor_stop"], 300)
             dicRegion["regNE"].wait(dicPng["tor_reload"], 300)
             unfoldCategoryPage()
@@ -255,19 +263,16 @@ def downloadProjectPages(strTargetCategory=None):
                 strProjHtmlFilePath = strProjectsFolderPath + os.sep + strProjName + strProjHtmlFileExtension
                 if os.path.exists(strProjHtmlFilePath):
                     os.remove(strProjHtmlFilePath)
-            openTor() #open chrome 
-            typeUrlOnChrome(strUrlText=strProjUrl)
+            openTor() #open tor 
+            typeUrlOnTor(strUrlText=strProjUrl)
             wait(0.5)
             #check page "something not right" show?
             while(dicRegion["regUp"].exists(dicPng["page_not_right"])):
-                openTor() #reopen chrome for load standard style
-                typeUrlOnChrome(strUrlText=strProjUrl)
+                openTor() #reopen tor for reload current page
+                typeUrlOnTor(strUrlText=strProjUrl)
                 wait(0.5)
         else:
             continue #skip this url
-        #click tor_not_now popup
-        if dicRegion["regNW"].exists(dicPng["tor_not_now"]):
-           dicRegion["regNW"].click(dicPng["tor_not_now"])
         #check page not found or is currently updated or under review
         if dicRegion["regUp"].exists(dicPng["page_not_found"]) or dicRegion["regUp"].exists(dicPng["page_not_found_2"]) or dicRegion["regUp"].exists(dicPng["page_currently_updated"]) or dicRegion["regUp"].exists(dicPng["page_under_review"]):
             continue #skip this url
@@ -283,19 +288,19 @@ def downloadProjectPages(strTargetCategory=None):
         rightClickSaveCurrentPage(onImage=dicPng["page_details_about"], strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_details.html")
         #save updates html
         openTor()
-        typeUrlOnChrome(strUrlText=strProjUrl + "#/updates")
+        typeUrlOnTor(strUrlText=strProjUrl + "#/updates")
         wait(0.5)
         #unfoldUCBShowmore()
         saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_updates.html")
         #save comments html
         openTor()
-        typeUrlOnChrome(strUrlText=strProjUrl + "#/comments")
+        typeUrlOnTor(strUrlText=strProjUrl + "#/comments")
         wait(0.5)
         #unfoldUCBShowmore()
         saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_comments.html")
         #save backers html
         openTor()
-        typeUrlOnChrome(strUrlText=strProjUrl + "#/backers")
+        typeUrlOnTor(strUrlText=strProjUrl + "#/backers")
         wait(0.5)
         #unfoldUCBShowmore()
         saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_backers.html")
@@ -328,8 +333,8 @@ def downloadIndividualsPages(strTargetCategory=None):
                 strIndividualsHtmlFilePath = strIndividualsFolderPath + os.sep + strIndividualsId + strIndividualsHtmlFileExtension
                 if os.path.exists(strIndividualsHtmlFilePath):
                     os.remove(strIndividualsHtmlFilePath)
-            openTor() #open chrome
-            typeUrlOnChrome(strUrlText=strIndividualsUrl)
+            openTor() #open tor
+            typeUrlOnTor(strUrlText=strIndividualsUrl)
             wait(0.5)
         else:
             continue #skip this url
@@ -343,7 +348,7 @@ def downloadIndividualsPages(strTargetCategory=None):
         #save campaigns html 
         strIndividualsCampaignsUrl = strIndividualsUrl + u"/campaigns"
         openTor()
-        typeUrlOnChrome(strUrlText=strIndividualsCampaignsUrl)
+        typeUrlOnTor(strUrlText=strIndividualsCampaignsUrl)
         wait(0.5)
         saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsId + "_campaigns.html")
     individualsUrlListFile.close()
