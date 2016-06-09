@@ -76,6 +76,7 @@ def openTor():
     #maximized tor window
     if dicRegion["regUp"].exists(dicPng["tor_maximized_window"]):
         dicRegion["regUp"].click(dicPng["tor_maximized_window"])
+        wait(2)
 # delete origin text
 def delOriginText():
     type("a", KeyModifier.CTRL)
