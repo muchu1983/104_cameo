@@ -167,8 +167,8 @@ def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None
     dicRegion["regNE"].wait(dicPng["tor_reload"], 300)
     checkAndPauseBeforeSave()
     rightClick(onImage)
-    dicRegion["regCenter"].wait(dicPng["os_right_save_as"], 300)
-    dicRegion["regCenter"].click(dicPng["os_right_save_as"])
+    dicRegion["regUp"].wait(dicPng["os_right_save_as"], 300)
+    dicRegion["regUp"].click(dicPng["os_right_save_as"])
     dicRegion["regCenter"].wait(dicPng["os_save_btn"], 300)
     if strFolderPath != None:
         typeFolderPath(strFolderPath)
