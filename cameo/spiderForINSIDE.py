@@ -154,8 +154,17 @@ class SpiderForINSIDE:
                 self.driver.get(strNewsUrl)
                 #儲存 html
                 strNewsName = re.match("^http://www.inside.com.tw/[\d]{4}/[\d]{2}/[\d]{2}/(.*)$", strNewsUrl).group(1)
+                #限縮 news.html 檔名
+                strNewsName = self.limitStrLessThen128Char(strStr=strNewsName)
                 strNewsHtmlFilePath = strNewsHtmlFolderPath + u"\\%s_news.html"%strNewsName
                 self.utility.overwriteSaveAs(strFilePath=strNewsHtmlFilePath, unicodeData=self.driver.page_source)
                 #更新news DB 為已抓取 (isGot = 1)
                 self.db.updateNewsStatusIsGot(strNewsUrl=strNewsUrl)
             
+    #限縮 字串長度低於 128 字元
+    def limitStrLessThen128Char(self, strStr=None):
+        if len(strStr) > 128:
+            logging.info("limit str less then 128 char")
+            return strStr[:127] + u"_"
+        else:
+            return strStr
