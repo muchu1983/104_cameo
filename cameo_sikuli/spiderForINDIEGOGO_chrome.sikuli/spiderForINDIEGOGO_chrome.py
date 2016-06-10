@@ -131,6 +131,11 @@ def typeUrlOnChrome(strUrlText=None):
         wait(0.5)
         dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 300)
         dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
+        wait(5)
+        #recheck for server may redirect to home page
+        dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 300)
+        dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
+        wait(0.5)
         #check page "something not right" show?
         if dicRegion["regUp"].exists(dicPng["page_not_right"]):
             #restart chrome and run typeUrlOnChrome again
