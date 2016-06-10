@@ -249,7 +249,7 @@ def downloadProjectPages(strTargetCategory=None):
             if not os.path.exists(strProjHtmlFilePath):
                 isProjHtmlFileMissing = True
         if isProjHtmlFileMissing:
-            wait(60) #wait 60 sec per project
+            wait(120) #wait 120 sec per project
             #delete remaining project html files
             for strProjHtmlFileExtension in lstStrProjHtmlFileExtension:
                 strProjHtmlFilePath = strProjectsFolderPath + os.sep + strProjName + strProjHtmlFileExtension
