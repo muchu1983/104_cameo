@@ -10,6 +10,7 @@ import os
 import sys
 import re
 import logging
+import random
 from java.awt import Toolkit
 from java.awt.datatransfer import StringSelection
 screen = Screen()
@@ -249,7 +250,7 @@ def downloadProjectPages(strTargetCategory=None):
             if not os.path.exists(strProjHtmlFilePath):
                 isProjHtmlFileMissing = True
         if isProjHtmlFileMissing:
-            wait(180) #wait 120 sec per project
+            wait(random.randint(240,600)) #wait random time per project
             #delete remaining project html files
             for strProjHtmlFileExtension in lstStrProjHtmlFileExtension:
                 strProjHtmlFilePath = strProjectsFolderPath + os.sep + strProjName + strProjHtmlFileExtension

@@ -9,7 +9,7 @@ This file is part of BSD license
 import unittest
 import logging
 import json
-from cameo.parserForINDIEGOGO import ParserForINDIEGOGO
+from cameo.parserV2ForINDIEGOGO import ParserV2ForINDIEGOGO
 """
 INDIEGOGO 改版 2016-05-27 改寫
 測試 INDIEGOGO 解析
@@ -28,19 +28,19 @@ class ParserV2ForINDIEGOGOTest(unittest.TestCase):
         
     #測試 解析 explore 頁面
     def test_parseExplorePage(self):
-        logging.info("ParserForINDIEGOGOTest.test_parseExplorePage")
+        logging.info("ParserV2ForINDIEGOGOTest.test_parseExplorePage")
         parser = ParserForINDIEGOGO()
         parser.parseExplorePage()
         
     #測試 解析 category 頁面
     def test_parseCategoryPage(self):
-        logging.info("ParserForINDIEGOGOTest.test_parseCategoryPage")
+        logging.info("ParserV2ForINDIEGOGOTest.test_parseCategoryPage")
         parser = ParserForINDIEGOGO()
         parser.parseCategoryPage()
         
     #測試 解析 project 頁面
     def test_parseProjectPage(self):
-        logging.info("ParserForINDIEGOGOTest.test_parseProjectPage")
+        logging.info("ParserV2ForINDIEGOGOTest.test_parseProjectPage")
         strCategory = "animals"
         parser = ParserForINDIEGOGO()
         parser.beforeParseProjectPage(strCategory)
@@ -54,7 +54,7 @@ class ParserV2ForINDIEGOGOTest(unittest.TestCase):
         
     #測試 解析 individuals 頁面
     def test_parseIndividualsPage(self):
-        logging.info("ParserForINDIEGOGOTest.test_parseIndividualsPage")
+        logging.info("ParserV2ForINDIEGOGOTest.test_parseIndividualsPage")
         strCategory = "animals"
         parser = ParserForINDIEGOGO()
         parser.beforeParseIndividualsPage(strCategory)

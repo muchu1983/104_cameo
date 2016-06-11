@@ -23,24 +23,23 @@ class ParserV2ForINDIEGOGO:
     def __init__(self):
         self.utility = Utility()
         self.dicSubCommandHandler = {"explore":[self.parseExplorePage],
-                                     "category":[self.parseCategoryPage],
-                                     "project":[self.beforeParseProjectPage,
-                                                self.parseProjectDetailsPage,
-                                                self.parseProjectStoryPage,
-                                                self.parseProjectUpdatesPage,
-                                                self.parseProjectCommentsPage,
-                                                self.parseProjectBackersPage,
-                                                self.parseProjectRewardPage,
-                                                self.parseProjectGalleryPage,
-                                                self.afterParseProjectPage],
-                                     "individuals":[self.beforeParseIndividualsPage,
-                                                    self.parseIndividualsProfilePage,
-                                                    self.parseIndividualsCampaignsPage,
-                                                    self.afterParseIndividualsPage],}
+                             "category":[self.parseCategoryPage],
+                             "project":[self.beforeParseProjectPage,
+                                     self.parseProjectDetailsPage,
+                                     self.parseProjectStoryPage,
+                                     self.parseProjectUpdatesPage,
+                                     self.parseProjectCommentsPage,
+                                     self.parseProjectBackersPage,
+                                     self.parseProjectRewardPage,
+                                     self.parseProjectGalleryPage,
+                                     self.afterParseProjectPage],
+                             "individuals":[self.beforeParseIndividualsPage,
+                                        self.parseIndividualsProfilePage,
+                                        self.parseIndividualsCampaignsPage,
+                                        self.afterParseIndividualsPage],
+                             }
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
-        self.CATEGORY_URL_LIST_FILENAME = u"category_url_list.txt"
-        self.PROJ_URL_LIST_FILENAME = u"_proj_url_list.txt"
         self.dicParsedResultOfProject = {} #project.json 資料
         self.dicParsedResultOfUpdate = {} #update.json 資料
         self.dicParsedResultOfComment = {} #comment.json 資料
@@ -77,7 +76,7 @@ class ParserV2ForINDIEGOGO:
         lstStrCategoryUrls = root.css("explore-category-link-www a.i-uncolored-link::attr(href)").extract()
         if len(lstStrCategoryUrls) == 0:
             lstStrCategoryUrls = root.css("ul.exploreCategories-list li.ng-scope a.ng-binding::attr(href)").extract()
-        strCategoryUrlListFilePath = strExploreResultFolderPath + u"\\" + self.CATEGORY_URL_LIST_FILENAME
+        strCategoryUrlListFilePath = strExploreResultFolderPath + u"\\category_url_list.txt"
         with open(strCategoryUrlListFilePath, "w+") as catUrlListFile:
             for strCategoryUrl in lstStrCategoryUrls:
                 strCategoryUrl = re.sub("#/browse", "", strCategoryUrl)
