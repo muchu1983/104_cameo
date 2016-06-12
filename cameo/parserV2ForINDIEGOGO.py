@@ -604,32 +604,28 @@ class ParserV2ForINDIEGOGO:
             logging.info("parsing %s"%strIndividualsProfileFilePath)
             with open(strIndividualsProfileFilePath, "r") as individualsProfileHtmlFile:
                 strIndividualsHtmlFileName = os.path.basename(individualsProfileHtmlFile.name)
-                strIndividualsUrl = "https://www.indiegogo.com/individuals/" + re.search("^(.*)_profile.html$", strIndividualsHtmlFileName).group(1)
+                strIndividualsUrl = "https://www.indiegogo.com/individuals/" + re.match("^(.*)_profile.html$", strIndividualsHtmlFileName).group(1)
                 if strIndividualsUrl not in self.dicParsedResultOfProfile:
                     self.dicParsedResultOfProfile[strIndividualsUrl] = {}
                 strPageSource = individualsProfileHtmlFile.read()
                 root = Selector(text=strPageSource)
                 #parse *_profile.html
                 #strUrl
-                self.dicParsedResultOfProfile[strIndividualsUrl]["strUrl"] = \
-                    strIndividualsUrl
+                self.dicParsedResultOfProfile[strIndividualsUrl]["strUrl"] = strIndividualsUrl
                 #strName
                 strName = root.css("h1.i-profileHeader-accountName::text").extract_first().strip()
-                self.dicParsedResultOfProfile[strIndividualsUrl]["strName"] = \
-                    strName
+                self.dicParsedResultOfProfile[strIndividualsUrl]["strName"] = strName
                 #strDescription
-                self.dicParsedResultOfProfile[strIndividualsUrl]["strDescription"] = \
-                    root.css("div.i-profile-show-content p.i-description::text").extract_first().strip()
+                strDescription = root.css("div.i-profile-show-content p.i-description::text").extract_first().strip()
+                self.dicParsedResultOfProfile[strIndividualsUrl]["strDescription"] = strDescription
                 #strLocation
-                strLocationSpanText = root.css("div.i-profileHeader-location span::text").extract_first()
-                strLocation = strLocationSpanText
-                self.dicParsedResultOfProfile[strIndividualsUrl]["strLocation"] = \
-                    strLocation
+                strLocation = root.css("div.i-profileHeader-location span::text").extract_first()
+                self.dicParsedResultOfProfile[strIndividualsUrl]["strLocation"] = strLocation
                 #strCountry and strCity
                 strCountry = None
                 strCity = None
-                if strLocationSpanText != None:
-                    lstStrLocationPart = strLocationSpanText.split(",")
+                if strLocation: # is not None
+                    lstStrLocationPart = strLocation.split(",")
                     if len(lstStrLocationPart) > 1 :
                         strCountry = lstStrLocationPart[-1].strip()
                         strCity = lstStrLocationPart[0].strip()
@@ -664,8 +660,7 @@ class ParserV2ForINDIEGOGO:
                     isBacker = True
                 self.dicParsedResultOfProfile[strIndividualsUrl]["isBacker"] = isBacker
                 #strIdentityName (同 strName)
-                self.dicParsedResultOfProfile[strIndividualsUrl]["strIdentityName"] = \
-                    strName
+                self.dicParsedResultOfProfile[strIndividualsUrl]["strIdentityName"] = strName
                 #intFbFriend
                 intFbFriend = 0
                 lstStrVerificationSpanText = root.css("div.i-verifications div.profileVerification span::text").extract()
@@ -689,7 +684,7 @@ class ParserV2ForINDIEGOGO:
             logging.info("parsing %s"%strIndividualsCampaignFilePath)
             with open(strIndividualsCampaignFilePath, "r") as individualsCampaignHtmlFile:
                 strIndividualsHtmlFileName = os.path.basename(individualsCampaignHtmlFile.name)
-                strIndividualsUrl = "https://www.indiegogo.com/individuals/" + re.search("^(.*)_campaigns.html$", strIndividualsHtmlFileName).group(1)
+                strIndividualsUrl = "https://www.indiegogo.com/individuals/" + re.match("^(.*)_campaigns.html$", strIndividualsHtmlFileName).group(1)
                 if strIndividualsUrl not in self.dicParsedResultOfProfile:
                     self.dicParsedResultOfProfile[strIndividualsUrl] = {}
                 strPageSource = individualsCampaignHtmlFile.read()
