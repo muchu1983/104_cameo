@@ -25,10 +25,7 @@ class ParserV2ForINDIEGOGO:
         self.dicSubCommandHandler = {"explore":[self.parseExplorePage],
                              "category":[self.parseCategoryPage],
                              "project":[self.parseProjectPage],
-                             "individuals":[self.beforeParseIndividualsPage,
-                                        self.parseIndividualsProfilePage,
-                                        self.parseIndividualsCampaignsPage,
-                                        self.afterParseIndividualsPage],
+                             "individuals":[self.parseIndividualsPage],
                              }
         self.lstStrCategoryName = ["animals", "art", "comic", "community", "dance",
                             "design", "education", "environment", "fashion",
@@ -567,6 +564,24 @@ class ParserV2ForINDIEGOGO:
     def parseProjectGalleryPage(self, strCategoryName=None):
         pass
 #individuals #####################################################################################
+
+    #解析 individuals page 進入點
+    def parseIndividualsPage(self, strCategoryName=None):
+        lstFuncOfParseIndividuals = [self.beforeParseIndividualsPage,
+                             self.parseIndividualsProfilePage,
+                             self.parseIndividualsCampaignsPage,
+                             self.afterParseIndividualsPage
+                             ]
+        if strCategoryName != "automode":
+            for funcOfParseIndividuals in lstFuncOfParseIndividuals:
+                funcOfParseIndividuals(strCategoryName=strCategoryName)
+        else: #automode
+            for strCategoryName in self.lstStrCategoryName:
+                strCategoryResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\INDIEGOGO\\%s"%(strCategoryName)
+                if os.path.exists(strCategoryResultFolderPath): #檢查 category 資料夾已建立
+                    for funcOfParseIndividuals in lstFuncOfParseIndividuals:
+                        funcOfParseIndividuals(strCategoryName=strCategoryName)
+                        
     #解析 individuals page(s) 之前
     def beforeParseIndividualsPage(self, strCategoryName=None):
         self.dicParsedResultOfProfile = {} #profile.json 資料

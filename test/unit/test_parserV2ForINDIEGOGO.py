@@ -37,7 +37,7 @@ class ParserV2ForINDIEGOGOTest(unittest.TestCase):
         logging.info("ParserV2ForINDIEGOGOTest.test_parseCategoryPage")
         parser = ParserV2ForINDIEGOGO()
         parser.parseCategoryPage()
-    """
+    
     #測試 解析 project 頁面
     def test_parseProjectPage(self):
         logging.info("ParserV2ForINDIEGOGOTest.test_parseProjectPage")
@@ -48,13 +48,9 @@ class ParserV2ForINDIEGOGOTest(unittest.TestCase):
     #測試 解析 individuals 頁面
     def test_parseIndividualsPage(self):
         logging.info("ParserV2ForINDIEGOGOTest.test_parseIndividualsPage")
-        strCategory = "animals"
         parser = ParserV2ForINDIEGOGO()
-        parser.beforeParseIndividualsPage(strCategory)
-        parser.parseIndividualsProfilePage(strCategory)
-        parser.parseIndividualsCampaignsPage(strCategory)
-        parser.afterParseIndividualsPage(strCategory)
-    """
+        parser.parseIndividualsPage("automode")
+    
 #測試開始
 if __name__ == "__main__":
     unittest.main(exit=False)
