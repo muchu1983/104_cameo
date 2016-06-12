@@ -130,7 +130,7 @@ class ParserV2ForINDIEGOGO:
         lstFuncOfParseProject = [self.beforeParseProjectPage,
                           self.parseProjectDetailsPage,
                           self.parseProjectStoryPage,
-                          #self.parseProjectUpdatesPage,
+                          self.parseProjectUpdatesPage,
                           #self.parseProjectCommentsPage,
                           #self.parseProjectBackersPage,
                           #self.parseProjectRewardPage,
@@ -362,7 +362,6 @@ class ParserV2ForINDIEGOGO:
                     self.dicParsedResultOfProject[strProjUrl]["isPMSelect"] = None
                     #strCreatorUrl = "" 已由 parseProjectDetailsPage 取得
                     #lstStrBacker = "" 已由 parseProjectBackersPage 取得
-                    
             except:
                 strErrorLogFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\INDIEGOGO\\error.log")
                 with open(strErrorLogFilePath, "a") as errFile:
