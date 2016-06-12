@@ -132,8 +132,8 @@ class ParserV2ForINDIEGOGO:
                           self.parseProjectStoryPage,
                           self.parseProjectUpdatesPage,
                           self.parseProjectCommentsPage,
-                          #self.parseProjectBackersPage,
-                          #self.parseProjectRewardPage,
+                          self.parseProjectBackersPage,
+                          self.parseProjectRewardPage,
                           self.afterParseProjectPage
                           ]
         if strCategoryName != "automode":
@@ -433,7 +433,7 @@ class ParserV2ForINDIEGOGO:
                 #parse *_comments.html
                 lstDicCommentData = []
                 #loop of append comment data to lstDicCommentData
-                for elementComment in root.css("div.i-comments desktop-comment"):
+                for elementComment in root.css("div.campaignBody-leadSection div.i-comments desktop-comment"):
                     dicCommentData = {}
                     #strUrl
                     dicCommentData["strUrl"] = strProjUrl
@@ -487,8 +487,8 @@ class ParserV2ForINDIEGOGO:
                 strPageSource = projBackersHtmlFile.read()
                 root = Selector(text=strPageSource)
                 #parse *_backers.html
-                #lstStrBacker
-                lstStrBacker = root.css("div.i-funder-row div.i-name-col div.i-name div.i-details-name::text,a.i-details-name::text").extract()
+                #lstStrBacker (注意:這裡使用了 root.css().css())
+                lstStrBacker = root.css("div.campaignBody-horizontal campaign-backers div.campaignBackers div.campaignBackers-pledge-backer-details").css("div.campaignBackers-pledge-backer-details-text::text,a.campaignBackers-pledge-backer-details-text::text").extract()
                 self.dicParsedResultOfProject[strProjUrl]["lstStrBacker"] = lstStrBacker
                 
     #解析 _story.html (INDIEGOGO 的 reward 資料置於 _story.html)
