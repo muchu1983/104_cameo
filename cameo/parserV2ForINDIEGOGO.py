@@ -433,7 +433,7 @@ class ParserV2ForINDIEGOGO:
                 #parse *_comments.html
                 lstDicCommentData = []
                 #loop of append comment data to lstDicCommentData
-                for elementComment in root.css("div.campaignBody-leadSection div.i-comments desktop-comment"):
+                for elementComment in root.css("div.campaignBody-horizontal div.i-comments desktop-comment"):
                     dicCommentData = {}
                     #strUrl
                     dicCommentData["strUrl"] = strProjUrl
@@ -508,48 +508,48 @@ class ParserV2ForINDIEGOGO:
                 #parse *_story.html (for reward data)
                 lstDicRewardData = []
                 #loop of append reward data to lstDicRewardData
-                for elementReward in root.css("div.perkItem-campaignPerkContainer"):
+                for elementReward in root.css("div.campaignBody-horizontal campaign-next-perk"):
                     dicRewardData = {}
                     #strUrl
                     dicRewardData["strUrl"] = strProjUrl
                     #strRewardContent
-                    strPerkTitleText = elementReward.css("perk-title div.perkItem-title::text").extract_first().strip()
-                    strPerkDescriptionText = elementReward.css("perk-description div.perkItem-description::text").extract_first().strip()
+                    strPerkTitleText = elementReward.css("div.campaignNextPerk-label::text").extract_first().strip()
+                    strPerkDescriptionText = elementReward.css("div.campaignNextPerk-description::text").extract_first().strip()
                     strRewardContent = strPerkTitleText + "\n" + strPerkDescriptionText
                     dicRewardData["strRewardContent"] = strRewardContent
                     #intRewardMoney
-                    strPerkAmountText = elementReward.css("amount-with-currency span.perkItem-perkAmount::text").extract_first().strip()
+                    strPerkAmountText = elementReward.css("div.campaignNextPerk-amountWithCurrency div.campaignNextPerk-amount::text").extract_first().strip()
                     dicRewardData["intRewardMoney"] = \
                         int(re.sub("[^0-9]", "", strPerkAmountText))
                     #intRewardBacker and intRewardLimit
-                    elementAvailability = elementReward.css("span.availability")
-                    #intRewardBacker
-                    dicRewardData["intRewardBacker"] = \
-                        int(elementAvailability.css("b:nth-of-type(1)::text").extract_first().strip())
-                    #intRewardLimit
-                    intRewardLimit = 0
-                    if len(elementAvailability.css("b").extract()) == 2:
-                        intRewardLimit = int(elementAvailability.css("b:nth-of-type(2)::text").extract_first().strip())
-                    dicRewardData["intRewardLimit"] = intRewardLimit
+                    strAvailabilityText = elementReward.css("div.campaignNextPerk-availability::text").extract_first().strip()
+                    if "out of" in strAvailabilityText:
+                        pAvailability = re.compile("^([\d]*) out of ([\d]*) claimed$")
+                        dicRewardData["intRewardBacker"] = int(pAvailability.match(strAvailabilityText).group(1))
+                        dicRewardData["intRewardLimit"] = int(pAvailability.match(strAvailabilityText).group(2))
+                    else:
+                        pAvailability = re.compile("^([\d]*) claimed$")
+                        dicRewardData["intRewardBacker"] = int(pAvailability.match(strAvailabilityText).group(1))
+                        dicRewardData["intRewardLimit"] = 0
                     #strRewardShipTo
                     strShipsToLabelText = elementReward.css("ships-to-countries span.shipsTo-label::text").extract_first()
                     lstStrShipsToValueText = elementReward.css("ships-to-countries span.shipsTo-value::text").extract()
                     strRewardShipTo = None
-                    if lstStrShipsToValueText: #is not None
+                    if lstStrShipsToValueText: #is not None (ex: Ships to:United States, Canada)
                         strRewardShipTo = u""
                         for strShipsToValueText in lstStrShipsToValueText:
                             strRewardShipTo = strRewardShipTo + strShipsToValueText.strip()
-                    elif strShipsToLabelText: #is not None
+                    elif strShipsToLabelText: #is not None (ex: Ships Worldwide)
                         strRewardShipTo = re.search("^Ships (.*)$", strShipsToLabelText.strip()).group(1)
-                    else:
+                    else: #no Ships text on page
                         strRewardShipTo = None
                     dicRewardData["strRewardShipTo"] = strRewardShipTo
                     #strRewardDeliveryDate
                     strRewardDeliveryDate = None
-                    lstStrEstimateDeliveryText = elementReward.css("perk-description div[ng-if*=estimated_delivery_date] span::text").extract()
-                    if len(lstStrEstimateDeliveryText) == 2 and lstStrEstimateDeliveryText[0].strip() == "Estimated delivery:":
-                        strRewardDeliveryDate = lstStrEstimateDeliveryText[1].strip()
-                        strRewardDeliveryDate = self.utility.parseStrDateByDateparser(strOriginDate=strRewardDeliveryDate)
+                    strEstimateDeliveryText = elementReward.css("div.campaignNextPerk div.campaignNextPerk-delivery::text").extract_first()
+                    if strEstimateDeliveryText:# is not None
+                        strEstimateDeliveryText = re.sub("Estimated", "", strEstimateDeliveryText).strip()
+                        strRewardDeliveryDate = self.utility.parseStrDateByDateparser(strOriginDate=strEstimateDeliveryText)
                         if strRewardDeliveryDate: # is not None
                             #強制設定為 每月 1 號 ex 2016-05-20 -> 2016-05-01
                             lstStrRewardDeliveryDate = list(strRewardDeliveryDate)
@@ -559,6 +559,7 @@ class ParserV2ForINDIEGOGO:
                     dicRewardData["strRewardDeliveryDate"] = strRewardDeliveryDate
                     #intRewardRetailPrice 零售價出現格式不統一難以取得
                     dicRewardData["intRewardRetailPrice"] = None
+                    #加入 reward 資料
                     lstDicRewardData.append(dicRewardData)
                 self.dicParsedResultOfReward[strProjUrl] = lstDicRewardData
                 
