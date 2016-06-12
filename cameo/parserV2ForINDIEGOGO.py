@@ -42,7 +42,7 @@ class ParserV2ForINDIEGOGO:
         
     #取得 parser 使用資訊
     def getUseageMessage(self):
-        return ("- INDIEGOGO -\n"
+        return ("- INDIEGOGO (parser version 2)-\n"
                 "useage:\n"
                 "explore - parse explore.html then create category_url_list.txt\n"
                 "category - parse category.html then create project_url_list.txt\n"

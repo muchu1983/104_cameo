@@ -25,7 +25,7 @@ class ParserV2ForINDIEGOGOTest(unittest.TestCase):
     #收尾
     def tearDown(self):
         pass
-    """
+    
     #測試 解析 explore 頁面
     def test_parseExplorePage(self):
         logging.info("ParserV2ForINDIEGOGOTest.test_parseExplorePage")
@@ -44,7 +44,7 @@ class ParserV2ForINDIEGOGOTest(unittest.TestCase):
         parser = ParserV2ForINDIEGOGO()
         parser.parseProjectPage("automode")
         
-    """
+    
     #測試 解析 individuals 頁面
     def test_parseIndividualsPage(self):
         logging.info("ParserV2ForINDIEGOGOTest.test_parseIndividualsPage")

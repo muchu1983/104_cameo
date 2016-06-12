@@ -7,7 +7,8 @@ This file is part of BSD license
 <https://opensource.org/licenses/BSD-3-Clause>
 """
 from cameo.spiderForINDIEGOGO import SpiderForINDIEGOGO
-from cameo.parserForINDIEGOGO import ParserForINDIEGOGO
+from cameo.parserForINDIEGOGO import ParserForINDIEGOGO #old style
+from cameo.parserV2ForINDIEGOGO import ParserV2ForINDIEGOGO #new style
 from cameo.spiderForWEBACKERS import SpiderForWEBACKERS
 from cameo.parserForWEBACKERS import ParserForWEBACKERS
 from cameo.spiderForTECHORANGE import SpiderForTECHORANGE
@@ -39,7 +40,7 @@ class CameoShell:
                       "bnext":SpiderForBNEXT(),
                       "pedaily":SpiderForPEDAILY(),
                       "inside":SpiderForINSIDE()}
-        self.dicParsers = {"indiegogo":ParserForINDIEGOGO(),
+        self.dicParsers = {"indiegogo":ParserV2ForINDIEGOGO(),
                       "webackers":ParserForWEBACKERS(),
                       "techorange":ParserForTECHORANGE(),
                       "bnext":ParserForBNEXT(),
