@@ -131,7 +131,7 @@ class ParserV2ForINDIEGOGO:
                           self.parseProjectDetailsPage,
                           self.parseProjectStoryPage,
                           self.parseProjectUpdatesPage,
-                          #self.parseProjectCommentsPage,
+                          self.parseProjectCommentsPage,
                           #self.parseProjectBackersPage,
                           #self.parseProjectRewardPage,
                           self.afterParseProjectPage
@@ -385,15 +385,13 @@ class ParserV2ForINDIEGOGO:
                 #parse *_updates.html
                 lstDicUpdateData = []
                 #loop of append update data to lstDicUpdateData
-                for elementUpdate in root.css("desktop-updates div.activityUpdate"):
+                for elementUpdate in root.css("div.campaignBody-horizontal div.desktopUpdates div.activityUpdate"):
                     dicUpdateData = {}
                     #strUrl
                     dicUpdateData["strUrl"] = strProjUrl
                     #strUpdateContent
-                    strUpdateContent = u""
                     lstStrUpdateContentParagraph = elementUpdate.css("div.ugcContent *::text").extract()
-                    for strUpdateContentParagraph in lstStrUpdateContentParagraph:
-                        strUpdateContent = strUpdateContent + strUpdateContentParagraph.strip()
+                    strUpdateContent = self.utility.stripTextArray(lstStrText=lstStrUpdateContentParagraph)
                     dicUpdateData["strUpdateContent"] = strUpdateContent
                     #strUpdateDate
                     strUpdateDate = None
