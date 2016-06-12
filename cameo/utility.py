@@ -230,7 +230,16 @@ class Utility:
             with open(strTxtFilePath, "a") as txtFile:
                 #append line to .txt
                 txtFile.write(strLine)
-        
+    
+    #將字串陣列先一一去除換行符 接著合併之後再 strip
+    def stripTextArray(self, lstStrText=None):
+        strTextLine = u""
+        for strText in lstStrText:
+            if strText is not None:
+                strText = re.sub("\s", " ", strText)
+                strTextLine = strTextLine + u" " + strText.strip()
+        return strTextLine.strip()
+    
     #使用 國家對照表 查找 洲別 資料
     def getContinentByCountryName(self, strCountryName=None):
         countries = [
