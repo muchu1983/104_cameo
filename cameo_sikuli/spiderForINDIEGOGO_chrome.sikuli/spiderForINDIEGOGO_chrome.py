@@ -201,6 +201,24 @@ def saveCurrentPage(strFolderPath=None, strFilename=None):
     dicRegion["regCenter"].click(dicPng["os_save_btn"])
     wait(0.5)
     dicRegion["regSW"].wait(dicPng["chrome_download_finished"], 600)#wait save complete
+#fake random request confuse browser fingerpring algorithm
+def fakeRandomRequest():
+    wait(0.5)
+    lstStrFakeReqUrl = ["https://translate.google.com.tw/",
+                   "http://24h.pchome.com.tw/",
+                   "https://tw.news.yahoo.com/",
+                   "https://trello.com/",
+                   "https://www.indiegogo.com/explore#/browse/landing",
+                   "https://www.indiegogo.com/explore#/browse/writing",
+                   "https://www.indiegogo.com/explore#/browse/gaming",
+                   "https://www.indiegogo.com/explore#/browse/animals",
+                  ]
+    for intFakeTimes in range(random.randint(3,5)):
+        strFakeUrl = lstStrFakeReqUrl[random.randint(0,len(lstStrFakeReqUrl)-1)]
+        openChrome()
+        typeUrlOnChrome(strUrlText=strFakeUrl)
+        wait(5)
+    wait(0.5)
 #download explore pages
 def downloadExplorePages():
     goExplorePage()
@@ -250,7 +268,8 @@ def downloadProjectPages(strTargetCategory=None):
             if not os.path.exists(strProjHtmlFilePath):
                 isProjHtmlFileMissing = True
         if isProjHtmlFileMissing:
-            wait(random.randint(240,600)) #wait random time per project
+            fakeRandomRequest() # confuse browser fingerpring algorithm
+            wait(random.randint(60,120)) #wait random time per project
             #delete remaining project html files
             for strProjHtmlFileExtension in lstStrProjHtmlFileExtension:
                 strProjHtmlFilePath = strProjectsFolderPath + os.sep + strProjName + strProjHtmlFileExtension
@@ -280,18 +299,21 @@ def downloadProjectPages(strTargetCategory=None):
         dicRegion["regUp"].wait(dicPng["page_details_about"], 300)
         rightClickSaveCurrentPage(onImage=dicPng["page_details_about"], strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_details.html")
         #save updates html
+        fakeRandomRequest() # confuse browser fingerpring algorithm
         openChrome()
         typeUrlOnChrome(strUrlText=strProjUrl + "#/updates")
         wait(0.5)
         #unfoldUCBShowmore()
         saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_updates.html")
         #save comments html
+        fakeRandomRequest() # confuse browser fingerpring algorithm
         openChrome()
         typeUrlOnChrome(strUrlText=strProjUrl + "#/comments")
         wait(0.5)
         #unfoldUCBShowmore()
         saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_comments.html")
         #save backers html
+        fakeRandomRequest() # confuse browser fingerpring algorithm
         openChrome()
         typeUrlOnChrome(strUrlText=strProjUrl + "#/backers")
         wait(0.5)
