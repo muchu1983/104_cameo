@@ -24,20 +24,17 @@ class ParserV2ForINDIEGOGO:
         self.utility = Utility()
         self.dicSubCommandHandler = {"explore":[self.parseExplorePage],
                              "category":[self.parseCategoryPage],
-                             "project":[self.beforeParseProjectPage,
-                                     self.parseProjectDetailsPage,
-                                     self.parseProjectStoryPage,
-                                     self.parseProjectUpdatesPage,
-                                     self.parseProjectCommentsPage,
-                                     self.parseProjectBackersPage,
-                                     self.parseProjectRewardPage,
-                                     self.parseProjectGalleryPage,
-                                     self.afterParseProjectPage],
+                             "project":[self.parseProjectPage],
                              "individuals":[self.beforeParseIndividualsPage,
                                         self.parseIndividualsProfilePage,
                                         self.parseIndividualsCampaignsPage,
                                         self.afterParseIndividualsPage],
                              }
+        self.lstStrCategoryName = ["animals", "art", "comic", "community", "dance",
+                            "design", "education", "environment", "fashion",
+                            "film", "food", "gaming", "health", "music", "photography",
+                            "politics", "religion", "small_business", "sports",
+                            "technology", "theatre", "transmedia", "video_web", "writing"]
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
         self.dicParsedResultOfProject = {} #project.json 資料
@@ -52,8 +49,8 @@ class ParserV2ForINDIEGOGO:
                 "useage:\n"
                 "explore - parse explore.html then create category_url_list.txt\n"
                 "category - parse category.html then create project_url_list.txt\n"
-                "project category - parse project's html of given category then create .json\n"
-                "individuals category - parse individuals's html of given category then create .json\n")
+                "project category - parse project's html of given category (or automode) then create .json\n"
+                "individuals category - parse individuals's html of given category (or automode) then create .json\n")
 
     #執行 parser
     def runParser(self, lstSubcommand=None):
@@ -79,10 +76,9 @@ class ParserV2ForINDIEGOGO:
         strCategoryUrlListFilePath = strExploreResultFolderPath + u"\\category_url_list.txt"
         with open(strCategoryUrlListFilePath, "w+") as catUrlListFile:
             for strCategoryUrl in lstStrCategoryUrls:
-                strCategoryUrl = re.sub("#/browse", "", strCategoryUrl)
-                strCategoryUrl = re.search("^(https://www.indiegogo.com/explore/[a-z_]*)\??.*$" ,strCategoryUrl).group(1)
-                if strCategoryUrl == "https://www.indiegogo.com/explore/all":
-                    continue
+                strCategoryUrl = re.match("^(https://www.indiegogo.com/explore#/browse/[^\?]*)\?{1}.*$" ,strCategoryUrl).group(1)
+                if strCategoryUrl == "https://www.indiegogo.com/explore#/browse/all":
+                    continue #skip "All Categories" link
                 else:
                     catUrlListFile.write(strCategoryUrl + u"\n")
 #category #####################################################################################
@@ -91,10 +87,10 @@ class ParserV2ForINDIEGOGO:
         strCategoryUrlListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\INDIEGOGO\\category_url_list.txt"
         catUrlListFile = open(strCategoryUrlListFilePath)
         for strCategoryUrl in catUrlListFile:#category loop
-            strCategoryName = re.search("^https://www.indiegogo.com/explore/(.*)$" ,strCategoryUrl).group(1)
+            strCategoryName = re.match("^https://www.indiegogo.com/explore#/browse/(.*)$" ,strCategoryUrl).group(1)
             strCategoryHtmlPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\INDIEGOGO\\%s\\category.html"%(strCategoryName)
-            if os.path.exists(strCategoryHtmlPath):#check category.html exists
-                strCategoryResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\INDIEGOGO\\" + strCategoryName
+            if os.path.exists(strCategoryHtmlPath): #檢查 category.html 已下載完成
+                strCategoryResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\INDIEGOGO\\%s"%(strCategoryName)
                 if not os.path.exists(strCategoryResultFolderPath):
                     os.mkdir(strCategoryResultFolderPath) #mkdir parsed_result/INDIEGOGO/category/
                 with open(strCategoryHtmlPath, "r") as catHtmlFile: #open category.html
@@ -103,14 +99,12 @@ class ParserV2ForINDIEGOGO:
                     #project url
                     lstStrProjUrls = root.css("a.discoveryCard::attr(href)").extract() #parse proj urls
                     #記錄抓取時間
-                    fCTimeStamp = os.path.getctime(strCategoryHtmlPath)
-                    dtCrawlTime = datetime.datetime.fromtimestamp(fCTimeStamp)
-                    strCrawlTime = dtCrawlTime.strftime("%Y-%m-%d")
+                    strCategoryCrawlTime = self.utility.getCtimeOfFile(strFilePath=strCategoryHtmlPath)
                     #寫入檔案
                     strProjectUrlListFilePath = strCategoryResultFolderPath + u"\\project_url_list.txt"
                     strProjectTimeleftListFilePath = strCategoryResultFolderPath + u"\\project_timeleft_list.txt"
                     with open(strProjectUrlListFilePath, "w+") as projUrlListFile, open(strProjectTimeleftListFilePath, "w+") as projTimeleftListFile:
-                        projTimeleftListFile.write(u"Crawl-Time:%s\n"%strCrawlTime)
+                        projTimeleftListFile.write(u"Crawl-Time:%s\n"%strCategoryCrawlTime)
                         for strProjUrl in lstStrProjUrls:
                             #write to project_url_list.txt
                             projUrlListFile.write(strProjUrl + u"\n")
@@ -122,21 +116,43 @@ class ParserV2ForINDIEGOGO:
                             strEndDate = None
                             if strProjTimeleft == None: #InDemaned
                                 strEndDate = "indemand"
-                            elif intRemainDays == 0: #No time left
+                            elif strProjTimeleft.strip() == "No time left": #No time left
                                 strEndDate = "closed"
                             elif intRemainDays > 0:
-                                dtEndDate = dtCrawlTime + datetime.timedelta(days=intRemainDays)
+                                dtCategoryCrawlTime = datetime.datetime.strptime(strCategoryCrawlTime, "%Y-%m-%d")
+                                dtEndDate = dtCategoryCrawlTime + datetime.timedelta(days=intRemainDays)
                                 strEndDate = dtEndDate.strftime("%Y-%m-%d")
                             #write to project_timeleft_list.txt
-                            projTimeleftListFile.write(strProjUrl + u"," + unicode(intRemainDays) + u"," + unicode(strEndDate) + u"\n")
+                            projTimeleftListFile.write(u"%s,%s,%s\n"%(strProjUrl, unicode(intRemainDays), unicode(strEndDate)))
 #project #####################################################################################
+    #解析 project page 進入點
+    def parseProjectPage(self, strCategoryName=None):
+        lstFuncOfParseProject = [self.beforeParseProjectPage,
+                          self.parseProjectDetailsPage,
+                          self.parseProjectStoryPage,
+                          #self.parseProjectUpdatesPage,
+                          #self.parseProjectCommentsPage,
+                          #self.parseProjectBackersPage,
+                          #self.parseProjectRewardPage,
+                          self.afterParseProjectPage
+                          ]
+        if strCategoryName != "automode":
+            for funcOfParseProject in lstFuncOfParseProject:
+                funcOfParseProject(strCategoryName=strCategoryName)
+        else: #automode
+            for strCategoryName in self.lstStrCategoryName:
+                strCategoryResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\INDIEGOGO\\%s"%(strCategoryName)
+                if os.path.exists(strCategoryResultFolderPath): #檢查 category 資料夾已建立
+                    for funcOfParseProject in lstFuncOfParseProject:
+                        funcOfParseProject(strCategoryName=strCategoryName)
+    
     #解析 project page(s) 之前
     def beforeParseProjectPage(self, strCategoryName=None):
         self.dicParsedResultOfProject = {} #project.json 資料
         self.dicParsedResultOfUpdate = {} #update.json 資料
         self.dicParsedResultOfComment = {} #comment.json 資料
         self.dicParsedResultOfReward = {} #reward.json 資料
-        strProjectsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\INDIEGOGO\\%s\\projects"%strCategoryName)
+        strProjectsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\INDIEGOGO\\%s\\projects"%strCategoryName
         if not os.path.exists(strProjectsResultFolderPath):
             #mkdir parsed_result/INDIEGOGO/category/projects/
             os.mkdir(strProjectsResultFolderPath)
@@ -178,18 +194,12 @@ class ParserV2ForINDIEGOGO:
                 root = Selector(text=strPageSource)
                 #parse *_details.html
                 #strCreatorUrl
-                strIndividualsUrl = root.css("div.campaignTrustPassportDesktop-ownerInfo a.ng-binding[href*='individuals']::attr(href)").extract_first() #parse individuals url
+                strIndividualsUrl = root.css("div.campaignTrustInfo-section-campaigner div.campaignTrustInfo-campaigner div.campaignTrustInfo-campaignerDetails-fullProfileLink a.ng-binding[href*='individuals']::attr(href)").extract_first() #parse individuals url
                 self.dicParsedResultOfProject[strProjUrl]["strCreatorUrl"] = strIndividualsUrl
                 # append url to parsed_result/*/category/individuals_url_list.txt
                 strIndividualsUrlListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\INDIEGOGO\\%s\\individuals_url_list.txt"%(strCategoryName))
-                lstStrExistsIndividualsUrl = []
-                if os.path.exists(strIndividualsUrlListFilePath):
-                    with open(strIndividualsUrlListFilePath, "r") as individualsUrlListFile:
-                        lstStrExistsIndividualsUrl = individualsUrlListFile.readlines()
-                if strIndividualsUrl+u"\n" not in lstStrExistsIndividualsUrl:#檢查有無重覆的 individuals url
-                    with open(strIndividualsUrlListFilePath, "a") as individualsUrlListFile:
-                        individualsUrlListFile.write(strIndividualsUrl + u"\n") #append url to individuals_url_list.txt
-                    
+                self.utility.appendLineToTxtIfNotExists(strTxtFilePath=strIndividualsUrlListFilePath, strLine=strIndividualsUrl)
+    
     #解析 _story.html
     def parseProjectStoryPage(self, strCategoryName=None):
         strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"\\INDIEGOGO\\%s\\projects"%strCategoryName)

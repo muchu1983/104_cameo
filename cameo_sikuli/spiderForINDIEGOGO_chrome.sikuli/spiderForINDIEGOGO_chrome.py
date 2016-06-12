@@ -213,7 +213,7 @@ def downloadCategoryPages():
     strCategoryUrlListFilePath = strBaseResFolderPath + r"\parsed_result\INDIEGOGO\category_url_list.txt"
     catUrlListFile = open(strCategoryUrlListFilePath)
     for strCategoryUrl in catUrlListFile:#category loop
-        strCategoryName = r"" + re.search("^https://www.indiegogo.com/explore/(.*)$" ,strCategoryUrl).group(1)
+        strCategoryName = r"" + re.search("^https://www.indiegogo.com/explore#/browse/(.*)$" ,strCategoryUrl).group(1)
         strCategoryFolderPath = strBaseResFolderPath + r"\source_html\INDIEGOGO\%s"%(strCategoryName)
         if not os.path.exists(strCategoryFolderPath):
             os.mkdir(strCategoryFolderPath) #mkdir category

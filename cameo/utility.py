@@ -219,6 +219,18 @@ class Utility:
                 strParsedDateBaseOnGivenBaseDate = (dtParsedDateBaseOnNow - timedeltaNowToBase).strftime("%Y-%m-%d")
         return strParsedDateBaseOnGivenBaseDate
         
+    #如果沒有重覆，附加一行文字至 txt 檔案的最後面
+    def appendLineToTxtIfNotExists(self, strTxtFilePath=None, strLine=None):
+        lstStrLineInTxt = []
+        strLine = strLine.strip() + u"\n"
+        if os.path.exists(strTxtFilePath):
+            with open(strTxtFilePath, "r") as txtFile:
+                lstStrLineInTxt = txtFile.readlines()
+        if strLine not in lstStrLineInTxt:#檢查有無重覆
+            with open(strTxtFilePath, "a") as txtFile:
+                #append line to .txt
+                txtFile.write(strLine)
+        
     #使用 國家對照表 查找 洲別 資料
     def getContinentByCountryName(self, strCountryName=None):
         countries = [
