@@ -208,14 +208,9 @@ def fakeRandomRequest():
                    "http://24h.pchome.com.tw/",
                    "https://tw.news.yahoo.com/",
                    "https://trello.com/",
-                   "https://www.indiegogo.com/search#/?q=taiwan",
-                   "https://www.indiegogo.com/search#/?q=number",
-                   "https://www.indiegogo.com/search#/?q=one",
-                   "https://www.indiegogo.com/search#/?q=TWNO1",
-                   "https://www.indiegogo.com/explore#/browse/landing",
-                   "https://www.indiegogo.com/explore#/browse/writing",
-                   "https://www.indiegogo.com/explore#/browse/gaming",
-                   "https://www.indiegogo.com/explore#/browse/animals",
+                   "http://www.distilnetworks.com/",
+                   "https://www.whatismyip.com/",
+                   "twitch.tv/hichocolate"
                   ]
     for intFakeTimes in range(random.randint(3,5)):
         strFakeUrl = lstStrFakeReqUrl[random.randint(0,len(lstStrFakeReqUrl)-1)]
