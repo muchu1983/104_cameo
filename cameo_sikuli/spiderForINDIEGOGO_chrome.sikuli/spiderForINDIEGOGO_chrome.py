@@ -115,7 +115,7 @@ def unfoldUCBShowmore():
     dicRegion["regSW"].wait(dicPng["page_blur_story"], 300)
 #pause if interruption page found
 def checkAndPauseBeforeSave():
-    if dicRegion["regUp"].exists(dicPng["page_your_interruption"]):
+    if dicRegion["regLeft"].exists(dicPng["page_your_interruption"]):
         popup(u"distil networks found us! （╯‵□′）╯︵┴─┴")
     if dicRegion["regUp"].exists(dicPng["page_proxy_error"]):
         popup(u"proxy error! （╯‵□′）╯︵┴─┴")

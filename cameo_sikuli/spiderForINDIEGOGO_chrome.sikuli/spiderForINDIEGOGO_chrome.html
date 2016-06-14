@@ -187,7 +187,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     dicRegion[<span class="str">"regSW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"page_blur_story"</span>], <span class="dig">300</span>)
 <span class="cmt">#pause if interruption page found
 </span><span class="kw">def</span> checkAndPauseBeforeSave():
-    <span class="kw">if</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_your_interruption"</span>]):
+    <span class="kw">if</span> dicRegion[<span class="str">"regLeft"</span>].exists(dicPng[<span class="str">"page_your_interruption"</span>]):
         <span class="skw">popup</span>(<span class="str">u"distil networks found us! （╯‵□′）╯︵┴─┴"</span>)
     <span class="kw">if</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_proxy_error"</span>]):
         <span class="skw">popup</span>(<span class="str">u"proxy error! （╯‵□′）╯︵┴─┴"</span>)
