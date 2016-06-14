@@ -35,7 +35,6 @@ dicPng = {"chrome_close":Pattern("chrome_close.png").targetOffset(-24,-1),
           "page_ucb_more":"page_ucb_more.png", #different between before click and after click
           "page_new_style_check":"page_new_style_check.png",
           "page_blur_story":"page_blur_story.png",
-          "page_focus_story":"page_focus_story.png",
           "page_focus_profile":"page_focus_profile.png", 
           "page_story_details":"page_story_details.png",
           "page_details_about":"page_details_about.png",
@@ -291,7 +290,6 @@ def downloadProjectPages(strTargetCategory=None):
             continue #skip this url
         #wait load completed
         dicRegion["regRight"].wait(dicPng["page_new_style_check"], 300)
-        dicRegion["regSW"].wait(dicPng["page_focus_story"], 300)
         #save story html
         saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_story.html")
         #save see more details html 

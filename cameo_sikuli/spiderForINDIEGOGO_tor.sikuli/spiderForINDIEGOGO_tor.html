@@ -108,7 +108,6 @@ dicPng = {<span class="str">"tor_close"</span>:Pattern(<img src="tor_close.png" 
         <span class="str">"page_ucb_more"</span>:<img src="page_ucb_more.png" />, <span class="cmt">#different between before click and after click</span>
         <span class="str">"page_new_style_check"</span>:<img src="page_new_style_check.png" />,
         <span class="str">"page_blur_story"</span>:<img src="page_blur_story.png" />,
-        <span class="str">"page_focus_story"</span>:<img src="page_focus_story.png" />,
         <span class="str">"page_focus_profile"</span>:<img src="page_focus_profile.png" />,
         <span class="str">"page_story_details"</span>:<img src="page_story_details.png" />,
         <span class="str">"page_details_about"</span>:<img src="page_details_about.png" />,
@@ -137,10 +136,10 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     <span class="cmt">#close prev tor
 </span>    <span class="kw">if</span> dicRegion[<span class="str">"regNW"</span>].exists(dicPng[<span class="str">"tor_close"</span>]):
         dicRegion[<span class="str">"regNW"</span>].<span class="skw">click</span>(dicPng[<span class="str">"tor_close"</span>])
-    <span class="skw">wait</span>(<span class="dig">2</span>)
+    <span class="skw">wait</span>(<span class="dig">10</span>)
     <span class="cmt">#re-open new tor
 </span>    App.open(<span class="str">"C:\\Users\\Administrator\\Desktop\\Tor Browser\\Browser\\firefox.exe"</span>)
-    <span class="skw">wait</span>(<span class="dig">2</span>)<span class="cmt">#wait to running</span>
+    <span class="skw">wait</span>(<span class="dig">10</span>)<span class="cmt">#wait to running</span>
     dicRegion[<span class="str">"regNW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"tor_home"</span>], <span class="dig">300</span>)
     dicRegion[<span class="str">"regNW"</span>].<span class="skw">click</span>(dicPng[<span class="str">"tor_home"</span>])
     dicRegion[<span class="str">"regNE"</span>].waitVanish(dicPng[<span class="str">"tor_stop"</span>], <span class="dig">300</span>)
@@ -148,6 +147,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     <span class="cmt">#maximized tor window
 </span>    <span class="kw">if</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"tor_maximized_window"</span>]):
         dicRegion[<span class="str">"regUp"</span>].<span class="skw">click</span>(dicPng[<span class="str">"tor_maximized_window"</span>])
+        <span class="skw">wait</span>(<span class="dig">2</span>)
 <span class="cmt"># delete origin text
 </span><span class="kw">def</span> delOriginText():
     <span class="skw">type</span>(<span class="str">"a"</span>, KeyModifier.CTRL)
@@ -196,8 +196,8 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         <span class="skw">popup</span>(<span class="str">u"distil networks found us! （╯‵□′）╯︵┴─┴"</span>)
     <span class="kw">if</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_proxy_error"</span>]):
         <span class="skw">popup</span>(<span class="str">u"proxy error! （╯‵□′）╯︵┴─┴"</span>)
-<span class="cmt">#type url on chrome
-</span><span class="kw">def</span> typeUrlOnChrome(strUrlText=None):
+<span class="cmt">#type url on tor
+</span><span class="kw">def</span> typeUrlOnTor(strUrlText=None):
     <span class="kw">while</span> True:
         <span class="skw">type</span>(<span class="str">"l"</span>, KeyModifier.CTRL)
         <span class="skw">wait</span>(<span class="dig">0.5</span>)
@@ -208,9 +208,17 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         <span class="skw">wait</span>(<span class="dig">0.5</span>)
         dicRegion[<span class="str">"regNE"</span>].waitVanish(dicPng[<span class="str">"tor_stop"</span>], <span class="dig">300</span>)
         dicRegion[<span class="str">"regNE"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"tor_reload"</span>], <span class="dig">300</span>)
+        <span class="skw">wait</span>(<span class="dig">5</span>)
+        <span class="cmt">#recheck for server may redirect to home page
+</span>        dicRegion[<span class="str">"regNE"</span>].waitVanish(dicPng[<span class="str">"tor_stop"</span>], <span class="dig">300</span>)
+        dicRegion[<span class="str">"regNE"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"tor_reload"</span>], <span class="dig">300</span>)
+        <span class="skw">wait</span>(<span class="dig">0.5</span>)
+        <span class="cmt">#click tor_not_now popup
+</span>        <span class="kw">if</span> dicRegion[<span class="str">"regNW"</span>].exists(dicPng[<span class="str">"tor_not_now"</span>]):
+           dicRegion[<span class="str">"regNW"</span>].<span class="skw">click</span>(dicPng[<span class="str">"tor_not_now"</span>])
         <span class="cmt">#check page "something not right" show?
 </span>        <span class="kw">if</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_not_right"</span>]):
-            <span class="cmt">#restart chrome and run typeUrlOnChrome again
+            <span class="cmt">#restart tor and run typeUrlOnTor again
 </span>            openTor()
         <span class="kw">else</span>:
             <span class="cmt">#ok everything is right, go out while loop
@@ -218,7 +226,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
 <span class="cmt"># go to explore page
 </span><span class="kw">def</span> goExplorePage():
     openTor()
-    typeUrlOnChrome(strUrlText=<span class="str">"https://www.indiegogo.com/explore"</span>)
+    typeUrlOnTor(strUrlText=<span class="str">"https://www.indiegogo.com/explore"</span>)
     dicRegion[<span class="str">"regUp"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"page_explore"</span>], <span class="dig">300</span>)
     dicRegion[<span class="str">"regNE"</span>].waitVanish(dicPng[<span class="str">"tor_stop"</span>], <span class="dig">300</span>)
     dicRegion[<span class="str">"regNE"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"tor_reload"</span>], <span class="dig">300</span>)
@@ -239,8 +247,8 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     dicRegion[<span class="str">"regNE"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"tor_reload"</span>], <span class="dig">300</span>)
     checkAndPauseBeforeSave()
     <span class="skw">rightClick</span>(onImage)
-    dicRegion[<span class="str">"regCenter"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"os_right_save_as"</span>], <span class="dig">300</span>)
-    dicRegion[<span class="str">"regCenter"</span>].<span class="skw">click</span>(dicPng[<span class="str">"os_right_save_as"</span>])
+    dicRegion[<span class="str">"regUp"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"os_right_save_as"</span>], <span class="dig">300</span>)
+    dicRegion[<span class="str">"regUp"</span>].<span class="skw">click</span>(dicPng[<span class="str">"os_right_save_as"</span>])
     dicRegion[<span class="str">"regCenter"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"os_save_btn"</span>], <span class="dig">300</span>)
     <span class="kw">if</span> strFolderPath != None:
         typeFolderPath(strFolderPath)
@@ -253,7 +261,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     dicRegion[<span class="str">"regCenter"</span>].<span class="skw">click</span>(dicPng[<span class="str">"os_save_btn"</span>])
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
     dicRegion[<span class="str">"regSW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"tor_download_finished"</span>], <span class="dig">600</span>)<span class="cmt">#wait save complete</span>
-<span class="cmt">#ask chrome save current page
+<span class="cmt">#ask tor save current page
 </span><span class="kw">def</span> saveCurrentPage(strFolderPath=None, strFilename=None):
     logging.info(<span class="str">"prepare to save "</span> + strFilename)
     dicRegion[<span class="str">"regNE"</span>].waitVanish(dicPng[<span class="str">"tor_stop"</span>], <span class="dig">300</span>)
@@ -284,14 +292,14 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     strCategoryUrlListFilePath = strBaseResFolderPath + <span class="str">r"\parsed_result\INDIEGOGO\category_url_list.txt"</span>
     catUrlListFile = open(strCategoryUrlListFilePath)
     <span class="kw">for</span> strCategoryUrl <span class="kw">in</span> catUrlListFile:<span class="cmt">#category loop</span>
-        strCategoryName = <span class="str">r""</span> + re.search(<span class="str">"^https://www.indiegogo.com/explore/(.*)$"</span> ,strCategoryUrl).group(<span class="dig">1</span>)
+        strCategoryName = <span class="str">r""</span> + re.search(<span class="str">"^https://www.indiegogo.com/explore#/browse/(.*)$"</span> ,strCategoryUrl).group(<span class="dig">1</span>)
         strCategoryFolderPath = strBaseResFolderPath + <span class="str">r"\source_html\INDIEGOGO\%s"</span>%(strCategoryName)
         <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strCategoryFolderPath):
             os.mkdir(strCategoryFolderPath) <span class="cmt">#mkdir category</span>
         strCategoryFilePath = strCategoryFolderPath + <span class="str">r"\category.html"</span>
         <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strCategoryFilePath):<span class="cmt">#check category.html</span>
             openTor()
-            typeUrlOnChrome(strUrlText=strCategoryUrl)
+            typeUrlOnTor(strUrlText=strCategoryUrl)
             dicRegion[<span class="str">"regNE"</span>].waitVanish(dicPng[<span class="str">"tor_stop"</span>], <span class="dig">300</span>)
             dicRegion[<span class="str">"regNE"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"tor_reload"</span>], <span class="dig">300</span>)
             unfoldCategoryPage()
@@ -327,25 +335,21 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
                 strProjHtmlFilePath = strProjectsFolderPath + os.sep + strProjName + strProjHtmlFileExtension
                 <span class="kw">if</span> os.path.exists(strProjHtmlFilePath):
                     os.remove(strProjHtmlFilePath)
-            openTor() <span class="cmt">#open chrome </span>
-            typeUrlOnChrome(strUrlText=strProjUrl)
+            openTor() <span class="cmt">#open tor </span>
+            typeUrlOnTor(strUrlText=strProjUrl)
             <span class="skw">wait</span>(<span class="dig">0.5</span>)
             <span class="cmt">#check page "something not right" show?
 </span>            <span class="kw">while</span>(dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_not_right"</span>])):
-                openTor() <span class="cmt">#reopen chrome for load standard style</span>
-                typeUrlOnChrome(strUrlText=strProjUrl)
+                openTor() <span class="cmt">#reopen tor for reload current page</span>
+                typeUrlOnTor(strUrlText=strProjUrl)
                 <span class="skw">wait</span>(<span class="dig">0.5</span>)
         <span class="kw">else</span>:
             <span class="kw">continue</span> <span class="cmt">#skip this url</span>
-        <span class="cmt">#click tor_not_now popup
-</span>        <span class="kw">if</span> dicRegion[<span class="str">"regNW"</span>].exists(dicPng[<span class="str">"tor_not_now"</span>]):
-           dicRegion[<span class="str">"regNW"</span>].<span class="skw">click</span>(dicPng[<span class="str">"tor_not_now"</span>])
         <span class="cmt">#check page not found or is currently updated or under review
 </span>        <span class="kw">if</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_not_found"</span>]) <span class="kw">or</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_not_found_2"</span>]) <span class="kw">or</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_currently_updated"</span>]) <span class="kw">or</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_under_review"</span>]):
             <span class="kw">continue</span> <span class="cmt">#skip this url</span>
         <span class="cmt">#wait load completed
 </span>        dicRegion[<span class="str">"regRight"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"page_new_style_check"</span>], <span class="dig">300</span>)
-        dicRegion[<span class="str">"regSW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"page_focus_story"</span>], <span class="dig">300</span>)
         <span class="cmt">#save story html
 </span>        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + <span class="str">"_story.html"</span>)
         <span class="cmt">#save see more details html 
@@ -355,19 +359,19 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         rightClickSaveCurrentPage(onImage=dicPng[<span class="str">"page_details_about"</span>], strFolderPath=strProjectsFolderPath, strFilename=strProjName + <span class="str">"_details.html"</span>)
         <span class="cmt">#save updates html
 </span>        openTor()
-        typeUrlOnChrome(strUrlText=strProjUrl + <span class="str">"#/updates"</span>)
+        typeUrlOnTor(strUrlText=strProjUrl + <span class="str">"#/updates"</span>)
         <span class="skw">wait</span>(<span class="dig">0.5</span>)
         <span class="cmt">#unfoldUCBShowmore()
 </span>        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + <span class="str">"_updates.html"</span>)
         <span class="cmt">#save comments html
 </span>        openTor()
-        typeUrlOnChrome(strUrlText=strProjUrl + <span class="str">"#/comments"</span>)
+        typeUrlOnTor(strUrlText=strProjUrl + <span class="str">"#/comments"</span>)
         <span class="skw">wait</span>(<span class="dig">0.5</span>)
         <span class="cmt">#unfoldUCBShowmore()
 </span>        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + <span class="str">"_comments.html"</span>)
         <span class="cmt">#save backers html
 </span>        openTor()
-        typeUrlOnChrome(strUrlText=strProjUrl + <span class="str">"#/backers"</span>)
+        typeUrlOnTor(strUrlText=strProjUrl + <span class="str">"#/backers"</span>)
         <span class="skw">wait</span>(<span class="dig">0.5</span>)
         <span class="cmt">#unfoldUCBShowmore()
 </span>        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + <span class="str">"_backers.html"</span>)
@@ -400,8 +404,8 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
                 strIndividualsHtmlFilePath = strIndividualsFolderPath + os.sep + strIndividualsId + strIndividualsHtmlFileExtension
                 <span class="kw">if</span> os.path.exists(strIndividualsHtmlFilePath):
                     os.remove(strIndividualsHtmlFilePath)
-            openTor() <span class="cmt">#open chrome</span>
-            typeUrlOnChrome(strUrlText=strIndividualsUrl)
+            openTor() <span class="cmt">#open tor</span>
+            typeUrlOnTor(strUrlText=strIndividualsUrl)
             <span class="skw">wait</span>(<span class="dig">0.5</span>)
         <span class="kw">else</span>:
             <span class="kw">continue</span> <span class="cmt">#skip this url</span>
@@ -415,7 +419,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         <span class="cmt">#save campaigns html 
 </span>        strIndividualsCampaignsUrl = strIndividualsUrl + <span class="str">u"/campaigns"</span>
         openTor()
-        typeUrlOnChrome(strUrlText=strIndividualsCampaignsUrl)
+        typeUrlOnTor(strUrlText=strIndividualsCampaignsUrl)
         <span class="skw">wait</span>(<span class="dig">0.5</span>)
         saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsId + <span class="str">"_campaigns.html"</span>)
     individualsUrlListFile.close()
