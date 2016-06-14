@@ -208,7 +208,6 @@ def fakeRandomRequest():
                    "http://24h.pchome.com.tw/",
                    "https://tw.news.yahoo.com/",
                    "https://trello.com/",
-                   "http://www.distilnetworks.com/",
                    "https://www.whatismyip.com/",
                    "twitch.tv/hichocolate"
                   ]
