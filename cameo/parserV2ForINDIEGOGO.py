@@ -57,6 +57,14 @@ class ParserV2ForINDIEGOGO:
             strArg1 = lstSubcommand[1]
         for handler in self.dicSubCommandHandler[strSubcommand]:
             handler(strArg1)
+#detect distil networks ######################################################################
+    #檢查 是否為 distil networks 頁面
+    def detectDistillNetworksInterruptionPage(self, root=None):
+        strPardonText = root.css("body.block-page div.content h1::text").extract_first()
+        isBlockPage = False
+        if strPardonText and strPardonText.strip().startswith("Pardon Our Interruption..."): # is not None
+            isBlockPage = True
+        return isBlockPage
 #explore #####################################################################################
     #解析 explore.html
     def parseExplorePage(self, uselessArg1=None):
@@ -189,6 +197,10 @@ class ParserV2ForINDIEGOGO:
                     self.dicParsedResultOfProject[strProjUrl] = {}
                 strPageSource = projDetailsHtmlFile.read()
                 root = Selector(text=strPageSource)
+                #detect distil networks
+                if self.detectDistillNetworksInterruptionPage(root=root):
+                    logging.error("%s is distil networks block-page"%strProjUrl)
+                    raise ValueError("%s is distil networks block-page"%strProjUrl)
                 #parse *_details.html
                 #strCreatorUrl
                 strIndividualsUrl = root.css("div.campaignTrustInfo-section-campaigner div.campaignTrustInfo-campaigner div.campaignTrustInfo-campaignerDetails-fullProfileLink a.ng-binding[href*='individuals']::attr(href)").extract_first() #parse individuals url
@@ -214,6 +226,10 @@ class ParserV2ForINDIEGOGO:
                         self.dicParsedResultOfProject[strProjUrl] = {}
                     strPageSource = projStoryHtmlFile.read()
                     root = Selector(text=strPageSource)
+                    #detect distil networks
+                    if self.detectDistillNetworksInterruptionPage(root=root):
+                        logging.error("%s is distil networks block-page"%strProjUrl)
+                        raise ValueError("%s is distil networks block-page"%strProjUrl)
                     #parse *_story.html
                     #strSource
                     self.dicParsedResultOfProject[strProjUrl]["strSource"] = \
@@ -379,6 +395,10 @@ class ParserV2ForINDIEGOGO:
                     continue #skip
                 strPageSource = projUpdatesHtmlFile.read()
                 root = Selector(text=strPageSource)
+                #detect distil networks
+                if self.detectDistillNetworksInterruptionPage(root=root):
+                    logging.error("%s is distil networks block-page"%strProjUrl)
+                    raise ValueError("%s is distil networks block-page"%strProjUrl)
                 #parse *_updates.html
                 lstDicUpdateData = []
                 #loop of append update data to lstDicUpdateData
@@ -427,6 +447,10 @@ class ParserV2ForINDIEGOGO:
                     continue #skip
                 strPageSource = projCommentsHtmlFile.read()
                 root = Selector(text=strPageSource)
+                #detect distil networks
+                if self.detectDistillNetworksInterruptionPage(root=root):
+                    logging.error("%s is distil networks block-page"%strProjUrl)
+                    raise ValueError("%s is distil networks block-page"%strProjUrl)
                 #parse *_comments.html
                 lstDicCommentData = []
                 #loop of append comment data to lstDicCommentData
@@ -483,6 +507,10 @@ class ParserV2ForINDIEGOGO:
                     self.dicParsedResultOfProject[strProjUrl] = {}
                 strPageSource = projBackersHtmlFile.read()
                 root = Selector(text=strPageSource)
+                #detect distil networks
+                if self.detectDistillNetworksInterruptionPage(root=root):
+                    logging.error("%s is distil networks block-page"%strProjUrl)
+                    raise ValueError("%s is distil networks block-page"%strProjUrl)
                 #parse *_backers.html
                 #lstStrBacker (注意:這裡使用了 root.css().css())
                 lstStrBacker = root.css("div.campaignBody-horizontal campaign-backers div.campaignBackers div.campaignBackers-pledge-backer-details").css("div.campaignBackers-pledge-backer-details-text::text,a.campaignBackers-pledge-backer-details-text::text").extract()
@@ -502,6 +530,10 @@ class ParserV2ForINDIEGOGO:
                     continue #skip
                 strPageSource = projStoryHtmlFile.read()
                 root = Selector(text=strPageSource)
+                #detect distil networks
+                if self.detectDistillNetworksInterruptionPage(root=root):
+                    logging.error("%s is distil networks block-page"%strProjUrl)
+                    raise ValueError("%s is distil networks block-page"%strProjUrl)
                 #parse *_story.html (for reward data)
                 lstDicRewardData = []
                 #loop of append reward data to lstDicRewardData
@@ -609,6 +641,10 @@ class ParserV2ForINDIEGOGO:
                     self.dicParsedResultOfProfile[strIndividualsUrl] = {}
                 strPageSource = individualsProfileHtmlFile.read()
                 root = Selector(text=strPageSource)
+                #detect distil networks
+                if self.detectDistillNetworksInterruptionPage(root=root):
+                    logging.error("%s is distil networks block-page"%strIndividualsUrl)
+                    raise ValueError("%s is distil networks block-page"%strIndividualsUrl)
                 #parse *_profile.html
                 #strUrl
                 self.dicParsedResultOfProfile[strIndividualsUrl]["strUrl"] = strIndividualsUrl
@@ -689,6 +725,10 @@ class ParserV2ForINDIEGOGO:
                     self.dicParsedResultOfProfile[strIndividualsUrl] = {}
                 strPageSource = individualsCampaignHtmlFile.read()
                 root = Selector(text=strPageSource)
+                #detect distil networks
+                if self.detectDistillNetworksInterruptionPage(root=root):
+                    logging.error("%s is distil networks block-page"%strIndividualsUrl)
+                    raise ValueError("%s is distil networks block-page"%strIndividualsUrl)
                 #parse *_campaigns.html
                 #lstStrCreatedProject and lstStrCreatedProjectUrl
                 elementCreatedProj = root.css("div.i-profile-container div.i-profile-campaigns-section:nth-of-type(1)")
