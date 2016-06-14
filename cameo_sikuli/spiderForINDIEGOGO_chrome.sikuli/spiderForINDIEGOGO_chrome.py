@@ -209,7 +209,10 @@ def fakeRandomRequest():
                    "https://tw.news.yahoo.com/",
                    "https://trello.com/",
                    "https://www.whatismyip.com/",
-                   "twitch.tv/hichocolate"
+                   "https://www.twitch.tv/hichocolate",
+                   "https://www.youtube.com/",
+                   "https://build.phonegap.com/",
+                   "https://tw.money.yahoo.com/currency"
                   ]
     for intFakeTimes in range(random.randint(3,5)):
         strFakeUrl = lstStrFakeReqUrl[random.randint(0,len(lstStrFakeReqUrl)-1)]
