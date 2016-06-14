@@ -270,7 +270,7 @@ def downloadProjectPages(strTargetCategory=None):
                 isProjHtmlFileMissing = True
         if isProjHtmlFileMissing:
             fakeRandomRequest() # confuse browser fingerpring algorithm
-            wait(random.randint(60,120)) #wait random time per project
+            wait(random.randint(10,30)) #wait random time per project
             #delete remaining project html files
             for strProjHtmlFileExtension in lstStrProjHtmlFileExtension:
                 strProjHtmlFilePath = strProjectsFolderPath + os.sep + strProjName + strProjHtmlFileExtension
