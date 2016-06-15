@@ -48,7 +48,7 @@ dicPng = {"tor_close":Pattern("tor_close.png").targetOffset(-14,0),
         "page_currently_updated":"currently_updated.png",
         "page_under_review":"page_under_review.png",
         "os_foldername_bar":Pattern("os_foldername_bar.png").targetOffset(10,0),
-        "os_filename_bar":Pattern("os_filename_bar.png").targetOffset(36,0),
+        "os_filename_bar":Pattern("os_filename_bar.png").targetOffset(48,0),
         "os_right_save_as":"os_right_save_as.png",
         "os_save_btn":"os_save_btn.png",
         }
