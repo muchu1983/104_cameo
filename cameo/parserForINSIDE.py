@@ -134,7 +134,7 @@ class ParserForINSIDE:
                 #strSiteName
                 dicNewsData["strSiteName"] = u"INSIDE"
                 #strUrl
-                strUrl = root.css("div.thumb-container a::attr(href)").extract_first()
+                strUrl = root.css("div.post-container a.published-time::attr(href)").extract_first()
                 dicNewsData["strUrl"] = strUrl
                 #strTitle
                 strTitle = root.css("div.post-container h2.entry-title::text").extract_first()
