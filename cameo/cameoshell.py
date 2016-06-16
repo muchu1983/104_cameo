@@ -22,6 +22,7 @@ from cameo.parserForPEDAILY import ParserForPEDAILY
 from cameo.importerForPEDAILY import ImporterForPEDAILY
 from cameo.spiderForINSIDE import SpiderForINSIDE
 from cameo.parserForINSIDE import ParserForINSIDE
+from cameo.importerForINSIDE import ImporterForINSIDE
 from cameo.cleaner import CleanerForINDIEGOGO
 from cameo.reporter import ReporterForINDIEGOGO
 from cameo.reporter import ReporterForWEBACKERS
@@ -48,7 +49,8 @@ class CameoShell:
                       "inside":ParserForINSIDE()}
         self.dicImporters = {"techorange":ImporterForTECHORANGE(),
                         "bnext":ImporterForBNEXT(),
-                        "pedaily":ImporterForPEDAILY()}
+                        "pedaily":ImporterForPEDAILY(),
+                        "inside":ImporterForINSIDE()}
         self.dicCleaners = {"indiegogo":CleanerForINDIEGOGO()}
         self.dicReporters = {"indiegogo":ReporterForINDIEGOGO(),
                        "webackers":ReporterForWEBACKERS()}
