@@ -122,8 +122,8 @@ class LocalDbForINSIDE:
         self.db.commitSQL(strSQL=strSQL)
         
     #更新 news 為尚未開始下載狀態
-    def updateNewsStatusIsNotGot(self, strNewsUrl=None):
-        strSQL = "UPDATE inside_news SET isGot=0 WHERE strNewsUrl='%s'"%strNewsUrl
+    def updateNewsStatusIsNotGot(self, strNewsUrlPart=None):
+        strSQL = "UPDATE inside_news SET isGot=0 WHERE strNewsUrl LIKE'%" + strNewsUrlPart + "%'"
         self.db.commitSQL(strSQL=strSQL)
         
     #清除測試資料 (clear table)

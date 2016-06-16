@@ -125,34 +125,42 @@ class ParserForINSIDE:
         lstStrNewsHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strNewsHtmlFolderPath, strSuffixes=u"_news.html")
         for strNewsHtmlFilePath in lstStrNewsHtmlFilePath:
             logging.info("parse %s"%strNewsHtmlFilePath)
-            dicNewsData = {} #新聞資料物件
-            with open(strNewsHtmlFilePath, "r") as newsHtmlFile:
-                strPageSource = newsHtmlFile.read()
-                root = Selector(text=strPageSource)
-            #解析 news.html
-            #strSiteName
-            dicNewsData["strSiteName"] = u"INSIDE"
-            #strUrl
-            strUrl = root.css("div.thumb-container a::attr(href)").extract_first()
-            dicNewsData["strUrl"] = strUrl
-            #strTitle
-            strTitle = root.css("div.post-container h2.entry-title::text").extract_first()
-            dicNewsData["strTitle"] = strTitle
-            #strContent
-            lstStrContent = root.css("div.post-container div.content *:not(script)::text").extract()
-            strContent = re.sub("\s", "", u"".join(lstStrContent)) #接合 新聞內容 並去除空白字元
-            dicNewsData["strContent"] = strContent.strip()
-            #lstStrKeyword
-            lstStrKeyword = root.css("div.cat-list a::text").extract()
-            dicNewsData["lstStrKeyword"] = lstStrKeyword
-            #strPublishDate
-            strPublishDate = root.css("div.post-container a.published-time::text").extract_first().strip()
-            strPublishDate = self.utility.parseStrDateByDateparser(strOriginDate=strPublishDate)
-            dicNewsData["strPublishDate"] = strPublishDate
-            #strCrawlDate
-            dicNewsData["strCrawlDate"] = self.utility.getCtimeOfFile(strFilePath=strNewsHtmlFilePath)
-            #將 新聞資料物件 加入 json
-            self.dicParsedResultOfNews.append(dicNewsData)
+            try:
+                dicNewsData = {} #新聞資料物件
+                with open(strNewsHtmlFilePath, "r") as newsHtmlFile:
+                    strPageSource = newsHtmlFile.read()
+                    root = Selector(text=strPageSource)
+                #解析 news.html
+                #strSiteName
+                dicNewsData["strSiteName"] = u"INSIDE"
+                #strUrl
+                strUrl = root.css("div.thumb-container a::attr(href)").extract_first()
+                dicNewsData["strUrl"] = strUrl
+                #strTitle
+                strTitle = root.css("div.post-container h2.entry-title::text").extract_first()
+                dicNewsData["strTitle"] = strTitle
+                #strContent
+                lstStrContent = root.css("div.post-container div.content *:not(script)::text").extract()
+                strContent = re.sub("\s", "", u"".join(lstStrContent)) #接合 新聞內容 並去除空白字元
+                dicNewsData["strContent"] = strContent.strip()
+                #lstStrKeyword
+                lstStrKeyword = root.css("div.cat-list a::text").extract()
+                dicNewsData["lstStrKeyword"] = lstStrKeyword
+                #strPublishDate
+                strPublishDate = root.css("div.post-container a.published-time::text").extract_first().strip()
+                strPublishDate = self.utility.parseStrDateByDateparser(strOriginDate=strPublishDate)
+                dicNewsData["strPublishDate"] = strPublishDate
+                #strCrawlDate
+                dicNewsData["strCrawlDate"] = self.utility.getCtimeOfFile(strFilePath=strNewsHtmlFilePath)
+                #將 新聞資料物件 加入 json
+                self.dicParsedResultOfNews.append(dicNewsData)
+            except:
+                logging.error("parse %s fail skip it"%strNewsHtmlFilePath)
+                # set isGot = 0
+                strNewsHtmlFileName = strNewsHtmlFilePath.split(os.sep)[-1]
+                strNewsName = re.match(u"^(?P<newsName>.*)_news.html$", strNewsHtmlFileName).group("newsName")
+                self.db.updateNewsStatusIsNotGot(strNewsUrlPart=strNewsName)
+                continue #skip it
             #每一千筆資料另存一個 json
             if len(self.dicParsedResultOfNews) == self.intMaxNewsPerNewsJsonFile:
                 self.intNewsJsonNum = self.intNewsJsonNum + self.intMaxNewsPerNewsJsonFile
