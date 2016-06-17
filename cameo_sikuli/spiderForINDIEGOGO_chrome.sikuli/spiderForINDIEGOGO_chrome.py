@@ -217,6 +217,7 @@ def fakeRandomRequest():
         strFakeUrl = lstStrFakeReqUrl[random.randint(0,len(lstStrFakeReqUrl)-1)]
         openChrome()
         typeUrlOnChrome(strUrlText=strFakeUrl)
+        dicRegion["regNW"].hover(dicPng["chrome_home"])
         wait(5)
     wait(0.5)
 #download explore pages
