@@ -24,33 +24,32 @@ dicRegion = {"regUp":Region(0,0,screen.getW(),screen.getH()/2),
           "regNW":Region(0,0,screen.getW()/2,screen.getH()/2),
           "regCenter":Region(screen.getW()/4,screen.getH()/4,screen.getW()/2,screen.getH()/2)
          }
-dicPng = {"chrome_close":Pattern("chrome_close.png").targetOffset(-21,-2),
-          "chrome_home":"chrome_home.png",
-          "chrome_stop": "chrome_stop.png",
-          "chrome_reload":"chrome_reload.png",
-          "chrome_download_finished":"chrome_download_finished.png",
-          "page_end_about":"page_end_about.png",
-          "page_end_camp":"page_end_camp.png",
-          "page_cate_more":"page_cate_more.png",
-          "page_ucb_more":"page_ucb_more.png", #different between before click and after click
-          "page_new_style_check":"page_new_style_check.png",
-          "page_blur_story":"page_blur_story.png",
-          "page_focus_profile":"page_focus_profile.png", 
-          "page_story_details":"page_story_details.png",
-          "page_details_about":"page_details_about.png",
-          "page_explore":"page_explore.png",
-          "page_not_found":"page_not_found.png",
-          "page_not_found_2":"page_not_found_2.png",
-          "page_not_right":"page_not_right.png",
-          "page_your_interruption":"page_your_interruption.png",
-          "page_proxy_error":"page_proxy_error.png",
-          "page_currently_updated":"currently_updated.png",
-          "page_under_review":"page_under_review.png",
-          "os_foldername_bar":Pattern("os_foldername_bar.png").targetOffset(10,0),
-          "os_filename_bar":Pattern("os_filename_bar.png").targetOffset(48,0),
-          "os_right_save_as":"os_right_save_as.png",
-          "os_save_btn":"os_save_btn.png",
-          }
+dicPng = {"chrome_home":"chrome_home.png",
+        "chrome_stop": "chrome_stop.png",
+        "chrome_reload":"chrome_reload.png",
+        "chrome_download_finished":"chrome_download_finished.png",
+        "page_end_about":"page_end_about.png",
+        "page_end_camp":"page_end_camp.png",
+        "page_cate_more":"page_cate_more.png",
+        "page_ucb_more":"page_ucb_more.png", #different between before click and after click
+        "page_new_style_check":"page_new_style_check.png",
+        "page_blur_story":"page_blur_story.png",
+        "page_focus_profile":"page_focus_profile.png", 
+        "page_story_details":"page_story_details.png",
+        "page_details_about":"page_details_about.png",
+        "page_explore":"page_explore.png",
+        "page_not_found":"page_not_found.png",
+        "page_not_found_2":"page_not_found_2.png",
+        "page_not_right":"page_not_right.png",
+        "page_your_interruption":"page_your_interruption.png",
+        "page_proxy_error":"page_proxy_error.png",
+        "page_currently_updated":"currently_updated.png",
+        "page_under_review":"page_under_review.png",
+        "os_foldername_bar":Pattern("os_foldername_bar.png").targetOffset(10,0),
+        "os_filename_bar":Pattern("os_filename_bar.png").targetOffset(48,0),
+        "os_right_save_as":"os_right_save_as.png",
+        "os_save_btn":"os_save_btn.png",
+        }
 lstStrCategoryName = ["animals", "art", "comic", "community", "dance",
                 "design", "education", "environment", "fashion",
                 "film", "food", "gaming", "health", "music", "photography",
@@ -61,8 +60,8 @@ strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_co
 #open chrome
 def openChrome():
     #close prev chrome
-    if dicRegion["regNW"].exists(dicPng["chrome_close"]):
-        dicRegion["regNW"].click(dicPng["chrome_close"])
+    if dicRegion["regNW"].exists(dicPng["chrome_home"]):
+        type("w", KeyModifier.CTRL)
     wait(2)
     #re-open new chrome
     App.open("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe --incognito")
