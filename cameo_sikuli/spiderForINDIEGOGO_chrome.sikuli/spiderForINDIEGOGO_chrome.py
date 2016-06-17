@@ -24,7 +24,7 @@ dicRegion = {"regUp":Region(0,0,screen.getW(),screen.getH()/2),
           "regNW":Region(0,0,screen.getW()/2,screen.getH()/2),
           "regCenter":Region(screen.getW()/4,screen.getH()/4,screen.getW()/2,screen.getH()/2)
          }
-dicPng = {"chrome_close":Pattern("chrome_close.png").targetOffset(-24,-1),
+dicPng = {"chrome_close":Pattern("chrome_close.png").targetOffset(-21,-2),
           "chrome_home":"chrome_home.png",
           "chrome_stop": "chrome_stop.png",
           "chrome_reload":"chrome_reload.png",
