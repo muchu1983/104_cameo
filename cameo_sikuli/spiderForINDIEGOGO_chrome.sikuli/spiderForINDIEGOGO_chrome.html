@@ -117,8 +117,6 @@ dicPng = {<span class="str">"chrome_home"</span>:<img src="chrome_home.png" />,
         <span class="str">"page_proxy_error"</span>:<img src="page_proxy_error.png" />,
         <span class="str">"page_currently_updated"</span>:<img src="currently_updated.png" />,
         <span class="str">"page_under_review"</span>:<img src="page_under_review.png" />,
-        <span class="str">"os_foldername_bar"</span>:Pattern(<img src="os_foldername_bar.png" />).targetOffset(<span class="dig">10</span>,<span class="dig">0</span>),
-        <span class="str">"os_filename_bar"</span>:Pattern(<img src="os_filename_bar.png" />).targetOffset(<span class="dig">48</span>,<span class="dig">0</span>),
         <span class="str">"os_right_save_as"</span>:<img src="os_right_save_as.png" />,
         <span class="str">"os_save_btn"</span>:<img src="os_save_btn.png" />,
         }
@@ -133,7 +131,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
 </span><span class="kw">def</span> openChrome():
     <span class="cmt">#close prev chrome
 </span>    <span class="kw">if</span> dicRegion[<span class="str">"regNW"</span>].exists(dicPng[<span class="str">"chrome_home"</span>]):
-        <span class="skw">type</span>(<span class="str">"w"</span>, KeyModifier.CTRL)
+        <span class="skw">type</span>(<span class="str">"w"</span>, Key.CTRL)
     <span class="skw">wait</span>(<span class="dig">2</span>)
     <span class="cmt">#re-open new chrome
 </span>    App.open(<span class="str">"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe --incognito"</span>)
@@ -144,7 +142,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     dicRegion[<span class="str">"regNW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"chrome_reload"</span>], <span class="dig">300</span>)
 <span class="cmt"># delete origin text
 </span><span class="kw">def</span> delOriginText():
-    <span class="skw">type</span>(<span class="str">"a"</span>, KeyModifier.CTRL)
+    <span class="skw">type</span>(<span class="str">"a"</span>, Key.CTRL)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
     <span class="skw">type</span>(Key.BACKSPACE)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
@@ -152,7 +150,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
 </span><span class="kw">def</span> pasteClipboardText(strText=None):
     sysClipboard.setContents(StringSelection(<span class="str">u""</span>+strText), None)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
-    <span class="skw">type</span>(<span class="str">"v"</span>, KeyModifier.CTRL)
+    <span class="skw">type</span>(<span class="str">"v"</span>, Key.CTRL)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
 <span class="cmt">#roll to page end
 </span><span class="kw">def</span> rollToPageEnd():
@@ -193,7 +191,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
 <span class="cmt">#type url on chrome
 </span><span class="kw">def</span> typeUrlOnChrome(strUrlText=None):
     <span class="kw">while</span> True:
-        <span class="skw">type</span>(<span class="str">"l"</span>, KeyModifier.CTRL)
+        <span class="skw">type</span>(<span class="str">"l"</span>, Key.CTRL)
         <span class="skw">wait</span>(<span class="dig">0.5</span>)
         delOriginText()
         pasteClipboardText(strText=strUrlText)
@@ -223,13 +221,26 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     dicRegion[<span class="str">"regNW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"chrome_reload"</span>], <span class="dig">300</span>)
 <span class="cmt">#choose folder at save progress
 </span><span class="kw">def</span> typeFolderPath(strFolderPath=None):
-    dicRegion[<span class="str">"regNW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"os_foldername_bar"</span>], <span class="dig">300</span>)
-    dicRegion[<span class="str">"regNW"</span>].<span class="skw">click</span>(dicPng[<span class="str">"os_foldername_bar"</span>])
+    <span class="skw">wait</span>(<span class="dig">0.5</span>)
+    <span class="skw">type</span>(Key.TAB)
+    <span class="skw">wait</span>(<span class="dig">0.5</span>)
+    <span class="skw">type</span>(<span class="str">"l"</span>, Key.CTRL)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
     delOriginText()
     pasteClipboardText(strText=strFolderPath)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
     <span class="skw">type</span>(Key.ENTER)
+    <span class="skw">wait</span>(<span class="dig">0.5</span>)
+<span class="cmt"># type in filename at save progress
+</span><span class="kw">def</span> typeFilename(strFilename=None):
+    <span class="skw">wait</span>(<span class="dig">0.5</span>)
+    <span class="skw">type</span>(Key.TAB)
+    <span class="skw">wait</span>(<span class="dig">0.5</span>)
+    <span class="skw">type</span>(<span class="str">"n"</span>, Key.ALT + Key.SHIFT)
+    <span class="skw">wait</span>(<span class="dig">0.5</span>)
+    delOriginText()
+    <span class="skw">wait</span>(<span class="dig">0.5</span>)
+    pasteClipboardText(strText=strFilename)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
 <span class="cmt">#rightclick on image to save current page
 </span><span class="kw">def</span> rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None):
@@ -243,11 +254,8 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     dicRegion[<span class="str">"regCenter"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"os_save_btn"</span>], <span class="dig">300</span>)
     <span class="kw">if</span> strFolderPath != None:
         typeFolderPath(strFolderPath)
-    dicRegion[<span class="str">"regLeft"</span>].<span class="skw">click</span>(dicPng[<span class="str">"os_filename_bar"</span>])
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
-    delOriginText()
-    <span class="skw">wait</span>(<span class="dig">0.5</span>)
-    pasteClipboardText(strText=strFilename)
+    typeFilename(strFilename=strFilename)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
     dicRegion[<span class="str">"regCenter"</span>].<span class="skw">click</span>(dicPng[<span class="str">"os_save_btn"</span>])
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
@@ -258,15 +266,12 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     dicRegion[<span class="str">"regNW"</span>].waitVanish(dicPng[<span class="str">"chrome_stop"</span>], <span class="dig">300</span>)
     dicRegion[<span class="str">"regNW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"chrome_reload"</span>], <span class="dig">300</span>)
     checkAndPauseBeforeSave()
-    <span class="skw">type</span>(<span class="str">"s"</span>, KeyModifier.CTRL)
+    <span class="skw">type</span>(<span class="str">"s"</span>, Key.CTRL)
     dicRegion[<span class="str">"regCenter"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"os_save_btn"</span>], <span class="dig">300</span>)
     <span class="kw">if</span> strFolderPath != None:
         typeFolderPath(strFolderPath)
-    dicRegion[<span class="str">"regLeft"</span>].<span class="skw">click</span>(dicPng[<span class="str">"os_filename_bar"</span>])
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
-    delOriginText()
-    <span class="skw">wait</span>(<span class="dig">0.5</span>)
-    pasteClipboardText(strText=strFilename)
+    typeFilename(strFilename=strFilename)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
     dicRegion[<span class="str">"regCenter"</span>].<span class="skw">click</span>(dicPng[<span class="str">"os_save_btn"</span>])
     <span class="skw">wait</span>(<span class="dig">0.5</span>)

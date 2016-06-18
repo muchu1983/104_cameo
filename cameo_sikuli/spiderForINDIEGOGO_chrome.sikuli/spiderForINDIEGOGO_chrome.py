@@ -45,8 +45,6 @@ dicPng = {"chrome_home":"chrome_home.png",
         "page_proxy_error":"page_proxy_error.png",
         "page_currently_updated":"currently_updated.png",
         "page_under_review":"page_under_review.png",
-        "os_foldername_bar":Pattern("os_foldername_bar.png").targetOffset(10,0),
-        "os_filename_bar":Pattern("os_filename_bar.png").targetOffset(48,0),
         "os_right_save_as":"os_right_save_as.png",
         "os_save_btn":"os_save_btn.png",
         }
@@ -61,7 +59,7 @@ strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_co
 def openChrome():
     #close prev chrome
     if dicRegion["regNW"].exists(dicPng["chrome_home"]):
-        type("w", KeyModifier.CTRL)
+        type("w", Key.CTRL)
     wait(2)
     #re-open new chrome
     App.open("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe --incognito")
@@ -72,7 +70,7 @@ def openChrome():
     dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
 # delete origin text
 def delOriginText():
-    type("a", KeyModifier.CTRL)
+    type("a", Key.CTRL)
     wait(0.5)
     type(Key.BACKSPACE)
     wait(0.5)
@@ -80,7 +78,7 @@ def delOriginText():
 def pasteClipboardText(strText=None):
     sysClipboard.setContents(StringSelection(u""+strText), None)
     wait(0.5)
-    type("v", KeyModifier.CTRL)
+    type("v", Key.CTRL)
     wait(0.5)
 #roll to page end
 def rollToPageEnd():
@@ -121,7 +119,7 @@ def checkAndPauseBeforeSave():
 #type url on chrome
 def typeUrlOnChrome(strUrlText=None):
     while True:
-        type("l", KeyModifier.CTRL)
+        type("l", Key.CTRL)
         wait(0.5)
         delOriginText()
         pasteClipboardText(strText=strUrlText)
@@ -151,13 +149,26 @@ def goExplorePage():
     dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
 #choose folder at save progress
 def typeFolderPath(strFolderPath=None):
-    dicRegion["regNW"].wait(dicPng["os_foldername_bar"], 300)
-    dicRegion["regNW"].click(dicPng["os_foldername_bar"])
+    wait(0.5)
+    type(Key.TAB)
+    wait(0.5)
+    type("l", Key.CTRL)
     wait(0.5)
     delOriginText()
     pasteClipboardText(strText=strFolderPath)
     wait(0.5)
     type(Key.ENTER)
+    wait(0.5)
+# type in filename at save progress
+def typeFilename(strFilename=None):
+    wait(0.5)
+    type(Key.TAB)
+    wait(0.5)
+    type("n", Key.ALT + Key.SHIFT)
+    wait(0.5)
+    delOriginText()
+    wait(0.5)
+    pasteClipboardText(strText=strFilename)
     wait(0.5)
 #rightclick on image to save current page
 def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None):
@@ -171,11 +182,8 @@ def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None
     dicRegion["regCenter"].wait(dicPng["os_save_btn"], 300)
     if strFolderPath != None:
         typeFolderPath(strFolderPath)
-    dicRegion["regLeft"].click(dicPng["os_filename_bar"])
     wait(0.5)
-    delOriginText()
-    wait(0.5)
-    pasteClipboardText(strText=strFilename)
+    typeFilename(strFilename=strFilename)
     wait(0.5)
     dicRegion["regCenter"].click(dicPng["os_save_btn"])
     wait(0.5)
@@ -186,15 +194,12 @@ def saveCurrentPage(strFolderPath=None, strFilename=None):
     dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 300)
     dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
     checkAndPauseBeforeSave()
-    type("s", KeyModifier.CTRL)
+    type("s", Key.CTRL)
     dicRegion["regCenter"].wait(dicPng["os_save_btn"], 300)
     if strFolderPath != None:
         typeFolderPath(strFolderPath)
-    dicRegion["regLeft"].click(dicPng["os_filename_bar"])
     wait(0.5)
-    delOriginText()
-    wait(0.5)
-    pasteClipboardText(strText=strFilename)
+    typeFilename(strFilename=strFilename)
     wait(0.5)
     dicRegion["regCenter"].click(dicPng["os_save_btn"])
     wait(0.5)
