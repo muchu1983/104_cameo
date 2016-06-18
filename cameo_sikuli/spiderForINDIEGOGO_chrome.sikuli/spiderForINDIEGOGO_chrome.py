@@ -185,7 +185,7 @@ def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None
     wait(0.5)
     typeFilename(strFilename=strFilename)
     wait(0.5)
-    dicRegion["regCenter"].click(dicPng["os_save_btn"])
+    type("s", Key.ALT + Key.SHIFT)
     wait(0.5)
     dicRegion["regSW"].wait(dicPng["chrome_download_finished"], 600)#wait save complete
 #ask chrome save current page
@@ -201,7 +201,7 @@ def saveCurrentPage(strFolderPath=None, strFilename=None):
     wait(0.5)
     typeFilename(strFilename=strFilename)
     wait(0.5)
-    dicRegion["regCenter"].click(dicPng["os_save_btn"])
+    type("s", Key.ALT + Key.SHIFT)
     wait(0.5)
     dicRegion["regSW"].wait(dicPng["chrome_download_finished"], 600)#wait save complete
 #fake random request confuse browser fingerpring algorithm
