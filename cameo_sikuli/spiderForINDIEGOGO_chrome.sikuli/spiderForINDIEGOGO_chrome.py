@@ -360,16 +360,21 @@ def downloadIndividualsPages(strTargetCategory=None):
         #check page not found
         if dicRegion["regUp"].exists(dicPng["page_not_found"]):
             continue #skip this url
-        #wait load completed
-        dicRegion["regLeft"].wait(dicPng["page_focus_profile"], 300)
-        #save profile html
-        saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsId + "_profile.html")
-        #save campaigns html 
-        strIndividualsCampaignsUrl = strIndividualsUrl + u"/campaigns"
-        openChrome()
-        typeUrlOnChrome(strUrlText=strIndividualsCampaignsUrl)
-        wait(0.5)
-        saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsId + "_campaigns.html")
+        try:
+            #wait load completed
+            dicRegion["regLeft"].wait(dicPng["page_focus_profile"], 300)
+            #save profile html
+            saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsId + "_profile.html")
+            #save campaigns html 
+            strIndividualsCampaignsUrl = strIndividualsUrl + u"/campaigns"
+            openChrome()
+            typeUrlOnChrome(strUrlText=strIndividualsCampaignsUrl)
+            wait(0.5)
+            saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsId + "_campaigns.html")
+        except FindFailed, ff:
+            print(str(ff))
+            popup(u"spider cant find png error! >_<|| (skip it now)")
+            continue
     individualsUrlListFile.close()
 #main entry point
 if __name__ == "__main__":
