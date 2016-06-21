@@ -291,7 +291,7 @@ def downloadProjectPages(strTargetCategory=None):
         else:
             continue #skip this url
         #check page not found or is currently updated or under review
-        if dicRegion["regUp"].exists(dicPng["page_not_found"]) or dicRegion["regUp"].exists(dicPng["page_not_found_2"]) or dicRegion["regUp"].exists(dicPng["page_currently_updated"]) or dicRegion["regUp"].exists(dicPng["page_under_review"]):
+        if dicRegion["regCenter"].exists(dicPng["page_not_found"]) or dicRegion["regUp"].exists(dicPng["page_not_found_2"]) or dicRegion["regUp"].exists(dicPng["page_currently_updated"]) or dicRegion["regUp"].exists(dicPng["page_under_review"]):
             continue #skip this url
         #wait load completed
         dicRegion["regRight"].wait(dicPng["page_new_style_check"], 300)
@@ -358,7 +358,7 @@ def downloadIndividualsPages(strTargetCategory=None):
         else:
             continue #skip this url
         #check page not found
-        if dicRegion["regUp"].exists(dicPng["page_not_found"]):
+        if dicRegion["regCenter"].exists(dicPng["page_not_found"]):
             continue #skip this url
         try:
             #wait load completed
