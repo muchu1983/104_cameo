@@ -8,38 +8,38 @@ This file is part of BSD license
 """
 import unittest
 import logging
-from cameo.spiderForPEDAILY import SpiderForPEDAILY
+from cameo.spiderForTECHCRUNCH import SpiderForTECHCRUNCH
 """
-測試 抓取 PEDAILY
+測試 抓取 TECHCRUNCH
 """
 
-class SpiderForPEDAILYTest(unittest.TestCase):
+class SpiderForTECHCRUNCHTest(unittest.TestCase):
 
     #準備
     def setUp(self):
         logging.basicConfig(level=logging.INFO)
-        self.spider = SpiderForPEDAILY()
+        self.spider = SpiderForTECHCRUNCH()
         self.spider.initDriver()
         
     #收尾
     def tearDown(self):
         self.spider.quitDriver()
-    
+    """
     #測試抓取 index page
     def test_downloadIndexPage(self):
-        logging.info("SpiderForPEDAILYTest.test_downloadIndexPage")
+        logging.info("SpiderForTECHCRUNCHTest.test_downloadIndexPage")
         self.spider.downloadIndexPage()
-    
-    #測試抓取 category page
-    def test_downloadCategoryPage(self):
-        logging.info("SpiderForPEDAILYTest.test_downloadCategoryPage")
-        self.spider.downloadCategoryPage()
-    
+    """
+    #測試抓取 topic page
+    def test_downloadTopicPage(self):
+        logging.info("SpiderForTECHCRUNCHTest.test_downloadTopicPage")
+        self.spider.downloadTopicPage()
+    """
     #測試抓取 news page
     def test_downloadNewsPage(self):
-        logging.info("SpiderForPEDAILYTest.test_downloadNewsPage")
-        self.spider.downloadNewsPage(strCategoryName=None)
-    
+        logging.info("SpiderForTECHCRUNCHTest.test_downloadNewsPage")
+        self.spider.downloadNewsPage(strTopicPage1Url=None)
+    """
 #測試開始
 if __name__ == "__main__":
     unittest.main(exit=False)

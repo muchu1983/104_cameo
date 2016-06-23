@@ -14,31 +14,33 @@ import random
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from cameo.utility import Utility
-from cameo.localdb import LocalDbForPEDAILY
+from cameo.localdb import LocalDbForTECHCRUNCH
 """
-抓取 投資界 html 存放到 source_html 
+抓取 TechCrunch html 存放到 source_html 
 """
-class SpiderForPEDAILY:
+class SpiderForTECHCRUNCH:
     
     #建構子
     def __init__(self):
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
-        self.strWebsiteDomain = u"http://www.pedaily.cn"
-        self.dicSubCommandHandler = {"index":self.downloadIndexPage,
-                             "category":self.downloadCategoryPage,
-                             "news":self.downloadNewsPage}
+        self.strWebsiteDomain = u"https://techcrunch.com/"
+        self.dicSubCommandHandler = {
+            "index":self.downloadIndexPage,
+            "topic":self.downloadTopicPage,
+            "news":self.downloadNewsPage
+        }
         self.utility = Utility()
-        self.db = LocalDbForPEDAILY()
+        self.db = LocalDbForTECHCRUNCH()
         self.driver = None
         
     #取得 spider 使用資訊
     def getUseageMessage(self):
-        return ("- PEDAILY -\n"
+        return ("- TECHCRUNCH -\n"
                 "useage:\n"
-                "index - download entry page of PEDAILY \n"
-                "category - download not obtained category page \n"
-                "news [category] - download not obtained news [of given category] \n")
+                "index - download topic index page of TECHCRUNCH \n"
+                "topic - download not obtained topic page \n"
+                "news [topic_page_1_url] - download not obtained news [of given topic_page_1_url] \n")
     
     #取得 selenium driver 物件
     def getDriver(self):
@@ -75,12 +77,12 @@ class SpiderForPEDAILY:
         
     #下載 index 頁面 
     def downloadIndexPage(self, uselessArg1=None):
-        logging.info("download index page")
-        strIndexHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\PEDAILY"
+        logging.info("download topic index page")
+        strIndexHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\TECHCRUNCH"
         if not os.path.exists(strIndexHtmlFolderPath):
-            os.mkdir(strIndexHtmlFolderPath) #mkdir source_html/PEDAILY/
-        #投資界首頁
-        self.driver.get("http://www.pedaily.cn/")
+            os.mkdir(strIndexHtmlFolderPath) #mkdir source_html/TECHCRUNCH/
+        #TECHCRUNCH topic index 頁面
+        self.driver.get("https://techcrunch.com/topic/")
         #儲存 html
         strIndexHtmlFilePath = strIndexHtmlFolderPath + u"\\index.html"
         self.utility.overwriteSaveAs(strFilePath=strIndexHtmlFilePath, unicodeData=self.driver.page_source)
@@ -115,9 +117,9 @@ class SpiderForPEDAILY:
             logging.info("selenium driver can't find the loadmore button.")
             return
         
-    #下載 category 頁面
-    def downloadCategoryPage(self, uselessArg1=None):
-        logging.info("download category page")
+    #下載 topic 頁面
+    def downloadTopicPage(self, uselessArg1=None):
+        logging.info("download topic page")
         strCategoryHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\PEDAILY\\category"
         if not os.path.exists(strCategoryHtmlFolderPath):
             os.mkdir(strCategoryHtmlFolderPath) #mkdir source_html/PEDAILY/category/

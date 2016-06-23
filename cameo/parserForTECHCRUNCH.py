@@ -14,20 +14,22 @@ import logging
 import urllib
 from scrapy import Selector
 from cameo.utility import Utility
-from cameo.localdb import LocalDbForPEDAILY
+from cameo.localdb import LocalDbForTECHCRUNCH
 """
 從 source_html 的 HTML 檔案解析資料
 結果放置於 parsed_result 下
 """
-class ParserForPEDAILY:
+class ParserForTECHCRUNCH:
     #建構子
     def __init__(self):
         self.utility = Utility()
-        self.db = LocalDbForPEDAILY()
-        self.dicSubCommandHandler = {"index":[self.parseIndexPage],
-                                     "category":[self.parseCategoryPage],
-                                     "json":[self.parseNewsPageThenCreateNewsJson]}
-        self.strWebsiteDomain = u"http://www.pedaily.cn"
+        self.db = LocalDbForTECHCRUNCH()
+        self.dicSubCommandHandler = {
+            "index":[self.parseIndexPage],
+            "category":[self.parseCategoryPage],
+            "json":[self.parseNewsPageThenCreateNewsJson]
+        }
+        self.strWebsiteDomain = u"https://techcrunch.com/"
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
         self.intNewsJsonNum = 0 #news.json 檔案編號
@@ -37,10 +39,10 @@ class ParserForPEDAILY:
         
     #取得 parser 使用資訊
     def getUseageMessage(self):
-        return ("- PEDAILY -\n"
+        return ("- TECHCRUNCH -\n"
                 "useage:\n"
-                "index - parse index.html then insert tag into DB \n"
-                "category - parse category.html then insert news into DB \n"
+                "index - parse index.html then insert topic into DB \n"
+                "topic - parse topic.html then insert news into DB \n"
                 "json - parse news.html then create json \n")
                 
     #執行 parser
@@ -54,19 +56,18 @@ class ParserForPEDAILY:
     
     #解析 index.html
     def parseIndexPage(self, uselessArg1=None):
-        strIndexResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\PEDAILY"
+        strIndexResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\TECHCRUNCH"
         if not os.path.exists(strIndexResultFolderPath):
-            os.mkdir(strIndexResultFolderPath) #mkdir parsed_result/PEDAILY/
-        strIndexHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\PEDAILY"
+            os.mkdir(strIndexResultFolderPath) #mkdir parsed_result/TECHCRUNCH/
+        strIndexHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\TECHCRUNCH"
         strIndexHtmlFilePath = strIndexHtmlFolderPath + u"\\index.html"
         with open(strIndexHtmlFilePath, "r") as indexHtmlFile:
             strPageSource = indexHtmlFile.read()
             root = Selector(text=strPageSource)
-            lstStrCategoryUrl = root.css("div.footer ul.main li.box-fix-d dl dt:nth-of-type(3) ul li a::attr(href)").extract()
-            for strCategoryUrl in lstStrCategoryUrl:
-                strCategoryName = re.match("^http://www.pedaily.cn/(.*)/$", strCategoryUrl).group(1)
-                strCategoryName = urllib.quote(strCategoryName.encode("utf-8")) #url encode
-                self.db.insertCategoryIfNotExists(strCategoryName=strCategoryName)
+            lstStrTopicPage1Url = root.css("div.topic-archive-links-list p.topic-alpha-column a::attr(href)").extract()
+            for strTopicPage1Url in lstStrTopicPage1Url:
+                if strTopicPage1Url.startswith("https://techcrunch.com/topic/"):
+                    self.db.insertTopicIfNotExists(strTopicPage1Url=strTopicPage1Url)
                 
     #解析 category.html
     def parseCategoryPage(self, uselessArg1=None):
