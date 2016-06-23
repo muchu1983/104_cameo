@@ -10,6 +10,12 @@ from bennu.externaldb import CameoMongoDb
 """
 外部資料庫存取
 """
+#cameo mongodb tier
+class ExternalDbOfCameo:
+    #建構子
+    def __init__(self):
+        self.mongodb = CameoMongoDb().getClient().tier
+    
 #匯入json
 class ExternalDbForJsonImporter:
     
