@@ -35,69 +35,69 @@ class LocalDbForTECHCRUNCH:
         
     #初取化資料庫
     def initialDb(self):
-        strSQLCreateTable = ("CREATE TABLE IF NOT EXISTS pedaily_news("
+        strSQLCreateTable = ("CREATE TABLE IF NOT EXISTS techcrunch_news("
                              "id INTEGER PRIMARY KEY,"
                              "strNewsUrl TEXT NOT NULL,"
-                             "intCategoryId INTEGER NOT NULL,"
+                             "intTopicId INTEGER NOT NULL,"
                              "isGot BOOLEAN NOT NULL)")
         self.db.commitSQL(strSQL=strSQLCreateTable)
-        strSQLCreateTable = ("CREATE TABLE IF NOT EXISTS pedaily_category("
+        strSQLCreateTable = ("CREATE TABLE IF NOT EXISTS techcrunch_topic("
                              "id INTEGER PRIMARY KEY,"
-                             "strCategoryName TEXT NOT NULL,"
+                             "strTopicPage1Url TEXT NOT NULL,"
                              "isGot BOOLEAN NOT NULL)")
         self.db.commitSQL(strSQL=strSQLCreateTable)
         
-    #若無重覆，儲存 category
-    def insertCategoryIfNotExists(self, strCategoryName=None):
-        strSQL = "SELECT * FROM pedaily_category WHERE strCategoryName='%s'"%strCategoryName
+    #若無重覆，儲存 topic
+    def insertTopicIfNotExists(self, strTopicPage1Url=None):
+        strSQL = "SELECT * FROM techcrunch_topic WHERE strTopicPage1Url='%s'"%strTopicPage1Url
         lstRowData = self.db.fetchallSQL(strSQL=strSQL)
         if len(lstRowData) == 0:
-            strSQL = "INSERT INTO pedaily_category VALUES(NULL, '%s', 0)"%strCategoryName
+            strSQL = "INSERT INTO techcrunch_topic VALUES(NULL, '%s', 0)"%strTopicPage1Url
             self.db.commitSQL(strSQL=strSQL)
         
-    #取得所有 category 名稱
-    def fetchallCategoryName(self, isGot=False):
+    #取得所有 topic 第一頁 url (指定 isGot 狀態)
+    def fetchallTopicUrl(self, isGot=False):
         dicIsGotCode = {True:"1", False:"0"}
-        strSQL = "SELECT strCategoryName FROM pedaily_category WHERE isGot=%s"%dicIsGotCode[isGot]
+        strSQL = "SELECT strTopicPage1Url FROM techcrunch_topic WHERE isGot=%s"%dicIsGotCode[isGot]
         lstRowData = self.db.fetchallSQL(strSQL=strSQL)
-        lstStrCategoryName = []
+        lstStrTopicPage1Url = []
         for rowData in lstRowData:
-            lstStrCategoryName.append(rowData["strCategoryName"])
-        return lstStrCategoryName
+            lstStrTopicPage1Url.append(rowData["strTopicPage1Url"])
+        return lstStrTopicPage1Url
         
-    #取得所有未完成下載的 category 名稱
-    def fetchallNotObtainedCategoryName(self):
-        return self.fetchallCategoryName(isGot=False)
+    #取得所有未完成下載的 topic 第一頁 url
+    def fetchallNotObtainedTopicUrl(self):
+        return self.fetchallTopicUrl(isGot=False)
         
-    #取得所有已完成下載的 category 名稱
-    def fetchallCompletedObtainedCategoryName(self):
-        return self.fetchallCategoryName(isGot=True)
+    #取得所有已完成下載的 topic 第一頁 url
+    def fetchallCompletedObtainedTopicUrl(self):
+        return self.fetchallTopicUrl(isGot=True)
         
-    #更新 category 為已完成下載狀態
-    def updateCategoryStatusIsGot(self, strCategoryName=None):
-        strSQL = "UPDATE pedaily_category SET isGot=1 WHERE strCategoryName='%s'"%strCategoryName
+    #更新 topic 為已完成下載狀態
+    def updateTopicStatusIsGot(self, strTopicPage1Url=None):
+        strSQL = "UPDATE techcrunch_topic SET isGot=1 WHERE strTopicPage1Url='%s'"%strTopicPage1Url
         self.db.commitSQL(strSQL=strSQL)
         
-    #取得 category id
-    def fetchCategoryIdByName(self, strCategoryName=None):
-        strSQL = "SELECT * FROM pedaily_category WHERE strCategoryName='%s'"%strCategoryName
+    #取得 topic id
+    def fetchTopicIdByUrl(self, strTopicPage1Url=None):
+        strSQL = "SELECT * FROM techcrunch_topic WHERE strTopicPage1Url='%s'"%strTopicPage1Url
         lstRowData = self.db.fetchallSQL(strSQL=strSQL)
         return lstRowData[0]["id"]
         
     #若無重覆 儲存 news URL
-    def insertNewsUrlIfNotExists(self, strNewsUrl=None, strCategoryName=None):
-        intCategoryId = self.fetchCategoryIdByName(strCategoryName=strCategoryName)
+    def insertNewsUrlIfNotExists(self, strNewsUrl=None, strTopicPage1Url=None):
+        intTopicId = self.fetchTopicIdByUrl(strTopicPage1Url=strTopicPage1Url)
         #insert news url if not exists
-        strSQL = "SELECT * FROM pedaily_news WHERE strNewsUrl='%s'"%strNewsUrl
+        strSQL = "SELECT * FROM techcrunch_news WHERE strNewsUrl='%s'"%strNewsUrl
         lstRowData = self.db.fetchallSQL(strSQL=strSQL)
         if len(lstRowData) == 0:
-            strSQL = "INSERT INTO pedaily_news VALUES(NULL, '%s', %d,0)"%(strNewsUrl, intCategoryId)
+            strSQL = "INSERT INTO techcrunch_news VALUES(NULL, '%s', %d,0)"%(strNewsUrl, intTopicId)
             self.db.commitSQL(strSQL=strSQL)
         
-    #取得指定 category 的 news url
-    def fetchallNewsUrlByCategoryName(self, strCategoryName=None):
-        intCategoryId = self.fetchCategoryIdByName(strCategoryName=strCategoryName)
-        strSQL = "SELECT * FROM pedaily_news WHERE intCategoryId=%d"%intCategoryId
+    #取得指定 topic 的 news url
+    def fetchallNewsUrlByTopicUrl(self, strTopicPage1Url=None):
+        intTopicId = self.fetchTopicIdByUrl(strTopicPage1Url=strTopicPage1Url)
+        strSQL = "SELECT * FROM techcrunch_news WHERE intTopicId=%d"%intTopicId
         lstRowData = self.db.fetchallSQL(strSQL=strSQL)
         lstStrNewsUrl = []
         for rowData in lstRowData:
@@ -107,7 +107,7 @@ class LocalDbForTECHCRUNCH:
     #檢查 news 是否已下載
     def checkNewsIsGot(self, strNewsUrl=None):
         isGot = True
-        strSQL = "SELECT * FROM pedaily_news WHERE strNewsUrl='%s'"%strNewsUrl
+        strSQL = "SELECT * FROM techcrunch_news WHERE strNewsUrl='%s'"%strNewsUrl
         lstRowData = self.db.fetchallSQL(strSQL=strSQL)
         for rowData in lstRowData:
             if rowData["isGot"] == 0:
@@ -116,12 +116,12 @@ class LocalDbForTECHCRUNCH:
         
     #更新 news 為已完成下載狀態
     def updateNewsStatusIsGot(self, strNewsUrl=None):
-        strSQL = "UPDATE pedaily_news SET isGot=1 WHERE strNewsUrl='%s'"%strNewsUrl
+        strSQL = "UPDATE techcrunch_news SET isGot=1 WHERE strNewsUrl='%s'"%strNewsUrl
         self.db.commitSQL(strSQL=strSQL)
         
     #取得所有已完成下載的 news url
     def fetchallCompletedObtainedNewsUrl(self):
-        strSQL = "SELECT strNewsUrl FROM pedaily_news WHERE isGot=1"
+        strSQL = "SELECT strNewsUrl FROM techcrunch_news WHERE isGot=1"
         lstRowData = self.db.fetchallSQL(strSQL=strSQL)
         lstStrNewsUrl = []
         for rowData in lstRowData:
@@ -130,16 +130,15 @@ class LocalDbForTECHCRUNCH:
         
     #更新 news 尚未開始下載狀態
     def updateNewsStatusIsNotGot(self, strNewsUrl=None):
-        strSQL = "UPDATE pedaily_news SET isGot=0 WHERE strNewsUrl='%s'"%strNewsUrl
+        strSQL = "UPDATE techcrunch_news SET isGot=0 WHERE strNewsUrl='%s'"%strNewsUrl
         self.db.commitSQL(strSQL=strSQL)
         
     #清除測試資料 (clear table)
     def clearTestData(self):
-        strSQL = "DELETE FROM pedaily_news"
+        strSQL = "DELETE FROM techcrunch_news"
         self.db.commitSQL(strSQL=strSQL)
-        strSQL = "DELETE FROM pedaily_category"
+        strSQL = "DELETE FROM techcrunch_topic"
         self.db.commitSQL(strSQL=strSQL)
-        
         
 #硬塞的
 class LocalDbForINSIDE:
