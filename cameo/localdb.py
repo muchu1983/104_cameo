@@ -25,6 +25,122 @@ class LocalDbForCurrencyApi:
     def __init__(self):
         self.mongodb = MongoDb().getClient().localdb
         
+#TECHCRUNCH
+class LocalDbForTECHCRUNCH:
+    
+    #建構子
+    def __init__(self):
+        self.db = SQLite3Db(strResFolderPath="cameo_res")
+        self.initialDb()
+        
+    #初取化資料庫
+    def initialDb(self):
+        strSQLCreateTable = ("CREATE TABLE IF NOT EXISTS pedaily_news("
+                             "id INTEGER PRIMARY KEY,"
+                             "strNewsUrl TEXT NOT NULL,"
+                             "intCategoryId INTEGER NOT NULL,"
+                             "isGot BOOLEAN NOT NULL)")
+        self.db.commitSQL(strSQL=strSQLCreateTable)
+        strSQLCreateTable = ("CREATE TABLE IF NOT EXISTS pedaily_category("
+                             "id INTEGER PRIMARY KEY,"
+                             "strCategoryName TEXT NOT NULL,"
+                             "isGot BOOLEAN NOT NULL)")
+        self.db.commitSQL(strSQL=strSQLCreateTable)
+        
+    #若無重覆，儲存 category
+    def insertCategoryIfNotExists(self, strCategoryName=None):
+        strSQL = "SELECT * FROM pedaily_category WHERE strCategoryName='%s'"%strCategoryName
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        if len(lstRowData) == 0:
+            strSQL = "INSERT INTO pedaily_category VALUES(NULL, '%s', 0)"%strCategoryName
+            self.db.commitSQL(strSQL=strSQL)
+        
+    #取得所有 category 名稱
+    def fetchallCategoryName(self, isGot=False):
+        dicIsGotCode = {True:"1", False:"0"}
+        strSQL = "SELECT strCategoryName FROM pedaily_category WHERE isGot=%s"%dicIsGotCode[isGot]
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        lstStrCategoryName = []
+        for rowData in lstRowData:
+            lstStrCategoryName.append(rowData["strCategoryName"])
+        return lstStrCategoryName
+        
+    #取得所有未完成下載的 category 名稱
+    def fetchallNotObtainedCategoryName(self):
+        return self.fetchallCategoryName(isGot=False)
+        
+    #取得所有已完成下載的 category 名稱
+    def fetchallCompletedObtainedCategoryName(self):
+        return self.fetchallCategoryName(isGot=True)
+        
+    #更新 category 為已完成下載狀態
+    def updateCategoryStatusIsGot(self, strCategoryName=None):
+        strSQL = "UPDATE pedaily_category SET isGot=1 WHERE strCategoryName='%s'"%strCategoryName
+        self.db.commitSQL(strSQL=strSQL)
+        
+    #取得 category id
+    def fetchCategoryIdByName(self, strCategoryName=None):
+        strSQL = "SELECT * FROM pedaily_category WHERE strCategoryName='%s'"%strCategoryName
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        return lstRowData[0]["id"]
+        
+    #若無重覆 儲存 news URL
+    def insertNewsUrlIfNotExists(self, strNewsUrl=None, strCategoryName=None):
+        intCategoryId = self.fetchCategoryIdByName(strCategoryName=strCategoryName)
+        #insert news url if not exists
+        strSQL = "SELECT * FROM pedaily_news WHERE strNewsUrl='%s'"%strNewsUrl
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        if len(lstRowData) == 0:
+            strSQL = "INSERT INTO pedaily_news VALUES(NULL, '%s', %d,0)"%(strNewsUrl, intCategoryId)
+            self.db.commitSQL(strSQL=strSQL)
+        
+    #取得指定 category 的 news url
+    def fetchallNewsUrlByCategoryName(self, strCategoryName=None):
+        intCategoryId = self.fetchCategoryIdByName(strCategoryName=strCategoryName)
+        strSQL = "SELECT * FROM pedaily_news WHERE intCategoryId=%d"%intCategoryId
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        lstStrNewsUrl = []
+        for rowData in lstRowData:
+            lstStrNewsUrl.append(rowData["strNewsUrl"])
+        return lstStrNewsUrl
+        
+    #檢查 news 是否已下載
+    def checkNewsIsGot(self, strNewsUrl=None):
+        isGot = True
+        strSQL = "SELECT * FROM pedaily_news WHERE strNewsUrl='%s'"%strNewsUrl
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        for rowData in lstRowData:
+            if rowData["isGot"] == 0:
+                isGot = False
+        return isGot
+        
+    #更新 news 為已完成下載狀態
+    def updateNewsStatusIsGot(self, strNewsUrl=None):
+        strSQL = "UPDATE pedaily_news SET isGot=1 WHERE strNewsUrl='%s'"%strNewsUrl
+        self.db.commitSQL(strSQL=strSQL)
+        
+    #取得所有已完成下載的 news url
+    def fetchallCompletedObtainedNewsUrl(self):
+        strSQL = "SELECT strNewsUrl FROM pedaily_news WHERE isGot=1"
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        lstStrNewsUrl = []
+        for rowData in lstRowData:
+            lstStrNewsUrl.append(rowData["strNewsUrl"])
+        return lstStrNewsUrl
+        
+    #更新 news 尚未開始下載狀態
+    def updateNewsStatusIsNotGot(self, strNewsUrl=None):
+        strSQL = "UPDATE pedaily_news SET isGot=0 WHERE strNewsUrl='%s'"%strNewsUrl
+        self.db.commitSQL(strSQL=strSQL)
+        
+    #清除測試資料 (clear table)
+    def clearTestData(self):
+        strSQL = "DELETE FROM pedaily_news"
+        self.db.commitSQL(strSQL=strSQL)
+        strSQL = "DELETE FROM pedaily_category"
+        self.db.commitSQL(strSQL=strSQL)
+        
+        
 #硬塞的
 class LocalDbForINSIDE:
     

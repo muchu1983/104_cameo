@@ -102,6 +102,25 @@ class LocalDbTest(unittest.TestCase):
         db.updateNewsStatusIsNotGot(strNewsUrlPart="/unit/test")
         self.assertFalse(db.checkNewsIsGot(strNewsUrl="http://news/for/unit/test"))
         db.clearTestData() #清除本次測試資料
+        
+    #測試 techcrunch 本地端資料庫存取
+    def test_localdb_for_techcrunch(self):
+        logging.info("LocalDbTest.test_localdb_for_pedaily")
+        db = LocalDbForPEDAILY()
+        db.clearTestData() #清除前次測試資料
+        db.insertCategoryIfNotExists(strCategoryName="category_for_unit_test")
+        self.assertEquals(db.fetchallNotObtainedCategoryName()[0], "category_for_unit_test")
+        db.updateCategoryStatusIsGot(strCategoryName="category_for_unit_test")
+        self.assertEquals(db.fetchallCompletedObtainedCategoryName()[0], "category_for_unit_test")
+        db.insertNewsUrlIfNotExists(strNewsUrl="http://news/for/unit/test", strCategoryName="category_for_unit_test")
+        self.assertEquals(db.fetchallNewsUrlByCategoryName(strCategoryName="category_for_unit_test")[0], "http://news/for/unit/test")
+        self.assertFalse(db.checkNewsIsGot(strNewsUrl="http://news/for/unit/test"))
+        db.updateNewsStatusIsGot(strNewsUrl="http://news/for/unit/test")
+        self.assertTrue(db.checkNewsIsGot(strNewsUrl="http://news/for/unit/test"))
+        self.assertEquals(db.fetchallCompletedObtainedNewsUrl(), ["http://news/for/unit/test"])
+        db.updateNewsStatusIsNotGot(strNewsUrl="http://news/for/unit/test")
+        self.assertFalse(db.checkNewsIsGot(strNewsUrl="http://news/for/unit/test"))
+        db.clearTestData() #清除本次測試資料
 
 #測試開始
 if __name__ == "__main__":
