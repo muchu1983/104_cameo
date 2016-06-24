@@ -135,25 +135,25 @@ class SpiderForTECHCRUNCH:
             finally:
                 self.restartDriver() #重啟
             
-    #下載 news 頁面 (strCategoryName == None 會自動找尋已下載完成之 category)
+    #下載 news 頁面 (strTopicPage1Url == None 會自動找尋已下載完成之 topic)
     def downloadNewsPage(self, strTopicPage1Url=None):
-        if strCategoryName is None:
-            #未指定 category
-            lstStrObtainedCategoryName = self.db.fetchallCompletedObtainedCategoryName()
-            for strObtainedCategoryName in lstStrObtainedCategoryName:
-                self.downloadNewsPageWithGivenCategoryName(strCategoryName=strObtainedCategoryName)
+        if strTopicPage1Url is None:
+            #未指定 topic
+            lstStrObtainedTopicUrl = self.db.fetchallCompletedObtainedTopicUrl()
+            for strObtainedTopicUrl in lstStrObtainedTopicUrl:
+                self.downloadNewsPageWithGivenTopicUrl(strTopicPage1Url=strObtainedTopicUrl)
         else:
-            #有指定 category 名稱
-            self.downloadNewsPageWithGivenCategoryName(strCategoryName=strCategoryName)
+            #有指定 topic url
+            self.downloadNewsPageWithGivenTopicUrl(strTopicPage1Url=strTopicPage1Url)
             
-    #下載 news 頁面 (指定 category 名稱)
-    def downloadNewsPageWithGivenCategoryName(self, strCategoryName=None):
-        logging.info("download news page with category %s"%strCategoryName)
-        strNewsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\PEDAILY\\news"
+    #下載 news 頁面 (指定 topic url)
+    def downloadNewsPageWithGivenTopicUrl(self, strTopicPage1Url=None):
+        logging.info("download news page with topic %s"%strTopicPage1Url)
+        strNewsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\TECHCRUNCH\\news"
         if not os.path.exists(strNewsHtmlFolderPath):
-            os.mkdir(strNewsHtmlFolderPath) #mkdir source_html/PEDAILY/news/
-        #取得 DB 紀錄中，指定 strCategoryName category 的 news url
-        lstStrNewsUrl = self.db.fetchallNewsUrlByCategoryName(strCategoryName=strCategoryName)
+            os.mkdir(strNewsHtmlFolderPath) #mkdir source_html/TECHCRUNCH/news/
+        #取得 DB 紀錄中，指定 strTopicPage1Url topic 的 news url
+        lstStrNewsUrl = self.db.fetchallNewsUrlByTopicUrl(strTopicPage1Url=strTopicPage1Url)
         intDownloadedNewsCount = 0#紀錄下載 news 頁面數量
         timeStart = time.time() #計時開始時間點
         timeEnd = None #計時結束時間點
@@ -169,10 +169,9 @@ class SpiderForTECHCRUNCH:
                 time.sleep(random.randint(5,9)) #sleep random time
                 try:
                     self.driver.get(strNewsUrl)
-                    #儲存 html (記錄 news 儲放的 xxx.pedaily.cn server 名稱)
-                    strNewsServerName = re.match("^http://([a-z]*).pedaily.cn/.*/([0-9]*).shtml$", strNewsUrl).group(1)
-                    strNewsName = re.match("^http://([a-z]*).pedaily.cn/.*/([0-9]*).shtml$", strNewsUrl).group(2)
-                    strNewsHtmlFilePath = strNewsHtmlFolderPath + u"\\%s_%s_news.html"%(strNewsName, strNewsServerName)
+                    #儲存 html
+                    strNewsName = re.match("^https://techcrunch.com/[\d]{4}/[\d]{2}/[\d]{2}/(.*)/$", strNewsUrl).group(1)
+                    strNewsHtmlFilePath = strNewsHtmlFolderPath + u"\\%s_news.html"%strNewsName
                     self.utility.overwriteSaveAs(strFilePath=strNewsHtmlFilePath, unicodeData=self.driver.page_source)
                     #更新news DB 為已抓取 (isGot = 1)
                     self.db.updateNewsStatusIsGot(strNewsUrl=strNewsUrl)

@@ -24,7 +24,7 @@ class SpiderForTECHCRUNCHTest(unittest.TestCase):
     #收尾
     def tearDown(self):
         self.spider.quitDriver()
-    """
+    
     #測試抓取 index page
     def test_downloadIndexPage(self):
         logging.info("SpiderForTECHCRUNCHTest.test_downloadIndexPage")
@@ -34,7 +34,7 @@ class SpiderForTECHCRUNCHTest(unittest.TestCase):
     def test_downloadTopicPage(self):
         logging.info("SpiderForTECHCRUNCHTest.test_downloadTopicPage")
         self.spider.downloadTopicPage()
-    """
+    
     #測試抓取 news page
     def test_downloadNewsPage(self):
         logging.info("SpiderForTECHCRUNCHTest.test_downloadNewsPage")

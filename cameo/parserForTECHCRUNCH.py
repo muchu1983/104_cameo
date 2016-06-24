@@ -95,16 +95,16 @@ class ParserForTECHCRUNCH:
                     #儲存 news url 及 news topic id 至 DB
                     if re.match("^https://techcrunch.com/[\d]{4}/[\d]{2}/[\d]{2}/.*$", strNewsUrl): #filter remove AD and other url
                         self.db.insertNewsUrlIfNotExists(strNewsUrl=strNewsUrl, strTopicPage1Url=strObtainedTopicUrl)
-            
-    #解析 news.html 產生 news.json (pedaily.cn 將 news 儲放在不同台的 server)
+    
+    #解析 news.html 產生 news.json (TODO 使用 crawlermaster 進行 parse)
     def parseNewsPageThenCreateNewsJson(self, uselessArg1=None):
-        strNewsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\PEDAILY\\news"
+        strNewsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\TECHCRUNCH\\news"
         if not os.path.exists(strNewsResultFolderPath):
-            os.mkdir(strNewsResultFolderPath) #mkdir parsed_result/PEDAILY/news/
-        strNewsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\PEDAILY\\news"
+            os.mkdir(strNewsResultFolderPath) #mkdir parsed_result/TECHCRUNCH/news/
+        strNewsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\TECHCRUNCH\\news"
         self.dicParsedResultOfNews = [] #清空 news.json 暫存資料
         self.intNewsJsonNum = 0 #計數器歸零
-        #pedaily 網頁錯誤率較高，改用 news 資料表作為 parse 的主要 loop
+        #用 news 資料表作為 parse 的主要 loop
         #若發現 html 檔案不存在或有錯誤，直接將 news 資料 isGot 設為 0 (未抓取)
         lstStrNewsUrl = self.db.fetchallCompletedObtainedNewsUrl()
         for strNewsUrl in lstStrNewsUrl: #url loop

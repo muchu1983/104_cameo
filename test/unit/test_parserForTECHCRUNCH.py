@@ -29,7 +29,7 @@ class ParserForTECHCRUNCHTest(unittest.TestCase):
     def test_parseIndexPage(self):
         logging.info("ParserForTECHCRUNCHTest.test_parseIndexPage")
         self.parser.parseIndexPage()
-    """
+    
     #測試 解析 topic.html
     def test_parseTopicPage(self):
         logging.info("ParserForTECHCRUNCHTest.test_parseTopicPage")
@@ -39,7 +39,7 @@ class ParserForTECHCRUNCHTest(unittest.TestCase):
     def test_parseNewsPageThenCreateNewsJson(self):
         logging.info("ParserForTECHCRUNCHTest.test_parseNewsPageThenCreateNewsJson")
         self.parser.parseNewsPageThenCreateNewsJson()
-    """
+    
 #測試開始
 if __name__ == "__main__":
     unittest.main(exit=False)
