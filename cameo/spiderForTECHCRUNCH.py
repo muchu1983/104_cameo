@@ -87,64 +87,56 @@ class SpiderForTECHCRUNCH:
         strIndexHtmlFilePath = strIndexHtmlFolderPath + u"\\index.html"
         self.utility.overwriteSaveAs(strFilePath=strIndexHtmlFilePath, unicodeData=self.driver.page_source)
         
-    #click 加載更多
-    def clickLoadMoreElement(self):
-        try:
-            eleLoadMoreBtn = self.driver.find_element_by_css_selector("a#loadmore")
-            strLoadMoreBtnStyle = eleLoadMoreBtn.get_attribute("style")
-            intNewsCount = len(self.driver.find_elements_by_css_selector("div.news-list ul#newslist-all li"))
-            intClickCount = 0
-            while u"none" not in strLoadMoreBtnStyle: #click loop
-                time.sleep(random.randint(2,5)) #sleep random time
-                logging.info("click loadmore button. (%d/15)"%intClickCount)
-                eleLoadMoreBtn.click()
-                time.sleep(random.randint(2,5)) #sleep random time
-                # 檢查 intNewsCount 數量是否有增加
-                intClickCount = (intClickCount+1)%15 # 每 click 15 次檢查一次
-                if intClickCount == 0:
-                    intNewNewsCount = len(self.driver.find_elements_by_css_selector("div.news-list ul#newslist-all li"))
-                    logging.info("news count: %d -> %d"%(intNewsCount, intNewNewsCount))
-                    if intNewsCount == intNewNewsCount or intNewNewsCount >= 8800:
-                        # click 15次 沒有發現新的 news ，中斷 click loop
-                        # 或是 news 總數量超過 8800 筆，也中斷 click loop
-                        break
-                    else:
-                        #持續有發現新的 news ，更新 intClickCount
-                        intNewsCount = intNewNewsCount
-                eleLoadMoreBtn = self.driver.find_element_by_css_selector("a#loadmore")
-                strLoadMoreBtnStyle = eleLoadMoreBtn.get_attribute("style")
-        except NoSuchElementException:
-            logging.info("selenium driver can't find the loadmore button.")
-            return
+    #找出下一頁 topic 的 url
+    def findNextTopicPageUrl(self):
+        strNextTopicPageUrl = None
+        elesNextPageA = self.driver.find_elements_by_css_selector("div.river-nav ol.pagination li.next a")
+        if len(elesNextPageA) == 1:
+            strNextTopicPageUrl = elesNextPageA[0].get_attribute("href")
+        return strNextTopicPageUrl
         
     #下載 topic 頁面
     def downloadTopicPage(self, uselessArg1=None):
         logging.info("download topic page")
-        strCategoryHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\PEDAILY\\category"
-        if not os.path.exists(strCategoryHtmlFolderPath):
-            os.mkdir(strCategoryHtmlFolderPath) #mkdir source_html/PEDAILY/category/
-        #取得 Db 中尚未下載的 category 名稱
-        lstStrNotObtainedTCategoryName = self.db.fetchallNotObtainedCategoryName()
-        for strNotObtainedTCategoryName in lstStrNotObtainedTCategoryName:
-            strCategoryUrl = self.strWebsiteDomain + u"/" + strNotObtainedTCategoryName
-            #category 頁面
-            time.sleep(random.randint(2,5)) #sleep random time
+        strTopicHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\TECHCRUNCH\\topic"
+        if not os.path.exists(strTopicHtmlFolderPath):
+            os.mkdir(strTopicHtmlFolderPath) #mkdir source_html/TECHCRUNCH/topic/
+        #取得 Db 中尚未下載的 topic url
+        lstStrNotObtainedTopicPage1Url = self.db.fetchallNotObtainedTopicUrl()
+        for strNotObtainedTopicPage1Url in lstStrNotObtainedTopicPage1Url:
+            #topic 頁面
             try:
-                self.driver.get(strCategoryUrl)
-                self.clickLoadMoreElement() #點開 加載更多 按鈕
+                #re 找出 topic 名稱
+                strTopicNamePartInUrl = re.match("^https://techcrunch.com/topic/(.*)/$", strNotObtainedTopicPage1Url).group(1)
+                strTopicName = re.sub(u"/", u"__", strTopicNamePartInUrl)
+                #topic 第0頁
+                intPageNum = 0
+                time.sleep(random.randint(2,5)) #sleep random time
+                self.driver.get(strNotObtainedTopicPage1Url)
                 #儲存 html
-                strCategoryHtmlFilePath = strCategoryHtmlFolderPath + u"\\%s_category.html"%(strNotObtainedTCategoryName)
-                self.utility.overwriteSaveAs(strFilePath=strCategoryHtmlFilePath, unicodeData=self.driver.page_source)
+                strTopicHtmlFilePath = strTopicHtmlFolderPath + u"\\%d_%s_topic.html"%(intPageNum, strTopicName)
+                self.utility.overwriteSaveAs(strFilePath=strTopicHtmlFilePath, unicodeData=self.driver.page_source)
+                #topic 下一頁
+                strNextTopicPageUrl = self.findNextTopicPageUrl()
+                while strNextTopicPageUrl: # is not None
+                    time.sleep(random.randint(2,5)) #sleep random time
+                    intPageNum = intPageNum+1
+                    self.driver.get(strNextTopicPageUrl)
+                    #儲存 html
+                    strTopicHtmlFilePath = strTopicHtmlFolderPath + u"\\%d_%s_topic.html"%(intPageNum, strTopicName)
+                    self.utility.overwriteSaveAs(strFilePath=strTopicHtmlFilePath, unicodeData=self.driver.page_source)
+                    #tag 再下一頁
+                    strNextTopicPageUrl = self.findNextTopicPageUrl()
                 #更新tag DB 為已抓取 (isGot = 1)
-                self.db.updateCategoryStatusIsGot(strCategoryName=strNotObtainedTCategoryName)
-                logging.info("got category %s"%strNotObtainedTCategoryName)
+                self.db.updateTopicStatusIsGot(strTopicPage1Url=strNotObtainedTopicPage1Url)
+                logging.info("got topic %s"%strTopicName)
             except:
-                logging.warning("selenium driver crashed. skip get category: %s"%strCategoryUrl)
+                logging.warning("selenium driver crashed. skip get topic: %s"%strNotObtainedTopicPage1Url)
             finally:
-                self.restartDriver() #重啟 
+                self.restartDriver() #重啟
             
     #下載 news 頁面 (strCategoryName == None 會自動找尋已下載完成之 category)
-    def downloadNewsPage(self, strCategoryName=None):
+    def downloadNewsPage(self, strTopicPage1Url=None):
         if strCategoryName is None:
             #未指定 category
             lstStrObtainedCategoryName = self.db.fetchallCompletedObtainedCategoryName()

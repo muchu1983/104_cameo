@@ -24,7 +24,7 @@ class ParserForTECHCRUNCHTest(unittest.TestCase):
     #收尾
     def tearDown(self):
         pass
-    
+    """
     #測試 解析 index.html
     def test_parseIndexPage(self):
         logging.info("ParserForTECHCRUNCHTest.test_parseIndexPage")
@@ -34,7 +34,7 @@ class ParserForTECHCRUNCHTest(unittest.TestCase):
     def test_parseTopicPage(self):
         logging.info("ParserForTECHCRUNCHTest.test_parseTopicPage")
         self.parser.parseTopicPage()
-    
+    """
     #測試 解析 news.html 並建立 news.json
     def test_parseNewsPageThenCreateNewsJson(self):
         logging.info("ParserForTECHCRUNCHTest.test_parseNewsPageThenCreateNewsJson")

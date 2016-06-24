@@ -29,7 +29,7 @@ class SpiderForTECHCRUNCHTest(unittest.TestCase):
     def test_downloadIndexPage(self):
         logging.info("SpiderForTECHCRUNCHTest.test_downloadIndexPage")
         self.spider.downloadIndexPage()
-    """
+    
     #測試抓取 topic page
     def test_downloadTopicPage(self):
         logging.info("SpiderForTECHCRUNCHTest.test_downloadTopicPage")
@@ -39,7 +39,7 @@ class SpiderForTECHCRUNCHTest(unittest.TestCase):
     def test_downloadNewsPage(self):
         logging.info("SpiderForTECHCRUNCHTest.test_downloadNewsPage")
         self.spider.downloadNewsPage(strTopicPage1Url=None)
-    """
+    
 #測試開始
 if __name__ == "__main__":
     unittest.main(exit=False)
