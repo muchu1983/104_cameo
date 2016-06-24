@@ -23,6 +23,8 @@ from cameo.importerForPEDAILY import ImporterForPEDAILY
 from cameo.spiderForINSIDE import SpiderForINSIDE
 from cameo.parserForINSIDE import ParserForINSIDE
 from cameo.importerForINSIDE import ImporterForINSIDE
+from cameo.spiderForTECHCRUNCH import SpiderForTECHCRUNCH
+from cameo.parserForTECHCRUNCH import ParserForTECHCRUNCH
 from cameo.cleaner import CleanerForINDIEGOGO
 from cameo.reporter import ReporterForINDIEGOGO
 from cameo.reporter import ReporterForWEBACKERS
@@ -35,25 +37,37 @@ class CameoShell:
     def __init__(self):
         self.intShellStateCode = 0 #0-已關閉，1-已開啟，
         self.strTargetSite = None
-        self.dicSpiders = {"indiegogo":SpiderForINDIEGOGO(),
-                      "webackers":SpiderForWEBACKERS(),
-                      "techorange":SpiderForTECHORANGE(),
-                      "bnext":SpiderForBNEXT(),
-                      "pedaily":SpiderForPEDAILY(),
-                      "inside":SpiderForINSIDE()}
-        self.dicParsers = {"indiegogo":ParserV2ForINDIEGOGO(),
-                      "webackers":ParserForWEBACKERS(),
-                      "techorange":ParserForTECHORANGE(),
-                      "bnext":ParserForBNEXT(),
-                      "pedaily":ParserForPEDAILY(),
-                      "inside":ParserForINSIDE()}
-        self.dicImporters = {"techorange":ImporterForTECHORANGE(),
-                        "bnext":ImporterForBNEXT(),
-                        "pedaily":ImporterForPEDAILY(),
-                        "inside":ImporterForINSIDE()}
-        self.dicCleaners = {"indiegogo":CleanerForINDIEGOGO()}
-        self.dicReporters = {"indiegogo":ReporterForINDIEGOGO(),
-                       "webackers":ReporterForWEBACKERS()}
+        self.dicSpiders = {
+            "indiegogo":SpiderForINDIEGOGO(),
+            "webackers":SpiderForWEBACKERS(),
+            "techorange":SpiderForTECHORANGE(),
+            "bnext":SpiderForBNEXT(),
+            "pedaily":SpiderForPEDAILY(),
+            "inside":SpiderForINSIDE(),
+            "techcrunch":SpiderForTECHCRUNCH()
+        }
+        self.dicParsers = {
+            "indiegogo":ParserV2ForINDIEGOGO(),
+            "webackers":ParserForWEBACKERS(),
+            "techorange":ParserForTECHORANGE(),
+            "bnext":ParserForBNEXT(),
+            "pedaily":ParserForPEDAILY(),
+            "inside":ParserForINSIDE(),
+            "techcrunch":ParserForTECHCRUNCH()
+        }
+        self.dicImporters = {
+            "techorange":ImporterForTECHORANGE(),
+            "bnext":ImporterForBNEXT(),
+            "pedaily":ImporterForPEDAILY(),
+            "inside":ImporterForINSIDE()
+        }
+        self.dicCleaners = {
+            "indiegogo":CleanerForINDIEGOGO()
+        }
+        self.dicReporters = {
+            "indiegogo":ReporterForINDIEGOGO(),
+            "webackers":ReporterForWEBACKERS()
+        }
         
     #顯示目前的目標網站
     def listSiteMessage(self):
