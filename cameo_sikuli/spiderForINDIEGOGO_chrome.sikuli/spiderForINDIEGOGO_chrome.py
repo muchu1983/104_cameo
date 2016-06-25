@@ -224,7 +224,7 @@ def fakeRandomRequest():
         dicRegion["regNW"].hover(dicPng["chrome_home"])
         wait(5)
     wait(0.5)
-def randomSaveUCBPages():
+def randomSaveUCBPages(strProjUrl=None, strProjName=None, strProjectsFolderPath=None):
     lstStrUCB = ["updates", "comments", "backers"]
     for _ in range(3):
         intPopIndex = random.randint(0,len(lstStrUCB)-1)
@@ -315,7 +315,7 @@ def downloadProjectPages(strTargetCategory=None):
         dicRegion["regUp"].wait(dicPng["page_details_about"], 300)
         rightClickSaveCurrentPage(onImage=dicPng["page_details_about"], strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_details.html")
         #save updates comments backers html
-        randomSaveUCBPages()
+        randomSaveUCBPages(strProjUrl=strProjUrl, strProjName=strProjName, strProjectsFolderPath=strProjectsFolderPath)
     projUrlListFile.close()
 #download individuals pages
 def downloadIndividualsPages(strTargetCategory=None):
