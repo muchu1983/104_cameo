@@ -226,7 +226,7 @@ def fakeRandomRequest():
     wait(0.5)
 def randomSaveUCBPages(strProjUrl=None, strProjName=None, strProjectsFolderPath=None):
     lstStrUCB = ["updates", "comments", "backers"]
-    for _ in range(3):
+    for i in range(3):
         intPopIndex = random.randint(0,len(lstStrUCB)-1)
         strUCB = lstStrUCB.pop(intPopIndex)
         # confuse browser fingerpring algorithm
