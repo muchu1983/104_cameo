@@ -217,13 +217,25 @@ def fakeRandomRequest():
                    "https://build.phonegap.com/",
                    "https://tw.money.yahoo.com/currency"
                   ]
-    for intFakeTimes in range(random.randint(3,5)):
+    for intFakeTimes in range(random.randint(1,2)):
         strFakeUrl = lstStrFakeReqUrl[random.randint(0,len(lstStrFakeReqUrl)-1)]
         openChrome()
         typeUrlOnChrome(strUrlText=strFakeUrl)
         dicRegion["regNW"].hover(dicPng["chrome_home"])
         wait(5)
     wait(0.5)
+def randomSaveUCBPages():
+    lstStrUCB = ["updates", "comments", "backers"]
+    for _ in range(3):
+        intPopIndex = random.randint(0,len(lstStrUCB)-1)
+        strUCB = lstStrUCB.pop(intPopIndex)
+        # confuse browser fingerpring algorithm
+        fakeRandomRequest() 
+        openChrome()
+        typeUrlOnChrome(strUrlText=strProjUrl + "#/%s"%strUCB)
+        wait(0.5)
+        #unfoldUCBShowmore()
+        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_%s.html"%strUCB)
 #download explore pages
 def downloadExplorePages():
     goExplorePage()
@@ -302,27 +314,8 @@ def downloadProjectPages(strTargetCategory=None):
         dicRegion["regCenter"].click(dicPng["page_story_details"])
         dicRegion["regUp"].wait(dicPng["page_details_about"], 300)
         rightClickSaveCurrentPage(onImage=dicPng["page_details_about"], strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_details.html")
-        #save updates html
-        fakeRandomRequest() # confuse browser fingerpring algorithm
-        openChrome()
-        typeUrlOnChrome(strUrlText=strProjUrl + "#/updates")
-        wait(0.5)
-        #unfoldUCBShowmore()
-        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_updates.html")
-        #save comments html
-        fakeRandomRequest() # confuse browser fingerpring algorithm
-        openChrome()
-        typeUrlOnChrome(strUrlText=strProjUrl + "#/comments")
-        wait(0.5)
-        #unfoldUCBShowmore()
-        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_comments.html")
-        #save backers html
-        fakeRandomRequest() # confuse browser fingerpring algorithm
-        openChrome()
-        typeUrlOnChrome(strUrlText=strProjUrl + "#/backers")
-        wait(0.5)
-        #unfoldUCBShowmore()
-        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_backers.html")
+        #save updates comments backers html
+        randomSaveUCBPages()
     projUrlListFile.close()
 #download individuals pages
 def downloadIndividualsPages(strTargetCategory=None):
@@ -373,7 +366,7 @@ def downloadIndividualsPages(strTargetCategory=None):
             saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsId + "_campaigns.html")
         except FindFailed, ff:
             print(str(ff))
-            popup(u"spider cant find png error! >_<|| (skip it now)")
+            logging.warning("spider cant find png error! (skip it now) %s"%strIndividualsUrl)
             continue
     individualsUrlListFile.close()
 #main entry point
