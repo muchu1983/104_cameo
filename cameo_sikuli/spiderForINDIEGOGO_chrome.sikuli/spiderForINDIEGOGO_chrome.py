@@ -285,7 +285,7 @@ def downloadProjectPages(strTargetCategory=None):
                 isProjHtmlFileMissing = True
         if isProjHtmlFileMissing:
             fakeRandomRequest() # confuse browser fingerpring algorithm
-            wait(random.randint(10,30)) #wait random time per project
+            wait(random.randint(6,10)) #wait random time per project
             #delete remaining project html files
             for strProjHtmlFileExtension in lstStrProjHtmlFileExtension:
                 strProjHtmlFilePath = strProjectsFolderPath + os.sep + strProjName + strProjHtmlFileExtension
@@ -296,7 +296,7 @@ def downloadProjectPages(strTargetCategory=None):
             wait(0.5)
             #check page "something not right" show?
             while(dicRegion["regUp"].exists(dicPng["page_not_right"])):
-                openChrome() #reopen chrome for load standard style
+                openChrome()
                 typeUrlOnChrome(strUrlText=strProjUrl)
                 wait(0.5)
         else:
