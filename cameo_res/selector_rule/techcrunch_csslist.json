@@ -1,0 +1,67 @@
+{
+    "rawdata-converter-name":"techcrunch_news",
+    "local-html-file-pattern":{
+        "strBasedir":"cameo_res\\source_html\\TECHCRUNCH\\news",
+        "strSuffixes":"news.html"
+    },
+    "csslist":[
+        {
+            "name": "techcrunch-news-title", 
+            "sampleUrl": "https://techcrunch.com/2016/06/02/apple-app-store-goes-down/", 
+            "cssRule": "header.page-title h1.tweet-title::text", 
+            "sampleAns": [
+                "Apple App Store goes down"
+            ], 
+            "ansType": "exact" 
+        },
+        {
+            "name":"techcrunch-news-tags",
+            "sampleUrl":"https://techcrunch.com/2016/06/02/apple-app-store-goes-down/",
+            "cssRule":"div.tags a.tag::text",
+            "sampleAns":[
+                "Apps",
+                "Apple",
+                "iCloud",
+                "iTunes",
+                "app-store"
+            ],
+            "ansType":"exact"
+        },
+        {
+            "name":"techcrunch-news-pubtime",
+            "sampleUrl":"https://techcrunch.com/2016/06/02/apple-app-store-goes-down/",
+            "cssRule":"div.byline time.timestamp::text",
+            "sampleAns":[
+                "4 hours ago"
+            ],
+            "ansType":"exist"
+        },
+        {
+            "name":"techcrunch-news-author",
+            "sampleUrl":"https://techcrunch.com/2016/06/02/apple-app-store-goes-down/",
+            "cssRule":"div.title-left div.byline a::text",
+            "sampleAns":[
+                "Jordan Crook"
+            ],
+            "ansType":"exact"
+        },
+        {
+            "name":"techcrunch-news-content",
+            "sampleUrl":"https://techcrunch.com/2016/06/02/apple-app-store-goes-down/",
+            "cssRule":"div.article-entry.text *::text",
+            "sampleAns":[
+                "If you’ve ever turned to the ..."
+            ],
+            "ansType":"exist"
+        },
+        {
+            "name":"techcrunch-news-url",
+            "sampleUrl":"https://techcrunch.com/2016/06/02/apple-app-store-goes-down/",
+            "cssRule":"ul#social-share::attr(data-permalink)",
+            "sampleAns":[
+                "https://techcrunch.com/2016/06/02/apple-app-store-goes-down/"
+            ],
+            "ansType":"exact"
+        }
+    ]
+}
