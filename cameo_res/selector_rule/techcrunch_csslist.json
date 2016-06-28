@@ -30,7 +30,7 @@
         {
             "name":"techcrunch-news-pubtime",
             "sampleUrl":"https://techcrunch.com/2016/06/02/apple-app-store-goes-down/",
-            "cssRule":"div.byline time.timestamp::text",
+            "cssRule":"header.article-header div.byline time.timestamp::text",
             "sampleAns":[
                 "4 hours ago"
             ],
