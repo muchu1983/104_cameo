@@ -27,6 +27,9 @@ vitual machine
 deploy server 210.65.11.231 administrator cameoroot
 爬蟲測試機 (募資網站) 210.65.11.246 administrator uGm5MCg5Z73kwgjm1SP
 爬蟲測試機 (新聞網站) 203.66.83.28 administrator uGm5MCg5Z73kwgjm1SP
+爬蟲測試機 (京東眾籌) 210.61.46.13 administrator uGm5MCg5Z73kwgjm1SP
+爬蟲測試機 (京東眾籌) 210.61.46.14 administrator uGm5MCg5Z73kwgjm1SP
+爬蟲測試機 (京東眾籌) 210.61.46.15 administrator uGm5MCg5Z73kwgjm1SP
 台經院FTP帳密 210.65.11.231 cameo / cameo port: 21
 https://userportal.hicloud.hinet.net/cloud/?others= cbh@cameoinfotech.com q1w2e3r4
 
