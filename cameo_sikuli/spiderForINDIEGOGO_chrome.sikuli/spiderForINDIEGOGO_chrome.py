@@ -14,45 +14,50 @@ import random
 from java.awt import Toolkit
 from java.awt.datatransfer import StringSelection
 screen = Screen()
-dicRegion = {"regUp":Region(0,0,screen.getW(),screen.getH()/2),
-          "regDown":Region(0,screen.getH()/2,screen.getW(),screen.getH()/2),
-          "regLeft":Region(0,0,screen.getW()/2,screen.getH()),
-          "regRight":Region(screen.getW()/2,0,screen.getW()/2,screen.getH()),
-          "regNE":Region(screen.getW()/2,0,screen.getW()/2,screen.getH()/2),
-          "regSE":Region(screen.getW()/2,screen.getH()/2,screen.getW()/2,screen.getH()/2),
-          "regSW":Region(0,screen.getH()/2,screen.getW()/2,screen.getH()/2),
-          "regNW":Region(0,0,screen.getW()/2,screen.getH()/2),
-          "regCenter":Region(screen.getW()/4,screen.getH()/4,screen.getW()/2,screen.getH()/2)
-         }
-dicPng = {"chrome_home":"chrome_home.png",
-        "chrome_stop": "chrome_stop.png",
-        "chrome_reload":"chrome_reload.png",
-        "chrome_download_finished":"chrome_download_finished.png",
-        "page_end_about":"page_end_about.png",
-        "page_end_camp":"page_end_camp.png",
-        "page_cate_more":"page_cate_more.png",
-        "page_ucb_more":"page_ucb_more.png", #different between before click and after click
-        "page_new_style_check":"page_new_style_check.png",
-        "page_blur_story":"page_blur_story.png",
-        "page_focus_profile":"page_focus_profile.png", 
-        "page_story_details":"page_story_details.png",
-        "page_details_about":"page_details_about.png",
-        "page_explore":"page_explore.png",
-        "page_not_found":"page_not_found.png",
-        "page_not_found_2":"page_not_found_2.png",
-        "page_not_right":"page_not_right.png",
-        "page_your_interruption":"page_your_interruption.png",
-        "page_proxy_error":"page_proxy_error.png",
-        "page_currently_updated":"currently_updated.png",
-        "page_under_review":"page_under_review.png",
-        "os_right_save_as":"os_right_save_as.png",
-        "os_save_btn":"os_save_btn.png",
-        }
-lstStrCategoryName = ["animals", "art", "comic", "community", "dance",
-                "design", "education", "environment", "fashion",
-                "film", "food", "gaming", "health", "music", "photography",
-                "politics", "religion", "small_business", "sports",
-                "technology", "theatre", "transmedia", "video_web", "writing"]
+dicRegion = {
+    "regUp":Region(0,0,screen.getW(),screen.getH()/2),
+    "regDown":Region(0,screen.getH()/2,screen.getW(),screen.getH()/2),
+    "regLeft":Region(0,0,screen.getW()/2,screen.getH()),
+    "regRight":Region(screen.getW()/2,0,screen.getW()/2,screen.getH()),
+    "regNE":Region(screen.getW()/2,0,screen.getW()/2,screen.getH()/2),
+    "regSE":Region(screen.getW()/2,screen.getH()/2,screen.getW()/2,screen.getH()/2),
+    "regSW":Region(0,screen.getH()/2,screen.getW()/2,screen.getH()/2),
+    "regNW":Region(0,0,screen.getW()/2,screen.getH()/2),
+    "regCenter":Region(screen.getW()/4,screen.getH()/4,screen.getW()/2,screen.getH()/2)
+}
+dicPng = {
+    "chrome_home":"chrome_home.png",
+    "chrome_stop": "chrome_stop.png",
+    "chrome_reload":"chrome_reload.png",
+    "chrome_download_finished":"chrome_download_finished.png",
+    "page_end_about":"page_end_about.png",
+    "page_end_camp":"page_end_camp.png",
+    "page_cate_more":"page_cate_more.png",
+    "page_ucb_more":"page_ucb_more.png", #different between before click and after click
+    "page_new_style_check":"page_new_style_check.png",
+    "page_blur_story":"page_blur_story.png",
+    "page_focus_profile":"page_focus_profile.png", 
+    "page_story_details":"page_story_details.png",
+    "page_details_about":"page_details_about.png",
+    "page_explore":"page_explore.png",
+    "page_not_found":"page_not_found.png",
+    "page_not_found_2":"page_not_found_2.png",
+    "page_generosity":,
+    "page_not_right":"page_not_right.png",
+    "page_your_interruption":"page_your_interruption.png",
+    "page_proxy_error":"page_proxy_error.png",
+    "page_currently_updated":"currently_updated.png",
+    "page_under_review":"page_under_review.png",
+    "os_right_save_as":"os_right_save_as.png",
+    "os_save_btn":"os_save_btn.png",
+}
+lstStrCategoryName = [
+    "animals", "art", "comic", "community", "dance",
+    "design", "education", "environment", "fashion",
+    "film", "food", "gaming", "health", "music", "photography",
+    "politics", "religion", "small_business", "sports",
+    "technology", "theatre", "transmedia", "video_web", "writing"
+]
 sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
 strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"
 #open chrome
@@ -302,7 +307,7 @@ def downloadProjectPages(strTargetCategory=None):
         else:
             continue #skip this url
         #check page not found or is currently updated or under review
-        if dicRegion["regCenter"].exists(dicPng["page_not_found"]) or dicRegion["regUp"].exists(dicPng["page_not_found_2"]) or dicRegion["regUp"].exists(dicPng["page_currently_updated"]) or dicRegion["regUp"].exists(dicPng["page_under_review"]):
+        if dicRegion["regNW"].exists(dicPng["page_generosity"]) or dicRegion["regCenter"].exists(dicPng["page_not_found"]) or dicRegion["regUp"].exists(dicPng["page_not_found_2"]) or dicRegion["regUp"].exists(dicPng["page_currently_updated"]) or dicRegion["regUp"].exists(dicPng["page_under_review"]):
             continue #skip this url
         #wait load completed
         dicRegion["regRight"].wait(dicPng["page_new_style_check"], 300)
