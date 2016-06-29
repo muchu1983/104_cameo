@@ -289,13 +289,24 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
                    <span class="str">"https://build.phonegap.com/"</span>,
                    <span class="str">"https://tw.money.yahoo.com/currency"</span>
                   ]
-    <span class="kw">for</span> intFakeTimes <span class="kw">in</span> range(random.randint(<span class="dig">3</span>,<span class="dig">5</span>)):
+    <span class="kw">for</span> intFakeTimes <span class="kw">in</span> range(random.randint(<span class="dig">1</span>,<span class="dig">2</span>)):
         strFakeUrl = lstStrFakeReqUrl[random.randint(<span class="dig">0</span>,len(lstStrFakeReqUrl)-<span class="dig">1</span>)]
         openChrome()
         typeUrlOnChrome(strUrlText=strFakeUrl)
-        dicRegion[<span class="str">"regNW"</span>].hover(dicPng[<span class="str">"chrome_home"</span>])
         <span class="skw">wait</span>(<span class="dig">5</span>)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
+<span class="kw">def</span> randomSaveUCBPages(strProjUrl=None, strProjName=None, strProjectsFolderPath=None):
+    lstStrUCB = [<span class="str">"updates"</span>, <span class="str">"comments"</span>, <span class="str">"backers"</span>]
+    <span class="kw">for</span> i <span class="kw">in</span> range(<span class="dig">3</span>):
+        intPopIndex = random.randint(<span class="dig">0</span>,len(lstStrUCB)-<span class="dig">1</span>)
+        strUCB = lstStrUCB.pop(intPopIndex)
+        <span class="cmt"># confuse browser fingerpring algorithm
+</span>        fakeRandomRequest()
+        openChrome()
+        typeUrlOnChrome(strUrlText=strProjUrl + <span class="str">"#/%s"</span>%strUCB)
+        <span class="skw">wait</span>(<span class="dig">0.5</span>)
+        <span class="cmt">#unfoldUCBShowmore()
+</span>        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + <span class="str">"_%s.html"</span>%strUCB)
 <span class="cmt">#download explore pages
 </span><span class="kw">def</span> downloadExplorePages():
     goExplorePage()
@@ -346,7 +357,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
                 isProjHtmlFileMissing = True
         <span class="kw">if</span> isProjHtmlFileMissing:
             fakeRandomRequest() <span class="cmt"># confuse browser fingerpring algorithm</span>
-            <span class="skw">wait</span>(random.randint(<span class="dig">10</span>,<span class="dig">30</span>)) <span class="cmt">#wait random time per project</span>
+            <span class="skw">wait</span>(random.randint(<span class="dig">6</span>,<span class="dig">10</span>)) <span class="cmt">#wait random time per project</span>
             <span class="cmt">#delete remaining project html files
 </span>            <span class="kw">for</span> strProjHtmlFileExtension <span class="kw">in</span> lstStrProjHtmlFileExtension:
                 strProjHtmlFilePath = strProjectsFolderPath + os.sep + strProjName + strProjHtmlFileExtension
@@ -357,7 +368,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
             <span class="skw">wait</span>(<span class="dig">0.5</span>)
             <span class="cmt">#check page "something not right" show?
 </span>            <span class="kw">while</span>(dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_not_right"</span>])):
-                openChrome() <span class="cmt">#reopen chrome for load standard style</span>
+                openChrome()
                 typeUrlOnChrome(strUrlText=strProjUrl)
                 <span class="skw">wait</span>(<span class="dig">0.5</span>)
         <span class="kw">else</span>:
@@ -374,27 +385,8 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         dicRegion[<span class="str">"regCenter"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_story_details"</span>])
         dicRegion[<span class="str">"regUp"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"page_details_about"</span>], <span class="dig">300</span>)
         rightClickSaveCurrentPage(onImage=dicPng[<span class="str">"page_details_about"</span>], strFolderPath=strProjectsFolderPath, strFilename=strProjName + <span class="str">"_details.html"</span>)
-        <span class="cmt">#save updates html
-</span>        fakeRandomRequest() <span class="cmt"># confuse browser fingerpring algorithm</span>
-        openChrome()
-        typeUrlOnChrome(strUrlText=strProjUrl + <span class="str">"#/updates"</span>)
-        <span class="skw">wait</span>(<span class="dig">0.5</span>)
-        <span class="cmt">#unfoldUCBShowmore()
-</span>        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + <span class="str">"_updates.html"</span>)
-        <span class="cmt">#save comments html
-</span>        fakeRandomRequest() <span class="cmt"># confuse browser fingerpring algorithm</span>
-        openChrome()
-        typeUrlOnChrome(strUrlText=strProjUrl + <span class="str">"#/comments"</span>)
-        <span class="skw">wait</span>(<span class="dig">0.5</span>)
-        <span class="cmt">#unfoldUCBShowmore()
-</span>        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + <span class="str">"_comments.html"</span>)
-        <span class="cmt">#save backers html
-</span>        fakeRandomRequest() <span class="cmt"># confuse browser fingerpring algorithm</span>
-        openChrome()
-        typeUrlOnChrome(strUrlText=strProjUrl + <span class="str">"#/backers"</span>)
-        <span class="skw">wait</span>(<span class="dig">0.5</span>)
-        <span class="cmt">#unfoldUCBShowmore()
-</span>        saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + <span class="str">"_backers.html"</span>)
+        <span class="cmt">#save updates comments backers html
+</span>        randomSaveUCBPages(strProjUrl=strProjUrl, strProjName=strProjName, strProjectsFolderPath=strProjectsFolderPath)
     projUrlListFile.close()
 <span class="cmt">#download individuals pages
 </span><span class="kw">def</span> downloadIndividualsPages(strTargetCategory=None):
@@ -445,7 +437,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
             saveCurrentPage(strFolderPath=strIndividualsFolderPath, strFilename=strIndividualsId + <span class="str">"_campaigns.html"</span>)
         <span class="kw">except</span> FindFailed, ff:
             <span class="kw">print</span>(str(ff))
-            <span class="skw">popup</span>(<span class="str">u"spider cant find png error! &gt;_&lt;|| (skip it now)"</span>)
+            logging.warning(<span class="str">"spider cant find png error! (skip it now) %s"</span>%strIndividualsUrl)
             <span class="kw">continue</span>
     individualsUrlListFile.close()
 <span class="cmt">#main entry point
