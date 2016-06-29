@@ -86,45 +86,50 @@ This file is part of BSD license
 <span class="kw">from</span> java.awt <span class="kw">import</span> Toolkit
 <span class="kw">from</span> java.awt.datatransfer <span class="kw">import</span> StringSelection
 screen = Screen()
-dicRegion = {<span class="str">"regUp"</span>:Region(<span class="dig">0</span>,<span class="dig">0</span>,screen.getW(),screen.getH()/<span class="dig">2</span>),
-          <span class="str">"regDown"</span>:Region(<span class="dig">0</span>,screen.getH()/<span class="dig">2</span>,screen.getW(),screen.getH()/<span class="dig">2</span>),
-          <span class="str">"regLeft"</span>:Region(<span class="dig">0</span>,<span class="dig">0</span>,screen.getW()/<span class="dig">2</span>,screen.getH()),
-          <span class="str">"regRight"</span>:Region(screen.getW()/<span class="dig">2</span>,<span class="dig">0</span>,screen.getW()/<span class="dig">2</span>,screen.getH()),
-          <span class="str">"regNE"</span>:Region(screen.getW()/<span class="dig">2</span>,<span class="dig">0</span>,screen.getW()/<span class="dig">2</span>,screen.getH()/<span class="dig">2</span>),
-          <span class="str">"regSE"</span>:Region(screen.getW()/<span class="dig">2</span>,screen.getH()/<span class="dig">2</span>,screen.getW()/<span class="dig">2</span>,screen.getH()/<span class="dig">2</span>),
-          <span class="str">"regSW"</span>:Region(<span class="dig">0</span>,screen.getH()/<span class="dig">2</span>,screen.getW()/<span class="dig">2</span>,screen.getH()/<span class="dig">2</span>),
-          <span class="str">"regNW"</span>:Region(<span class="dig">0</span>,<span class="dig">0</span>,screen.getW()/<span class="dig">2</span>,screen.getH()/<span class="dig">2</span>),
-          <span class="str">"regCenter"</span>:Region(screen.getW()/<span class="dig">4</span>,screen.getH()/<span class="dig">4</span>,screen.getW()/<span class="dig">2</span>,screen.getH()/<span class="dig">2</span>)
-         }
-dicPng = {<span class="str">"chrome_home"</span>:<img src="chrome_home.png" />,
-        <span class="str">"chrome_stop"</span>: <img src="chrome_stop.png" />,
-        <span class="str">"chrome_reload"</span>:<img src="chrome_reload.png" />,
-        <span class="str">"chrome_download_finished"</span>:<img src="chrome_download_finished.png" />,
-        <span class="str">"page_end_about"</span>:<img src="page_end_about.png" />,
-        <span class="str">"page_end_camp"</span>:<img src="page_end_camp.png" />,
-        <span class="str">"page_cate_more"</span>:<img src="page_cate_more.png" />,
-        <span class="str">"page_ucb_more"</span>:<img src="page_ucb_more.png" />, <span class="cmt">#different between before click and after click</span>
-        <span class="str">"page_new_style_check"</span>:<img src="page_new_style_check.png" />,
-        <span class="str">"page_blur_story"</span>:<img src="page_blur_story.png" />,
-        <span class="str">"page_focus_profile"</span>:<img src="page_focus_profile.png" />,
-        <span class="str">"page_story_details"</span>:<img src="page_story_details.png" />,
-        <span class="str">"page_details_about"</span>:<img src="page_details_about.png" />,
-        <span class="str">"page_explore"</span>:<img src="page_explore.png" />,
-        <span class="str">"page_not_found"</span>:<img src="page_not_found.png" />,
-        <span class="str">"page_not_found_2"</span>:<img src="page_not_found_2.png" />,
-        <span class="str">"page_not_right"</span>:<img src="page_not_right.png" />,
-        <span class="str">"page_your_interruption"</span>:<img src="page_your_interruption.png" />,
-        <span class="str">"page_proxy_error"</span>:<img src="page_proxy_error.png" />,
-        <span class="str">"page_currently_updated"</span>:<img src="currently_updated.png" />,
-        <span class="str">"page_under_review"</span>:<img src="page_under_review.png" />,
-        <span class="str">"os_right_save_as"</span>:<img src="os_right_save_as.png" />,
-        <span class="str">"os_save_btn"</span>:<img src="os_save_btn.png" />,
-        }
-lstStrCategoryName = [<span class="str">"animals"</span>, <span class="str">"art"</span>, <span class="str">"comic"</span>, <span class="str">"community"</span>, <span class="str">"dance"</span>,
-                <span class="str">"design"</span>, <span class="str">"education"</span>, <span class="str">"environment"</span>, <span class="str">"fashion"</span>,
-                <span class="str">"film"</span>, <span class="str">"food"</span>, <span class="str">"gaming"</span>, <span class="str">"health"</span>, <span class="str">"music"</span>, <span class="str">"photography"</span>,
-                <span class="str">"politics"</span>, <span class="str">"religion"</span>, <span class="str">"small_business"</span>, <span class="str">"sports"</span>,
-                <span class="str">"technology"</span>, <span class="str">"theatre"</span>, <span class="str">"transmedia"</span>, <span class="str">"video_web"</span>, <span class="str">"writing"</span>]
+dicRegion = {
+    <span class="str">"regUp"</span>:Region(<span class="dig">0</span>,<span class="dig">0</span>,screen.getW(),screen.getH()/<span class="dig">2</span>),
+    <span class="str">"regDown"</span>:Region(<span class="dig">0</span>,screen.getH()/<span class="dig">2</span>,screen.getW(),screen.getH()/<span class="dig">2</span>),
+    <span class="str">"regLeft"</span>:Region(<span class="dig">0</span>,<span class="dig">0</span>,screen.getW()/<span class="dig">2</span>,screen.getH()),
+    <span class="str">"regRight"</span>:Region(screen.getW()/<span class="dig">2</span>,<span class="dig">0</span>,screen.getW()/<span class="dig">2</span>,screen.getH()),
+    <span class="str">"regNE"</span>:Region(screen.getW()/<span class="dig">2</span>,<span class="dig">0</span>,screen.getW()/<span class="dig">2</span>,screen.getH()/<span class="dig">2</span>),
+    <span class="str">"regSE"</span>:Region(screen.getW()/<span class="dig">2</span>,screen.getH()/<span class="dig">2</span>,screen.getW()/<span class="dig">2</span>,screen.getH()/<span class="dig">2</span>),
+    <span class="str">"regSW"</span>:Region(<span class="dig">0</span>,screen.getH()/<span class="dig">2</span>,screen.getW()/<span class="dig">2</span>,screen.getH()/<span class="dig">2</span>),
+    <span class="str">"regNW"</span>:Region(<span class="dig">0</span>,<span class="dig">0</span>,screen.getW()/<span class="dig">2</span>,screen.getH()/<span class="dig">2</span>),
+    <span class="str">"regCenter"</span>:Region(screen.getW()/<span class="dig">4</span>,screen.getH()/<span class="dig">4</span>,screen.getW()/<span class="dig">2</span>,screen.getH()/<span class="dig">2</span>)
+}
+dicPng = {
+    <span class="str">"chrome_home"</span>:<img src="chrome_home.png" />,
+    <span class="str">"chrome_stop"</span>: <img src="chrome_stop.png" />,
+    <span class="str">"chrome_reload"</span>:<img src="chrome_reload.png" />,
+    <span class="str">"chrome_download_finished"</span>:<img src="chrome_download_finished.png" />,
+    <span class="str">"page_end_about"</span>:<img src="page_end_about.png" />,
+    <span class="str">"page_end_camp"</span>:<img src="page_end_camp.png" />,
+    <span class="str">"page_cate_more"</span>:<img src="page_cate_more.png" />,
+    <span class="str">"page_ucb_more"</span>:<img src="page_ucb_more.png" />, <span class="cmt">#different between before click and after click</span>
+    <span class="str">"page_new_style_check"</span>:<img src="page_new_style_check.png" />,
+    <span class="str">"page_blur_story"</span>:<img src="page_blur_story.png" />,
+    <span class="str">"page_focus_profile"</span>:<img src="page_focus_profile.png" />,
+    <span class="str">"page_story_details"</span>:<img src="page_story_details.png" />,
+    <span class="str">"page_details_about"</span>:<img src="page_details_about.png" />,
+    <span class="str">"page_explore"</span>:<img src="page_explore.png" />,
+    <span class="str">"page_not_found"</span>:<img src="page_not_found.png" />,
+    <span class="str">"page_not_found_2"</span>:<img src="page_not_found_2.png" />,
+    <span class="str">"page_generosity"</span>:<img src="page_generosity.png" />,
+    <span class="str">"page_not_right"</span>:<img src="page_not_right.png" />,
+    <span class="str">"page_your_interruption"</span>:<img src="page_your_interruption.png" />,
+    <span class="str">"page_proxy_error"</span>:<img src="page_proxy_error.png" />,
+    <span class="str">"page_currently_updated"</span>:<img src="currently_updated.png" />,
+    <span class="str">"page_under_review"</span>:<img src="page_under_review.png" />,
+    <span class="str">"os_right_save_as"</span>:<img src="os_right_save_as.png" />,
+    <span class="str">"os_save_btn"</span>:<img src="os_save_btn.png" />,
+}
+lstStrCategoryName = [
+    <span class="str">"animals"</span>, <span class="str">"art"</span>, <span class="str">"comic"</span>, <span class="str">"community"</span>, <span class="str">"dance"</span>,
+    <span class="str">"design"</span>, <span class="str">"education"</span>, <span class="str">"environment"</span>, <span class="str">"fashion"</span>,
+    <span class="str">"film"</span>, <span class="str">"food"</span>, <span class="str">"gaming"</span>, <span class="str">"health"</span>, <span class="str">"music"</span>, <span class="str">"photography"</span>,
+    <span class="str">"politics"</span>, <span class="str">"religion"</span>, <span class="str">"small_business"</span>, <span class="str">"sports"</span>,
+    <span class="str">"technology"</span>, <span class="str">"theatre"</span>, <span class="str">"transmedia"</span>, <span class="str">"video_web"</span>, <span class="str">"writing"</span>
+]
 sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
 strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"</span>
 <span class="cmt">#open chrome
@@ -374,7 +379,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         <span class="kw">else</span>:
             <span class="kw">continue</span> <span class="cmt">#skip this url</span>
         <span class="cmt">#check page not found or is currently updated or under review
-</span>        <span class="kw">if</span> dicRegion[<span class="str">"regCenter"</span>].exists(dicPng[<span class="str">"page_not_found"</span>]) <span class="kw">or</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_not_found_2"</span>]) <span class="kw">or</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_currently_updated"</span>]) <span class="kw">or</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_under_review"</span>]):
+</span>        <span class="kw">if</span> dicRegion[<span class="str">"regNW"</span>].exists(dicPng[<span class="str">"page_generosity"</span>]) <span class="kw">or</span> dicRegion[<span class="str">"regCenter"</span>].exists(dicPng[<span class="str">"page_not_found"</span>]) <span class="kw">or</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_not_found_2"</span>]) <span class="kw">or</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_currently_updated"</span>]) <span class="kw">or</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_under_review"</span>]):
             <span class="kw">continue</span> <span class="cmt">#skip this url</span>
         <span class="cmt">#wait load completed
 </span>        dicRegion[<span class="str">"regRight"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"page_new_style_check"</span>], <span class="dig">300</span>)
