@@ -23,13 +23,17 @@ class SpiderForWEBACKERS:
     def __init__(self):
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
-        self.dicSubCommandHandler = {"browse":self.downloadBrowsePageAndParseBrowsePage,
-                                     "category":self.downloadCategoryPage,
-                                     "project":self.downloadProjectPage,
-                                     "profile":self.downloadProfilePage,
-                                     "automode":self.downloadProjectAndProfilePageAutoMode}
-        self.lstStrCategoryName = ["acg", "art", "charity", "design", "music",
-                                   "publication", "sport", "surprise", "technology", "video"]
+        self.dicSubCommandHandler = {
+            "browse":self.downloadBrowsePageAndParseBrowsePage,
+            "category":self.downloadCategoryPage,
+            "project":self.downloadProjectPage,
+            "profile":self.downloadProfilePage,
+            "automode":self.downloadProjectAndProfilePageAutoMode
+        }
+        self.lstStrCategoryName = [
+            "acg", "art", "charity", "design", "music",
+            "publication", "sport", "surprise", "technology", "video"
+        ]
         self.CATEGORY_URL_LIST_FILENAME = u"category_url_list.txt"
         self.PROJ_URL_LIST_FILENAME = u"_proj_url_list.txt"
         self.utility = Utility()
@@ -159,6 +163,9 @@ class SpiderForWEBACKERS:
         for dicProjectData in dicCategoryData["project_url_list"]:
             strProjectIntroUrl = dicProjectData["strUrl"]
             strProjId = re.match("^https://www.webackers.com/Proposal/Display/([0-9]*)$", strProjectIntroUrl).group(1)
+            #skip 345.html
+            if strProjId == "345":
+                continue
             #專案介紹 TAB
             strProjectIntroHtmlFileName = strProjId + u"_intro.html"
             strProjectIntroHtmlFilePath = strProjectsHtmlFolderPath + (u"\\%s"%strProjectIntroHtmlFileName)

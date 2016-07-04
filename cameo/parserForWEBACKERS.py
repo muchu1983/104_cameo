@@ -22,21 +22,29 @@ class ParserForWEBACKERS:
     #建構子
     def __init__(self):
         self.utility = Utility()
-        self.dicSubCommandHandler = {"category":[self.parseCategoryPage],
-                            "project":[self.beforeParseProjectPage,
-                                   self.parseIntroPage,
-                                   self.parseSponsorPage,
-                                   self.parseProgressPage,
-                                   self.parseFaqPage,
-                                   self.afterParseProjectPage],
-                            "profile":[self.beforeParseProfilePage,
-                                   self.parseProjPage,
-                                   self.parseOrderPage,
-                                   self.afterParseProfilePage],
-                            "automode":[self.parseProjectAndProfilePageAutoMode]}
+        self.dicSubCommandHandler = {
+            "category":[self.parseCategoryPage],
+            "project":[
+                self.beforeParseProjectPage,
+                self.parseIntroPage,
+                self.parseSponsorPage,
+                self.parseProgressPage,
+                self.parseFaqPage,
+                self.afterParseProjectPage
+            ],
+            "profile":[
+                self.beforeParseProfilePage,
+                self.parseProjPage,
+                self.parseOrderPage,
+                self.afterParseProfilePage
+            ],
+            "automode":[self.parseProjectAndProfilePageAutoMode]
+        }
         self.strWebsiteDomain = u"https://www.webackers.com"
-        self.lstStrCategoryName = ["acg", "art", "charity", "design", "music",
-                        "publication", "sport", "surprise", "technology", "video"]
+        self.lstStrCategoryName = [
+            "acg", "art", "charity", "design", "music",
+            "publication", "sport", "surprise", "technology", "video"
+        ]
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
         self.dicParsedResultOfCategory = {} #category.json 資料
@@ -48,12 +56,14 @@ class ParserForWEBACKERS:
         
     #取得 parser 使用資訊
     def getUseageMessage(self):
-        return ("- WEBACKERS -\n"
-                "useage:\n"
-                "category - parse #_category.html then create project_url_list.txt\n"
-                "project category - parse project's html of given category, then create .json\n"
-                "profile category - parse profile's html of given category, then create .json\n"
-                "automode - parse project's and profile's html of all categories, then create .json\n")
+        return (
+            "- WEBACKERS -\n"
+            "useage:\n"
+            "category - parse #_category.html then create project_url_list.txt\n"
+            "project category - parse project's html of given category, then create .json\n"
+            "profile category - parse profile's html of given category, then create .json\n"
+            "automode - parse project's and profile's html of all categories, then create .json\n"
+        )
 
     #執行 parser
     def runParser(self, lstSubcommand=None):

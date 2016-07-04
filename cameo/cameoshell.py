@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Copyright (C) 2015, MuChu Hsu
+Copyright (C) 2016, MuChu Hsu
 Contributed by Muchu Hsu (muchu1983@gmail.com)
 This file is part of BSD license
 
@@ -94,17 +94,19 @@ class CameoShell:
             
     #顯示幫助訊息
     def printHelpMessage(self):
-        strHelpText = ("- HELP -\n"
-                       "useage:\n"
-                       "help - print this message\n"
-                       "exit - close shell\n"
-                       "lssite - list current site\n"
-                       "chsite - change site\n"
-                       "spider - run spider\n"
-                       "parser - run parser\n"
-                       "importer - run importer\n"
-                       "clean - clean _files dirs\n"
-                       "report - report result of site\n")
+        strHelpText = (
+            "- HELP -\n"
+            "useage:\n"
+            "help - print this message\n"
+            "exit - close shell\n"
+            "lssite - list current site\n"
+            "chsite - change site\n"
+            "spider - run spider\n"
+            "parser - run parser\n"
+            "importer - run importer\n"
+            "clean - clean _files dirs\n"
+            "report - report result of site\n"
+        )
         print(strHelpText)
         
     #顯示 spider 訊息
