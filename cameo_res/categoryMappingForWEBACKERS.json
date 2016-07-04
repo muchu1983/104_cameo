@@ -1,0 +1,12 @@
+{
+    "藝術":{ "intCategoryId": 2, "strCategory": "商品設計", "intSubCategoryId": 22, "strSubCategory": "藝術" },
+    "出版":{ "intCategoryId": 7, "strCategory": "出版", "intSubCategoryId": 75, "strSubCategory": "創作出版" },
+    "音樂":{ "intCategoryId": 5, "strCategory": "影音娛樂", "intSubCategoryId": 52, "strSubCategory": "音樂" },
+    "設計":{ "intCategoryId": 2, "strCategory": "商品設計", "intSubCategoryId": 24, "strSubCategory": "產品設計" },
+    "科技":{ "intCategoryId": 1, "strCategory": "科技應用", "intSubCategoryId": 117, "strSubCategory": "科技" },
+    "遊戲動漫":{ "intCategoryId": 4, "strCategory": "遊戲動漫", "intSubCategoryId": 48, "strSubCategory": "遊戲動漫" },
+    "驚喜":{ "intCategoryId": 9, "strCategory": "其他", "intSubCategoryId": 93, "strSubCategory": "其他" },
+    "公益":{ "intCategoryId": 6, "strCategory": "社會文化", "intSubCategoryId": 63, "strSubCategory": "公益" },
+    "影視":{ "intCategoryId": 5, "strCategory": "影音娛樂", "intSubCategoryId": 55, "strSubCategory": "電視" },
+    "運動休閒": { "intCategoryId": 9, "strCategory": "其他", "intSubCategoryId": 93, "strSubCategory": "其他" }
+}

@@ -11,6 +11,7 @@ from cameo.parserForINDIEGOGO import ParserForINDIEGOGO #old style
 from cameo.parserV2ForINDIEGOGO import ParserV2ForINDIEGOGO #new style
 from cameo.spiderForWEBACKERS import SpiderForWEBACKERS
 from cameo.parserForWEBACKERS import ParserForWEBACKERS
+from cameo.importerForWEBACKERS import ImporterForWEBACKERS
 from cameo.spiderForTECHORANGE import SpiderForTECHORANGE
 from cameo.parserForTECHORANGE import ParserForTECHORANGE
 from cameo.importerForTECHORANGE import ImporterForTECHORANGE
@@ -56,6 +57,7 @@ class CameoShell:
             "techcrunch":ParserForTECHCRUNCH()
         }
         self.dicImporters = {
+            "webackers":ImporterForWEBACKERS(),
             "techorange":ImporterForTECHORANGE(),
             "bnext":ImporterForBNEXT(),
             "pedaily":ImporterForPEDAILY(),
