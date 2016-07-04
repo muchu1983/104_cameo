@@ -207,6 +207,9 @@ class SpiderForWEBACKERS:
         dicCategoryData = self.utility.readObjectFromJsonFile(strJsonFilePath=strCategoryJsonFilePath)
         for strProfileProjectUrl in dicCategoryData["profile_url_list"]:
             strProfileId = re.match("^.*proposalId=([0-9]*)$", strProfileProjectUrl).group(1)
+            #skip 345.html
+            if strProfileId == "345":
+                continue
             #啟動專案 TAB
             strProfileProjHtmlFileName = strProfileId + u"_proj.html"
             strProfileProjHtmlFilePath = strProfilesHtmlFolderPath + (u"\\%s"%strProfileProjHtmlFileName)
