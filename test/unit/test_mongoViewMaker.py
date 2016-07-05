@@ -29,7 +29,9 @@ class MongoViewMakerTest(unittest.TestCase):
     #測試 建立 ViewSyndicateAndStartup
     def test_makeViewSyndicateAndStartup(self):
         logging.info("MongoViewMakerTest.test_makeViewSyndicateAndStartup")
-        self.viewMaker.makeViewSyndicateAndStartup()
+        #self.viewMaker.makeViewSyndicateAndStartup() #已廢棄
+        self.viewMaker.makeViewStartupAndInvestment()
+        self.viewMaker.makeViewStartupAndSeries()
 
 
 #測試開始
