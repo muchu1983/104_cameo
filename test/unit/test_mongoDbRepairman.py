@@ -8,10 +8,10 @@ This file is part of BSD license
 """
 import unittest
 import logging
-from cameo.mongoViewMaker import MongoViewMaker
+from cameo.mongoDbRepairman import MongoDbRepairman
 
 """
-測試 建立 mongo db 的 view 表格
+測試 mongoDB 維護工作
 """
 
 class MongoViewMakerTest(unittest.TestCase):
@@ -19,7 +19,7 @@ class MongoViewMakerTest(unittest.TestCase):
     #準備
     def setUp(self):
         logging.basicConfig(level=logging.INFO)
-        self.viewMaker = MongoViewMaker()
+        self.repairman = MongoDbRepairman()
         pass
         
     #收尾
@@ -27,11 +27,12 @@ class MongoViewMakerTest(unittest.TestCase):
         pass
 
     #測試 建立 ViewSyndicateAndStartup
-    def test_makeViewSyndicateAndStartup(self):
-        logging.info("MongoViewMakerTest.test_makeViewSyndicateAndStartup")
+    def test_repair(self):
+        logging.info("MongoViewMakerTest.test_repair")
         #self.viewMaker.makeViewSyndicateAndStartup() #已廢棄
-        self.viewMaker.makeViewStartupAndInvestment()
-        self.viewMaker.makeViewStartupAndSeries()
+        self.repairman.makeViewStartupAndInvestment()
+        self.repairman.makeViewStartupAndSeries()
+        #self.repairman.replaceNullStrCurrencyToEmptyString()
 
 
 #測試開始

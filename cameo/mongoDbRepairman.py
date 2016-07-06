@@ -15,14 +15,30 @@ from cameo.utility import Utility
 from cameo.externaldb import ExternalDbOfCameo
 #from cameo.localdb import LocalDbForJsonImporter #測試用本地端 db
 """
-建立 mongoDB 的 View 資料表
+mongoDB 維護工作
 """
-class MongoViewMaker:
+class MongoDbRepairman:
     #建構子
     def __init__(self):
         self.utility = Utility()
         self.db = ExternalDbOfCameo().mongodb
         #self.db = LocalDbForJsonImporter().mongodb #測試用本地端 db
+        
+    #find null strCurrency and replace it with ""
+    def replaceNullStrCurrencyToEmptyString(self):
+        for docFundProject in self.db.ModelFundProject.find({"strSource":"INDIEGOGO"}): #所有專案 INDIEGOGO loop
+            if not docFundProject["strCurrency"]: #strCurrency 為 null
+                docFundProject["strCurrency"] = ""
+                logging.info("replace strCurrency null by empty string: [_id:%s]"%docFundProject["_id"])
+                self.db.ModelFundProject.update_one(
+                    {
+                        "_id":docFundProject["_id"]
+                    },
+                    {
+                        "$set":docFundProject,
+                    },
+                    upsert=True
+                )
         
     #make view ViewStartupAndInvestment
     def makeViewStartupAndInvestment(self):
