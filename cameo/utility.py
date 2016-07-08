@@ -12,6 +12,9 @@ import json
 import datetime
 import dateparser
 import pkg_resources
+import smtplib
+import logging
+from email.mime.text import MIMEText
 from scrapy import Selector
 from geopy.geocoders import GoogleV3
 from bennu.filesystemutility import FileSystemUtility
@@ -24,7 +27,33 @@ class Utility:
         self.strListOfCountryByContinentJsonFilePath = self.fsUtil.getPackageResourcePath(strPackageName="cameo_res", strResourceName="list_of_country_by_continent.json")
         if not os.path.exists(self.strListOfCountryByContinentJsonFilePath): #建立 list_of_country_by_continent.json
             self.parseListOfCountryWikiPage()
-    
+        #email helper setting
+        self.DEFAULT_SMTP = "smtp.gmail.com:587"
+        self.DEFAULT_ACCOUNT = "cameoinfotech.tw@gmail.com"
+        self.DEFAULT_PASSWORD = "cameo70525198"
+        
+    #寄送 email
+    def sendEmail(self, strSubject=None, strFrom=None, strTo=None, strMsg=None, lstStrTarget=None, strSmtp=None, strAccount=None, strPassword=None):
+        if not strSmtp:
+            strSmtp = self.DEFAULT_SMTP
+        if not strAccount:
+            strAccount = self.DEFAULT_ACCOUNT
+        if not strPassword:
+            strPassword = self.DEFAULT_PASSWORD
+        msg = MIMEText(strMsg)
+        msg["Subject"] = strSubject
+        msg["From"] = strFrom
+        msg["To"] = strTo
+        try:
+            server = smtplib.SMTP(strSmtp)
+            server.ehlo()
+            server.starttls()
+            server.login(strAccount, strPassword)
+            server.sendmail(strAccount, lstStrTarget, msg.as_string())
+            server.quit()
+        except Exception, e:
+            logging.error("[eMail Helper] Sending email failed! ErrorMessage: %s"%str(e))
+        
     #儲存檔案
     def overwriteSaveAs(self, strFilePath=None, unicodeData=None):
         with open(strFilePath, "w+") as file:
