@@ -25,6 +25,184 @@ class LocalDbForCurrencyApi:
     def __init__(self):
         self.mongodb = MongoDb().getClient().localdb
         
+#京東眾籌
+class LocalDbForJD:
+    
+    #建構子
+    def __init__(self):
+        self.db = SQLite3Db(strResFolderPath="cameo_res")
+        self.initialDb()
+        
+    #初取化資料庫
+    def initialDb(self):
+        strSQLCreateTable = (
+            "CREATE TABLE IF NOT EXISTS jd_category("
+                "id INTEGER PRIMARY KEY,"
+                "strCategoryPage1Url TEXT NOT NULL,"
+                "isGot BOOLEAN NOT NULL)"
+        )
+        self.db.commitSQL(strSQL=strSQLCreateTable)
+        strSQLCreateTable = (
+            "CREATE TABLE IF NOT EXISTS jd_project("
+                "id INTEGER PRIMARY KEY,"
+                "strProjectUrl TEXT NOT NULL,"
+                "intCategoryId INTEGER NOT NULL,"
+                "isGot BOOLEAN NOT NULL)"
+        )
+        self.db.commitSQL(strSQL=strSQLCreateTable)
+        strSQLCreateTable = (
+            "CREATE TABLE IF NOT EXISTS jd_funder("
+                "id INTEGER PRIMARY KEY,"
+                "strFunderUrl TEXT NOT NULL,"
+                "intCategoryId INTEGER NOT NULL,"
+                "isGot BOOLEAN NOT NULL)"
+        )
+        self.db.commitSQL(strSQL=strSQLCreateTable)
+        
+    #若無重覆，儲存 category
+    def insertCategoryIfNotExists(self, strCategoryPage1Url=None):
+        strSQL = "SELECT * FROM jd_category WHERE strCategoryPage1Url='%s'"%strCategoryPage1Url
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        if len(lstRowData) == 0:
+            strSQL = "INSERT INTO jd_category VALUES(NULL, '%s', 0)"%strCategoryPage1Url
+            self.db.commitSQL(strSQL=strSQL)
+        
+    #取得所有 category 第一頁 url (指定 isGot 狀態)
+    def fetchallCategoryUrl(self, isGot=False):
+        dicIsGotCode = {True:"1", False:"0"}
+        strSQL = "SELECT strCategoryPage1Url FROM jd_category WHERE isGot=%s"%dicIsGotCode[isGot]
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        lstStrCategoryPage1Url = []
+        for rowData in lstRowData:
+            lstStrCategoryPage1Url.append(rowData["strCategoryPage1Url"])
+        return lstStrCategoryPage1Url
+        
+    #取得所有未完成下載的 category 第一頁 url
+    def fetchallNotObtainedCategoryUrl(self):
+        return self.fetchallCategoryUrl(isGot=False)
+        
+    #取得所有已完成下載的 category 第一頁 url
+    def fetchallCompletedObtainedCategoryUrl(self):
+        return self.fetchallCategoryUrl(isGot=True)
+        
+    #更新 category 為已完成下載狀態
+    def updateCategoryStatusIsGot(self, strCategoryPage1Url=None):
+        strSQL = "UPDATE jd_category SET isGot=1 WHERE strCategoryPage1Url='%s'"%strCategoryPage1Url
+        self.db.commitSQL(strSQL=strSQL)
+        
+    #取得 category id
+    def fetchCategoryIdByUrl(self, strCategoryPage1Url=None):
+        strSQL = "SELECT * FROM jd_category WHERE strCategoryPage1Url='%s'"%strCategoryPage1Url
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        return lstRowData[0]["id"]
+        
+    #若無重覆 儲存 project URL
+    def insertProjectUrlIfNotExists(self, strProjectUrl=None, strCategoryPage1Url=None):
+        intCategoryId = self.fetchCategoryIdByUrl(strCategoryPage1Url=strCategoryPage1Url)
+        #insert project url if not exists
+        strSQL = "SELECT * FROM jd_project WHERE strProjectUrl='%s'"%strProjectUrl
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        if len(lstRowData) == 0:
+            strSQL = "INSERT INTO jd_project VALUES(NULL, '%s', %d,0)"%(strProjectUrl, intCategoryId)
+            self.db.commitSQL(strSQL=strSQL)
+            
+    #若無重覆 儲存 funder URL
+    def insertFunderUrlIfNotExists(self, strFunderUrl=None, strCategoryPage1Url=None):
+        intCategoryId = self.fetchCategoryIdByUrl(strCategoryPage1Url=strCategoryPage1Url)
+        #insert funder url if not exists
+        strSQL = "SELECT * FROM jd_funder WHERE strFunderUrl='%s'"%strFunderUrl
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        if len(lstRowData) == 0:
+            strSQL = "INSERT INTO jd_funder VALUES(NULL, '%s', %d,0)"%(strFunderUrl, intCategoryId)
+            self.db.commitSQL(strSQL=strSQL)
+        
+    #取得指定 category 的 project url
+    def fetchallProjectUrlByCategoryUrl(self, strCategoryPage1Url=None):
+        intCategoryId = self.fetchCategoryIdByUrl(strCategoryPage1Url=strCategoryPage1Url)
+        strSQL = "SELECT * FROM jd_project WHERE intCategoryId=%d"%intCategoryId
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        lstStrProjectUrl = []
+        for rowData in lstRowData:
+            lstStrProjectUrl.append(rowData["strProjectUrl"])
+        return lstStrProjectUrl
+    
+    #取得指定 category 的 funder url
+    def fetchallFunderUrlByCategoryUrl(self, strCategoryPage1Url=None):
+        intCategoryId = self.fetchCategoryIdByUrl(strCategoryPage1Url=strCategoryPage1Url)
+        strSQL = "SELECT * FROM jd_funder WHERE intCategoryId=%d"%intCategoryId
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        lstStrFunderUrl = []
+        for rowData in lstRowData:
+            lstStrFunderUrl.append(rowData["strFunderUrl"])
+        return lstStrFunderUrl
+    
+    #檢查 project 是否已下載
+    def checkProjectIsGot(self, strProjectUrl=None):
+        isGot = True
+        strSQL = "SELECT * FROM jd_project WHERE strProjectUrl='%s'"%strProjectUrl
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        for rowData in lstRowData:
+            if rowData["isGot"] == 0:
+                isGot = False
+        return isGot
+        
+    #檢查 funder 是否已下載
+    def checkFunderIsGot(self, strFunderUrl=None):
+        isGot = True
+        strSQL = "SELECT * FROM jd_funder WHERE strFunderUrl='%s'"%strFunderUrl
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        for rowData in lstRowData:
+            if rowData["isGot"] == 0:
+                isGot = False
+        return isGot
+        
+    #更新 project 為已完成下載狀態
+    def updateProjectStatusIsGot(self, strProjectUrl=None):
+        strSQL = "UPDATE jd_project SET isGot=1 WHERE strProjectUrl='%s'"%strProjectUrl
+        self.db.commitSQL(strSQL=strSQL)
+    
+    #更新 funder 為已完成下載狀態
+    def updateFunderStatusIsGot(self, strFunderUrl=None):
+        strSQL = "UPDATE jd_funder SET isGot=1 WHERE strFunderUrl='%s'"%strFunderUrl
+        self.db.commitSQL(strSQL=strSQL)
+    
+    #取得所有已完成下載的 project url
+    def fetchallCompletedObtainedProjectUrl(self):
+        strSQL = "SELECT strProjectUrl FROM jd_project WHERE isGot=1"
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        lstStrProjectUrl = []
+        for rowData in lstRowData:
+            lstStrProjectUrl.append(rowData["strProjectUrl"])
+        return lstStrProjectUrl
+        
+    #取得所有已完成下載的 funder url
+    def fetchallCompletedObtainedFunderUrl(self):
+        strSQL = "SELECT strFunderUrl FROM jd_funder WHERE isGot=1"
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        lstStrFunderUrl = []
+        for rowData in lstRowData:
+            lstStrFunderUrl.append(rowData["strFunderUrl"])
+        return lstStrFunderUrl
+        
+    #更新 project 尚未開始下載狀態
+    def updateProjectStatusIsNotGot(self, strProjectUrl=None):
+        strSQL = "UPDATE jd_project SET isGot=0 WHERE strProjectUrl='%s'"%strProjectUrl
+        self.db.commitSQL(strSQL=strSQL)
+        
+    #更新 funder 尚未開始下載狀態
+    def updateFunderStatusIsNotGot(self, strFunderUrl=None):
+        strSQL = "UPDATE jd_funder SET isGot=0 WHERE strFunderUrl='%s'"%strFunderUrl
+        self.db.commitSQL(strSQL=strSQL)
+        
+    #清除測試資料 (clear table)
+    def clearTestData(self):
+        strSQL = "DELETE FROM jd_category"
+        self.db.commitSQL(strSQL=strSQL)
+        strSQL = "DELETE FROM jd_project"
+        self.db.commitSQL(strSQL=strSQL)
+        strSQL = "DELETE FROM jd_funder"
+        self.db.commitSQL(strSQL=strSQL)
+        
 #TECHCRUNCH
 class LocalDbForTECHCRUNCH:
     

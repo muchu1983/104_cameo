@@ -14,6 +14,7 @@ from cameo.localdb import LocalDbForBNEXT
 from cameo.localdb import LocalDbForPEDAILY
 from cameo.localdb import LocalDbForINSIDE
 from cameo.localdb import LocalDbForTECHCRUNCH
+from cameo.localdb import LocalDbForJD
 """
 測試 本地端資料庫存取
 """
@@ -26,7 +27,7 @@ class LocalDbTest(unittest.TestCase):
     #收尾
     def tearDown(self):
         pass
-    
+    """
     #測試 幣別轉換API 本地端資料庫存取
     def test_localdb_for_currency_api(self):
         self.db = LocalDbForCurrencyApi()
@@ -121,6 +122,33 @@ class LocalDbTest(unittest.TestCase):
         self.assertEquals(db.fetchallCompletedObtainedNewsUrl(), ["http://news/for/unit/test"])
         db.updateNewsStatusIsNotGot(strNewsUrl="http://news/for/unit/test")
         self.assertFalse(db.checkNewsIsGot(strNewsUrl="http://news/for/unit/test"))
+        db.clearTestData() #清除本次測試資料
+    """
+    #測試 京東眾籌 本地端資料庫存取
+    def test_localdb_for_jd(self):
+        logging.info("LocalDbTest.test_localdb_for_jd")
+        db = LocalDbForJD()
+        db.clearTestData() #清除前次測試資料
+        db.insertCategoryIfNotExists(strCategoryPage1Url="http://category_for_unit_test")
+        self.assertEquals(db.fetchallNotObtainedCategoryUrl()[0], "http://category_for_unit_test")
+        db.updateCategoryStatusIsGot(strCategoryPage1Url="http://category_for_unit_test")
+        self.assertEquals(db.fetchallCompletedObtainedCategoryUrl()[0], "http://category_for_unit_test")
+        db.insertProjectUrlIfNotExists(strProjectUrl="http://project/for/unit/test", strCategoryPage1Url="http://category_for_unit_test")
+        db.insertFunderUrlIfNotExists(strFunderUrl="http://funder/for/unit/test", strCategoryPage1Url="http://category_for_unit_test")
+        self.assertEquals(db.fetchallProjectUrlByCategoryUrl(strCategoryPage1Url="http://category_for_unit_test")[0], "http://project/for/unit/test")
+        self.assertEquals(db.fetchallFunderUrlByCategoryUrl(strCategoryPage1Url="http://category_for_unit_test")[0], "http://funder/for/unit/test")
+        self.assertFalse(db.checkProjectIsGot(strProjectUrl="http://project/for/unit/test"))
+        self.assertFalse(db.checkFunderIsGot(strFunderUrl="http://funder/for/unit/test"))
+        db.updateProjectStatusIsGot(strProjectUrl="http://project/for/unit/test")
+        db.updateFunderStatusIsGot(strFunderUrl="http://funder/for/unit/test")
+        self.assertTrue(db.checkProjectIsGot(strProjectUrl="http://project/for/unit/test"))
+        self.assertTrue(db.checkFunderIsGot(strFunderUrl="http://funder/for/unit/test"))
+        self.assertEquals(db.fetchallCompletedObtainedProjectUrl(), ["http://project/for/unit/test"])
+        self.assertEquals(db.fetchallCompletedObtainedFunderUrl(), ["http://funder/for/unit/test"])
+        db.updateProjectStatusIsNotGot(strProjectUrl="http://project/for/unit/test")
+        db.updateFunderStatusIsNotGot(strFunderUrl="http://funder/for/unit/test")
+        self.assertFalse(db.checkProjectIsGot(strProjectUrl="http://project/for/unit/test"))
+        self.assertFalse(db.checkFunderIsGot(strFunderUrl="http://funder/for/unit/test"))
         db.clearTestData() #清除本次測試資料
     
 #測試開始
