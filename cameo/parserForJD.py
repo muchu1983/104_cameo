@@ -81,33 +81,42 @@ class ParserForJD:
                 logging.info("insert category %s:%s"%(strCategoryName, strCategoryPage1Url))
                 self.db.insertCategoryIfNotExists(strCategoryPage1Url=strCategoryPage1Url, strCategoryName=strCategoryName)
                 
+    #解析 category.html (strCategoryPage1Url == None 會自動找尋已完成下載之 category)
+    def parseCategoryPage(self, strCategoryPage1Url=None):
+        if strCategoryPage1Url is None:
+            #未指定 category url
+            #取得已下載完成的 strCategoryUrl list
+            lstStrObtainedCategoryUrl = self.db.fetchallCompletedObtainedCategoryUrl()
+            for strObtainedCategoryUrl in lstStrObtainedCategoryUrl: #category loop
+                self.parseCategoryPageWithGivenCategoryUrl(strCategoryPage1Url=strObtainedCategoryUrl)
+        else:
+            #有指定 category url
+            self.parseCategoryPageWithGivenCategoryUrl(strCategoryPage1Url=strCategoryPage1Url)
+                
     #解析 category.html
-    def parseCategoryPage(self, uselessArg1=None):
-        strCategoryResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\JD\\category"
+    def parseCategoryPageWithGivenCategoryUrl(self, strCategoryPage1Url=None):
+        #取出 category 名稱
+        strCategoryName = self.db.fetchCategoryNameByUrl(strCategoryPage1Url=strCategoryPage1Url)
+        strCategoryResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\JD\\%s"%strCategoryName
         if not os.path.exists(strCategoryResultFolderPath):
             os.mkdir(strCategoryResultFolderPath) #mkdir parsed_result/JD/category/
-        strCategoryHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\JD\\category"
+        strCategoryHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\JD\\%s"%strCategoryName
         self.dicParsedResultOfCategory = {} #清空 dicParsedResultOfCategory 資料 (暫無用處)
-        #取得已下載完成的 strCategoryUrl list
-        lstStrObtainedCategoryUrl = self.db.fetchallCompletedObtainedCategoryUrl()
-        for strObtainedCategoryUrl in lstStrObtainedCategoryUrl: #category loop
-            #取出 category 名稱
-            strCategoryName = self.db.fetchCategoryNameByUrl(strCategoryPage1Url=strObtainedCategoryUrl)
-            strCategorySuffixes = u"_%s_category.html"%strCategoryName
-            lstStrCategoryHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strCategoryHtmlFolderPath, strSuffixes=strCategorySuffixes)
-            for strCategoryHtmlFilePath in lstStrCategoryHtmlFilePath: #category page loop
-                logging.info("parse %s"%strCategoryHtmlFilePath)
-                with open(strCategoryHtmlFilePath, "r") as categoryHtmlFile:
-                    strPageSource = categoryHtmlFile.read()
-                    root = Selector(text=strPageSource)
-                #解析 project URL
-                lstStrProjectUrl = root.css("div.l-result div.lr-lists ul.infos li.info a::attr(href)").extract()
-                for strProjectUrl in lstStrProjectUrl: #project loop
-                    #儲存 project url 及 news category id 至 DB
-                    if re.match("^/project/details/[\d]+.html$", strProjectUrl): #filter remove AD and other url
-                        strProjectUrl = self.strWebsiteDomain + strProjectUrl
-                        logging.info("insert project url: %s"%strProjectUrl)
-                        self.db.insertProjectUrlIfNotExists(strProjectUrl=strProjectUrl, strCategoryPage1Url=strObtainedCategoryUrl)
+        strCategorySuffixes = u"_%s_category.html"%strCategoryName
+        lstStrCategoryHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strCategoryHtmlFolderPath, strSuffixes=strCategorySuffixes)
+        for strCategoryHtmlFilePath in lstStrCategoryHtmlFilePath: #category page loop
+            logging.info("parse %s"%strCategoryHtmlFilePath)
+            with open(strCategoryHtmlFilePath, "r") as categoryHtmlFile:
+                strPageSource = categoryHtmlFile.read()
+                root = Selector(text=strPageSource)
+            #解析 project URL
+            lstStrProjectUrl = root.css("div.l-result div.lr-lists ul.infos li.info a::attr(href)").extract()
+            for strProjectUrl in lstStrProjectUrl: #project loop
+                #儲存 project url 及 news category id 至 DB
+                if re.match("^/project/details/[\d]+.html$", strProjectUrl): #filter remove AD and other url
+                    strProjectUrl = self.strWebsiteDomain + strProjectUrl
+                    logging.info("insert project url: %s"%strProjectUrl)
+                    self.db.insertProjectUrlIfNotExists(strProjectUrl=strProjectUrl, strCategoryPage1Url=strCategoryPage1Url)
     
     #解析 projects/*.html 產生 json 並 取得 funder url
     def parseProjectPage(self, uselessArg1=None):

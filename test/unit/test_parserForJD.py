@@ -33,7 +33,7 @@ class ParserForJDTest(unittest.TestCase):
     #測試 解析 category.html
     def test_parseCategoryPage(self):
         logging.info("ParserForJDTest.test_parseCategoryPage")
-        self.parser.parseCategoryPage()
+        self.parser.parseCategoryPage(strCategoryPage1Url=None)
     """
     #測試 解析 project.html 並建立 json
     def test_parseProjectPage(self):

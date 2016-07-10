@@ -12,6 +12,8 @@ from cameo.parserV2ForINDIEGOGO import ParserV2ForINDIEGOGO #new style
 from cameo.spiderForWEBACKERS import SpiderForWEBACKERS
 from cameo.parserForWEBACKERS import ParserForWEBACKERS
 from cameo.importerForWEBACKERS import ImporterForWEBACKERS
+from cameo.spiderForJD import SpiderForJD
+from cameo.parserForJD import ParserForJD
 from cameo.spiderForTECHORANGE import SpiderForTECHORANGE
 from cameo.parserForTECHORANGE import ParserForTECHORANGE
 from cameo.importerForTECHORANGE import ImporterForTECHORANGE
@@ -41,6 +43,7 @@ class CameoShell:
         self.dicSpiders = {
             "indiegogo":SpiderForINDIEGOGO(),
             "webackers":SpiderForWEBACKERS(),
+            "jd":SpiderForJD(),
             "techorange":SpiderForTECHORANGE(),
             "bnext":SpiderForBNEXT(),
             "pedaily":SpiderForPEDAILY(),
@@ -50,6 +53,7 @@ class CameoShell:
         self.dicParsers = {
             "indiegogo":ParserV2ForINDIEGOGO(),
             "webackers":ParserForWEBACKERS(),
+            "jd":ParserForJD(),
             "techorange":ParserForTECHORANGE(),
             "bnext":ParserForBNEXT(),
             "pedaily":ParserForPEDAILY(),

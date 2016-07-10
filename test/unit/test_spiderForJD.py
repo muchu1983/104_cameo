@@ -29,17 +29,17 @@ class SpiderForJDTest(unittest.TestCase):
     def test_downloadIndexPage(self):
         logging.info("SpiderForJDTest.test_downloadIndexPage")
         self.spider.downloadIndexPage()
-    """
+    
     #測試抓取 category page
     def test_downloadCategoryPage(self):
         logging.info("SpiderForJDTest.test_downloadCategoryPage")
-        self.spider.downloadCategoryPage()
+        self.spider.downloadCategoryPage(strCategoryPage1Url=None)
     """
     #測試抓取 project page
     def test_downloadProjectPage(self):
         logging.info("SpiderForJDTest.test_downloadProjectPage")
         self.spider.downloadProjectPage(strCategoryPage1Url=None)
-        
+    """
     #測試抓取 funder page
     def test_downloadFunderPage(self):
         logging.info("SpiderForJDTest.test_downloadFunderPage")
