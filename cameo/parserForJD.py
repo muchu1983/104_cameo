@@ -120,6 +120,7 @@ class ParserForJD:
     
     #解析 projects/*.html 產生 json 並 取得 funder url
     def parseProjectPage(self, uselessArg1=None):
+        raise ValueError("TODO")
         strNewsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\TECHCRUNCH\\news"
         if not os.path.exists(strNewsResultFolderPath):
             os.mkdir(strNewsResultFolderPath) #mkdir parsed_result/TECHCRUNCH/news/
@@ -132,6 +133,7 @@ class ParserForJD:
         
     #解析 profile/*.html 產生 json 
     def parseFunderPage(self, uselessArg1=None):
+        raise ValueError("TODO")
         strNewsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\TECHCRUNCH\\news"
         if not os.path.exists(strNewsResultFolderPath):
             os.mkdir(strNewsResultFolderPath) #mkdir parsed_result/TECHCRUNCH/news/
