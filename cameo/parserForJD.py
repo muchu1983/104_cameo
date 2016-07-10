@@ -72,10 +72,14 @@ class ParserForJD:
             strPageSource = indexHtmlFile.read()
             root = Selector(text=strPageSource)
         lstStrCategoryPage1Url = root.css("div.browse ul#categorylist li a::attr(href)").extract()
-        for strCategoryPage1Url in lstStrCategoryPage1Url:
+        lstStrCategoryName = root.css("div.browse ul#categorylist li a::text").extract()
+        for (indexOFCategory, strCategoryPage1Url) in enumerate(lstStrCategoryPage1Url):
             if strCategoryPage1Url.startswith("/bigger/search.html?categoryId="):
                 strCategoryPage1Url = self.strWebsiteDomain + strCategoryPage1Url
-                self.db.insertCategoryIfNotExists(strCategoryPage1Url=strCategoryPage1Url)
+                #URL encode 分類名稱
+                strCategoryName = lstStrCategoryName[indexOFCategory]
+                logging.info("insert category %s:%s"%(strCategoryName, strCategoryPage1Url))
+                self.db.insertCategoryIfNotExists(strCategoryPage1Url=strCategoryPage1Url, strCategoryName=strCategoryName)
                 
     #解析 category.html
     def parseCategoryPage(self, uselessArg1=None):

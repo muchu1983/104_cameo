@@ -39,6 +39,7 @@ class LocalDbForJD:
             "CREATE TABLE IF NOT EXISTS jd_category("
                 "id INTEGER PRIMARY KEY,"
                 "strCategoryPage1Url TEXT NOT NULL,"
+                "strCategoryName TEXT NOT NULL,"
                 "isGot BOOLEAN NOT NULL)"
         )
         self.db.commitSQL(strSQL=strSQLCreateTable)
@@ -60,12 +61,18 @@ class LocalDbForJD:
         self.db.commitSQL(strSQL=strSQLCreateTable)
         
     #若無重覆，儲存 category
-    def insertCategoryIfNotExists(self, strCategoryPage1Url=None):
+    def insertCategoryIfNotExists(self, strCategoryPage1Url=None, strCategoryName=None):
         strSQL = "SELECT * FROM jd_category WHERE strCategoryPage1Url='%s'"%strCategoryPage1Url
         lstRowData = self.db.fetchallSQL(strSQL=strSQL)
         if len(lstRowData) == 0:
-            strSQL = "INSERT INTO jd_category VALUES(NULL, '%s', 0)"%strCategoryPage1Url
+            strSQL = "INSERT INTO jd_category VALUES(NULL, '%s', '%s', 0)"%(strCategoryPage1Url, strCategoryName)
             self.db.commitSQL(strSQL=strSQL)
+        
+    #取得 category 名稱
+    def fetchCategoryNameByUrl(self, strCategoryPage1Url=None):
+        strSQL = "SELECT * FROM jd_category WHERE strCategoryPage1Url='%s'"%strCategoryPage1Url
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        return lstRowData[0]["strCategoryName"]
         
     #取得所有 category 第一頁 url (指定 isGot 狀態)
     def fetchallCategoryUrl(self, isGot=False):

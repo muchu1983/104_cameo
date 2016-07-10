@@ -129,7 +129,8 @@ class LocalDbTest(unittest.TestCase):
         logging.info("LocalDbTest.test_localdb_for_jd")
         db = LocalDbForJD()
         db.clearTestData() #清除前次測試資料
-        db.insertCategoryIfNotExists(strCategoryPage1Url="http://category_for_unit_test")
+        db.insertCategoryIfNotExists(strCategoryPage1Url="http://category_for_unit_test", strCategoryName="category_for_unit_test")
+        self.assertEquals(db.fetchCategoryNameByUrl(strCategoryPage1Url="http://category_for_unit_test"), "category_for_unit_test")
         self.assertEquals(db.fetchallNotObtainedCategoryUrl()[0], "http://category_for_unit_test")
         db.updateCategoryStatusIsGot(strCategoryPage1Url="http://category_for_unit_test")
         self.assertEquals(db.fetchallCompletedObtainedCategoryUrl()[0], "http://category_for_unit_test")

@@ -24,7 +24,7 @@ class SpiderForJDTest(unittest.TestCase):
     #收尾
     def tearDown(self):
         self.spider.quitDriver()
-    
+    """
     #測試抓取 index page
     def test_downloadIndexPage(self):
         logging.info("SpiderForJDTest.test_downloadIndexPage")
@@ -34,7 +34,7 @@ class SpiderForJDTest(unittest.TestCase):
     def test_downloadCategoryPage(self):
         logging.info("SpiderForJDTest.test_downloadCategoryPage")
         self.spider.downloadCategoryPage()
-    
+    """
     #測試抓取 project page
     def test_downloadProjectPage(self):
         logging.info("SpiderForJDTest.test_downloadProjectPage")

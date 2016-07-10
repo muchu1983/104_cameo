@@ -11,6 +11,7 @@ import time
 import logging
 import re
 import random
+import urllib
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from cameo.utility import Utility
@@ -24,7 +25,7 @@ class SpiderForJD:
     def __init__(self):
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
-        self.strWebsiteDomain = u"http://z.jd.com/"
+        self.strWebsiteDomain = u"http://z.jd.com"
         self.dicSubCommandHandler = {
             "index":self.downloadIndexPage,
             "category":self.downloadCategoryPage,
@@ -92,51 +93,49 @@ class SpiderForJD:
         strIndexHtmlFilePath = strIndexHtmlFolderPath + u"\\index.html"
         self.utility.overwriteSaveAs(strFilePath=strIndexHtmlFilePath, unicodeData=self.driver.page_source)
         
-    #找出下一頁 category 的 url
-    def findNextTopicPageUrl(self):
-        strNextTopicPageUrl = None
-        elesNextPageA = self.driver.find_elements_by_css_selector("div.river-nav ol.pagination li.next a")
-        if len(elesNextPageA) == 1:
-            strNextTopicPageUrl = elesNextPageA[0].get_attribute("href")
-        return strNextTopicPageUrl
+    #檢查是否有下一頁 category
+    def hasNextCategoryPage(self):
+        isHasNextCategoryPage = False
+        elesNextPageA = self.driver.find_elements_by_css_selector("div.pagesbox div.ui-page a.next")
+        if len(elesNextPageA) > 0:
+            isHasNextCategoryPage = True
+        return isHasNextCategoryPage
         
     #下載 category 頁面
     def downloadCategoryPage(self, uselessArg1=None):
-        logging.info("download topic page")
-        strTopicHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\TECHCRUNCH\\topic"
-        if not os.path.exists(strTopicHtmlFolderPath):
-            os.mkdir(strTopicHtmlFolderPath) #mkdir source_html/TECHCRUNCH/topic/
-        #取得 Db 中尚未下載的 topic url
-        lstStrNotObtainedTopicPage1Url = self.db.fetchallNotObtainedTopicUrl()
-        for strNotObtainedTopicPage1Url in lstStrNotObtainedTopicPage1Url:
-            #topic 頁面
+        logging.info("download category page")
+        strCategoryHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\JD\\category"
+        if not os.path.exists(strCategoryHtmlFolderPath):
+            os.mkdir(strCategoryHtmlFolderPath) #mkdir source_html/JD/category/
+        #取得 Db 中尚未下載的 category url
+        lstStrNotObtainedCategoryPage1Url = self.db.fetchallNotObtainedCategoryUrl()
+        for strNotObtainedCategoryPage1Url in lstStrNotObtainedCategoryPage1Url:
+            #category 頁面
             try:
-                #re 找出 topic 名稱
-                strTopicNamePartInUrl = re.match("^https://techcrunch.com/topic/(.*)/$", strNotObtainedTopicPage1Url).group(1)
-                strTopicName = re.sub(u"/", u"__", strTopicNamePartInUrl)
-                #topic 第0頁
+                #取出 category 名稱
+                strCategoryName = self.db.fetchCategoryNameByUrl(strCategoryPage1Url=strNotObtainedCategoryPage1Url)
+                #category 第0頁
                 intPageNum = 0
                 time.sleep(random.randint(2,5)) #sleep random time
-                self.driver.get(strNotObtainedTopicPage1Url)
+                self.driver.get(strNotObtainedCategoryPage1Url)
                 #儲存 html
-                strTopicHtmlFilePath = strTopicHtmlFolderPath + u"\\%d_%s_topic.html"%(intPageNum, strTopicName)
-                self.utility.overwriteSaveAs(strFilePath=strTopicHtmlFilePath, unicodeData=self.driver.page_source)
-                #topic 下一頁
-                strNextTopicPageUrl = self.findNextTopicPageUrl()
-                while strNextTopicPageUrl: # is not None
-                    time.sleep(random.randint(2,5)) #sleep random time
+                strCategoryHtmlFilePath = strCategoryHtmlFolderPath + u"\\%d_%s_category.html"%(intPageNum, strCategoryName)
+                self.utility.overwriteSaveAs(strFilePath=strCategoryHtmlFilePath, unicodeData=self.driver.page_source)
+                #category 下一頁
+                while self.hasNextCategoryPage():
+                    time.sleep(random.randint(5,8)) #sleep random time
                     intPageNum = intPageNum+1
-                    self.driver.get(strNextTopicPageUrl)
+                    #點擊下一頁
+                    self.driver.find_element_by_css_selector("div.pagesbox div.ui-page a.next").click()
                     #儲存 html
-                    strTopicHtmlFilePath = strTopicHtmlFolderPath + u"\\%d_%s_topic.html"%(intPageNum, strTopicName)
-                    self.utility.overwriteSaveAs(strFilePath=strTopicHtmlFilePath, unicodeData=self.driver.page_source)
-                    #tag 再下一頁
-                    strNextTopicPageUrl = self.findNextTopicPageUrl()
-                #更新tag DB 為已抓取 (isGot = 1)
-                self.db.updateTopicStatusIsGot(strTopicPage1Url=strNotObtainedTopicPage1Url)
-                logging.info("got topic %s"%strTopicName)
-            except:
-                logging.warning("selenium driver crashed. skip get topic: %s"%strNotObtainedTopicPage1Url)
+                    strCayegoryHtmlFilePath = strCategoryHtmlFolderPath + u"\\%d_%s_category.html"%(intPageNum, strCategoryName)
+                    self.utility.overwriteSaveAs(strFilePath=strCayegoryHtmlFilePath, unicodeData=self.driver.page_source)
+                #更新 category DB 為已抓取 (isGot = 1)
+                self.db.updateCategoryStatusIsGot(strCategoryPage1Url=strNotObtainedCategoryPage1Url)
+                logging.info("got category %s"%strCategoryName)
+            except Exception as e:
+                logging.warning(str(e))
+                logging.warning("selenium driver crashed. skip get category: %s"%strNotObtainedCategoryPage1Url)
             finally:
                 self.restartDriver() #重啟
             
