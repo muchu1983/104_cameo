@@ -8,17 +8,17 @@ This file is part of BSD license
 """
 import unittest
 import logging
-from cameo.spiderForTECHCRUNCH import SpiderForTECHCRUNCH
+from cameo.spiderForJD import SpiderForJD
 """
-測試 抓取 TECHCRUNCH
+測試 抓取 京東眾籌
 """
 
-class SpiderForTECHCRUNCHTest(unittest.TestCase):
+class SpiderForJDTest(unittest.TestCase):
 
     #準備
     def setUp(self):
         logging.basicConfig(level=logging.INFO)
-        self.spider = SpiderForTECHCRUNCH()
+        self.spider = SpiderForJD()
         self.spider.initDriver()
         
     #收尾
@@ -27,19 +27,24 @@ class SpiderForTECHCRUNCHTest(unittest.TestCase):
     
     #測試抓取 index page
     def test_downloadIndexPage(self):
-        logging.info("SpiderForTECHCRUNCHTest.test_downloadIndexPage")
+        logging.info("SpiderForJDTest.test_downloadIndexPage")
         self.spider.downloadIndexPage()
+    """
+    #測試抓取 category page
+    def test_downloadCategoryPage(self):
+        logging.info("SpiderForJDTest.test_downloadCategoryPage")
+        self.spider.downloadCategoryPage()
     
-    #測試抓取 topic page
-    def test_downloadTopicPage(self):
-        logging.info("SpiderForTECHCRUNCHTest.test_downloadTopicPage")
-        self.spider.downloadTopicPage()
-    
-    #測試抓取 news page
-    def test_downloadNewsPage(self):
-        logging.info("SpiderForTECHCRUNCHTest.test_downloadNewsPage")
-        self.spider.downloadNewsPage(strTopicPage1Url=None)
-    
+    #測試抓取 project page
+    def test_downloadProjectPage(self):
+        logging.info("SpiderForJDTest.test_downloadProjectPage")
+        self.spider.downloadProjectPage(strCategoryPage1Url=None)
+        
+    #測試抓取 funder page
+    def test_downloadFunderPage(self):
+        logging.info("SpiderForJDTest.test_downloadFunderPage")
+        self.spider.downloadFunderPage(strCategoryPage1Url=None)
+    """
 #測試開始
 if __name__ == "__main__":
     unittest.main(exit=False)

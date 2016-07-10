@@ -14,37 +14,43 @@ import logging
 import urllib
 from scrapy import Selector
 from cameo.utility import Utility
-from cameo.localdb import LocalDbForTECHCRUNCH
+from cameo.localdb import LocalDbForJD
 from crawlermaster.cmparser import CmParser
 """
 從 source_html 的 HTML 檔案解析資料
 結果放置於 parsed_result 下
 """
-class ParserForTECHCRUNCH:
+class ParserForJD:
     #建構子
     def __init__(self):
         self.utility = Utility()
-        self.db = LocalDbForTECHCRUNCH()
+        self.db = LocalDbForJD()
         self.dicSubCommandHandler = {
             "index":[self.parseIndexPage],
-            "topic":[self.parseTopicPage],
-            "json":[self.parseNewsPageThenCreateNewsJson]
+            "category":[self.parseCategoryPage],
+            "project":[self.parseProjectPage],
+            "funder":[self.parseFunderPage]
         }
-        self.strWebsiteDomain = u"https://techcrunch.com/"
+        self.strWebsiteDomain = u"http://z.jd.com"
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
-        self.intNewsJsonNum = 0 #news.json 檔案編號
-        self.intMaxNewsPerNewsJsonFile = 1000 #每個 news.json 儲存的 news 之最大數量
-        self.dicParsedResultOfTopic = {} #topic.json 資料
-        self.dicParsedResultOfNews = [] #news.json 資料
+        self.dicParsedResultOfCategory = {} #category.json 資料
+        self.dicParsedResultOfProject = {} #project.json 資料
+        self.dicParsedResultOfUpdate = {} #update.json 資料
+        self.dicParsedResultOfQanda = {} #qanda.json 資料
+        self.dicParsedResultOfReward = {} #reward.json 資料
+        self.dicParsedResultOfProfile = {} #profile.json 資料
         
     #取得 parser 使用資訊
     def getUseageMessage(self):
-        return ("- TECHCRUNCH -\n"
-                "useage:\n"
-                "index - parse index.html then insert topic into DB \n"
-                "topic - parse topic.html then insert news into DB \n"
-                "json - parse news.html then create json \n")
+        return (
+            "- JD -\n"
+            "useage:\n"
+            "index - parse index.html then insert category into DB \n"
+            "category - parse category.html then insert project into DB \n"
+            "project - parse projects/*.html then create json and insert funder into DB \n"
+            "funder - parse profiles/*.html then create json \n"
+        )
                 
     #執行 parser
     def runParser(self, lstSubcommand=None):
@@ -57,21 +63,22 @@ class ParserForTECHCRUNCH:
     
     #解析 index.html
     def parseIndexPage(self, uselessArg1=None):
-        strIndexResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\TECHCRUNCH"
+        strIndexResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\JD"
         if not os.path.exists(strIndexResultFolderPath):
-            os.mkdir(strIndexResultFolderPath) #mkdir parsed_result/TECHCRUNCH/
-        strIndexHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\TECHCRUNCH"
+            os.mkdir(strIndexResultFolderPath) #mkdir parsed_result/JD/
+        strIndexHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\JD"
         strIndexHtmlFilePath = strIndexHtmlFolderPath + u"\\index.html"
         with open(strIndexHtmlFilePath, "r") as indexHtmlFile:
             strPageSource = indexHtmlFile.read()
             root = Selector(text=strPageSource)
-            lstStrTopicPage1Url = root.css("div.topic-archive-links-list p.topic-alpha-column a::attr(href)").extract()
-            for strTopicPage1Url in lstStrTopicPage1Url:
-                if strTopicPage1Url.startswith("https://techcrunch.com/topic/"):
-                    self.db.insertTopicIfNotExists(strTopicPage1Url=strTopicPage1Url)
+        lstStrCategoryPage1Url = root.css("div.browse ul#categorylist li a::attr(href)").extract()
+        for strCategoryPage1Url in lstStrCategoryPage1Url:
+            if strCategoryPage1Url.startswith("/bigger/search.html?categoryId="):
+                strCategoryPage1Url = self.strWebsiteDomain + strCategoryPage1Url
+                self.db.insertCategoryIfNotExists(strCategoryPage1Url=strCategoryPage1Url)
                 
-    #解析 topic.html
-    def parseTopicPage(self, uselessArg1=None):
+    #解析 category.html
+    def parseCategoryPage(self, uselessArg1=None):
         strTopicResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\TECHCRUNCH\\topic"
         if not os.path.exists(strTopicResultFolderPath):
             os.mkdir(strTopicResultFolderPath) #mkdir parsed_result/TECHCRUNCH/topic/
@@ -97,8 +104,20 @@ class ParserForTECHCRUNCH:
                     if re.match("^https://techcrunch.com/[\d]{4}/[\d]{2}/[\d]{2}/.*$", strNewsUrl): #filter remove AD and other url
                         self.db.insertNewsUrlIfNotExists(strNewsUrl=strNewsUrl, strTopicPage1Url=strObtainedTopicUrl)
     
-    #解析 news.html 產生 news.json (TODO 使用 crawlermaster 進行 parse)
-    def parseNewsPageThenCreateNewsJson(self, uselessArg1=None):
+    #解析 projects/*.html 產生 json 並 取得 funder url
+    def parseProjectPage(self, uselessArg1=None):
+        strNewsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\TECHCRUNCH\\news"
+        if not os.path.exists(strNewsResultFolderPath):
+            os.mkdir(strNewsResultFolderPath) #mkdir parsed_result/TECHCRUNCH/news/
+        strNewsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\TECHCRUNCH\\news"
+        strCssJsonFilePath = "cameo_res\\selector_rule\\techcrunch_csslist.json"
+        cmParser = CmParser(strCssJsonFilePath=strCssJsonFilePath)
+        cmParser.localHtmlFileParse()
+        strNewsJsonFilePath = strNewsResultFolderPath + u"\\news.json"
+        cmParser.flushConvertedDataToJsonFile(strJsonFilePath=strNewsJsonFilePath)
+        
+    #解析 profile/*.html 產生 json 
+    def parseFunderPage(self, uselessArg1=None):
         strNewsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\TECHCRUNCH\\news"
         if not os.path.exists(strNewsResultFolderPath):
             os.mkdir(strNewsResultFolderPath) #mkdir parsed_result/TECHCRUNCH/news/
