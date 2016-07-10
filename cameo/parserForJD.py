@@ -83,30 +83,31 @@ class ParserForJD:
                 
     #解析 category.html
     def parseCategoryPage(self, uselessArg1=None):
-        strTopicResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\TECHCRUNCH\\topic"
-        if not os.path.exists(strTopicResultFolderPath):
-            os.mkdir(strTopicResultFolderPath) #mkdir parsed_result/TECHCRUNCH/topic/
-        strTopicHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\TECHCRUNCH\\topic"
-        self.dicParsedResultOfTopic = {} #清空 dicParsedResultOfTopic 資料 (暫無用處)
-        #取得已下載完成的 strTopicUrl list
-        lstStrObtainedTopicUrl = self.db.fetchallCompletedObtainedTopicUrl()
-        for strObtainedTopicUrl in lstStrObtainedTopicUrl: #topic loop
-            #re 找出 topic 名稱
-            strTopicNamePartInUrl = re.match("^https://techcrunch.com/topic/(.*)/$", strObtainedTopicUrl).group(1)
-            strTopicName = re.sub(u"/", u"__", strTopicNamePartInUrl)
-            strTopicSuffixes = u"_%s_topic.html"%strTopicName
-            lstStrTopicHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strTopicHtmlFolderPath, strSuffixes=strTopicSuffixes)
-            for strTopicHtmlFilePath in lstStrTopicHtmlFilePath: #topic page loop
-                logging.info("parse %s"%strTopicHtmlFilePath)
-                with open(strTopicHtmlFilePath, "r") as topicHtmlFile:
-                    strPageSource = topicHtmlFile.read()
+        strCategoryResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\JD\\category"
+        if not os.path.exists(strCategoryResultFolderPath):
+            os.mkdir(strCategoryResultFolderPath) #mkdir parsed_result/JD/category/
+        strCategoryHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\JD\\category"
+        self.dicParsedResultOfCategory = {} #清空 dicParsedResultOfCategory 資料 (暫無用處)
+        #取得已下載完成的 strCategoryUrl list
+        lstStrObtainedCategoryUrl = self.db.fetchallCompletedObtainedCategoryUrl()
+        for strObtainedCategoryUrl in lstStrObtainedCategoryUrl: #category loop
+            #取出 category 名稱
+            strCategoryName = self.db.fetchCategoryNameByUrl(strCategoryPage1Url=strObtainedCategoryUrl)
+            strCategorySuffixes = u"_%s_category.html"%strCategoryName
+            lstStrCategoryHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strCategoryHtmlFolderPath, strSuffixes=strCategorySuffixes)
+            for strCategoryHtmlFilePath in lstStrCategoryHtmlFilePath: #category page loop
+                logging.info("parse %s"%strCategoryHtmlFilePath)
+                with open(strCategoryHtmlFilePath, "r") as categoryHtmlFile:
+                    strPageSource = categoryHtmlFile.read()
                     root = Selector(text=strPageSource)
-                #解析 news URL
-                lstStrNewsUrl = root.css("ul.river li.topic-river-block div.block-content-topic h3 a::attr(href)").extract()
-                for strNewsUrl in lstStrNewsUrl: #news loop
-                    #儲存 news url 及 news topic id 至 DB
-                    if re.match("^https://techcrunch.com/[\d]{4}/[\d]{2}/[\d]{2}/.*$", strNewsUrl): #filter remove AD and other url
-                        self.db.insertNewsUrlIfNotExists(strNewsUrl=strNewsUrl, strTopicPage1Url=strObtainedTopicUrl)
+                #解析 project URL
+                lstStrProjectUrl = root.css("div.l-result div.lr-lists ul.infos li.info a::attr(href)").extract()
+                for strProjectUrl in lstStrProjectUrl: #project loop
+                    #儲存 project url 及 news category id 至 DB
+                    if re.match("^/project/details/[\d]+.html$", strProjectUrl): #filter remove AD and other url
+                        strProjectUrl = self.strWebsiteDomain + strProjectUrl
+                        logging.info("insert project url: %s"%strProjectUrl)
+                        self.db.insertProjectUrlIfNotExists(strProjectUrl=strProjectUrl, strCategoryPage1Url=strObtainedCategoryUrl)
     
     #解析 projects/*.html 產生 json 並 取得 funder url
     def parseProjectPage(self, uselessArg1=None):

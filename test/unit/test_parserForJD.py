@@ -24,7 +24,7 @@ class ParserForJDTest(unittest.TestCase):
     #收尾
     def tearDown(self):
         pass
-    
+    """
     #測試 解析 index.html
     def test_parseIndexPage(self):
         logging.info("ParserForJDTest.test_parseIndexPage")
@@ -34,7 +34,7 @@ class ParserForJDTest(unittest.TestCase):
     def test_parseCategoryPage(self):
         logging.info("ParserForJDTest.test_parseCategoryPage")
         self.parser.parseCategoryPage()
-    
+    """
     #測試 解析 project.html 並建立 json
     def test_parseProjectPage(self):
         logging.info("ParserForJDTest.test_parseProjectPage")
