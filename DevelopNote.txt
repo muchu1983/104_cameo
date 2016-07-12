@@ -25,6 +25,7 @@ HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\NoFileFolde
 
 vitual machine
 deploy server 210.65.11.231 administrator cameoroot
+後台 admin cameoroot
 爬蟲測試機 (募資網站) 210.65.11.246 administrator uGm5MCg5Z73kwgjm1SP
 爬蟲測試機 (新聞網站) 203.66.83.28 administrator uGm5MCg5Z73kwgjm1SP
 爬蟲測試機 (京東眾籌) 210.61.46.13 administrator uGm5MCg5Z73kwgjm1SP
