@@ -28,6 +28,7 @@ from cameo.parserForINSIDE import ParserForINSIDE
 from cameo.importerForINSIDE import ImporterForINSIDE
 from cameo.spiderForTECHCRUNCH import SpiderForTECHCRUNCH
 from cameo.parserForTECHCRUNCH import ParserForTECHCRUNCH
+from cameo.importerForTECHCRUNCH import ImporterForTECHCRUNCH
 from cameo.cleaner import CleanerForINDIEGOGO
 from cameo.reporter import ReporterForINDIEGOGO
 from cameo.reporter import ReporterForWEBACKERS
@@ -65,7 +66,8 @@ class CameoShell:
             "techorange":ImporterForTECHORANGE(),
             "bnext":ImporterForBNEXT(),
             "pedaily":ImporterForPEDAILY(),
-            "inside":ImporterForINSIDE()
+            "inside":ImporterForINSIDE(),
+            "techcrunch":ImporterForTECHCRUNCH()
         }
         self.dicCleaners = {
             "indiegogo":CleanerForINDIEGOGO()
