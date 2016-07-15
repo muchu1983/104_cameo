@@ -12,8 +12,8 @@ import json
 import logging
 import re
 from cameo.utility import Utility
-#from cameo.externaldb import ExternalDbForJsonImporter
-from cameo.localdb import LocalDbForJsonImporter #測試用本地端 db
+from cameo.externaldb import ExternalDbForJsonImporter
+#from cameo.localdb import LocalDbForJsonImporter #測試用本地端 db
 """
 將 news.json 內容存入 mongoDB
 """
@@ -21,8 +21,8 @@ class ImporterForTECHCRUNCH:
     #建構子
     def __init__(self):
         self.utility = Utility()
-        #self.db = ExternalDbForJsonImporter().mongodb
-        self.db = LocalDbForJsonImporter().mongodb #測試用本地端 db
+        self.db = ExternalDbForJsonImporter().mongodb
+        #self.db = LocalDbForJsonImporter().mongodb #測試用本地端 db
         self.dicSubCommandHandler = {"import":[self.importNewsJsonToDb]}
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
         
