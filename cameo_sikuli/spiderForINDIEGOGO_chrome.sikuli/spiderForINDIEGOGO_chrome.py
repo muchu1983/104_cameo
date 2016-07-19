@@ -248,11 +248,13 @@ def downloadExplorePages():
         os.mkdir(strExploreFolderPath)
     saveCurrentPage(strFolderPath=strExploreFolderPath, strFilename="explore.html")
 #download category pages
-def downloadCategoryPages():
+def downloadCategoryPages(strTargetCategory=None):
     strCategoryUrlListFilePath = strBaseResFolderPath + r"\parsed_result\INDIEGOGO\category_url_list.txt"
     catUrlListFile = open(strCategoryUrlListFilePath)
     for strCategoryUrl in catUrlListFile:#category loop
         strCategoryName = r"" + re.search("^https://www.indiegogo.com/explore#/browse/(.*)$" ,strCategoryUrl).group(1)
+        if strTargetCategory and strCategoryName != strTargetCategory:
+            continue
         strCategoryFolderPath = strBaseResFolderPath + r"\source_html\INDIEGOGO\%s"%(strCategoryName)
         if not os.path.exists(strCategoryFolderPath):
             os.mkdir(strCategoryFolderPath) #mkdir category
@@ -381,7 +383,7 @@ if __name__ == "__main__":
         if lstStrArgs[1] == "explore":
             downloadExplorePages()
         if lstStrArgs[1] == "category":
-            downloadCategoryPages()
+            downloadCategoryPages(strTargetCategory=lstStrArgs[2])
         if lstStrArgs[1] == "project": 
             #lstStrArgs[2] is target category arg
             downloadProjectPages(strTargetCategory=lstStrArgs[2])
