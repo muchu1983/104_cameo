@@ -29,11 +29,11 @@ class MongoViewMakerTest(unittest.TestCase):
     #測試 建立 ViewSyndicateAndStartup
     def test_repair(self):
         logging.info("MongoViewMakerTest.test_repair")
-        #self.viewMaker.makeViewSyndicateAndStartup() #已廢棄
-        #self.repairman.makeViewStartupAndInvestment()
-        #self.repairman.makeViewStartupAndSeries()
+        #self.repairman.makeViewSyndicateAndStartup() #已廢棄
+        self.repairman.makeViewStartupAndInvestment()
+        self.repairman.makeViewStartupAndSeries()
         #self.repairman.replaceNullStrCurrencyToEmptyString()
-        self.repairman.removeModelStartupInvestorAndModelRewardPersonUnnecessaryData()
+        #self.repairman.removeModelStartupInvestorAndModelRewardPersonUnnecessaryData()
 
 
 #測試開始
