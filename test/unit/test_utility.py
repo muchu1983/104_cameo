@@ -23,7 +23,7 @@ class UtilityTest(unittest.TestCase):
     #收尾
     def tearDown(self):
         pass
-
+    
     #測試 轉換數字字串為純數字
     def test_translateNumTextToPureNum(self):
         logging.info("UtilityTest.test_translateNumTextToPureNum")
@@ -86,13 +86,14 @@ class UtilityTest(unittest.TestCase):
     def test_parseListOfCountryWikiPage(self):
         logging.info("UtilityTest.test_parseListOfCountryWikiPage")
         self.utility.parseListOfCountryWikiPage()
-        
+    
     #測試 dateparser 模組
     def test_dateparser(self):
         logging.info("UtilityTest.test_dateparser")
         print(self.utility.parseStrDateByDateparser(strOriginDate="3 days ago"))
-        print(self.utility.parseStrDateByDateparser(strOriginDate="3 days ago", strBaseDate="2015-5-7"))
-        print(self.utility.parseStrDateByDateparser(strOriginDate="3 days ago", strBaseDate="2017-5-7"))
+        print(self.utility.parseStrDateByDateparser(strOriginDate="3 days ago", strBaseDate="2015-7-19"))
+        print(self.utility.parseStrDateByDateparser(strOriginDate="3 days ago", strBaseDate="2017-7-19"))
+        print(self.utility.parseStrDateByDateparser(strOriginDate="5 years ago", strBaseDate="2016-7-19"))
         print(self.utility.parseStrDateByDateparser(strOriginDate="July 2016"))
         self.assertIsNone(self.utility.parseStrDateByDateparser(strOriginDate=None))
 #測試開始

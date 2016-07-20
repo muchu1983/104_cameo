@@ -33,6 +33,7 @@ class MongoViewMakerTest(unittest.TestCase):
         self.repairman.makeViewStartupAndInvestment()
         self.repairman.makeViewStartupAndSeries()
         #self.repairman.replaceNullStrCurrencyToEmptyString()
+        #self.repairman.removeModelStockPersonAndModelRewardPersonUnnecessaryData()
 
 
 #測試開始

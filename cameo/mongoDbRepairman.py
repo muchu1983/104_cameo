@@ -24,6 +24,26 @@ class MongoDbRepairman:
         self.db = ExternalDbOfCameo().mongodb
         #self.db = LocalDbForJsonImporter().mongodb #測試用本地端 db
         
+    def removeModelStockPersonAndModelRewardPersonUnnecessaryData(self):
+        #投資型
+        for docStockPerson in self.db.ModelStockPerson.find({}):
+            strUrl = docStockPerson["strUrl"]
+            if strUrl:
+                if strUrl.startswith("https://angel.co/"):
+                    continue
+                else:
+                    self.db.ModelStockPerson.delete_one({"strUrl":strUrl})
+                    logging.info("delete: %s"%strUrl)
+        #回饋型
+        for docRewardPerson in self.db.ModelRewardPerson.find({}):
+            strUrl = docRewardPerson["strUrl"]
+            if strUrl:
+                if strUrl.startswith("https://angel.co/"):
+                    self.db.ModelRewardPerson.delete_one({"strUrl":strUrl})
+                    logging.info("delete: %s"%strUrl)
+                else:
+                    continue
+                    
     #find null strCurrency and replace it with ""
     def replaceNullStrCurrencyToEmptyString(self):
         for docFundProject in self.db.ModelFundProject.find({"strSource":"INDIEGOGO"}): #所有專案 INDIEGOGO loop

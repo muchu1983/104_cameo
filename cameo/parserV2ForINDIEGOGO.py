@@ -22,16 +22,19 @@ class ParserV2ForINDIEGOGO:
     #建構子
     def __init__(self):
         self.utility = Utility()
-        self.dicSubCommandHandler = {"explore":[self.parseExplorePage],
-                             "category":[self.parseCategoryPage],
-                             "project":[self.parseProjectPage],
-                             "individuals":[self.parseIndividualsPage],
-                             }
-        self.lstStrCategoryName = ["animals", "art", "comic", "community", "dance",
-                            "design", "education", "environment", "fashion",
-                            "film", "food", "gaming", "health", "music", "photography",
-                            "politics", "religion", "small_business", "sports",
-                            "technology", "theatre", "transmedia", "video_web", "writing"]
+        self.dicSubCommandHandler = {
+            "explore":[self.parseExplorePage],
+            "category":[self.parseCategoryPage],
+            "project":[self.parseProjectPage],
+            "individuals":[self.parseIndividualsPage],
+        }
+        self.lstStrCategoryName = [
+            "animals", "art", "comic", "community", "dance",
+            "design", "education", "environment", "fashion",
+            "film", "food", "gaming", "health", "music", "photography",
+            "politics", "religion", "small_business", "sports",
+            "technology", "theatre", "transmedia", "video_web", "writing"
+        ]
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
         self.dicParsedResultOfProject = {} #project.json 資料
@@ -42,12 +45,14 @@ class ParserV2ForINDIEGOGO:
         
     #取得 parser 使用資訊
     def getUseageMessage(self):
-        return ("- INDIEGOGO (parser version 2)-\n"
-                "useage:\n"
-                "explore - parse explore.html then create category_url_list.txt\n"
-                "category - parse category.html then create project_url_list.txt\n"
-                "project category - parse project's html of given category (or automode) then create .json\n"
-                "individuals category - parse individuals's html of given category (or automode) then create .json\n")
+        return (
+            "- INDIEGOGO (parser version 2)-\n"
+            "useage:\n"
+            "explore - parse explore.html then create category_url_list.txt\n"
+            "category - parse category.html then create project_url_list.txt\n"
+            "project category - parse project's html of given category (or automode) then create .json\n"
+            "individuals category - parse individuals's html of given category (or automode) then create .json\n"
+        )
 
     #執行 parser
     def runParser(self, lstSubcommand=None):
@@ -131,15 +136,16 @@ class ParserV2ForINDIEGOGO:
 #project #####################################################################################
     #解析 project page 進入點
     def parseProjectPage(self, strCategoryName=None):
-        lstFuncOfParseProject = [self.beforeParseProjectPage,
-                          self.parseProjectDetailsPage,
-                          self.parseProjectStoryPage,
-                          self.parseProjectUpdatesPage,
-                          self.parseProjectCommentsPage,
-                          self.parseProjectBackersPage,
-                          self.parseProjectRewardPage,
-                          self.afterParseProjectPage
-                          ]
+        lstFuncOfParseProject = [
+            self.beforeParseProjectPage,
+            self.parseProjectDetailsPage,
+            self.parseProjectStoryPage,
+            self.parseProjectUpdatesPage,
+            self.parseProjectCommentsPage,
+            self.parseProjectBackersPage,
+            self.parseProjectRewardPage,
+            self.afterParseProjectPage
+        ]
         if strCategoryName != "automode":
             for funcOfParseProject in lstFuncOfParseProject:
                 funcOfParseProject(strCategoryName=strCategoryName)
@@ -406,8 +412,10 @@ class ParserV2ForINDIEGOGO:
                     #strUpdateDate
                     strUpdateDate = None
                     strOriginUpdateDate = elementUpdate.css("h2.activityUpdate-timestamp::text").extract_first().strip()
-                    strParsedUpdateDate = self.utility.parseStrDateByDateparser(strOriginDate=strOriginUpdateDate,
-                                                               strBaseDate=self.utility.getCtimeOfFile(strFilePath=strProjUpdatesFilePath))
+                    strParsedUpdateDate = self.utility.parseStrDateByDateparser(
+                        strOriginDate=strOriginUpdateDate,
+                        strBaseDate=self.utility.getCtimeOfFile(strFilePath=strProjUpdatesFilePath)
+                    )
                     #如果原文字含有 months ago 將轉換後的日期強制設定為 01 號
                     if "month" in strOriginUpdateDate.lower():
                         lstStrParsedUpdateDate = list(strParsedUpdateDate)
@@ -467,8 +475,10 @@ class ParserV2ForINDIEGOGO:
                     #strCommentDate
                     strCommentDate = None
                     strOriginCommentDate = elementComment.css("div.commentLayout-header:nth-of-type(1) span.commentNote::text").extract_first().strip()
-                    strParsedCommentDate = self.utility.parseStrDateByDateparser(strOriginDate=strOriginCommentDate,
-                                                                strBaseDate=self.utility.getCtimeOfFile(strFilePath=strProjCommentsFilePath))
+                    strParsedCommentDate = self.utility.parseStrDateByDateparser(
+                        strOriginDate=strOriginCommentDate,
+                        strBaseDate=self.utility.getCtimeOfFile(strFilePath=strProjCommentsFilePath)
+                    )
                     #如果原文字含有 months ago 將轉換後的日期強制設定為 01 號
                     if "month" in strOriginCommentDate.lower():
                         lstStrParsedCommentDate = list(strParsedCommentDate)
@@ -586,11 +596,12 @@ class ParserV2ForINDIEGOGO:
 
     #解析 individuals page 進入點
     def parseIndividualsPage(self, strCategoryName=None):
-        lstFuncOfParseIndividuals = [self.beforeParseIndividualsPage,
-                             self.parseIndividualsProfilePage,
-                             self.parseIndividualsCampaignsPage,
-                             self.afterParseIndividualsPage
-                             ]
+        lstFuncOfParseIndividuals = [
+            self.beforeParseIndividualsPage,
+            self.parseIndividualsProfilePage,
+            self.parseIndividualsCampaignsPage,
+            self.afterParseIndividualsPage
+        ]
         if strCategoryName != "automode":
             for funcOfParseIndividuals in lstFuncOfParseIndividuals:
                 funcOfParseIndividuals(strCategoryName=strCategoryName)
