@@ -377,6 +377,9 @@ class ParserV2ForINDIEGOGO:
                     #strCreatorUrl = "" 已由 parseProjectDetailsPage 取得
                     #lstStrBacker = "" 已由 parseProjectBackersPage 取得
             except:
+                #remove story page
+                os.remove(strProjStoryFilePath)
+                #error log
                 strErrorLogFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\INDIEGOGO\\error.log")
                 with open(strErrorLogFilePath, "a") as errFile:
                     errFile.write(strProjUrl + "\n")
