@@ -24,6 +24,52 @@ class MongoDbRepairman:
         self.db = ExternalDbOfCameo().mongodb
         #self.db = LocalDbForJsonImporter().mongodb #測試用本地端 db
         
+    def makeTagFieldOnModelFundProject(self):
+        for docFundProject in self.db.ModelFundProject.find({}):
+            lstStrTag = []
+            strCategory = docFundProject["strCategory"]
+            strSubCategory = docFundProject["strSubCategory"]
+            lstStrCategory = docFundProject["lstStrCategory"]
+            lstStrSubCategory = docFundProject["lstStrSubCategory"]
+            lstStrTag.append(strCategory)
+            lstStrTag.append(strSubCategory)
+            lstStrTag = lstStrTag + lstStrCategory
+            lstStrTag = lstStrTag + lstStrSubCategory
+            lstStrTag = list(set(lstStrTag))
+            self.db.ModelFundProject.update_one(
+                {
+                    "_id":docFundProject["_id"]
+                },
+                {
+                    "$set":{
+                        "lstStrTag":lstStrTag
+                    }
+                },
+                upsert=True
+            )
+        
+    def makeTagFieldOnModelStartup(self):
+        for docStartup in self.db.ModelStartup.find({}):
+            lstStrTag = []
+            lstIndustry = docStartup["lstIndustry"]
+            lstStrCategory = docStartup["lstStrCategory"]
+            lstStrSubCategory = docStartup["lstStrSubCategory"]
+            lstStrTag = lstStrTag + lstIndustry
+            lstStrTag = lstStrTag + lstStrCategory
+            lstStrTag = lstStrTag + lstStrSubCategory
+            lstStrTag = list(set(lstStrTag))
+            self.db.ModelStartup.update_one(
+                {
+                    "_id":docStartup["_id"]
+                },
+                {
+                    "$set":{
+                        "lstStrTag":lstStrTag
+                    }
+                },
+                upsert=True
+            )
+        
     def removeModelStartupInvestorAndModelRewardPersonUnnecessaryData(self):
         #投資型
         for docStartupInvestor in self.db.ModelStartupInvestor.find({}):
