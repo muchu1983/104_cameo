@@ -201,6 +201,7 @@ class ParserV2ForINDIEGOGO:
                 strProjHtmlFilePath = strBasedir + os.sep + strHtmlFilePrefix + strProjHtmlFileExtension
                 if os.path.exists(strProjHtmlFilePath):
                     print("prepare to remove %s"%strProjHtmlFilePath)
+                    raise ValueError("test")
                     #os.remove(strProjHtmlFilePath)
         return isProjHtmlFileMissing
     
