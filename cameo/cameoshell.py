@@ -9,6 +9,7 @@ This file is part of BSD license
 from cameo.spiderForINDIEGOGO import SpiderForINDIEGOGO
 from cameo.parserForINDIEGOGO import ParserForINDIEGOGO #old style
 from cameo.parserV2ForINDIEGOGO import ParserV2ForINDIEGOGO #new style
+from cameo.importerForINDIEGOGO import ImporterForINDIEGOGO
 from cameo.spiderForWEBACKERS import SpiderForWEBACKERS
 from cameo.parserForWEBACKERS import ParserForWEBACKERS
 from cameo.importerForWEBACKERS import ImporterForWEBACKERS
@@ -62,6 +63,7 @@ class CameoShell:
             "techcrunch":ParserForTECHCRUNCH()
         }
         self.dicImporters = {
+            "indiegogo":ImporterForINDIEGOGO(),
             "webackers":ImporterForWEBACKERS(),
             "techorange":ImporterForTECHORANGE(),
             "bnext":ImporterForBNEXT(),
