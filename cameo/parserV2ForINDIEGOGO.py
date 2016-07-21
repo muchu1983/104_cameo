@@ -272,33 +272,48 @@ class ParserV2ForINDIEGOGO:
                     #intVideoCount
                     lstVideoElements = root.css("campaign-video.campaignVideo").extract()
                     self.dicParsedResultOfProject[strProjUrl]["intVideoCount"] = len(lstVideoElements)
+                    
+                    #isDemand
+                    isIndemand = False
+                    if len(root.css("div.campaignState--indemand").extract()) > 0:
+                        isIndemand = True
+                    else:
+                        isIndemand = False
+                    self.dicParsedResultOfProject[strProjUrl]["isDemand"] = isIndemand
+                    #isEnded
+                    isEnded = False
+                    if len(root.css("div.campaignState--ended").extract()) > 0:
+                        isEnded = True
+                    else:
+                        isEnded = False
                     #strCrawlTime and intRemainDays and strEndDate
                     strProjectTimeleftListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\INDIEGOGO\\%s\\project_timeleft_list.txt"%strCategoryName)
                     with open(strProjectTimeleftListFilePath, "r") as projectTimeleftListFile:
                         #strCrawlTime local category.html的建立時間
                         strCrawlTime = projectTimeleftListFile.readline().split(u":")[1].strip()
-                        #intRemainDays and strEndDate
+                        self.dicParsedResultOfProject[strProjUrl]["strCrawlTime"] = strCrawlTime
+                        #intRemainDays
                         intRemainDays = 0
                         strEndDate = None
                         for strProjTimeleftLine in projectTimeleftListFile:
                             if strProjUrl in strProjTimeleftLine:
                                 intRemainDays = int(strProjTimeleftLine.split(",")[1].strip())
                                 strEndDate = strProjTimeleftLine.split(",")[2].strip()
-                        self.dicParsedResultOfProject[strProjUrl]["strCrawlTime"] = strCrawlTime
                         self.dicParsedResultOfProject[strProjUrl]["intRemainDays"] = intRemainDays
-                        self.dicParsedResultOfProject[strProjUrl]["strEndDate"] = strEndDate
-                    #isDemand
-                    if strEndDate == "indemand":
-                        self.dicParsedResultOfProject[strProjUrl]["isDemand"] = True
-                    else:
-                        self.dicParsedResultOfProject[strProjUrl]["isDemand"] = False
+                        #strEndDate
+                        if isIndemand:
+                            self.dicParsedResultOfProject[strProjUrl]["strEndDate"] = u"indemand"
+                        elif isEnded:
+                            self.dicParsedResultOfProject[strProjUrl]["strEndDate"] = u"closed"
+                        else:
+                            self.dicParsedResultOfProject[strProjUrl]["strEndDate"] = strEndDate
                     #strCategory
                     self.dicParsedResultOfProject[strProjUrl]["strCategory"] = strCategoryName
                     #strSubCategory
                     self.dicParsedResultOfProject[strProjUrl]["strSubCategory"] = strCategoryName
                     #intRaisedMoney
                     strFundsAmountText = None
-                    if strEndDate == "indemand":
+                    if isIndemand:
                         strFundsAmountText = root.css("div.indemandProgress-raised span.indemandProgress-raisedAmount::text").extract_first().strip()
                     else:
                         strFundsAmountText = root.css("div.campaignGoalProgress-raised span.campaignGoalProgress-raisedAmount::text").extract_first().strip()
@@ -306,7 +321,7 @@ class ParserV2ForINDIEGOGO:
                     self.dicParsedResultOfProject[strProjUrl]["intRaisedMoney"] = intRaisedMoney
                     #intFundTarget
                     strRaisedGoalText = None
-                    if strEndDate == "indemand":
+                    if isIndemand:
                         strPercentFundedText = root.css("div.indemandProgress-historyDetails span[gogo-test='percent_funded'] em.ng-binding::text").extract_first().strip()
                         intIndemandFundedPersentage = int(re.sub("[^0-9]", "", strPercentFundedText))
                         intFundTarget = int(float(intRaisedMoney) / (float(intIndemandFundedPersentage) / 100 ))
@@ -318,12 +333,12 @@ class ParserV2ForINDIEGOGO:
                     fFundProgress = round((float(intRaisedMoney)/float(intFundTarget))*100, 2)
                     self.dicParsedResultOfProject[strProjUrl]["fFundProgress"] = fFundProgress
                     #intStatus
-                    if strEndDate == "indemand":
+                    if isIndemand:
                         if fFundProgress >= 100:
                             self.dicParsedResultOfProject[strProjUrl]["intStatus"] = 3
                         else:
                             self.dicParsedResultOfProject[strProjUrl]["intStatus"] = 4
-                    elif strEndDate == "closed":
+                    elif isEnded:
                         if fFundProgress >= 100:
                             self.dicParsedResultOfProject[strProjUrl]["intStatus"] = 1
                         else:
@@ -334,7 +349,7 @@ class ParserV2ForINDIEGOGO:
                         else:
                             self.dicParsedResultOfProject[strProjUrl]["intStatus"] = 0
                     #strCurrency
-                    if strEndDate == "indemand":
+                    if isIndemand:
                         strCurrencyText = self.utility.stripTextArray(lstStrText=root.css("div.indemandProgress-raised::text").extract())
                     else:
                         strCurrencyText = self.utility.stripTextArray(lstStrText=root.css("div.campaignGoalProgress-raised::text").extract())
