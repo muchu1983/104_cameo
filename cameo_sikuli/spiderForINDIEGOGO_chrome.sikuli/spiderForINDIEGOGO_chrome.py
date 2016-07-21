@@ -272,6 +272,7 @@ def downloadProjectPages(strTargetCategory=None):
     if strTargetCategory == "automode": #自動抓取所有分類的專案 html
         for strCategoryName in lstStrCategoryName:
             downloadProjectPages(strTargetCategory=strCategoryName)
+            popup(u"project of [%s] downloaded. press ok to continue."%strCategoryName)
         return #自動完成就 return
     strProjUrlListFilePathTemplate = strBaseResFolderPath + r"\parsed_result\INDIEGOGO\%s\project_url_list.txt"
     strProjectsFolderPathTemplate = strBaseResFolderPath + r"\source_html\INDIEGOGO\%s\projects"   
@@ -328,6 +329,7 @@ def downloadIndividualsPages(strTargetCategory=None):
     if strTargetCategory == "automode": #自動抓取所有分類的個人資料 html
         for strCategoryName in lstStrCategoryName:
             downloadIndividualsPages(strTargetCategory=strCategoryName)
+            popup(u"individuals of [%s] downloaded. press ok to continue."%strCategoryName)
         return #自動完成就 return
     strIndividualsUrlListFilePathTemplate = strBaseResFolderPath + r"\parsed_result\INDIEGOGO\%s\individuals_url_list.txt"
     strIndividualsFolderPathTemplate = strBaseResFolderPath + r"\source_html\INDIEGOGO\%s\profiles"
