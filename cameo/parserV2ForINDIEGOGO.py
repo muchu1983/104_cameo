@@ -186,6 +186,24 @@ class ParserV2ForINDIEGOGO:
                     isExists = True
         return isExists
     
+    #檢查所有的 html 檔案，若有缺少則全部 delete
+    def checkAllHtmlFileExistsAndDeleteAllIfMissing(self, strBasedir=None, strHtmlFilePrefix=None):
+        #check html file exists
+        isProjHtmlFileMissing = False
+        lstStrProjHtmlFileExtension = ["_details.html", "_story.html", "_updates.html", "_comments.html", "_backers.html"]
+        for strProjHtmlFileExtension in lstStrProjHtmlFileExtension:
+            strProjHtmlFilePath = strBasedir + os.sep + strHtmlFilePrefix + strProjHtmlFileExtension
+            if not os.path.exists(strProjHtmlFilePath):
+                isProjHtmlFileMissing = True
+        if isProjHtmlFileMissing:
+            #delete remaining project html files
+            for strProjHtmlFileExtension in lstStrProjHtmlFileExtension:
+                strProjHtmlFilePath = strBasedir + os.sep + strHtmlFilePrefix + strProjHtmlFileExtension
+                if os.path.exists(strProjHtmlFilePath):
+                    print("prepare to remove %s"%strProjHtmlFilePath)
+                    #os.remove(strProjHtmlFilePath)
+        return isProjHtmlFileMissing
+    
     #解析 _details.html
     def parseProjectDetailsPage(self, strCategoryName=None):
         strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"\\INDIEGOGO\\%s\\projects"%strCategoryName)
@@ -194,6 +212,11 @@ class ParserV2ForINDIEGOGO:
             logging.info("parsing %s"%strProjectDetailsHtmlPath)
             with open(strProjectDetailsHtmlPath, "r") as projDetailsHtmlFile: #open *_details.html
                 strProjHtmlFileName = os.path.basename(projDetailsHtmlFile.name)
+                #檢查 html 狀態
+                strHtmlFilePrefix = re.search("^(.*)_details.html$", strProjHtmlFileName).group(1)
+                isProjHtmlFileMissing = self.checkAllHtmlFileExistsAndDeleteAllIfMissing(strBasedir=strProjectsHtmlFolderPath, strHtmlFilePrefix=strHtmlFilePrefix)
+                if isProjHtmlFileMissing:
+                    continue #skip
                 strProjUrl = "https://www.indiegogo.com/projects/" + re.search("^(.*)_details.html$", strProjHtmlFileName).group(1)
                 if not self.checkIsProjUrlInProjUrlListFile(strCategoryName=strCategoryName, strProjUrl=strProjUrl):
                     logging.warning("%s not in project_url_list.txt, skip parse it"%strProjUrl)
