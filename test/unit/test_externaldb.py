@@ -27,7 +27,8 @@ class ExternalDbTest(unittest.TestCase):
     def test_externaldb_for_currency_api(self):
         logging.info("ExternalDbTest.test_externaldb_for_currency_api")
         self.assertIsNotNone(self.cameoDb.mongodb)
-
+        self.assertTrue(self.cameoDb.mongodb.ModelExRate.find({}).count() > 0)
+        
 #測試開始
 if __name__ == "__main__":
     unittest.main(exit=False)
