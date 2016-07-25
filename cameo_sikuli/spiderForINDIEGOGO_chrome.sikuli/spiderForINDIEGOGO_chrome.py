@@ -253,12 +253,17 @@ def downloadCategoryPages(strTargetCategory=None):
     catUrlListFile = open(strCategoryUrlListFilePath)
     for strCategoryUrl in catUrlListFile:#category loop
         strCategoryName = r"" + re.search("^https://www.indiegogo.com/explore#/browse/(.*)$" ,strCategoryUrl).group(1)
-        if strTargetCategory and strCategoryName != strTargetCategory:
-            continue
         strCategoryFolderPath = strBaseResFolderPath + r"\source_html\INDIEGOGO\%s"%(strCategoryName)
         if not os.path.exists(strCategoryFolderPath):
-            os.mkdir(strCategoryFolderPath) #mkdir category
+            os.mkdir(strCategoryFolderPath) #mkdir /source_html/INDIEGOGO/category
         strCategoryFilePath = strCategoryFolderPath + r"\category.html"
+        if strTargetCategory: #specify strTargetCategory
+            if strCategoryName == strTargetCategory:
+                # remove original category.html
+                os.remove(strCategoryFilePath)
+            else:
+                # skip other category
+                continue
         if not os.path.exists(strCategoryFilePath):#check category.html
             openChrome()
             typeUrlOnChrome(strUrlText=strCategoryUrl)
