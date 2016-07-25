@@ -38,13 +38,22 @@ class SpiderForINDIEGOGO:
     
     #下載及解析 category 頁面
     def handleCategoryPage(self, arg1=None):
-        call(
-            [
-                r"cameo_sikuli\runsikulix.cmd", "-c",
-                r"-r", self.strSikuliFolderPath,
-                r"--args", r"category"
-            ]
-        )
+        if arg1:
+            call(
+                [
+                    r"cameo_sikuli\runsikulix.cmd", "-c",
+                    r"-r", self.strSikuliFolderPath,
+                    r"--args", r"category", arg1
+                ]
+            )
+        else:
+            call(
+                [
+                    r"cameo_sikuli\runsikulix.cmd", "-c",
+                    r"-r", self.strSikuliFolderPath,
+                    r"--args", r"category"
+                ]
+            )
 
     #下載及解析 project 頁面
     def handleProjectPage(self, arg1=None):

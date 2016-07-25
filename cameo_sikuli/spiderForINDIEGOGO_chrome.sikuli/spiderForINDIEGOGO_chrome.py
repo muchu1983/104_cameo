@@ -385,7 +385,11 @@ if __name__ == "__main__":
         if lstStrArgs[1] == "explore":
             downloadExplorePages()
         if lstStrArgs[1] == "category":
-            downloadCategoryPages(strTargetCategory=lstStrArgs[2])
+            if len(lstStrArgs) == 3:
+                #lstStrArgs[2] is target category arg
+                downloadCategoryPages(strTargetCategory=lstStrArgs[2])
+            else:
+                downloadCategoryPages(strTargetCategory=None)
         if lstStrArgs[1] == "project": 
             #lstStrArgs[2] is target category arg
             downloadProjectPages(strTargetCategory=lstStrArgs[2])
