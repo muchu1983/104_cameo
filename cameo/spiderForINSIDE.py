@@ -24,9 +24,11 @@ class SpiderForINSIDE:
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
         self.strWebsiteDomain = u"http://www.inside.com.tw/"
-        self.dicSubCommandHandler = {"index":self.downloadIndexPage,
-                              "tag":self.downloadTagPage,
-                              "news":self.downloadNewsPage}
+        self.dicSubCommandHandler = {
+            "index":self.downloadIndexPage,
+            "tag":self.downloadTagPage,
+            "news":self.downloadNewsPage
+        }
         self.utility = Utility()
         self.db = LocalDbForINSIDE()
         self.driver = None

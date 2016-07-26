@@ -25,9 +25,11 @@ class SpiderForPEDAILY:
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
         self.strWebsiteDomain = u"http://www.pedaily.cn"
-        self.dicSubCommandHandler = {"index":self.downloadIndexPage,
-                             "category":self.downloadCategoryPage,
-                             "news":self.downloadNewsPage}
+        self.dicSubCommandHandler = {
+            "index":self.downloadIndexPage,
+            "category":self.downloadCategoryPage,
+            "news":self.downloadNewsPage
+        }
         self.utility = Utility()
         self.db = LocalDbForPEDAILY()
         self.driver = None

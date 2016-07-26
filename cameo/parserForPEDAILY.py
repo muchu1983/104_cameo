@@ -24,9 +24,11 @@ class ParserForPEDAILY:
     def __init__(self):
         self.utility = Utility()
         self.db = LocalDbForPEDAILY()
-        self.dicSubCommandHandler = {"index":[self.parseIndexPage],
-                                     "category":[self.parseCategoryPage],
-                                     "json":[self.parseNewsPageThenCreateNewsJson]}
+        self.dicSubCommandHandler = {
+            "index":[self.parseIndexPage],
+            "category":[self.parseCategoryPage],
+            "json":[self.parseNewsPageThenCreateNewsJson]
+        }
         self.strWebsiteDomain = u"http://www.pedaily.cn"
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
