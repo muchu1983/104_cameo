@@ -121,43 +121,42 @@ class ParserForTECHORANGE:
         lstStrNewsHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strNewsHtmlFolderPath, strSuffixes=u"_news.html")
         for strNewsHtmlFilePath in lstStrNewsHtmlFilePath:
             logging.info("parse %s"%strNewsHtmlFilePath)
-            #try:
-            if(True):
+            try:
                 dicNewsData = {} #新聞資料物件
                 with open(strNewsHtmlFilePath, "r") as newsHtmlFile:
                     strPageSource = newsHtmlFile.read()
                     root = Selector(text=strPageSource)
-                    #解析 news.html
-                    #strSiteName
-                    dicNewsData["strSiteName"] = u"TECHORANGE"
-                    #strUrl
-                    strShareNewsUrlHref = root.css("#share_group_btns div.share_facebook a::attr(href)").extract_first().strip()
-                    strNewsUrl = re.match("^.*(https://buzzorange.com/techorange/[\d]{4}/[\d]{2}/[\d]{2}/.*/)$", strShareNewsUrlHref).group(1).strip()
-                    dicNewsData["strUrl"] = strNewsUrl
-                    #strTitle
-                    dicNewsData["strTitle"] = root.css("header.entry-header h1.entry-title::text").extract_first().strip()
-                    #strContent
-                    # filter 項目：'by'作者、日期、tag、分享計數、分享總數、標題、上一頁、下一頁、java script、廣告…
-                    strCssNotFilter = ":not(a[rel=tag]):not(script)"
-                    lstStrContent = root.css("#main div.entry-content *%s::text"%strCssNotFilter).extract()
-                    strContent = re.sub("\s", "", u"".join(lstStrContent)) #接合 新聞內容 並去除空白字元
-                    dicNewsData["strContent"] = strContent.strip().strip(u"、")
-                    #lstStrKeyword
-                    dicNewsData["lstStrKeyword"] = root.css("ul.post-tags li a[rel=tag]::text").extract()
-                    #strPublishDate
-                    strPublishDateText = root.css("#main article.post header.entry-header span time.entry-date::text").extract_first().strip()
-                    dicNewsData["strPublishDate"] = re.sub("/", "-", strPublishDateText)
-                    #strCrawlDate
-                    dicNewsData["strCrawlDate"] = self.utility.getCtimeOfFile(strFilePath=strNewsHtmlFilePath)
+                #解析 news.html
+                #strSiteName
+                dicNewsData["strSiteName"] = u"TECHORANGE"
+                #strUrl
+                strShareNewsUrlHref = root.css("#share_group_btns div.share_facebook a::attr(href)").extract_first().strip()
+                strNewsUrl = re.match("^.*(https://buzzorange.com/techorange/[\d]{4}/[\d]{2}/[\d]{2}/.*/)$", strShareNewsUrlHref).group(1).strip()
+                dicNewsData["strUrl"] = strNewsUrl
+                #strTitle
+                dicNewsData["strTitle"] = root.css("header.entry-header h1.entry-title::text").extract_first().strip()
+                #strContent
+                # filter 項目：'by'作者、日期、tag、分享計數、分享總數、標題、上一頁、下一頁、java script、廣告…
+                strCssNotFilter = ":not(a[rel=tag]):not(script)"
+                lstStrContent = root.css("#main div.entry-content *%s::text"%strCssNotFilter).extract()
+                strContent = re.sub("\s", "", u"".join(lstStrContent)) #接合 新聞內容 並去除空白字元
+                dicNewsData["strContent"] = strContent.strip().strip(u"、")
+                #lstStrKeyword
+                dicNewsData["lstStrKeyword"] = root.css("ul.post-tags li a[rel=tag]::text").extract()
+                #strPublishDate
+                strPublishDateText = root.css("#main article.post header.entry-header span time.entry-date::text").extract_first().strip()
+                dicNewsData["strPublishDate"] = re.sub("/", "-", strPublishDateText)
+                #strCrawlDate
+                dicNewsData["strCrawlDate"] = self.utility.getCtimeOfFile(strFilePath=strNewsHtmlFilePath)
                 #將 新聞資料物件 加入 json
                 self.dicParsedResultOfNews.append(dicNewsData)
-            #except:
-            #    logging.error("parse %s fail skip it"%strNewsHtmlFilePath)
-            #    # set isGot = 0
-            #    strNewsHtmlFileName = strNewsHtmlFilePath.split(os.sep)[-1]
-            #    strNewsName = re.match(u"^(?P<newsName>.*)_news.html$", strNewsHtmlFileName).group("newsName")
-            #    self.db.updateNewsStatusIsNotGot(strNewsUrlPart=strNewsName)
-            #    continue #skip it
+            except:
+                logging.error("parse %s fail skip it"%strNewsHtmlFilePath)
+                # set isGot = 0
+                strNewsHtmlFileName = strNewsHtmlFilePath.split(os.sep)[-1]
+                strNewsName = re.match(u"^(?P<newsName>.*)_news.html$", strNewsHtmlFileName).group("newsName")
+                self.db.updateNewsStatusIsNotGot(strNewsUrlPart=strNewsName)
+                continue #skip it
             #每一千筆資料另存一個 json
             if len(self.dicParsedResultOfNews) == self.intMaxNewsPerNewsJsonFile:
                 self.intNewsJsonNum = self.intNewsJsonNum + self.intMaxNewsPerNewsJsonFile
