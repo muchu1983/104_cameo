@@ -40,7 +40,7 @@ class SeleniumTest(unittest.TestCase):
     def test_chrome_selenium(self):
         chromedriver = ".\cameo_res\chromedriver.exe"
         driver = webdriver.Chrome(chromedriver)
-        driver.get("https://www.indiegogo.com/explorer")
+        driver.get("https://www.crowdcube.com/")
         source = driver.page_source
         #f = open("currency.html", "w+")
         #f.write(source.encode("utf-8"))

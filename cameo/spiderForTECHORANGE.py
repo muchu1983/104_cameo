@@ -74,7 +74,7 @@ class SpiderForTECHORANGE:
         if not os.path.exists(strIndexHtmlFolderPath):
             os.mkdir(strIndexHtmlFolderPath) #mkdir source_html/TECHORANGE/
         #科技報橘首頁
-        self.driver.get("http://buzzorange.com/techorange/")
+        self.driver.get("https://buzzorange.com/techorange/")
         #儲存 html
         strIndexHtmlFilePath = strIndexHtmlFolderPath + u"\\index.html"
         self.utility.overwriteSaveAs(strFilePath=strIndexHtmlFilePath, unicodeData=self.driver.page_source)
@@ -98,7 +98,7 @@ class SpiderForTECHORANGE:
             strTagHtmlFilePath = strTagHtmlFolderPath + u"\\%d_%s_tag.html"%(intPageNum, strNotObtainedTagName)
             self.utility.overwriteSaveAs(strFilePath=strTagHtmlFilePath, unicodeData=self.driver.page_source)
             #tag 下一頁
-            elesNextPageA = self.driver.find_elements_by_css_selector("ul.page-numbers li a.next.page-numbers")
+            elesNextPageA = self.driver.find_elements_by_css_selector("div.nav-links a.next.page-numbers")
             while len(elesNextPageA) != 0:
                 time.sleep(random.randint(2,5)) #sleep random time
                 intPageNum = intPageNum+1
@@ -108,7 +108,7 @@ class SpiderForTECHORANGE:
                 strTagHtmlFilePath = strTagHtmlFolderPath + u"\\%d_%s_tag.html"%(intPageNum, strNotObtainedTagName)
                 self.utility.overwriteSaveAs(strFilePath=strTagHtmlFilePath, unicodeData=self.driver.page_source)
                 #tag 再下一頁
-                elesNextPageA = self.driver.find_elements_by_css_selector("ul.page-numbers li a.next.page-numbers")
+                elesNextPageA = self.driver.find_elements_by_css_selector("div.nav-links a.next.page-numbers")
             #更新tag DB 為已抓取 (isGot = 1)
             self.db.updateTagStatusIsGot(strTagName=strNotObtainedTagName)
             logging.info("got tag %s"%strNotObtainedTagName)
@@ -155,7 +155,7 @@ class SpiderForTECHORANGE:
                 time.sleep(random.randint(2,5)) #sleep random time
                 self.driver.get(strNewsUrl)
                 #儲存 html
-                strNewsName = re.match("^http://buzzorange.com/techorange/[0-9]*/[0-9]*/[0-9]*/(.*)/$", strNewsUrl).group(1)
+                strNewsName = re.match("^https://buzzorange.com/techorange/[\d]{4}/[\d]{2}/[\d]{2}/(.*)/$", strNewsUrl).group(1)
                 strNewsName = self.limitStrLessThen128Char(strStr=strNewsName) #將名稱縮短小於128字完
                 strNewsHtmlFilePath = strNewsHtmlFolderPath + u"\\%s_news.html"%strNewsName
                 self.utility.overwriteSaveAs(strFilePath=strNewsHtmlFilePath, unicodeData=self.driver.page_source)
