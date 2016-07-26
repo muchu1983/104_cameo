@@ -23,10 +23,12 @@ class ParserForTECHORANGE:
     def __init__(self):
         self.utility = Utility()
         self.db = LocalDbForTECHORANGE()
-        self.dicSubCommandHandler = {"index":[self.parseIndexPage],
-                                     "tag":[self.parseTagPage],
-                                     "news":[self.findMoreTagByParseNewsPage],
-                                     "json":[self.parseNewsPageThenCreateNewsJson]}
+        self.dicSubCommandHandler = {
+            "index":[self.parseIndexPage],
+            "tag":[self.parseTagPage],
+            "news":[self.findMoreTagByParseNewsPage],
+            "json":[self.parseNewsPageThenCreateNewsJson]
+        }
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
         self.intNewsJsonNum = 0 #news.json 檔案編號

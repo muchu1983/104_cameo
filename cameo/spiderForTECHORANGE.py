@@ -24,9 +24,11 @@ class SpiderForTECHORANGE:
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
         self.strWebsiteDomain = u"http://buzzorange.com/techorange"
-        self.dicSubCommandHandler = {"index":self.downloadIndexPage,
-                                     "tag":self.downloadTagPag,
-                                     "news":self.downloadNewsPage}
+        self.dicSubCommandHandler = {
+            "index":self.downloadIndexPage,
+            "tag":self.downloadTagPag,
+            "news":self.downloadNewsPage
+        }
         self.utility = Utility()
         self.db = LocalDbForTECHORANGE()
         self.driver = None
