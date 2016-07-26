@@ -66,7 +66,6 @@ class ParserForTECHORANGE:
             root = Selector(text=strPageSource)
             lstStrHotTagUrl = root.css("ul#menu-tag-bar li.menu-item-object-post_tag a::attr(href)").extract()
             for strHotTagUrl in lstStrHotTagUrl:
-                print(strHotTagUrl)
                 strHotTagName = re.match("^https://buzzorange.com/techorange/tag/(.*)/$", strHotTagUrl).group(1)
                 self.db.insertTagIfNotExists(strTagName=strHotTagName)
                 
