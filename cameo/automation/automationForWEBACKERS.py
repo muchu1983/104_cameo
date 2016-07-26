@@ -33,7 +33,7 @@ def entry_point():
         parser.runParser(["automode"])
         importer.importJsonData()
         cameoUtility.sendEmail(
-            strSubject="WEBACKERS auto-crawler SUCCESS!",
+            strSubject="SUCCESS!",
             strFrom=dicSettings["strMachine"],
             strTo="me",
             strMsg="",
@@ -42,7 +42,7 @@ def entry_point():
     except Exception as e:
         logging.warning("automation for WEBACKERS fail: %s"%str(e))
         cameoUtility.sendEmail(
-            strSubject="WEBACKERS auto-crawler Failed!",
+            strSubject="Failed!",
             strFrom=dicSettings["strMachine"],
             strTo="me",
             strMsg=str(e),
