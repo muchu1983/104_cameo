@@ -132,14 +132,13 @@ class ImporterForWEBACKERS:
             collectionProj.update({"strUrl": strUrl},  {"$set":{"lstDicUpdate": lstDicUpdate}})
     
     def makeTagFieldOnModelFundProject(self, strCategory=None, strSubCategory=None, lstStrCategory=[], lstStrSubCategory=[]):
-        for docFundProject in self.db.ModelFundProject.find({}):
-            lstStrTag = []
-            lstStrTag.append(strCategory)
-            lstStrTag.append(strSubCategory)
-            lstStrTag = lstStrTag + lstStrCategory
-            lstStrTag = lstStrTag + lstStrSubCategory
-            lstStrTag = list(set(lstStrTag))
-            return lstStrTag
+        lstStrTag = []
+        lstStrTag.append(strCategory)
+        lstStrTag.append(strSubCategory)
+        lstStrTag = lstStrTag + lstStrCategory
+        lstStrTag = lstStrTag + lstStrSubCategory
+        lstStrTag = list(set(lstStrTag))
+        return lstStrTag
     
     def importPersonJson(self, strCategory):
         dicTotalPerson = self.utility.readObjectFromJsonFile(strJsonFilePath=self.getParsedProfileFilePath(strCategory))
