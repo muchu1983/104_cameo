@@ -125,7 +125,7 @@ class ImporterForINDIEGOGO:
     
     def importPersonJson(self, strCategory):
         dicTotalPerson = self.utility.readObjectFromJsonFile(strJsonFilePath=self.getParsedProfileFilePath(strCategory))
-        collectionPerson = self.db.ModelPerson
+        collectionPerson = self.db.ModelRewardPerson
         for strUrl, dicPerson in dicTotalPerson.items():
             logging.info("[Import person]: %s"%strUrl)
             dicPerson.setdefault("strSource", "INDIEGOGO")
