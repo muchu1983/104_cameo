@@ -8,16 +8,16 @@ import math
 import re
 import logging
 from cameo.utility import Utility
-#from cameo.externaldb import ExternalDbForJsonImporter
-from cameo.localdb import LocalDbForJsonImporter #測試用本地端 db
+from cameo.externaldb import ExternalDbForJsonImporter
+#from cameo.localdb import LocalDbForJsonImporter #測試用本地端 db
 
 class ImporterForINDIEGOGO:
     
     #建構子
     def __init__(self):
         self.utility = Utility()
-        #self.db = ExternalDbForJsonImporter().mongodb
-        self.db = LocalDbForJsonImporter().mongodb #測試用本地端 db
+        self.db = ExternalDbForJsonImporter().mongodb
+        #self.db = LocalDbForJsonImporter().mongodb #測試用本地端 db
         self.dicSubCommandHandler = {"import":[self.importJsonData]}
         self.dicCategoryMapping = None
         self.lstStrCategory = [
@@ -98,6 +98,22 @@ class ImporterForINDIEGOGO:
             dicStatus.setdefault("strDate", self.getCorrectFormatDateTime(dicProject["strCrawlTime"]))
             collectionProj.update({"strUrl": strUrl},  {"$addToSet":{"lstDicStatus":dicStatus}}, upsert = True)
             collectionProj.update({"strUrl": strUrl}, {"$set": {"strCrawlTime": self.getCorrectFormatDateTime(dicProject["strCrawlTime"])}})
+            #lstStrTag
+            lstStrTag = self.makeTagFieldOnModelFundProject(
+                strCategory=dicProject["strCategory"],
+                strSubCategory=dicProject["strSubCategory"],
+                lstStrCategory=dicProject["lstStrCategory"],
+                lstStrSubCategory=dicProject["lstStrSubCategory"]
+            )
+            collectionProj.update_one(
+                {"strUrl": strUrl},
+                {
+                    "$set":{
+                        "lstStrTag":lstStrTag
+                    }
+                },
+                upsert=True
+            )
             #Backer: 如果有新的backer會加入db
             collectionProj.update({"strUrl": strUrl},  {"$addToSet":{"lstStrBacker": {"$each":dicProject["lstStrBacker"]}}})
             #Comment: 使用新的array蓋掉原來array
@@ -122,6 +138,16 @@ class ImporterForINDIEGOGO:
                     dateUpdate = dateparser.parse(dicUpdate["strUpdateDate"]) - dateDelta
                     dicUpdate["strUpdateDate"] = dateUpdate.strftime("%Y/%m/%d")
             collectionProj.update({"strUrl": strUrl},  {"$set":{"lstDicUpdate": lstDicUpdate}})
+    
+    def makeTagFieldOnModelFundProject(self, strCategory=None, strSubCategory=None, lstStrCategory=[], lstStrSubCategory=[]):
+        for docFundProject in self.db.ModelFundProject.find({}):
+            lstStrTag = []
+            lstStrTag.append(strCategory)
+            lstStrTag.append(strSubCategory)
+            lstStrTag = lstStrTag + lstStrCategory
+            lstStrTag = lstStrTag + lstStrSubCategory
+            lstStrTag = list(set(lstStrTag))
+            return lstStrTag
     
     def importPersonJson(self, strCategory):
         dicTotalPerson = self.utility.readObjectFromJsonFile(strJsonFilePath=self.getParsedProfileFilePath(strCategory))

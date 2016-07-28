@@ -97,6 +97,22 @@ class ImporterForWEBACKERS:
             dicStatus.setdefault("strDate", self.getCorrectFormatDateTime(dicProject["strCrawlTime"]))
             collectionProj.update({"strUrl": strUrl},  {"$addToSet":{"lstDicStatus":dicStatus}}, upsert = True)
             collectionProj.update({"strUrl": strUrl}, {"$set": {"strCrawlTime": self.getCorrectFormatDateTime(dicProject["strCrawlTime"])}})
+            #lstStrTag
+            lstStrTag = self.makeTagFieldOnModelFundProject(
+                strCategory=dicProject["strCategory"],
+                strSubCategory=dicProject["strSubCategory"],
+                lstStrCategory=dicProject["lstStrCategory"],
+                lstStrSubCategory=dicProject["lstStrSubCategory"]
+            )
+            collectionProj.update_one(
+                {"strUrl": strUrl},
+                {
+                    "$set":{
+                        "lstStrTag":lstStrTag
+                    }
+                },
+                upsert=True
+            )
             #Backer: 如果有新的backer會加入db
             collectionProj.update({"strUrl": strUrl},  {"$addToSet":{"lstStrBacker": {"$each":dicProject["lstStrBacker"]}}})
             #QandA: 使用新的array蓋掉原來array
@@ -114,6 +130,16 @@ class ImporterForWEBACKERS:
                 if(dicUpdate["strUpdateDate"] != None and len(dicUpdate["strUpdateDate"]) > 0):
                     dicUpdate["strUpdateDate"] = self.getCorrectFormatDateTime(dicUpdate["strUpdateDate"])
             collectionProj.update({"strUrl": strUrl},  {"$set":{"lstDicUpdate": lstDicUpdate}})
+    
+    def makeTagFieldOnModelFundProject(self, strCategory=None, strSubCategory=None, lstStrCategory=[], lstStrSubCategory=[]):
+        for docFundProject in self.db.ModelFundProject.find({}):
+            lstStrTag = []
+            lstStrTag.append(strCategory)
+            lstStrTag.append(strSubCategory)
+            lstStrTag = lstStrTag + lstStrCategory
+            lstStrTag = lstStrTag + lstStrSubCategory
+            lstStrTag = list(set(lstStrTag))
+            return lstStrTag
     
     def importPersonJson(self, strCategory):
         dicTotalPerson = self.utility.readObjectFromJsonFile(strJsonFilePath=self.getParsedProfileFilePath(strCategory))
