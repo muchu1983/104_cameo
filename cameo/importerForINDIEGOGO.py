@@ -64,6 +64,7 @@ class ImporterForINDIEGOGO:
             if("fFundProgress" not in dicProject):
                 continue
             logging.info("[Import project]: %s"%strUrl)
+            dicCategory = self.dicCategoryMapping[dicProject["strCategory"]]
             bIsNew = collectionProj.count({"strUrl": strUrl}) == 0
             dateDelta = datetime.datetime.now() - datetime.datetime.strptime(dicProject["strCrawlTime"], "%Y-%m-%d")
             #project: 固定資訊只有在db上沒有時才會匯入，status為變動資訊，每次匯入時會確認是否為新的，若是新的則會匯入
@@ -73,7 +74,6 @@ class ImporterForINDIEGOGO:
                     dicProject["strEndDate"] = self.getCorrectFormatDateTime(dicProject["strEndDate"])
                 else:
                     dicProject["strEndDate"] = None
-                dicCategory = self.dicCategoryMapping[dicProject["strCategory"]]
                 dicProject.setdefault("lstIntCategoryId", [dicCategory["intCategoryId"]])
                 dicProject.setdefault("lstStrCategory", [dicCategory["strCategory"]])
                 dicProject.setdefault("lstIntSubCategoryId", [dicCategory["intSubCategoryId"]])
@@ -84,6 +84,8 @@ class ImporterForINDIEGOGO:
                 dicProject.setdefault("lstDicUpdate", [])
                 dicProject.setdefault("lstDicStatus", [])
                 collectionProj.insert_one(dicProject).inserted_id
+            else:
+                pass
             dicStatus = {}
             dicStatus.setdefault("intStatus", dicProject.pop("intStatus", 0))
             dicStatus.setdefault("intRemainDays", dicProject.pop("intRemainDays", 0))
@@ -102,8 +104,8 @@ class ImporterForINDIEGOGO:
             lstStrTag = self.makeTagFieldOnModelFundProject(
                 strCategory=dicProject["strCategory"],
                 strSubCategory=dicProject["strSubCategory"],
-                lstStrCategory=dicProject["lstStrCategory"],
-                lstStrSubCategory=dicProject["lstStrSubCategory"]
+                lstStrCategory=[dicCategory["strCategory"]],
+                lstStrSubCategory=[dicCategory["strSubCategory"]]
             )
             collectionProj.update_one(
                 {"strUrl": strUrl},
