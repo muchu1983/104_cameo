@@ -86,7 +86,8 @@ class ImporterForWEBACKERS:
                 dicProject.setdefault("lstDicStatus", [])
                 collectionProj.insert_one(dicProject).inserted_id
             else:
-                pass
+                collectionProj.update({"strUrl": strUrl}, {"$set":{"fFundProgress":dicProject.get("fFundProgress", .0)}}, upsert=True)
+                collectionProj.update({"strUrl": strUrl}, {"$set":{"intRaisedMoney":dicProject.get("intRaisedMoney", 0)}}, upsert=True)
             dicStatus = {}
             dicStatus.setdefault("intStatus", dicProject.pop("intStatus", 0))
             dicStatus.setdefault("intRemainDays", dicProject.pop("intRemainDays", 0))
@@ -97,7 +98,7 @@ class ImporterForWEBACKERS:
             dicStatus.setdefault("intComment", dicProject.pop("intComment", 0))
             dicStatus.setdefault("intFbLike", dicProject.pop("intFbLike", 0))
             dicStatus.setdefault("strDate", self.getCorrectFormatDateTime(dicProject["strCrawlTime"]))
-            collectionProj.update({"strUrl": strUrl},  {"$addToSet":{"lstDicStatus":dicStatus}}, upsert = True)
+            collectionProj.update({"strUrl": strUrl}, {"$addToSet":{"lstDicStatus":dicStatus}}, upsert = True)
             collectionProj.update({"strUrl": strUrl}, {"$set": {"strCrawlTime": self.getCorrectFormatDateTime(dicProject["strCrawlTime"])}})
             #lstStrTag
             lstStrTag = self.makeTagFieldOnModelFundProject(
