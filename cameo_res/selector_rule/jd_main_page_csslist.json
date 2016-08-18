@@ -1,8 +1,8 @@
 {
-    "rawdata-converter-name":"jd_finance",
-    "local-html-file-pattern":{
-        "strBasedir":"C:\\Users\\SJack\\Desktop\\crawlermaster",
-        "strSuffixes":"news.html"
+    "rawdata-converter-name":"jd_intro",
+    "local-html-file-pattern": {
+        "strBasedir":"C:\\Users\\muchu\\Desktop\\caseWorkspace\\003-卡米爾scrapy\\CAMEO_git_code\\cameo_res\\source_html\\JD\\互联网汽车\\projects",
+        "strSuffixes":"_intro.html"
     },
     "csslist":[
 
