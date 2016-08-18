@@ -1,0 +1,64 @@
+{
+    "rawdata-converter-name":"jd_finance",
+    "local-html-file-pattern":{
+        "strBasedir":"C:\\Users\\SJack\\Desktop\\crawlermaster",
+        "strSuffixes":"news.html"
+    },
+    "csslist":[
+
+    {
+            "name":"jd-creator",
+            "sampleUrl":"http://z.jd.com/funderCenter.action?flag=2&id=61922",
+            "preAction": [],
+            "cssRule":"div.my_infor_left p::text",
+            "sampleAns":[
+                "\n                    \t                    \t\t食库\n                    \t                    "
+            ],
+            "ansType":"exact"
+        },
+    {
+            "name":"jd-creator-descript",
+            "sampleUrl":"http://z.jd.com/funderCenter.action?flag=2&id=61922",
+            "preAction":[],
+            "cssRule":"div.my_infor_right p::text",
+            "sampleAns":[
+                "2013年，玫瑰寺发起人之一结识了香格里拉白马雪山下的一位活佛；同时也发现了这里有着2900米的海拔、雪水滋养的沃土、离阳光最近的超长日照……，非常适合种植重瓣食用玫瑰；有了活佛的撮合，时至今天1000余亩的玫瑰山谷已经蔚然成行。\n2016年，基于香格里拉藏地玫瑰原料、‘敬畏自然 匠作造物’的玫瑰寺™鲜花饼正式上市。"
+            ],
+            "ansType":"exact"
+        },
+
+        {
+            "name":"jd-creator-CreatedProject",
+            "sampleUrl":"http://z.jd.com/funderCenter.action?flag=2&id=61922",
+            "preAction":[],
+            "cssRule":"form#myProListForm div.tab_cont ul li p::text",
+            "sampleAns":[
+                "距离 产生玫瑰寺"
+            ],
+            "ansType":"exist"
+        },
+         {
+            "name":"jd-creator-CreatedProjectUrl",
+            "sampleUrl":"http://z.jd.com/funderCenter.action?flag=2&id=61922",
+            "preAction":[],
+            "cssRule":"form#myProListForm div.tab_cont ul li::attr(onclick)",
+            "sampleAns":[
+                "javascript:location.href='/project/details/61922.html';"
+            ],
+            "ansType":"exist"
+        },
+        {
+            "name":"jd-creator-CreatedCount",
+            "sampleUrl":"http://z.jd.com/funderCenter.action?flag=2&id=61922",
+            "preAction":[],
+            "cssRule":"div.myCentNav a:nth-child(2) i::text",
+            "sampleAns":[
+                "1"
+            ],
+            "ansType":"exist"
+        }
+
+
+
+ ]
+}

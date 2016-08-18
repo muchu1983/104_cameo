@@ -1,0 +1,54 @@
+{
+    "rawdata-converter-name":"jd_finance",
+    "local-html-file-pattern":{
+        "strBasedir":"C:\\Users\\SJack\\Desktop\\crawlermaster",
+        "strSuffixes":"news.html"
+    },
+    "csslist":[
+
+    	{
+            "name":"jd-comment",
+            "sampleUrl":"http://z.jd.com/project/details/61922.html",
+            "preAction": [],
+            "cssRule":"div#topicBtn span.tab-bubble::text",
+            "sampleAns":[
+                "14"
+            ],
+            "ansType":"exist"
+        },
+
+        {
+            "name":"jd-comment-name",
+            "sampleUrl":"http://z.jd.com/project/details/61922.html",
+            "preAction": [{"click":"div#topicBtn"}],
+            "cssRule":"div#topicArea div.dialog-content span.dialog-name::text",
+            "sampleAns":[
+                "食库："
+            ],
+            "ansType":"exist"
+        },
+
+        {
+            "name":"jd-comment-content",
+            "sampleUrl":"http://z.jd.com/project/details/61922.html",
+            "preAction": [{"click":"div#topicBtn"}],
+            "cssRule":"div#topicArea div.dialog-li-l div.dialog-content div.dialog-detail::text",
+            "sampleAns":[
+                "醉贤庄：恭喜众筹成功~~~吃小菜，配好酒，欢迎大家前来支持“茅台镇天然活竹美酒清雅醇香”鲜竹酒哦"
+            ],
+            "ansType":"exist"
+        },
+
+        {
+            "name":"jd-comment-date",
+            "sampleUrl":"http://z.jd.com/project/details/61922.html",
+            "preAction": [{"click":"div#topicBtn"}],
+            "cssRule":"div#topicArea div.dialog-content div.dialog-reply-wrap span.dialog-time::text",
+            "sampleAns":[
+                "4天前"
+            ],
+            "ansType":"exist"
+        }
+
+        ]
+}

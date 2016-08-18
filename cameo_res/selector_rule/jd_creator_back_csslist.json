@@ -1,0 +1,54 @@
+{
+    "rawdata-converter-name":"jd_finance",
+    "local-html-file-pattern":{
+        "strBasedir":"C:\\Users\\SJack\\Desktop\\crawlermaster",
+        "strSuffixes":"news.html"
+    },
+    "csslist":[
+            
+       {
+            "name":"jd-creator-BackedProject",
+            "sampleUrl":"http://z.jd.com/funderCenter.action?flag=2&id=61922",
+            "preAction":[
+                {"click":"div.myCentNav a:first-child"}
+            ],
+            "cssRule":"div.tab_cont ul li p::text",
+            "sampleAns":[
+                "我们只比传统阿胶多了点水",
+                "云马mini智能折叠电单车",
+                "好吃又健康天使恶魔油辣椒",
+                "一块蕴藏着天籁之声的原木"
+            ],
+            "ansType":"exist"
+        },
+
+        {
+            "name":"jd-creator-BackedProjectUrl",
+            "sampleUrl":"http://z.jd.com/funderCenter.action?flag=2&id=61922",
+            "preAction":[
+                {"click":"div.myCentNav a:first-child"}
+            ],
+            "cssRule":"div.tab_cont ul li::attr(onclick)",
+            "sampleAns":[
+                "javascript:location.href='/project/details/59004.html';",
+                "javascript:location.href='/project/details/60196.html';",
+                "javascript:location.href='/project/details/55376.html';",
+                "javascript:location.href='/project/details/7191.html';"
+            ],
+            "ansType":"exist"
+        },
+        {
+            "name":"jd-creator-BackedCount",
+            "sampleUrl":"http://z.jd.com/funderCenter.action?flag=2&id=61922",
+            "preAction":[],
+            "cssRule":"div.myCentNav a:first-child i::text",
+            "sampleAns":[
+                "4"
+            ],
+            "ansType":"exist"
+        }
+
+
+
+    ]
+}

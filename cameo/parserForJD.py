@@ -118,22 +118,34 @@ class ParserForJD:
                     logging.info("insert project url: %s"%strProjectUrl)
                     self.db.insertProjectUrlIfNotExists(strProjectUrl=strProjectUrl, strCategoryPage1Url=strCategoryPage1Url)
     
-    #解析 projects/*.html 產生 json 並 取得 funder url
-    def parseProjectPage(self, uselessArg1=None):
-        raise ValueError("TODO")
-        strNewsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\TECHCRUNCH\\news"
-        if not os.path.exists(strNewsResultFolderPath):
-            os.mkdir(strNewsResultFolderPath) #mkdir parsed_result/TECHCRUNCH/news/
-        strNewsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\TECHCRUNCH\\news"
-        strCssJsonFilePath = "cameo_res\\selector_rule\\techcrunch_csslist.json"
+    #解析 projects/*.html 產生 json 並 取得 funder url (strCategoryPage1Url == None 會自動找尋已完成下載之 category)
+    def parseProjectPage(self, strCategoryPage1Url=None):
+        if strCategoryPage1Url is None:
+            #未指定 category url
+            #取得已下載完成的 strCategoryUrl list
+            lstStrObtainedCategoryUrl = self.db.fetchallCompletedObtainedCategoryUrl()
+            for strObtainedCategoryUrl in lstStrObtainedCategoryUrl: #category loop
+                strCategoryName = self.db.fetchCategoryNameByUrl(strCategoryPage1Url=strObtainedCategoryUrl)
+                self.parseProjectPageWithGivenCategory(strCategoryPage1Url=strObtainedCategoryUrl, strCategoryName=strCategoryName)
+        else:
+            #有指定 category url
+            strCategoryName = self.db.fetchCategoryNameByUrl(strCategoryPage1Url=strCategoryPage1Url)
+            self.parseProjectPageWithGivenCategory(strCategoryPage1Url=strCategoryPage1Url, strCategoryName=strCategoryName)
+    
+    #解析 指定 category 的 projects/*.html 產生 json 並 取得 funder url
+    def parseProjectPageWithGivenCategory(self, strCategoryPage1Url=None, strCategoryName=None):
+        strProjectResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\JD\\%s\\projects"%strCategoryName
+        if not os.path.exists(strProjectResultFolderPath):
+            os.mkdir(strProjectResultFolderPath) #mkdir parsed_result/JD/category/projects
+        strProjectHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\JD\\%s\\projects"%strCategoryName
+        strCssJsonFilePath = "cameo_res\\selector_rule\\jd_main_page_csslist.json"
         cmParser = CmParser(strCssJsonFilePath=strCssJsonFilePath)
-        cmParser.localHtmlFileParse()
-        strNewsJsonFilePath = strNewsResultFolderPath + u"\\news.json"
-        cmParser.flushConvertedDataToJsonFile(strJsonFilePath=strNewsJsonFilePath)
+        cmParser.localHtmlFileParse(strBasedir=strProjectHtmlFolderPath, strSuffixes="_intro.html")
+        strProjectJsonFilePath = strProjectResultFolderPath + u"\\project.json"
+        #cmParser.flushConvertedDataToJsonFile(strJsonFilePath=strProjectJsonFilePath)
         
-    #解析 profile/*.html 產生 json 
+    #解析 profiles/*.html 產生 json 
     def parseFunderPage(self, uselessArg1=None):
-        raise ValueError("TODO")
         strNewsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\TECHCRUNCH\\news"
         if not os.path.exists(strNewsResultFolderPath):
             os.mkdir(strNewsResultFolderPath) #mkdir parsed_result/TECHCRUNCH/news/

@@ -9,6 +9,7 @@
             "name": "techcrunch-news-title", 
             "sampleUrl": "https://techcrunch.com/2016/06/02/apple-app-store-goes-down/", 
             "cssRule": "header.page-title h1.tweet-title::text", 
+            "preAction": [], 
             "sampleAns": [
                 "Apple App Store goes down"
             ], 
@@ -18,6 +19,7 @@
             "name":"techcrunch-news-tags",
             "sampleUrl":"https://techcrunch.com/2016/06/02/apple-app-store-goes-down/",
             "cssRule":"div.tags a.tag::text",
+            "preAction": [], 
             "sampleAns":[
                 "Apps",
                 "Apple",
@@ -31,6 +33,7 @@
             "name":"techcrunch-news-pubtime",
             "sampleUrl":"https://techcrunch.com/2016/06/02/apple-app-store-goes-down/",
             "cssRule":"header.article-header div.byline time.timestamp::text",
+            "preAction": [], 
             "sampleAns":[
                 "4 hours ago"
             ],
@@ -40,6 +43,7 @@
             "name":"techcrunch-news-author",
             "sampleUrl":"https://techcrunch.com/2016/06/02/apple-app-store-goes-down/",
             "cssRule":"div.title-left div.byline a::text",
+            "preAction": [], 
             "sampleAns":[
                 "Jordan Crook"
             ],
@@ -49,6 +53,7 @@
             "name":"techcrunch-news-content",
             "sampleUrl":"https://techcrunch.com/2016/06/02/apple-app-store-goes-down/",
             "cssRule":"div.article-entry.text *::text",
+            "preAction": [], 
             "sampleAns":[
                 "If you’ve ever turned to the ..."
             ],
@@ -58,6 +63,7 @@
             "name":"techcrunch-news-url",
             "sampleUrl":"https://techcrunch.com/2016/06/02/apple-app-store-goes-down/",
             "cssRule":"ul#social-share::attr(data-permalink)",
+            "preAction": [], 
             "sampleAns":[
                 "https://techcrunch.com/2016/06/02/apple-app-store-goes-down/"
             ],

@@ -1,0 +1,220 @@
+{
+    "rawdata-converter-name":"jd_finance",
+    "local-html-file-pattern":{
+        "strBasedir":"C:\\Users\\SJack\\Desktop\\crawlermaster",
+        "strSuffixes":"news.html"
+    },
+    "csslist":[
+
+    {
+            "name": "jd-source", 
+            "sampleUrl": "http://z.jd.com/project/details/61922.html", 
+            "preAction": [],
+            "cssRule": "div.main-nav-logo a img::attr(alt)", 
+            "sampleAns": ["京东金融"], 
+            "ansType": "exact" 
+        },
+
+        {
+            "name": "jd-project-name", 
+            "sampleUrl": "http://z.jd.com/project/details/61922.html", 
+            "preAction": [],
+            "cssRule": "div.project-introduce p.p-title::text", 
+            "sampleAns": [
+                "距离 产生玫瑰寺"
+            ], 
+            "ansType": "exact" 
+        },
+
+        {
+            "name":"jd-img-count",
+            "sampleUrl":"http://z.jd.com/project/details/61922.html",
+            "preAction": [],
+            "cssRule":"div.tab-img-group p img.lazyout-detail",
+            "sampleAns":[
+                ""
+            ],
+            "ansType":"exist"
+        },
+
+        {
+            "name":"jd-status",
+            "sampleUrl":"http://z.jd.com/project/details/61922.html",
+            "preAction": [],
+            "cssRule":"div.project-introduce p.p-have::text",
+            "sampleAns":[
+                "已筹到"
+            ],
+            "ansType":"exact"
+        },
+
+        {
+            "name":"jd-fund-progress",
+            "sampleUrl":"http://z.jd.com/project/details/61922.html",
+            "preAction": [],
+            "cssRule":"p.p-progress span.percent::text",
+            "sampleAns":[
+                "当前进度119%"
+            ],
+            "ansType":"exist"
+        },
+
+        {
+            "name":"jd-fund-target",
+            "sampleUrl":"http://z.jd.com/project/details/61922.html",
+            "preAction": [],
+            "cssRule":"p#projectMessage span.f_red:nth-child(2) *::text",
+            "sampleAns":[
+                "￥","50000"
+            ],
+            "ansType":"exact"
+        },
+
+        {
+            "name":"jd-raised-money",
+            "sampleUrl":"http://z.jd.com/project/details/61922.html",
+            "preAction": [],
+            "cssRule":"div.project-introduce p.p-num::text",
+            "sampleAns":[
+                "60808"
+            ],
+            "ansType":"exist"
+        },
+
+        {
+            "name":"jd-currency",
+            "sampleUrl":"http://z.jd.com/project/details/61922.html",
+            "preAction": [],
+            "cssRule":"p#projectMessage span.f_red:nth-child(2) i::text",
+            "sampleAns":[
+                "￥"
+            ],
+            "ansType":"exist"
+        },
+
+
+        
+
+        {
+            "name":"jd-remain-days",
+            "sampleUrl":"http://z.jd.com/project/details/61922.html",
+            "preAction": [],
+            "cssRule":"p#projectMessage span.f_red:nth-child(3)::text",
+            "sampleAns":[
+                "13"
+            ],
+            "ansType":"exist"
+        },
+
+        {
+            "name":"jd-end-date",
+            "sampleUrl":"http://z.jd.com/project/details/61922.html",
+            "preAction": [],
+            "cssRule":"p#projectMessage span.f_red:nth-child(1) *::text",
+            "sampleAns":[
+                "\n                                                                    2016年08月10日\n                                                            "
+            ],
+            "ansType":"exact"
+        },
+
+        {
+            "name":"jd-like",
+            "sampleUrl":"http://z.jd.com/project/details/61922.html",
+            "preAction": [],
+            "cssRule":"span#praisCount::text",
+            "sampleAns":[
+                "(318)"
+            ],
+            "ansType":"exist"
+        },
+
+        {
+            "name":"jd-reward-content",
+            "sampleUrl":"http://z.jd.com/project/details/61922.html",
+            "preAction": [],
+            "cssRule":"div.details-r div.box-grade div.box-content p.box-intro::text",
+            "sampleAns":[
+                "每满20位支持者抽取1位幸运用户，不满足时也抽取1位。幸运用户将会获得2个装玫瑰饼一盒。幸运用户将由京东官方抽取，抽奖规则及中奖者名单将在话题区公布。"
+            ],
+            "ansType":"exist"
+        },
+
+        {
+            "name":"jd-reward-money",
+            "sampleUrl":"http://z.jd.com/project/details/61922.html",
+            "preAction": [],
+            "cssRule":"div.box-grade div.Jfold div.t-price span::text",
+            "sampleAns":[
+                "84"
+            ],
+            "ansType":"exist"
+        },
+
+        {
+            "name":"jd-reward-backer",
+            "sampleUrl":"http://z.jd.com/project/details/61922.html",
+            "preAction": [],
+            "cssRule":"div.box-grade div.t-people span::text",
+            "sampleAns":[
+            "\n                                                                                                                                    78\n                                                                                                                        ", 
+            "\n                                                                                                                                    126\n                                                                                                                        ", 
+            "\n                                                                                                                                    28\n                                                                                                                        ", 
+            "\n                                                                                                                                    15\n                                                                                                                        ", 
+            "\n                                                                                                                                    14\n                                                                                                                        ", 
+            "\n                                                                                                                                    26\n                                                                                                                        ", 
+            "0"
+            ],
+            "ansType":"exist"
+        },
+
+        {
+            "name":"jd-reward-limit",
+            "sampleUrl":"http://z.jd.com/project/details/61922.html",
+            "preAction": [],
+            "cssRule":"div.box-grade div.box-content div.box-limit span::text",
+            "sampleAns":[
+                "限额 ", 
+            "100", 
+            "位 | 剩余 ", 
+            "22", 
+            "位", 
+            "无限额", 
+            "抽奖档", 
+            "无限额", 
+            "限额 ", 
+            "2000", 
+            "位 | 剩余 ", 
+            "1985", 
+            "位", 
+            "限额 ", 
+            "1000", 
+            "位 | 剩余 ", 
+            "986", 
+            "位", 
+            "无限额"
+            ],
+            "ansType":"exist"
+        },
+        {
+            "name":"jd-reward-deliverday-1",
+            "sampleUrl":"http://z.jd.com/project/details/61922.html",
+            "preAction": [],
+            "cssRule":"div.box-content p.box-item span.font-b span.font-red::text",
+            "sampleAns":[
+                "20", 
+            "20", 
+            "20", 
+            "20", 
+            "20", 
+            "20"
+            ],
+            "ansType":"exist"
+        }
+
+
+
+
+
+
+    ]
+}

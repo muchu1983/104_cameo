@@ -1,0 +1,86 @@
+{
+    "rawdata-converter-name":"jd_finance",
+    "local-html-file-pattern":{
+        "strBasedir":"C:\\Users\\SJack\\Desktop\\crawlermaster",
+        "strSuffixes":"news.html"
+    },
+    "csslist":[
+
+    	{
+            "name":"jd-update",
+            "sampleUrl":"http://z.jd.com/project/details/61922.html",
+            "preAction": [],
+            "cssRule":"div#qaBtn span.tab-bubble::text",
+            "sampleAns":[
+                "9"
+            ],
+            "ansType":"exist"
+        },
+
+        {
+            "name":"jd-update-content",
+            "sampleUrl":"http://z.jd.com/project/details/61922.html",
+            "preAction": [{"click":"div#qaBtn"}],
+            "cssRule":"div#proList div.pro-detail p::text",
+            "sampleAns":[
+                "每天早晨吃掉3朵玫瑰会是怎么样的美的体验？玫瑰寺™鲜花饼，独家精选三朵香格里拉的雪地玫瑰以及特级面粉+野地蜂蜜+葡萄糖浆+进口奶油……才能做成一个鲜花饼在如暮的早晨一个鲜花饼+一杯牛奶即是世界上最有颜值的完美早餐伙伴"
+            ],
+            "ansType":"exist"
+        },
+
+        {
+            "name":"jd-update-date",
+            "sampleUrl":"http://z.jd.com/project/details/61922.html",
+            "preAction": [{"click":"div#qaBtn"}],
+            "cssRule":"div#proList span.pro-day::text",
+            "sampleAns":[
+            "\n                                                                                                            今天\n                                                                                                    ", 
+            "\n                                                                                                            3天前\n                                                                                                    ", 
+            "\n                                                                                                            7天前\n                                                                                                    ", 
+            "\n                                                                                                            10天前\n                                                                                                    ", 
+            "\n                                                                                                            14天前\n                                                                                                    ", 
+            "\n                                                                                                            15天前\n                                                                                                    ", 
+            "\n                                                                                                            16天前\n                                                                                                    ", 
+            "\n                                                                                                            16天前\n                                                                                                    ", 
+            "\n                                                                                                            17天前\n                                                                                                    "
+            ],
+            "ansType":"exist"
+        },
+
+        {
+            "name":"jd-qa-q",
+            "sampleUrl":"http://z.jd.com/project/details/61922.html",
+            "preAction": [{"click":"div#qaBtn"}],
+            "cssRule":"div#qaBox div.dialog-li-l div.dialog-detail span::text",
+            "sampleAns":[
+                "只吃过酥皮的，太掉渣！这个玫瑰饼软皮不掉渣，不错哦！"
+            ],
+            "ansType":"exist"
+        },
+
+        {
+            "name":"jd-qa-a",
+            "sampleUrl":"http://z.jd.com/project/details/61922.html",
+            "preAction": [{"click":"div#qaBtn"}],
+            "cssRule":"div#qaBox div.dialog-li-r div.dialog-detail span::text",
+            "sampleAns":[
+                "谢谢您关注我们的众筹，玫瑰寺鲜花饼独家创新采用了黄金蜂蜜软皮，吃起来不会有碎屑掉落哦。",
+                "如果喜欢，还可以向我咨询更多细节。"
+            ],
+            "ansType":"exist"
+        },
+
+        {
+            "name":"jd-qa-date",
+            "sampleUrl":"http://z.jd.com/project/details/61922.html",
+            "preAction": [{"click":"div#qaBtn"}],
+            "cssRule":"div#qaBox div.dialog-li-r div.dialog-time::text",
+            "sampleAns":[
+                "2016年07月09日 18:34:21"
+            ],
+            "ansType":"exist"
+        }
+
+
+        ]
+}

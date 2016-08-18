@@ -29,7 +29,7 @@ class ParserForJDTest(unittest.TestCase):
     def test_parseIndexPage(self):
         logging.info("ParserForJDTest.test_parseIndexPage")
         self.parser.parseIndexPage()
-    """
+    
     #測試 解析 category.html
     def test_parseCategoryPage(self):
         logging.info("ParserForJDTest.test_parseCategoryPage")
@@ -38,8 +38,8 @@ class ParserForJDTest(unittest.TestCase):
     #測試 解析 project.html 並建立 json
     def test_parseProjectPage(self):
         logging.info("ParserForJDTest.test_parseProjectPage")
-        self.parser.parseProjectPage()
-        
+        self.parser.parseProjectPage(strCategoryPage1Url=None)
+    """
     #測試 解析 funder.html 並建立 json
     def test_parseFunderPage(self):
         logging.info("ParserForJDTest.test_parseFunderPage")

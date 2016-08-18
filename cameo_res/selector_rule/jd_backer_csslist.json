@@ -1,0 +1,45 @@
+{
+    "rawdata-converter-name":"jd_finance",
+    "local-html-file-pattern":{
+        "strBasedir":"C:\\Users\\SJack\\Desktop\\crawlermaster",
+        "strSuffixes":"news.html"
+    },
+    "csslist":[
+
+        {
+            "name":"jd-backer",
+            "sampleUrl":"http://z.jd.com/project/details/61922.html",
+            "preAction": [],
+            "cssRule":"div#supporterBtn span.tab-bubble::text",
+            "sampleAns":[
+                "259"
+            ],
+            "ansType":"exist"
+        },
+
+    	{
+            "name":"jd-backer-name",
+            "sampleUrl":"http://z.jd.com/project/details/61922.html",
+            "preAction":[
+                {"click":"div#supporterBtn"}   
+            ],
+            "cssRule":"ul#supporter li p.item-name::attr(title)",
+            "sampleAns":[
+                "FengLiang0411",
+                "王0***25",
+                "阿拉小宝贝",
+                "阿拉小宝贝",
+                "阿拉小宝贝",
+                "阿拉小宝贝",
+                "阿拉小宝贝",
+                "阿拉小宝贝",
+                "阿拉小宝贝",
+                "阿拉小宝贝"
+            ],
+            "ansType":"exist"
+        }
+
+
+
+        ]
+}

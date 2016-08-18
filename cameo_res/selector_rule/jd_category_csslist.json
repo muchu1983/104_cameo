@@ -1,0 +1,42 @@
+{
+    "rawdata-converter-name":"jd_finance",
+    "local-html-file-pattern":{
+        "strBasedir":"C:\\Users\\SJack\\Desktop\\crawlermaster",
+        "strSuffixes":"news.html"
+    },
+    "csslist":[
+
+     {
+            "name":"jd-category",
+            "sampleUrl":"http://z.jd.com/sceneIndex.html",
+            "preAction": [],
+            "cssRule":"ul#categorylist li a::text",
+            "sampleAns":[
+                "健康监测",
+                "智能穿戴",
+                "家居安全",
+                "时尚科技",
+                "互联网汽车",
+                "手机",
+                "数码",
+                "生活健康",
+                "智能家电",
+                "良品家居",
+                "设计师",
+                "音乐",
+                "影视",
+                "游戏",
+                "动漫",
+                "体育",
+                "旅游",
+                "出版",
+                "公益",
+                "其他",
+                "母婴"
+            ],
+            "ansType":"exact"
+        }
+
+
+ ]
+}
