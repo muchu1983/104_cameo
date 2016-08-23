@@ -159,6 +159,9 @@ class MongoDbRepairman:
                                     "strCity":docInvestmentStartup.get("strCity", None),
                                     "strProduct":docInvestmentStartup.get("strProduct", None),
                                     "lstStrCategory":docInvestmentStartup.get("lstStrCategory", None),
+                                    "lstStrNewCategoryId":docInvestmentStartup.get("lstStrNewCategoryId", None),
+                                    "lstStrNewSubCategoryId":docInvestmentStartup.get("lstStrNewSubCategoryId", None),
+                                    "lstStrTierTagId":docInvestmentStartup.get("lstStrTierTagId", None),
                                 }
                             },
                             upsert=True
@@ -236,6 +239,9 @@ class MongoDbRepairman:
                                 "strCity":docStartup.get("strCity", None),
                                 "strProduct":docStartup.get("strProduct", None),
                                 "lstStrCategory":docStartup.get("lstStrCategory", None),
+                                "lstStrNewCategoryId":docStartup.get("lstStrNewCategoryId", None),
+                                "lstStrNewSubCategoryId":docStartup.get("lstStrNewSubCategoryId", None),
+                                "lstStrTierTagId":docStartup.get("lstStrTierTagId", None),
                             }
                         },
                         upsert=True
