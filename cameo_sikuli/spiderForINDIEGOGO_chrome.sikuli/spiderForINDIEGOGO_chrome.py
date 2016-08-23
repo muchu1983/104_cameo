@@ -181,18 +181,17 @@ def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None
     dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 300)
     dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
     checkAndPauseBeforeSave()
-    for intSaveTime in range(5):
-        rightClick(onImage)
-        dicRegion["regCenter"].wait(dicPng["os_right_save_as"], 300)
-        dicRegion["regCenter"].click(dicPng["os_right_save_as"])
-        dicRegion["regCenter"].wait(dicPng["os_save_btn"], 300)
-        if strFolderPath != None:
-            typeFolderPath(strFolderPath)
-        wait(0.5)
-        typeFilename(strFilename=strFilename)
-        wait(0.5)
-        type("s", Key.ALT + Key.SHIFT)
-        wait(0.5)
+    rightClick(onImage)
+    dicRegion["regCenter"].wait(dicPng["os_right_save_as"], 300)
+    dicRegion["regCenter"].click(dicPng["os_right_save_as"])
+    dicRegion["regCenter"].wait(dicPng["os_save_btn"], 300)
+    if strFolderPath != None:
+        typeFolderPath(strFolderPath)
+    wait(0.5)
+    typeFilename(strFilename=strFilename)
+    wait(0.5)
+    type("s", Key.ALT + Key.SHIFT)
+    wait(0.5)
     dicRegion["regSW"].wait(dicPng["chrome_download_finished"], 600)#wait save complete
 #ask chrome save current page
 def saveCurrentPage(strFolderPath=None, strFilename=None):
@@ -200,16 +199,15 @@ def saveCurrentPage(strFolderPath=None, strFilename=None):
     dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 300)
     dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
     checkAndPauseBeforeSave()
-    for intSaveTime in range(5):
-        type("s", Key.CTRL)
-        dicRegion["regCenter"].wait(dicPng["os_save_btn"], 300)
-        if strFolderPath != None:
-            typeFolderPath(strFolderPath)
-        wait(0.5)
-        typeFilename(strFilename=strFilename)
-        wait(0.5)
-        type("s", Key.ALT + Key.SHIFT)
-        wait(0.5)
+    type("s", Key.CTRL)
+    dicRegion["regCenter"].wait(dicPng["os_save_btn"], 300)
+    if strFolderPath != None:
+        typeFolderPath(strFolderPath)
+    wait(0.5)
+    typeFilename(strFilename=strFilename)
+    wait(0.5)
+    type("s", Key.ALT + Key.SHIFT)
+    wait(0.5)
     dicRegion["regSW"].wait(dicPng["chrome_download_finished"], 600)#wait save complete
 #fake random request confuse browser fingerpring algorithm
 def fakeRandomRequest():
