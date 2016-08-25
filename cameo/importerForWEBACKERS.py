@@ -88,6 +88,7 @@ class ImporterForWEBACKERS:
             else:
                 collectionProj.update({"strUrl": strUrl}, {"$set":{"fFundProgress":dicProject.get("fFundProgress", .0)}}, upsert=True)
                 collectionProj.update({"strUrl": strUrl}, {"$set":{"intRaisedMoney":dicProject.get("intRaisedMoney", 0)}}, upsert=True)
+                collectionProj.update({"strUrl": strUrl}, {"$set":{"strCrawlTime":self.getCorrectFormatDateTime(dicProject["strCrawlTime"])}}, upsert=True)
             dicStatus = {}
             dicStatus.setdefault("intStatus", dicProject.pop("intStatus", 0))
             dicStatus.setdefault("intRemainDays", dicProject.pop("intRemainDays", 0))
