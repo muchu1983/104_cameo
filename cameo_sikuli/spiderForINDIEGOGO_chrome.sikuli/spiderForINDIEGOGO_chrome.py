@@ -65,10 +65,10 @@ def openChrome():
     #close prev chrome
     if dicRegion["regNW"].exists(dicPng["chrome_home"]):
         type("w", Key.CTRL)
-    wait(2)
+    wait(10)
     #re-open new chrome
     App.open("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe --incognito")
-    wait(2)#wait to running
+    wait(10)#wait to running
     dicRegion["regNW"].wait(dicPng["chrome_home"], 300)
     dicRegion["regNW"].click(dicPng["chrome_home"])
     dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 300)
@@ -212,16 +212,17 @@ def saveCurrentPage(strFolderPath=None, strFilename=None):
 #fake random request confuse browser fingerpring algorithm
 def fakeRandomRequest():
     wait(0.5)
-    lstStrFakeReqUrl = ["https://translate.google.com.tw/",
-                   "http://24h.pchome.com.tw/",
-                   "https://tw.news.yahoo.com/",
-                   "https://trello.com/",
-                   "https://www.whatismyip.com/",
-                   "https://www.twitch.tv/hichocolate",
-                   "https://www.youtube.com/",
-                   "https://build.phonegap.com/",
-                   "https://tw.money.yahoo.com/currency"
-                  ]
+    lstStrFakeReqUrl = [
+        "https://translate.google.com.tw/",
+        "http://24h.pchome.com.tw/",
+        "https://tw.news.yahoo.com/",
+        "https://trello.com/",
+        "https://www.whatismyip.com/",
+        "https://www.twitch.tv/hichocolate",
+        "https://www.youtube.com/",
+        "https://build.phonegap.com/",
+        "https://tw.money.yahoo.com/currency"
+    ]
     for intFakeTimes in range(random.randint(1,2)):
         strFakeUrl = lstStrFakeReqUrl[random.randint(0,len(lstStrFakeReqUrl)-1)]
         openChrome()
