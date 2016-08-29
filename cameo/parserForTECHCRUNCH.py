@@ -16,6 +16,7 @@ from scrapy import Selector
 from cameo.utility import Utility
 from cameo.localdb import LocalDbForTECHCRUNCH
 from crawlermaster.cmparser import CmParser
+from cameo.cmConverter.converterForTECHCRUNCH import ConverterForTECHCRUNCH
 """
 從 source_html 的 HTML 檔案解析資料
 結果放置於 parsed_result 下
@@ -105,6 +106,8 @@ class ParserForTECHCRUNCH:
         strNewsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\TECHCRUNCH\\news"
         strCssJsonFilePath = "cameo_res\\selector_rule\\techcrunch_csslist.json"
         cmParser = CmParser(strCssJsonFilePath=strCssJsonFilePath)
-        cmParser.localHtmlFileParse()
+        lstDicNewsRawData = cmParser.localHtmlFileParse()
+        rawDataConverter = ConverterForTECHCRUNCH()
+        rawDataConverter.convert(lstDicNewsRawData=lstDicNewsRawData)
         strNewsJsonFilePath = strNewsResultFolderPath + u"\\news.json"
-        cmParser.flushConvertedDataToJsonFile(strJsonFilePath=strNewsJsonFilePath)
+        rawDataConverter.flushConvertedDataToJsonFile(strJsonFilePath=strNewsJsonFilePath)
