@@ -16,6 +16,7 @@ from scrapy import Selector
 from cameo.utility import Utility
 from cameo.localdb import LocalDbForJD
 from crawlermaster.cmparser import CmParser
+from cameo.cmConverter.converterForJD import ConverterForJD
 """
 從 source_html 的 HTML 檔案解析資料
 結果放置於 parsed_result 下
@@ -118,7 +119,7 @@ class ParserForJD:
                     logging.info("insert project url: %s"%strProjectUrl)
                     self.db.insertProjectUrlIfNotExists(strProjectUrl=strProjectUrl, strCategoryPage1Url=strCategoryPage1Url)
     
-    #解析 projects/*.html 產生 json 並 取得 funder url (strCategoryPage1Url == None 會自動找尋已完成下載之 category)
+    #解析 projects/*.html 產生 json (strCategoryPage1Url == None 會自動找尋已完成下載之 category)
     def parseProjectPage(self, strCategoryPage1Url=None):
         if strCategoryPage1Url is None:
             #未指定 category url
@@ -138,20 +139,58 @@ class ParserForJD:
         if not os.path.exists(strProjectResultFolderPath):
             os.mkdir(strProjectResultFolderPath) #mkdir parsed_result/JD/category/projects
         strProjectHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\JD\\%s\\projects"%strCategoryName
+        #_intro.html
         strCssJsonFilePath = "cameo_res\\selector_rule\\jd_main_page_csslist.json"
         cmParser = CmParser(strCssJsonFilePath=strCssJsonFilePath)
-        cmParser.localHtmlFileParse(strBasedir=strProjectHtmlFolderPath, strSuffixes="_intro.html")
+        lstDicIntroPageRawData = cmParser.localHtmlFileParse(strBasedir=strProjectHtmlFolderPath, strSuffixes="_intro.html")
+        #_progress.html
+        strCssJsonFilePath = "cameo_res\\selector_rule\\jd_qa_update_csslist.json"
+        cmParser = CmParser(strCssJsonFilePath=strCssJsonFilePath)
+        lstDicProgressPageRawData = cmParser.localHtmlFileParse(strBasedir=strProjectHtmlFolderPath, strSuffixes="_progress.html")
+        #_qanda.html
+        strCssJsonFilePath = "cameo_res\\selector_rule\\jd_comment_csslist.json"
+        cmParser = CmParser(strCssJsonFilePath=strCssJsonFilePath)
+        lstDicQandaPageRawData = cmParser.localHtmlFileParse(strBasedir=strProjectHtmlFolderPath, strSuffixes="_qanda.html")
+        #_sponsor.html
+        strCssJsonFilePath = "cameo_res\\selector_rule\\jd_backer_csslist.json"
+        cmParser = CmParser(strCssJsonFilePath=strCssJsonFilePath)
+        lstDicSponsorPageRawData = cmParser.localHtmlFileParse(strBasedir=strProjectHtmlFolderPath, strSuffixes="_sponsor.html")
+        #converter
+        rawDataConverter = ConverterForJD()
+        rawDataConverter.convertProject(lstLstDicRawData=[lstDicIntroPageRawData, lstDicProgressPageRawData, lstDicQandaPageRawData, lstDicSponsorPageRawData])
         strProjectJsonFilePath = strProjectResultFolderPath + u"\\project.json"
-        #cmParser.flushConvertedDataToJsonFile(strJsonFilePath=strProjectJsonFilePath)
+        rawDataConverter.flushConvertedDataToJsonFile(strJsonFilePath=strProjectJsonFilePath)
+        
+    #解析 profiles/*.html 產生 json 並 取得 (strCategoryPage1Url == None 會自動找尋已完成下載之 category)
+    def parseFunderPage(self, strCategoryPage1Url=None):
+        if strCategoryPage1Url is None:
+            #未指定 category url
+            #取得已下載完成的 strCategoryUrl list
+            lstStrObtainedCategoryUrl = self.db.fetchallCompletedObtainedCategoryUrl()
+            for strObtainedCategoryUrl in lstStrObtainedCategoryUrl: #category loop
+                strCategoryName = self.db.fetchCategoryNameByUrl(strCategoryPage1Url=strObtainedCategoryUrl)
+                self.parseFunderPageWithGivenCategory(strCategoryPage1Url=strObtainedCategoryUrl, strCategoryName=strCategoryName)
+        else:
+            #有指定 category url
+            strCategoryName = self.db.fetchCategoryNameByUrl(strCategoryPage1Url=strCategoryPage1Url)
+            self.parseFunderPageWithGivenCategory(strCategoryPage1Url=strCategoryPage1Url, strCategoryName=strCategoryName)
         
     #解析 profiles/*.html 產生 json 
-    def parseFunderPage(self, uselessArg1=None):
-        strNewsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\TECHCRUNCH\\news"
-        if not os.path.exists(strNewsResultFolderPath):
-            os.mkdir(strNewsResultFolderPath) #mkdir parsed_result/TECHCRUNCH/news/
-        strNewsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\TECHCRUNCH\\news"
-        strCssJsonFilePath = "cameo_res\\selector_rule\\techcrunch_csslist.json"
+    def parseFunderPageWithGivenCategory(self, strCategoryPage1Url=None, strCategoryName=None):
+        strProfileResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\JD\\%s\\profiles"%strCategoryName
+        if not os.path.exists(strProfileResultFolderPath):
+            os.mkdir(strProfileResultFolderPath) #mkdir parsed_result/JD/category/profiles
+        strProfileHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\JD\\%s\\profiles"%strCategoryName
+        #_proj.html
+        strCssJsonFilePath = "cameo_res\\selector_rule\\jd_creator_csslist.json"
         cmParser = CmParser(strCssJsonFilePath=strCssJsonFilePath)
-        cmParser.localHtmlFileParse()
-        strNewsJsonFilePath = strNewsResultFolderPath + u"\\news.json"
-        cmParser.flushConvertedDataToJsonFile(strJsonFilePath=strNewsJsonFilePath)
+        lstDicProjPageRawData = cmParser.localHtmlFileParse(strBasedir=strProfileHtmlFolderPath, strSuffixes="_proj.html")
+        #_order.html
+        strCssJsonFilePath = "cameo_res\\selector_rule\\jd_creator_back_csslist.json"
+        cmParser = CmParser(strCssJsonFilePath=strCssJsonFilePath)
+        lstDicOrderPageRawData = cmParser.localHtmlFileParse(strBasedir=strProfileHtmlFolderPath, strSuffixes="_order.html")
+        #converter
+        rawDataConverter = ConverterForJD()
+        rawDataConverter.convertProfile(lstLstDicRawData=[lstDicProjPageRawData, lstDicOrderPageRawData])
+        strProfileJsonFilePath = strProfileResultFolderPath + u"\\profile.json"
+        rawDataConverter.flushConvertedDataToJsonFile(strJsonFilePath=strProfileJsonFilePath)

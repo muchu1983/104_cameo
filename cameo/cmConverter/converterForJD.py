@@ -11,19 +11,17 @@ import re
 import dateparser
 from crawlermaster.utility import Utility
 
-class ConverterForJdIntroPage:
+class ConverterForJD:
     
     #建構子
     def __init__(self):
         self.cmUtility = Utility()
     
-    def convert(self, strHtmlFilePath=None, dicRawData=None):
-        logging.info("convert %s"%strHtmlFilePath)
-        try:
-            pass
-        except Exception as e:
-            logging.warning(str(e))
-            logging.warning("parse failed skip: %s"%strHtmlFilePath)
+    def convertProject(self, lstLstDicRawData=[]):
+        pass
+        
+    def convertProfile(self, lstLstDicRawData=[]):
+        pass
         
     def flushConvertedDataToJsonFile(self, strJsonFilePath=None):
         pass
