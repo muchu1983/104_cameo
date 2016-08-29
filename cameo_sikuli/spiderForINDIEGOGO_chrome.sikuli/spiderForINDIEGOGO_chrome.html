@@ -114,6 +114,7 @@ dicPng = {
     <span class="str">"page_explore"</span>:<img src="page_explore.png" />,
     <span class="str">"page_not_found"</span>:<img src="page_not_found.png" />,
     <span class="str">"page_not_found_2"</span>:<img src="page_not_found_2.png" />,
+        <span class="str">"page_not_found_3"</span>:,
     <span class="str">"page_generosity"</span>:<img src="page_generosity.png" />,
     <span class="str">"page_not_right"</span>:<img src="page_not_right.png" />,
     <span class="str">"page_your_interruption"</span>:<img src="page_your_interruption.png" />,
@@ -137,10 +138,10 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     <span class="cmt">#close prev chrome
 </span>    <span class="kw">if</span> dicRegion[<span class="str">"regNW"</span>].exists(dicPng[<span class="str">"chrome_home"</span>]):
         <span class="skw">type</span>(<span class="str">"w"</span>, Key.CTRL)
-    <span class="skw">wait</span>(<span class="dig">2</span>)
+    <span class="skw">wait</span>(<span class="dig">5</span>)
     <span class="cmt">#re-open new chrome
-</span>    App.open(<span class="str">"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe --incognito"</span>)
-    <span class="skw">wait</span>(<span class="dig">2</span>)<span class="cmt">#wait to running</span>
+</span>    App.open(<span class="str">"C:\\chrome64_49.0.2623.75\\chrome.exe --incognito"</span>)
+    <span class="skw">wait</span>(<span class="dig">5</span>)<span class="cmt">#wait to running</span>
     dicRegion[<span class="str">"regNW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"chrome_home"</span>], <span class="dig">300</span>)
     dicRegion[<span class="str">"regNW"</span>].<span class="skw">click</span>(dicPng[<span class="str">"chrome_home"</span>])
     dicRegion[<span class="str">"regNW"</span>].waitVanish(dicPng[<span class="str">"chrome_stop"</span>], <span class="dig">300</span>)
@@ -167,7 +168,8 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     <span class="kw">for</span> uptime <span class="kw">in</span> range(<span class="dig">6</span>):
         <span class="skw">type</span>(Key.UP)
     dicRegion[<span class="str">"regLeft"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"page_end_camp"</span>], <span class="dig">300</span>)
-    <span class="kw">while</span>(dicRegion[<span class="str">"regCenter"</span>].exists(dicPng[<span class="str">"page_cate_more"</span>])):
+    intCategoryUnfoldTimes = <span class="dig">1</span>
+    <span class="kw">while</span>(dicRegion[<span class="str">"regCenter"</span>].exists(dicPng[<span class="str">"page_cate_more"</span>]) <span class="kw">and</span> intCategoryUnfoldTimes &lt; <span class="dig">5</span>):
         dicRegion[<span class="str">"regCenter"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_cate_more"</span>])
         dicRegion[<span class="str">"regLeft"</span>].waitVanish(dicPng[<span class="str">"page_end_camp"</span>], <span class="dig">300</span>)
         <span class="skw">wait</span>(<span class="dig">5</span>)
@@ -176,6 +178,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
             <span class="skw">type</span>(Key.UP)
             <span class="skw">wait</span>(<span class="dig">0.5</span>)
         dicRegion[<span class="str">"regLeft"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"page_end_camp"</span>], <span class="dig">300</span>)
+        intCategoryUnfoldTimes = intCategoryUnfoldTimes+<span class="dig">1</span>
 <span class="cmt">#unfold (updates comments backers) showmore
 </span><span class="kw">def</span> unfoldUCBShowmore():
     <span class="kw">while</span>(<span class="kw">not</span> dicRegion[<span class="str">"regLeft"</span>].exists(dicPng[<span class="str">"page_end_about"</span>])):
@@ -284,16 +287,17 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
 <span class="cmt">#fake random request confuse browser fingerpring algorithm
 </span><span class="kw">def</span> fakeRandomRequest():
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
-    lstStrFakeReqUrl = [<span class="str">"https://translate.google.com.tw/"</span>,
-                   <span class="str">"http://24h.pchome.com.tw/"</span>,
-                   <span class="str">"https://tw.news.yahoo.com/"</span>,
-                   <span class="str">"https://trello.com/"</span>,
-                   <span class="str">"https://www.whatismyip.com/"</span>,
-                   <span class="str">"https://www.twitch.tv/hichocolate"</span>,
-                   <span class="str">"https://www.youtube.com/"</span>,
-                   <span class="str">"https://build.phonegap.com/"</span>,
-                   <span class="str">"https://tw.money.yahoo.com/currency"</span>
-                  ]
+    lstStrFakeReqUrl = [
+        <span class="str">"https://translate.google.com.tw/"</span>,
+        <span class="str">"http://24h.pchome.com.tw/"</span>,
+        <span class="str">"https://tw.news.yahoo.com/"</span>,
+        <span class="str">"https://trello.com/"</span>,
+        <span class="str">"https://www.whatismyip.com/"</span>,
+        <span class="str">"https://www.twitch.tv/hichocolate"</span>,
+        <span class="str">"https://www.youtube.com/"</span>,
+        <span class="str">"https://build.phonegap.com/"</span>,
+        <span class="str">"https://tw.money.yahoo.com/currency"</span>
+    ]
     <span class="kw">for</span> intFakeTimes <span class="kw">in</span> range(random.randint(<span class="dig">1</span>,<span class="dig">2</span>)):
         strFakeUrl = lstStrFakeReqUrl[random.randint(<span class="dig">0</span>,len(lstStrFakeReqUrl)-<span class="dig">1</span>)]
         openChrome()
@@ -320,15 +324,22 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         os.mkdir(strExploreFolderPath)
     saveCurrentPage(strFolderPath=strExploreFolderPath, strFilename=<span class="str">"explore.html"</span>)
 <span class="cmt">#download category pages
-</span><span class="kw">def</span> downloadCategoryPages():
+</span><span class="kw">def</span> downloadCategoryPages(strTargetCategory=None):
     strCategoryUrlListFilePath = strBaseResFolderPath + <span class="str">r"\parsed_result\INDIEGOGO\category_url_list.txt"</span>
     catUrlListFile = open(strCategoryUrlListFilePath)
     <span class="kw">for</span> strCategoryUrl <span class="kw">in</span> catUrlListFile:<span class="cmt">#category loop</span>
         strCategoryName = <span class="str">r""</span> + re.search(<span class="str">"^https://www.indiegogo.com/explore#/browse/(.*)$"</span> ,strCategoryUrl).group(<span class="dig">1</span>)
         strCategoryFolderPath = strBaseResFolderPath + <span class="str">r"\source_html\INDIEGOGO\%s"</span>%(strCategoryName)
         <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strCategoryFolderPath):
-            os.mkdir(strCategoryFolderPath) <span class="cmt">#mkdir category</span>
+            os.mkdir(strCategoryFolderPath) <span class="cmt">#mkdir /source_html/INDIEGOGO/category</span>
         strCategoryFilePath = strCategoryFolderPath + <span class="str">r"\category.html"</span>
+        <span class="kw">if</span> strTargetCategory: <span class="cmt">#specify strTargetCategory</span>
+            <span class="kw">if</span> strCategoryName == strTargetCategory:
+                <span class="cmt"># remove original category.html
+</span>                os.remove(strCategoryFilePath)
+            <span class="kw">else</span>:
+                <span class="cmt"># skip other category
+</span>                <span class="kw">continue</span>
         <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strCategoryFilePath):<span class="cmt">#check category.html</span>
             openChrome()
             typeUrlOnChrome(strUrlText=strCategoryUrl)
@@ -342,6 +353,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     <span class="kw">if</span> strTargetCategory == <span class="str">"automode"</span>: <span class="cmt">#自動抓取所有分類的專案 html</span>
         <span class="kw">for</span> strCategoryName <span class="kw">in</span> lstStrCategoryName:
             downloadProjectPages(strTargetCategory=strCategoryName)
+            <span class="skw">popup</span>(<span class="str">u"project of [%s] downloaded. press ok to continue."</span>%strCategoryName)
         <span class="kw">return</span> <span class="cmt">#自動完成就 return</span>
     strProjUrlListFilePathTemplate = strBaseResFolderPath + <span class="str">r"\parsed_result\INDIEGOGO\%s\project_url_list.txt"</span>
     strProjectsFolderPathTemplate = strBaseResFolderPath + <span class="str">r"\source_html\INDIEGOGO\%s\projects"</span>
@@ -398,6 +410,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     <span class="kw">if</span> strTargetCategory == <span class="str">"automode"</span>: <span class="cmt">#自動抓取所有分類的個人資料 html</span>
         <span class="kw">for</span> strCategoryName <span class="kw">in</span> lstStrCategoryName:
             downloadIndividualsPages(strTargetCategory=strCategoryName)
+            <span class="skw">popup</span>(<span class="str">u"individuals of [%s] downloaded. press ok to continue."</span>%strCategoryName)
         <span class="kw">return</span> <span class="cmt">#自動完成就 return</span>
     strIndividualsUrlListFilePathTemplate = strBaseResFolderPath + <span class="str">r"\parsed_result\INDIEGOGO\%s\individuals_url_list.txt"</span>
     strIndividualsFolderPathTemplate = strBaseResFolderPath + <span class="str">r"\source_html\INDIEGOGO\%s\profiles"</span>
@@ -453,7 +466,11 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         <span class="kw">if</span> lstStrArgs[<span class="dig">1</span>] == <span class="str">"explore"</span>:
             downloadExplorePages()
         <span class="kw">if</span> lstStrArgs[<span class="dig">1</span>] == <span class="str">"category"</span>:
-            downloadCategoryPages()
+            <span class="kw">if</span> len(lstStrArgs) == <span class="dig">3</span>:
+                <span class="cmt">#lstStrArgs[2] is target category arg
+</span>                downloadCategoryPages(strTargetCategory=lstStrArgs[<span class="dig">2</span>])
+            <span class="kw">else</span>:
+                downloadCategoryPages(strTargetCategory=None)
         <span class="kw">if</span> lstStrArgs[<span class="dig">1</span>] == <span class="str">"project"</span>:
             <span class="cmt">#lstStrArgs[2] is target category arg
 </span>            downloadProjectPages(strTargetCategory=lstStrArgs[<span class="dig">2</span>])
