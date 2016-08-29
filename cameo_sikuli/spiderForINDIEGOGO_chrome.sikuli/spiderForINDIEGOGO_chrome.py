@@ -42,7 +42,7 @@ dicPng = {
     "page_explore":"page_explore.png",
     "page_not_found":"page_not_found.png",
     "page_not_found_2":"page_not_found_2.png",
-    "page_not_found_3":"",
+    "page_not_found_3":"page_not_found_3.png",
     "page_generosity":"page_generosity.png",
     "page_not_right":"page_not_right.png",
     "page_your_interruption":"page_your_interruption.png",
