@@ -95,7 +95,8 @@ def unfoldCategoryPage():
     for uptime in range(6):
         type(Key.UP)
     dicRegion["regLeft"].wait(dicPng["page_end_camp"], 300)
-    while(dicRegion["regCenter"].exists(dicPng["page_cate_more"])):
+    intCategoryUnfoldTimes = 1
+    while(dicRegion["regCenter"].exists(dicPng["page_cate_more"]) and intCategoryUnfoldTimes < 5):
         dicRegion["regCenter"].click(dicPng["page_cate_more"])
         dicRegion["regLeft"].waitVanish(dicPng["page_end_camp"], 300)
         wait(5)
@@ -104,6 +105,7 @@ def unfoldCategoryPage():
             type(Key.UP)
             wait(0.5)
         dicRegion["regLeft"].wait(dicPng["page_end_camp"], 300)
+        intCategoryUnfoldTimes = intCategoryUnfoldTimes+1
 #unfold (updates comments backers) showmore
 def unfoldUCBShowmore():
     while(not dicRegion["regLeft"].exists(dicPng["page_end_about"])):
