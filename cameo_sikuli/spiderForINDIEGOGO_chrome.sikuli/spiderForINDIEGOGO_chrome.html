@@ -140,7 +140,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         <span class="skw">type</span>(<span class="str">"w"</span>, Key.CTRL)
     <span class="skw">wait</span>(<span class="dig">5</span>)
     <span class="cmt">#re-open new chrome
-</span>    App.open(<span class="str">"C:\\chrome64_49.0.2623.75\\chrome.exe --incognito"</span>)
+</span>    App.open(<span class="str">"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe --incognito"</span>)
     <span class="skw">wait</span>(<span class="dig">5</span>)<span class="cmt">#wait to running</span>
     dicRegion[<span class="str">"regNW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"chrome_home"</span>], <span class="dig">300</span>)
     dicRegion[<span class="str">"regNW"</span>].<span class="skw">click</span>(dicPng[<span class="str">"chrome_home"</span>])
@@ -391,7 +391,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         <span class="kw">else</span>:
             <span class="kw">continue</span> <span class="cmt">#skip this url</span>
         <span class="cmt">#check page not found or is currently updated or under review
-</span>        <span class="kw">if</span> dicRegion[<span class="str">"regNW"</span>].exists(dicPng[<span class="str">"page_generosity"</span>]) <span class="kw">or</span> dicRegion[<span class="str">"regCenter"</span>].exists(dicPng[<span class="str">"page_not_found"</span>]) <span class="kw">or</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_not_found_2"</span>]) <span class="kw">or</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_not_found_3"</span>]) <span class="kw">or</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_currently_updated"</span>]) <span class="kw">or</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_under_review"</span>]):
+</span>        <span class="kw">if</span> dicRegion[<span class="str">"regNW"</span>].exists(dicPng[<span class="str">"page_generosity"</span>]) <span class="kw">or</span> dicRegion[<span class="str">"regCenter"</span>].exists(dicPng[<span class="str">"page_not_found"</span>]) <span class="kw">or</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_not_found_2"</span>]) <span class="kw">or</span> dicRegion[<span class="str">"regDown"</span>].exists(dicPng[<span class="str">"page_not_found_3"</span>]) <span class="kw">or</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_currently_updated"</span>]) <span class="kw">or</span> dicRegion[<span class="str">"regUp"</span>].exists(dicPng[<span class="str">"page_under_review"</span>]):
             <span class="kw">continue</span> <span class="cmt">#skip this url</span>
         <span class="cmt">#wait load completed
 </span>        dicRegion[<span class="str">"regRight"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"page_new_style_check"</span>], <span class="dig">300</span>)
