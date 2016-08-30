@@ -35,7 +35,6 @@ class ParserForJDTest(unittest.TestCase):
         logging.info("ParserForJDTest.test_parseCategoryPage")
         self.parser.parseCategoryPage(strCategoryPage1Url=None)
     """
-    """
     #測試 解析 project.html 並建立 json
     def test_parseProjectPage(self):
         logging.info("ParserForJDTest.test_parseProjectPage")
@@ -45,7 +44,7 @@ class ParserForJDTest(unittest.TestCase):
     def test_parseFunderPage(self):
         logging.info("ParserForJDTest.test_parseFunderPage")
         self.parser.parseFunderPage()
-    
+    """
 #測試開始
 if __name__ == "__main__":
     unittest.main(exit=False)

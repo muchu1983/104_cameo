@@ -30,7 +30,36 @@ class ConverterForJD:
     def convertProfile(self, lstLstDicRawData=[]):
         """
         範例：
-       
+        "http://z.jd.com/funderCenter.action?flag=2&id=10437": {
+            "intBackedCount": 0, 
+            "intCreatedCount": 2, 
+            "intFailedProject": null, 
+            "intFbFriend": null, 
+            "intLiveProject": null, 
+            "intSuccessProject": null, 
+            "isBacker": false, 
+            "isCreator": true, 
+            "lstStrBackedProject": [], 
+            "lstStrBackedProjectUrl": [], 
+            "lstStrCreatedProject": [
+                "莱仕邦智能电动折叠跑步机", 
+                "莱仕邦办公走步机"
+            ], 
+            "lstStrCreatedProjectUrl": [
+                "http://z.jd.com/project/details/23486.html", 
+                "http://z.jd.com/project/details/10437.html"
+            ], 
+            "lstStrSocialNetwork": null, 
+            "strCity": "China", 
+            "strContinent": "AS", 
+            "strCountry": "CN", 
+            "strDescription": "LifeSpan莱仕邦总公司于2001年设立于美国盐湖城，在国际市场上提供全系列家用、商用和办公系列的健身器材，除了美国总部之外，LifeSpan莱仕邦也在世界主要国家设立经销商，以提供更完善的服务质量。将健康生活方式的理念结合高端科技，运用在办公走步机上，有效的落实个人健康管理，让人们迈向更好的生活。", 
+            "strIdentityName": "LifeSpan莱仕邦", 
+            "strLastLoginDate": null, 
+            "strLocation": "China", 
+            "strName": "LifeSpan莱仕邦", 
+            "strUrl": "http://z.jd.com/funderCenter.action?flag=2&id=10437"
+        }, ...
         """
         #_proj.html raw data
         lstDicProjPageRawData = lstLstDicRawData[0]
