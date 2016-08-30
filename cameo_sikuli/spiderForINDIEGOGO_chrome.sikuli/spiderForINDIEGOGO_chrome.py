@@ -181,6 +181,7 @@ def typeFilename(strFilename=None):
 #rightclick on image to save current page
 def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None):
     logging.info("prepare to save " + strFilename)
+    wait(10)
     dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 300)
     dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
     checkAndPauseBeforeSave()
@@ -199,6 +200,7 @@ def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None
 #ask chrome save current page
 def saveCurrentPage(strFolderPath=None, strFilename=None):
     logging.info("prepare to save " + strFilename)
+    wait(10)
     dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 300)
     dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
     checkAndPauseBeforeSave()
