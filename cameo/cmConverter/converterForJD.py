@@ -18,49 +18,73 @@ class ConverterForJD:
         self.cmUtility = Utility()
         self.dicParsedResultOfProject = {} #project.json 資料
         self.dicParsedResultOfUpdate = {} #update.json 資料
-        self.dicParsedResultOfQanda = {} #qanda.json 資料
         self.dicParsedResultOfReward = {} #reward.json 資料
+        self.dicParsedResultOfQanda = {} #qanda.json 資料
+        self.dicParsedResultOfComment = {} #comment.json 資料
         self.dicParsedResultOfProfile = {} #profile.json 資料
         
     #轉換 project 資訊
     def convertProject(self, lstLstDicRawData=[]):
-        pass
+        #_intro.html raw data
+        lstDicIntroPageRawData = lstLstDicRawData[0]
+        for dicIntroPageRawData in lstDicIntroPageRawData:
+            strIntroHtmlFilePath = dicIntroPageRawData.get("meta-data-html-filepath", None)
+            strProjectId = re.search("^.*\\\\([\d]+)_intro.html$", strIntroHtmlFilePath).group(1)
+            strProjUrl = u"http://z.jd.com/project/details/%s.html"%strProjectId
+            if strProjUrl not in self.dicParsedResultOfProject:
+                self.dicParsedResultOfProject[strProjUrl] = {}
+            # - 解析 project.json -
+            #strSource
+            self.dicParsedResultOfProject[strProjUrl]["strSource"] = u"JD"
+            #strUrl
+            self.dicParsedResultOfProject[strProjUrl]["strUrl"] = strProjUrl
+            #strCrawlTime
+            strCrawlTime = self.cmUtility.getCtimeOfFile(strFilePath=strIntroHtmlFilePath)
+            self.dicParsedResultOfProject[strProjUrl]["strCrawlTime"] = strCrawlTime
+            #strProjectName
+            #strLocation
+            #strCity
+            #strCountry
+            #strContinent
+            #strDescription
+            #strIntroduction
+            #intStatus
+            #strCreator
+            #strCreatorUrl
+            #strCategory
+            #strSubCategory
+            #intFundTarget
+            #intRaisedMoney
+            #fFundProgress
+            #strCurrency
+            #intRemainDays
+            #strEndDate
+            #strStartDate
+            #intUpdate
+            #intBacker
+            #intComment
+            #intFbLike
+            #intVideoCount
+            #intImageCount
+            #isPMSelect 無法取得
+            #
+            # - 解析 reward.json -
+            #strUrl
+            #strRewardContent
+            #intRewardMoney
+            #intRewardBacker
+            #intRewardLimit
+            #strRewardShipTo and strRewardDeliveryDate
+            #intRewardRetailPrice
+        #_progress.html raw data
+        lstDicProgressPageRawData = lstLstDicRawData[1]
+        #_qanda.html raw data
+        lstDicQandaPageRawData = lstLstDicRawData[2]
+        #_sponsor.html raw data
+        lstDicSponsorPageRawData = lstLstDicRawData[3]
         
     #轉換 profile 資訊
     def convertProfile(self, lstLstDicRawData=[]):
-        """
-        範例：
-        "http://z.jd.com/funderCenter.action?flag=2&id=10437": {
-            "intBackedCount": 0, 
-            "intCreatedCount": 2, 
-            "intFailedProject": null, 
-            "intFbFriend": null, 
-            "intLiveProject": null, 
-            "intSuccessProject": null, 
-            "isBacker": false, 
-            "isCreator": true, 
-            "lstStrBackedProject": [], 
-            "lstStrBackedProjectUrl": [], 
-            "lstStrCreatedProject": [
-                "莱仕邦智能电动折叠跑步机", 
-                "莱仕邦办公走步机"
-            ], 
-            "lstStrCreatedProjectUrl": [
-                "http://z.jd.com/project/details/23486.html", 
-                "http://z.jd.com/project/details/10437.html"
-            ], 
-            "lstStrSocialNetwork": null, 
-            "strCity": "China", 
-            "strContinent": "AS", 
-            "strCountry": "CN", 
-            "strDescription": "LifeSpan莱仕邦总公司于2001年设立于美国盐湖城，在国际市场上提供全系列家用、商用和办公系列的健身器材，除了美国总部之外，LifeSpan莱仕邦也在世界主要国家设立经销商，以提供更完善的服务质量。将健康生活方式的理念结合高端科技，运用在办公走步机上，有效的落实个人健康管理，让人们迈向更好的生活。", 
-            "strIdentityName": "LifeSpan莱仕邦", 
-            "strLastLoginDate": null, 
-            "strLocation": "China", 
-            "strName": "LifeSpan莱仕邦", 
-            "strUrl": "http://z.jd.com/funderCenter.action?flag=2&id=10437"
-        }, ...
-        """
         #_proj.html raw data
         lstDicProjPageRawData = lstLstDicRawData[0]
         for dicProjPageRawData in lstDicProjPageRawData:
@@ -143,8 +167,26 @@ class ConverterForJD:
             lstStrResultUrl.append(strResultUrl)
         return lstStrResultUrl
         
-    #將 convert 結果寫入 json
-    def flushConvertedDataToJsonFile(self, strJsonFilePath=None):
+    #將 project convert 結果寫入 project.json update.json reward.json qanda.json comment.json 
+    def flushConvertedProjectDataToJsonFile(self, strJsonFolderPath=None):
+        strJsonFilePath = strJsonFolderPath + u"project.json"
+        self.cmUtility.writeObjectToJsonFile(dicData=self.dicParsedResultOfProject, strJsonFilePath=strJsonFilePath)
+        strJsonFilePath = strJsonFolderPath + u"update.json"
+        self.cmUtility.writeObjectToJsonFile(dicData=self.dicParsedResultOfUpdate, strJsonFilePath=strJsonFilePath)
+        strJsonFilePath = strJsonFolderPath + u"reward.json"
+        self.cmUtility.writeObjectToJsonFile(dicData=self.dicParsedResultOfReward, strJsonFilePath=strJsonFilePath)
+        strJsonFilePath = strJsonFolderPath + u"qanda.json"
+        self.cmUtility.writeObjectToJsonFile(dicData=self.dicParsedResultOfQanda, strJsonFilePath=strJsonFilePath)
+        strJsonFilePath = strJsonFolderPath + u"comment.json"
+        self.cmUtility.writeObjectToJsonFile(dicData=self.dicParsedResultOfComment, strJsonFilePath=strJsonFilePath)
+        #清空資料
+        self.dicParsedResultOfProject = {}
+        self.dicParsedResultOfUpdate = {}
+        self.dicParsedResultOfReward = {}
+        self.dicParsedResultOfQanda = {}
+        self.dicParsedResultOfComment = {}
+        
+    #將 profile convert 結果寫入 profilejson
+    def flushConvertedProfileDataToJsonFile(self, strJsonFilePath=None):
         self.cmUtility.writeObjectToJsonFile(dicData=self.dicParsedResultOfProfile, strJsonFilePath=strJsonFilePath)
         self.dicParsedResultOfProfile = {}
-        

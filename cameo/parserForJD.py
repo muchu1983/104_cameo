@@ -158,8 +158,7 @@ class ParserForJD:
         #converter
         rawDataConverter = ConverterForJD()
         rawDataConverter.convertProject(lstLstDicRawData=[lstDicIntroPageRawData, lstDicProgressPageRawData, lstDicQandaPageRawData, lstDicSponsorPageRawData])
-        strProjectJsonFilePath = strProjectResultFolderPath + u"\\project.json"
-        rawDataConverter.flushConvertedDataToJsonFile(strJsonFilePath=strProjectJsonFilePath)
+        rawDataConverter.flushConvertedProjectDataToJsonFile(strJsonFolderPath=strProjectResultFolderPath)
         
     #解析 profiles/*.html 產生 json 並 取得 (strCategoryPage1Url == None 會自動找尋已完成下載之 category)
     def parseFunderPage(self, strCategoryPage1Url=None):
@@ -193,4 +192,4 @@ class ParserForJD:
         rawDataConverter = ConverterForJD()
         rawDataConverter.convertProfile(lstLstDicRawData=[lstDicProjPageRawData, lstDicOrderPageRawData])
         strProfileJsonFilePath = strProfileResultFolderPath + u"\\profile.json"
-        rawDataConverter.flushConvertedDataToJsonFile(strJsonFilePath=strProfileJsonFilePath)
+        rawDataConverter.flushConvertedProfileDataToJsonFile(strJsonFilePath=strProfileJsonFilePath)
