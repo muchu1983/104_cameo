@@ -169,15 +169,15 @@ class ConverterForJD:
         
     #將 project convert 結果寫入 project.json update.json reward.json qanda.json comment.json 
     def flushConvertedProjectDataToJsonFile(self, strJsonFolderPath=None):
-        strJsonFilePath = strJsonFolderPath + u"project.json"
+        strJsonFilePath = strJsonFolderPath + u"\\project.json"
         self.cmUtility.writeObjectToJsonFile(dicData=self.dicParsedResultOfProject, strJsonFilePath=strJsonFilePath)
-        strJsonFilePath = strJsonFolderPath + u"update.json"
+        strJsonFilePath = strJsonFolderPath + u"\\update.json"
         self.cmUtility.writeObjectToJsonFile(dicData=self.dicParsedResultOfUpdate, strJsonFilePath=strJsonFilePath)
-        strJsonFilePath = strJsonFolderPath + u"reward.json"
+        strJsonFilePath = strJsonFolderPath + u"\\reward.json"
         self.cmUtility.writeObjectToJsonFile(dicData=self.dicParsedResultOfReward, strJsonFilePath=strJsonFilePath)
-        strJsonFilePath = strJsonFolderPath + u"qanda.json"
+        strJsonFilePath = strJsonFolderPath + u"\\qanda.json"
         self.cmUtility.writeObjectToJsonFile(dicData=self.dicParsedResultOfQanda, strJsonFilePath=strJsonFilePath)
-        strJsonFilePath = strJsonFolderPath + u"comment.json"
+        strJsonFilePath = strJsonFolderPath + u"\\comment.json"
         self.cmUtility.writeObjectToJsonFile(dicData=self.dicParsedResultOfComment, strJsonFilePath=strJsonFilePath)
         #清空資料
         self.dicParsedResultOfProject = {}
