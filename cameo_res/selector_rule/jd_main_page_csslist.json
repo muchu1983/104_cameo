@@ -5,8 +5,7 @@
         "strSuffixes":"_intro.html"
     },
     "csslist":[
-
-    {
+        {
             "name": "jd-source", 
             "sampleUrl": "http://z.jd.com/project/details/61922.html", 
             "preAction": [],
@@ -14,7 +13,6 @@
             "sampleAns": ["京东金融"], 
             "ansType": "exact" 
         },
-
         {
             "name": "jd-project-name", 
             "sampleUrl": "http://z.jd.com/project/details/61922.html", 
@@ -25,7 +23,6 @@
             ], 
             "ansType": "exact" 
         },
-
         {
             "name":"jd-img-count",
             "sampleUrl":"http://z.jd.com/project/details/61922.html",
@@ -36,7 +33,6 @@
             ],
             "ansType":"exist"
         },
-
         {
             "name":"jd-status",
             "sampleUrl":"http://z.jd.com/project/details/61922.html",
@@ -47,7 +43,6 @@
             ],
             "ansType":"exact"
         },
-
         {
             "name":"jd-fund-progress",
             "sampleUrl":"http://z.jd.com/project/details/61922.html",
@@ -58,7 +53,6 @@
             ],
             "ansType":"exist"
         },
-
         {
             "name":"jd-fund-target",
             "sampleUrl":"http://z.jd.com/project/details/61922.html",
@@ -69,7 +63,6 @@
             ],
             "ansType":"exact"
         },
-
         {
             "name":"jd-raised-money",
             "sampleUrl":"http://z.jd.com/project/details/61922.html",
@@ -80,7 +73,6 @@
             ],
             "ansType":"exist"
         },
-
         {
             "name":"jd-currency",
             "sampleUrl":"http://z.jd.com/project/details/61922.html",
@@ -91,10 +83,6 @@
             ],
             "ansType":"exist"
         },
-
-
-        
-
         {
             "name":"jd-remain-days",
             "sampleUrl":"http://z.jd.com/project/details/61922.html",
@@ -105,7 +93,6 @@
             ],
             "ansType":"exist"
         },
-
         {
             "name":"jd-end-date",
             "sampleUrl":"http://z.jd.com/project/details/61922.html",
@@ -116,7 +103,6 @@
             ],
             "ansType":"exact"
         },
-
         {
             "name":"jd-like",
             "sampleUrl":"http://z.jd.com/project/details/61922.html",
@@ -127,7 +113,6 @@
             ],
             "ansType":"exist"
         },
-
         {
             "name":"jd-reward-content",
             "sampleUrl":"http://z.jd.com/project/details/61922.html",
@@ -138,7 +123,6 @@
             ],
             "ansType":"exist"
         },
-
         {
             "name":"jd-reward-money",
             "sampleUrl":"http://z.jd.com/project/details/61922.html",
@@ -149,7 +133,6 @@
             ],
             "ansType":"exist"
         },
-
         {
             "name":"jd-reward-backer",
             "sampleUrl":"http://z.jd.com/project/details/61922.html",
@@ -166,7 +149,6 @@
             ],
             "ansType":"exist"
         },
-
         {
             "name":"jd-reward-limit",
             "sampleUrl":"http://z.jd.com/project/details/61922.html",
@@ -209,12 +191,26 @@
             "20"
             ],
             "ansType":"exist"
+        },
+        {
+            "name":"jd-creator-name",
+            "sampleUrl":"http://z.jd.com/project/details/61922.html",
+            "preAction": [],
+            "cssRule":"div.promoters-name a span::text",
+            "sampleAns":[
+                "食库"
+            ],
+            "ansType":"exact"
+        },
+        {
+            "name":"jd-creator-url",
+            "sampleUrl":"http://z.jd.com/project/details/61922.html",
+            "preAction": [],
+            "cssRule":"div.promoters-name a::attr(href)",
+            "sampleAns":[
+                "/funderCenter.action?flag=2&id=61922"
+            ],
+            "ansType":"exact"
         }
-
-
-
-
-
-
     ]
 }
