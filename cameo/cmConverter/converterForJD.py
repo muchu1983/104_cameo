@@ -31,6 +31,7 @@ class ConverterForJD:
         lstDicIntroPageRawData = lstLstDicRawData[0]
         for dicIntroPageRawData in lstDicIntroPageRawData:
             strIntroHtmlFilePath = dicIntroPageRawData.get("meta-data-html-filepath", None)
+            logging.info("convert: %s"%strIntroHtmlFilePath)
             strProjectId = re.search("^.*\\\\([\d]+)_intro.html$", strIntroHtmlFilePath).group(1)
             strProjUrl = u"http://z.jd.com/project/details/%s.html"%strProjectId
             if strProjUrl not in self.dicParsedResultOfProject:
@@ -124,6 +125,7 @@ class ConverterForJD:
         lstDicProgressPageRawData = lstLstDicRawData[1]
         for dicProgressPageRawData in lstDicProgressPageRawData:
             strProgressHtmlFilePath = dicProgressPageRawData.get("meta-data-html-filepath", None)
+            logging.info("convert: %s"%strProgressHtmlFilePath)
             strProjectId = re.search("^.*\\\\([\d]+)_progress.html$", strProgressHtmlFilePath).group(1)
             strProjUrl = u"http://z.jd.com/project/details/%s.html"%strProjectId
             if strProjUrl not in self.dicParsedResultOfUpdate:
@@ -161,6 +163,7 @@ class ConverterForJD:
         lstDicQandaPageRawData = lstLstDicRawData[2]
         for dicQandaPageRawData in lstDicQandaPageRawData:
             strQandaHtmlFilePath = dicQandaPageRawData.get("meta-data-html-filepath", None)
+            logging.info("convert: %s"%strQandaHtmlFilePath)
             strProjectId = re.search("^.*\\\\([\d]+)_qanda.html$", strQandaHtmlFilePath).group(1)
             strProjUrl = u"http://z.jd.com/project/details/%s.html"%strProjectId
             if strProjUrl not in self.dicParsedResultOfComment:
@@ -199,6 +202,7 @@ class ConverterForJD:
         lstDicSponsorPageRawData = lstLstDicRawData[3]
         for dicSponsorPageRawData in lstDicSponsorPageRawData:
             strSponsorHtmlFilePath = dicSponsorPageRawData.get("meta-data-html-filepath", None)
+            logging.info("convert: %s"%strSponsorHtmlFilePath)
             strProjectId = re.search("^.*\\\\([\d]+)_sponsor.html$", strSponsorHtmlFilePath).group(1)
             strProjUrl = u"http://z.jd.com/project/details/%s.html"%strProjectId
             if strProjUrl not in self.dicParsedResultOfProject:
@@ -218,6 +222,7 @@ class ConverterForJD:
         lstDicProjPageRawData = lstLstDicRawData[0]
         for dicProjPageRawData in lstDicProjPageRawData:
             strProjHtmlFileName = dicProjPageRawData.get("meta-data-html-filepath", None)
+            logging.info("convert: %s"%strProjHtmlFileName)
             strProfileId = re.search("^.*\\\\([\d]+)_proj.html$", strProjHtmlFileName).group(1)
             strProfUrl = u"http://z.jd.com/funderCenter.action?flag=2&id=" + strProfileId
             if strProfUrl not in self.dicParsedResultOfProfile:
@@ -269,6 +274,7 @@ class ConverterForJD:
         lstDicOrderPageRawData = lstLstDicRawData[1]
         for dicOrderPageRawData in lstDicOrderPageRawData:
             strOrderHtmlFileName = dicOrderPageRawData.get("meta-data-html-filepath", None)
+            logging.info("convert: %s"%strOrderHtmlFileName)
             strProfileId = re.search("^.*\\\\([\d]+)_order.html$", strOrderHtmlFileName).group(1)
             strProfUrl = u"http://z.jd.com/funderCenter.action?flag=2&id=" + strProfileId
             if strProfUrl not in self.dicParsedResultOfProfile:
