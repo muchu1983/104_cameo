@@ -253,6 +253,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
 <span class="cmt">#rightclick on image to save current page
 </span><span class="kw">def</span> rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None):
     logging.info(<span class="str">"prepare to save "</span> + strFilename)
+    <span class="skw">wait</span>(<span class="dig">10</span>)
     dicRegion[<span class="str">"regNW"</span>].waitVanish(dicPng[<span class="str">"chrome_stop"</span>], <span class="dig">300</span>)
     dicRegion[<span class="str">"regNW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"chrome_reload"</span>], <span class="dig">300</span>)
     checkAndPauseBeforeSave()
@@ -267,10 +268,11 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
     <span class="skw">type</span>(<span class="str">"s"</span>, Key.ALT + Key.SHIFT)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
-    dicRegion[<span class="str">"regSW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"chrome_download_finished"</span>], <span class="dig">600</span>)<span class="cmt">#wait save complete</span>
+    dicRegion[<span class="str">"regSW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"chrome_download_finished"</span>], <span class="dig">60</span>)<span class="cmt">#wait save complete</span>
 <span class="cmt">#ask chrome save current page
 </span><span class="kw">def</span> saveCurrentPage(strFolderPath=None, strFilename=None):
     logging.info(<span class="str">"prepare to save "</span> + strFilename)
+    <span class="skw">wait</span>(<span class="dig">10</span>)
     dicRegion[<span class="str">"regNW"</span>].waitVanish(dicPng[<span class="str">"chrome_stop"</span>], <span class="dig">300</span>)
     dicRegion[<span class="str">"regNW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"chrome_reload"</span>], <span class="dig">300</span>)
     checkAndPauseBeforeSave()
@@ -283,7 +285,7 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
     <span class="skw">type</span>(<span class="str">"s"</span>, Key.ALT + Key.SHIFT)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
-    dicRegion[<span class="str">"regSW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"chrome_download_finished"</span>], <span class="dig">600</span>)<span class="cmt">#wait save complete</span>
+    dicRegion[<span class="str">"regSW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"chrome_download_finished"</span>], <span class="dig">60</span>)<span class="cmt">#wait save complete</span>
 <span class="cmt">#fake random request confuse browser fingerpring algorithm
 </span><span class="kw">def</span> fakeRandomRequest():
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
