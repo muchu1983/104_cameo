@@ -160,7 +160,7 @@ def typeFolderPath(strFolderPath=None):
     wait(0.5)
     type(Key.TAB)
     wait(0.5)
-    type("l", Key.CTRL)
+    type("d", Key.ALT)
     wait(0.5)
     delOriginText()
     pasteClipboardText(strText=strFolderPath)
@@ -172,7 +172,7 @@ def typeFilename(strFilename=None):
     wait(0.5)
     type(Key.TAB)
     wait(0.5)
-    type("n", Key.ALT + Key.SHIFT)
+    type("n", Key.ALT)
     wait(0.5)
     delOriginText()
     wait(0.5)
@@ -194,7 +194,7 @@ def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None
     wait(0.5)
     typeFilename(strFilename=strFilename)
     wait(0.5)
-    type("s", Key.ALT + Key.SHIFT)
+    type("s", Key.ALT)
     wait(0.5)
     dicRegion["regSW"].wait(dicPng["chrome_download_finished"], 60)#wait save complete
 #ask chrome save current page
@@ -211,7 +211,7 @@ def saveCurrentPage(strFolderPath=None, strFilename=None):
     wait(0.5)
     typeFilename(strFilename=strFilename)
     wait(0.5)
-    type("s", Key.ALT + Key.SHIFT)
+    type("s", Key.ALT)
     wait(0.5)
     dicRegion["regSW"].wait(dicPng["chrome_download_finished"], 60)#wait save complete
 #fake random request confuse browser fingerpring algorithm
