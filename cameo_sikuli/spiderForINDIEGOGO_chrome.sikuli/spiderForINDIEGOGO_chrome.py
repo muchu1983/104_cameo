@@ -72,7 +72,7 @@ def openChrome():
     wait(5)#wait to running
     dicRegion["regNW"].wait(dicPng["chrome_home"], 300)
     dicRegion["regNW"].click(dicPng["chrome_home"])
-    dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 300)
+    dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 10)
     dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
 # delete origin text
 def delOriginText():
