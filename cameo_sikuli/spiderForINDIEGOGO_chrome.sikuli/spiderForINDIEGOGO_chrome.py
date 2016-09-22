@@ -68,7 +68,7 @@ def openChrome():
         type("w", Key.CTRL)
     wait(5)
     #re-open new chrome
-    App.open("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe --incognito")
+    App.open("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe")
     wait(5)#wait to running
     dicRegion["regNW"].wait(dicPng["chrome_home"], 300)
     dicRegion["regNW"].click(dicPng["chrome_home"])
