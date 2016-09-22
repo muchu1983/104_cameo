@@ -99,7 +99,7 @@ def unfoldCategoryPage():
     intCategoryUnfoldTimes = 1
     while(dicRegion["regCenter"].exists(dicPng["page_cate_more"]) and intCategoryUnfoldTimes < 5):
         dicRegion["regCenter"].click(dicPng["page_cate_more"])
-        dicRegion["regLeft"].waitVanish(dicPng["page_end_camp"], 300)
+        dicRegion["regLeft"].waitVanish(dicPng["page_end_camp"], 30)
         wait(5)
         rollToPageEnd()
         for uptime in range(6):
@@ -114,7 +114,7 @@ def unfoldUCBShowmore():
         wait(0.5)
         if dicRegion["regDown"].exists(dicPng["page_ucb_more"]):
             dicRegion["regDown"].click(dicPng["page_ucb_more"])
-            dicRegion["regDown"].waitVanish(dicPng["page_ucb_more"], 300)
+            dicRegion["regDown"].waitVanish(dicPng["page_ucb_more"], 30)
             wait(2)
     type(Key.HOME)
     dicRegion["regSW"].wait(dicPng["page_blur_story"], 300)
@@ -134,11 +134,11 @@ def typeUrlOnChrome(strUrlText=None):
         wait(0.5)
         type(Key.ENTER)
         wait(0.5)
-        dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 300)
+        dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 30)
         dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
         wait(5)
         #recheck for server may redirect to home page
-        dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 300)
+        dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 30)
         dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
         wait(0.5)
         #check page "something not right" show?
@@ -153,7 +153,7 @@ def goExplorePage():
     openChrome()
     typeUrlOnChrome(strUrlText="https://www.indiegogo.com/explore")
     dicRegion["regUp"].wait(dicPng["page_explore"], 300)
-    dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 300)
+    dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 30)
     dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
 #choose folder at save progress
 def typeFolderPath(strFolderPath=None):
@@ -182,7 +182,7 @@ def typeFilename(strFilename=None):
 def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None):
     logging.info("prepare to save " + strFilename)
     wait(10)
-    dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 300)
+    dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 30)
     dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
     checkAndPauseBeforeSave()
     rightClick(onImage)
@@ -201,7 +201,7 @@ def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None
 def saveCurrentPage(strFolderPath=None, strFilename=None):
     logging.info("prepare to save " + strFilename)
     wait(10)
-    dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 300)
+    dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 30)
     dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
     checkAndPauseBeforeSave()
     type("s", Key.CTRL)
@@ -273,7 +273,7 @@ def downloadCategoryPages(strTargetCategory=None):
         if not os.path.exists(strCategoryFilePath):#check category.html
             openChrome()
             typeUrlOnChrome(strUrlText=strCategoryUrl)
-            dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 300)
+            dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 30)
             dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
             unfoldCategoryPage()
             saveCurrentPage(strFolderPath=strCategoryFolderPath, strFilename="category.html")
