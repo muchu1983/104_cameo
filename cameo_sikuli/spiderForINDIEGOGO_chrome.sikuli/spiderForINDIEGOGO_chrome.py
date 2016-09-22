@@ -188,7 +188,7 @@ def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None
     rightClick(onImage)
     dicRegion["regCenter"].wait(dicPng["os_right_save_as"], 300)
     dicRegion["regCenter"].click(dicPng["os_right_save_as"])
-    dicRegion["regCenter"].wait(dicPng["os_save_btn"], 300)
+    dicRegion["regDown"].wait(dicPng["os_save_btn"], 300)
     if strFolderPath != None:
         typeFolderPath(strFolderPath)
     wait(0.5)
@@ -205,7 +205,7 @@ def saveCurrentPage(strFolderPath=None, strFilename=None):
     dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
     checkAndPauseBeforeSave()
     type("s", Key.CTRL)
-    dicRegion["regCenter"].wait(dicPng["os_save_btn"], 300)
+    dicRegion["regDown"].wait(dicPng["os_save_btn"], 300)
     if strFolderPath != None:
         typeFolderPath(strFolderPath)
     wait(0.5)
