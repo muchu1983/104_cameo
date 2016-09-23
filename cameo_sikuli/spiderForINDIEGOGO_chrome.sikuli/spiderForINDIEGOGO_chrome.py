@@ -199,7 +199,7 @@ def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None
     wait(0.5)
     hover(Location(100, 620))
     logging.info("save timestamp: %s"%datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-    dicRegion["regSW"].wait(dicPng["chrome_download_finished"], 180)#wait save complete
+    dicRegion["regSW"].wait(dicPng["chrome_download_finished"], 300)#wait save complete
 #ask chrome save current page
 def saveCurrentPage(strFolderPath=None, strFilename=None):
     logging.info("prepare to save " + strFilename)
@@ -218,7 +218,7 @@ def saveCurrentPage(strFolderPath=None, strFilename=None):
     wait(0.5)
     hover(Location(100, 620))
     logging.info("save timestamp: %s"%datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-    dicRegion["regSW"].wait(dicPng["chrome_download_finished"], 180)#wait save complete
+    dicRegion["regSW"].wait(dicPng["chrome_download_finished"], 300)#wait save complete
 #fake random request confuse browser fingerpring algorithm
 def fakeRandomRequest():
     wait(0.5)
