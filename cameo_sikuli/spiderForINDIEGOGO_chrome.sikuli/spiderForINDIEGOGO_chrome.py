@@ -10,6 +10,7 @@ import os
 import sys
 import re
 import logging
+import datetime
 import random
 from java.awt import Toolkit
 from java.awt.datatransfer import StringSelection
@@ -197,6 +198,7 @@ def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None
     type("s", Key.ALT)
     wait(0.5)
     hover(Location(100, 620))
+    logging.info("save timestamp: %s"%datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     dicRegion["regSW"].wait(dicPng["chrome_download_finished"], 180)#wait save complete
 #ask chrome save current page
 def saveCurrentPage(strFolderPath=None, strFilename=None):
@@ -215,6 +217,7 @@ def saveCurrentPage(strFolderPath=None, strFilename=None):
     type("s", Key.ALT)
     wait(0.5)
     hover(Location(100, 620))
+    logging.info("save timestamp: %s"%datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     dicRegion["regSW"].wait(dicPng["chrome_download_finished"], 180)#wait save complete
 #fake random request confuse browser fingerpring algorithm
 def fakeRandomRequest():
@@ -412,9 +415,9 @@ if __name__ == "__main__":
         popup(u"spider action completed. ^.^y")
     except FindFailed, ff:
         print(str(ff))
-        popup(u"spider cant find png error! >_<||")
+        popup(u"spider cant find png error! timestamp: %s"%datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     except Exception, ex:
         print(str(ex))
-        popup(u"spider unknow error! >_<||")
+        popup(u"spider unknow error! timestamp: %s"%datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     finally:
         exit()
