@@ -34,27 +34,17 @@ class SpiderForCROWDCUBETest(unittest.TestCase):
     def test_loginAccount(self):
         logging.info("SpiderForCROWDCUBETest.test_loginAccount")
         self.spider.loginAccount()
-    """
+    
     #測試抓取 companies page
     def test_downloadCompaniesPage(self):
         logging.info("SpiderForCROWDCUBETest.test_downloadCompaniesPage")
         self.spider.downloadCompaniesPage()
     """
-    #測試抓取 category page
-    def test_downloadCategoryPage(self):
-        logging.info("SpiderForCROWDCUBETest.test_downloadCategoryPage")
-        self.spider.downloadCategoryPage(strCategoryPage1Url=None)
+    #測試抓取 company page
+    def test_downloadCompanyPage(self):
+        logging.info("SpiderForCROWDCUBETest.test_downloadCompanyPage")
+        self.spider.downloadCompanyPage()
     
-    #測試抓取 project page
-    def test_downloadProjectPage(self):
-        logging.info("SpiderForCROWDCUBETest.test_downloadProjectPage")
-        self.spider.downloadProjectPage(strCategoryPage1Url=None)
-    
-    #測試抓取 funder page
-    def test_downloadFunderPage(self):
-        logging.info("SpiderForCROWDCUBETest.test_downloadFunderPage")
-        self.spider.downloadFunderPage(strCategoryPage1Url=None)
-    """
 #測試開始
 if __name__ == "__main__":
     unittest.main(exit=False)
