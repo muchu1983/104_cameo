@@ -29,17 +29,17 @@ class SpiderForCROWDCUBETest(unittest.TestCase):
     def test_registerAccount(self):
         logging.info("SpiderForCROWDCUBETest.test_registerAccount")
         self.spider.registerAccount()
-    """
+    
     #測試登入帳號
     def test_loginAccount(self):
         logging.info("SpiderForCROWDCUBETest.test_loginAccount")
         self.spider.loginAccount()
     """
-    #測試抓取 index page
-    def test_downloadIndexPage(self):
-        logging.info("SpiderForCROWDCUBETest.test_downloadIndexPage")
-        self.spider.downloadIndexPage()
-    
+    #測試抓取 companies page
+    def test_downloadCompaniesPage(self):
+        logging.info("SpiderForCROWDCUBETest.test_downloadCompaniesPage")
+        self.spider.downloadCompaniesPage()
+    """
     #測試抓取 category page
     def test_downloadCategoryPage(self):
         logging.info("SpiderForCROWDCUBETest.test_downloadCategoryPage")

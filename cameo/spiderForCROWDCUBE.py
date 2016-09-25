@@ -29,10 +29,7 @@ class SpiderForCROWDCUBE:
         self.strWebsiteDomain = u""
         self.dicSubCommandHandler = {
             "register":self.registerAccount,
-            "index":self.downloadIndexPage,
-            "category":self.downloadCategoryPage,
-            "project":self.downloadProjectPage,
-            "funder":self.downloadFunderPage
+            "companies":self.downloadCompaniesPage,
         }
         self.utility = Utility()
         self.db = LocalDbForCROWDCUBE()
@@ -44,10 +41,7 @@ class SpiderForCROWDCUBE:
             "- CROWDCUBE -\n"
             "useage:\n"
             "register - register 10 account for use \n"
-            "index - download category index page of JD \n"
-            "category - download not obtained category page \n"
-            "project [category_page_1_url] - download not obtained project [of given category_page_1_url] \n"
-            "funder [category_page_1_url] - download not obtained funder [of given category_page_1_url] \n"
+            "companies - download companies page \n"
         )
     
     #取得 selenium driver 物件
@@ -62,6 +56,8 @@ class SpiderForCROWDCUBE:
     def initDriver(self):
         if self.driver is None:
             self.driver = self.getDriver()
+            #登入帳號
+            self.loginAccount()
         
     #終止 selenium driver 物件
     def quitDriver(self):
@@ -139,17 +135,27 @@ class SpiderForCROWDCUBE:
         self.driver.find_element_by_css_selector("#login-form button.button").click()
         time.sleep(30)
     
-    #下載 index 頁面 
-    def downloadIndexPage(self, uselessArg1=None):
-        logging.info("download category index page")
-        strIndexHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\JD"
-        if not os.path.exists(strIndexHtmlFolderPath):
-            os.mkdir(strIndexHtmlFolderPath) #mkdir source_html/JD/
-        #JD category index 頁面
-        self.driver.get("http://z.jd.com/sceneIndex.html")
+    #下載 companies 頁面 
+    def downloadCompaniesPage(self, uselessArg1=None):
+        logging.info("download companies page")
+        strCompaniesHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\CROWDCUBE"
+        if not os.path.exists(strCompaniesHtmlFolderPath):
+            os.mkdir(strCompaniesHtmlFolderPath) #mkdir source_html/CROWDCUBE/
+        #CROWDCUBE Funded companies 頁面
+        self.driver.get("https://www.crowdcube.com/companies")
+        #展開 Load more
+        isLoadMoreBtnHide = False
+        while not isLoadMoreBtnHide:
+            eleLoadMoreBtn = self.driver.find_element_by_css_selector("#loadMoreCompanies")
+            strLoadMoreBtnClass = eleLoadMoreBtn.get_attribute("class")
+            if "is-hidden" in strLoadMoreBtnClass:
+                isLoadMoreBtnHide = True
+            else:
+                eleLoadMoreBtn.click()
+                time.sleep(10)
         #儲存 html
-        strIndexHtmlFilePath = strIndexHtmlFolderPath + u"\\index.html"
-        self.utility.overwriteSaveAs(strFilePath=strIndexHtmlFilePath, unicodeData=self.driver.page_source)
+        strCompaniesHtmlFilePath = strCompaniesHtmlFolderPath + u"\\companies.html"
+        self.utility.overwriteSaveAs(strFilePath=strCompaniesHtmlFilePath, unicodeData=self.driver.page_source)
         
     #檢查是否有下一頁 category
     def hasNextCategoryPage(self):

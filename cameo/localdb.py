@@ -44,6 +44,13 @@ class LocalDbForCROWDCUBE:
                 "strStatus TEXT NOT NULL)"
         )
         self.db.commitSQL(strSQL=strSQLCreateTable)
+        strSQLCreateTable = (
+            "CREATE TABLE IF NOT EXISTS crowdcube_company("
+                "id INTEGER PRIMARY KEY,"
+                "strCompanyUrl TEXT NOT NULL,"
+                "isGot BOOLEAN NOT NULL)"
+        )
+        self.db.commitSQL(strSQL=strSQLCreateTable)
         
     #若無重覆，儲存 account
     def insertAccountIfNotExists(self, strEmail=None, strPassword=None):
@@ -60,9 +67,55 @@ class LocalDbForCROWDCUBE:
         rowDataAccount = lstRowData[random.randint(0, len(lstRowData)-1)]
         return (rowDataAccount["strEmail"], rowDataAccount["strPassword"])
         
+    #若無重覆 儲存 company URL
+    def insertCompanyUrlIfNotExists(self, strCompanyUrl=None):
+        strSQL = "SELECT * FROM crowdcube_company WHERE strCompanyUrl='%s'"%strCompanyUrl
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        if len(lstRowData) == 0:
+            strSQL = "INSERT INTO crowdcube_company VALUES(NULL, '%s', 0)"%strCompanyUrl
+            self.db.commitSQL(strSQL=strSQL)
+            
+    #取得所有尚未完成下載的 company url
+    def fetchallNotObtainedCompanyUrl(self):
+        strSQL = "SELECT strCompanyUrl FROM crowdcube_company WHERE isGot=0"
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        lstStrCompanyUrl = []
+        for rowData in lstRowData:
+            lstStrCompanyUrl.append(rowData["strCompanyUrl"])
+        return lstStrCompanyUrl
+    
+    #檢查 company 是否已下載
+    def checkCompanyIsGot(self, strCompanyUrl=None):
+        isGot = True
+        strSQL = "SELECT * FROM crowdcube_company WHERE strCompanyUrl='%s'"%strCompanyUrl
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        for rowData in lstRowData:
+            if rowData["isGot"] == 0:
+                isGot = False
+        return isGot
+        
+    #更新 company 為已完成下載狀態
+    def updateCompanyStatusIsGot(self, strCompanyUrl=None):
+        strSQL = "UPDATE crowdcube_company SET isGot=1 WHERE strCompanyUrl='%s'"%strCompanyUrl
+        self.db.commitSQL(strSQL=strSQL)
+    
+    #取得所有已完成下載的 company url
+    def fetchallCompletedObtainedCompanyUrl(self):
+        strSQL = "SELECT strCompanyUrl FROM crowdcube_company WHERE isGot=1"
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        lstStrCompanyUrl = []
+        for rowData in lstRowData:
+            lstStrCompanyUrl.append(rowData["strCompanyUrl"])
+        return lstStrCompanyUrl
+        
+    #更新 company 尚未開始下載狀態
+    def updateCompanyStatusIsNotGot(self, strCompanyUrl=None):
+        strSQL = "UPDATE crowdcube_company SET isGot=0 WHERE strCompanyUrl='%s'"%strCompanyUrl
+        self.db.commitSQL(strSQL=strSQL)
+        
     #清除測試資料 (clear table)
     def clearTestData(self):
-        strSQL = "DELETE FROM crowdcube_account"
+        strSQL = "DELETE FROM crowdcube_company"
         self.db.commitSQL(strSQL=strSQL)
         
 #京東眾籌

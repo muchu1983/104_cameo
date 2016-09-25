@@ -157,10 +157,20 @@ class LocalDbTest(unittest.TestCase):
     def test_localdb_for_crowdcube(self):
         logging.info("LocalDbTest.test_localdb_for_crowdcube")
         db = LocalDbForCROWDCUBE()
-        db.insertAccountIfNotExists(strEmail="ebucdworc+01@gmail.com", strPassword="bee520")
-        db.insertAccountIfNotExists(strEmail="ebucdworc+02@gmail.com", strPassword="bee520")
+        db.clearTestData() #清除前次測試資料
+        db.insertAccountIfNotExists(strEmail="ebucdworc+0100@gmail.com", strPassword="bee520")
+        db.insertAccountIfNotExists(strEmail="ebucdworc+0101@gmail.com", strPassword="bee520")
         (strAccountEmail, strAccountPassword) = db.fetchRandomReadyAccount()
         self.assertTrue(strAccountEmail.startswith("ebucdworc"))
+        db.insertCompanyUrlIfNotExists(strCompanyUrl="http://company/for/unit/test")
+        self.assertEquals(db.fetchallNotObtainedCompanyUrl(), ["http://company/for/unit/test"])
+        self.assertFalse(db.checkCompanyIsGot(strCompanyUrl="http://company/for/unit/test"))
+        db.updateCompanyStatusIsGot(strCompanyUrl="http://company/for/unit/test")
+        self.assertTrue(db.checkCompanyIsGot(strCompanyUrl="http://company/for/unit/test"))
+        self.assertEquals(db.fetchallCompletedObtainedCompanyUrl(), ["http://company/for/unit/test"])
+        db.updateCompanyStatusIsNotGot(strCompanyUrl="http://company/for/unit/test")
+        self.assertFalse(db.checkCompanyIsGot(strCompanyUrl="http://company/for/unit/test"))
+        db.clearTestData() #清除本次測試資料
         
 #測試開始
 if __name__ == "__main__":
