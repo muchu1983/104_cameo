@@ -8,6 +8,7 @@ This file is part of BSD license
 """
 from bennu.localdb import SQLite3Db
 from bennu.localdb import MongoDb
+import random
 """
 本地端資料庫存取
 """
@@ -24,6 +25,45 @@ class LocalDbForCurrencyApi:
     #建構子
     def __init__(self):
         self.mongodb = MongoDb().getClient().localdb
+        
+#crowdcube
+class LocalDbForCROWDCUBE:
+    
+    #建構子
+    def __init__(self):
+        self.db = SQLite3Db(strResFolderPath="cameo_res")
+        self.initialDb()
+        
+    #初取化資料庫
+    def initialDb(self):
+        strSQLCreateTable = (
+            "CREATE TABLE IF NOT EXISTS crowdcube_account("
+                "id INTEGER PRIMARY KEY,"
+                "strEmail TEXT NOT NULL,"
+                "strPassword TEXT NOT NULL,"
+                "strStatus TEXT NOT NULL)"
+        )
+        self.db.commitSQL(strSQL=strSQLCreateTable)
+        
+    #若無重覆，儲存 account
+    def insertAccountIfNotExists(self, strEmail=None, strPassword=None):
+        strSQL = "SELECT * FROM crowdcube_account WHERE strEmail='%s'"%strEmail
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        if len(lstRowData) == 0:
+            strSQL = "INSERT INTO crowdcube_account VALUES(NULL, '%s', '%s', 'ready')"%(strEmail, strPassword)
+            self.db.commitSQL(strSQL=strSQL)
+        
+    #隨機取得可用的 account
+    def fetchRandomReadyAccount(self):
+        strSQL = "SELECT * FROM crowdcube_account WHERE strStatus='ready'"
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        rowDataAccount = lstRowData[random.randint(0, len(lstRowData)-1)]
+        return (rowDataAccount["strEmail"], rowDataAccount["strPassword"])
+        
+    #清除測試資料 (clear table)
+    def clearTestData(self):
+        strSQL = "DELETE FROM crowdcube_account"
+        self.db.commitSQL(strSQL=strSQL)
         
 #京東眾籌
 class LocalDbForJD:

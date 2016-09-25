@@ -15,6 +15,7 @@ from cameo.localdb import LocalDbForPEDAILY
 from cameo.localdb import LocalDbForINSIDE
 from cameo.localdb import LocalDbForTECHCRUNCH
 from cameo.localdb import LocalDbForJD
+from cameo.localdb import LocalDbForCROWDCUBE
 """
 測試 本地端資料庫存取
 """
@@ -123,7 +124,7 @@ class LocalDbTest(unittest.TestCase):
         db.updateNewsStatusIsNotGot(strNewsUrl="http://news/for/unit/test")
         self.assertFalse(db.checkNewsIsGot(strNewsUrl="http://news/for/unit/test"))
         db.clearTestData() #清除本次測試資料
-    """
+    
     #測試 京東眾籌 本地端資料庫存取
     def test_localdb_for_jd(self):
         logging.info("LocalDbTest.test_localdb_for_jd")
@@ -151,7 +152,16 @@ class LocalDbTest(unittest.TestCase):
         self.assertFalse(db.checkProjectIsGot(strProjectUrl="http://project/for/unit/test"))
         self.assertFalse(db.checkFunderIsGot(strFunderUrl="http://funder/for/unit/test"))
         db.clearTestData() #清除本次測試資料
-    
+    """
+    #測試 crowdcube 本地端資料庫存取
+    def test_localdb_for_crowdcube(self):
+        logging.info("LocalDbTest.test_localdb_for_crowdcube")
+        db = LocalDbForCROWDCUBE()
+        db.insertAccountIfNotExists(strEmail="ebucdworc+01@gmail.com", strPassword="bee520")
+        db.insertAccountIfNotExists(strEmail="ebucdworc+02@gmail.com", strPassword="bee520")
+        (strAccountEmail, strAccountPassword) = db.fetchRandomReadyAccount()
+        self.assertTrue(strAccountEmail.startswith("ebucdworc"))
+        
 #測試開始
 if __name__ == "__main__":
     unittest.main(exit=False)
