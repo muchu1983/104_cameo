@@ -15,6 +15,7 @@ from cameo.parserForWEBACKERS import ParserForWEBACKERS
 from cameo.importerForWEBACKERS import ImporterForWEBACKERS
 from cameo.spiderForJD import SpiderForJD
 from cameo.parserForJD import ParserForJD
+from cameo.importerForJD import ImporterForJD
 from cameo.spiderForTECHORANGE import SpiderForTECHORANGE
 from cameo.parserForTECHORANGE import ParserForTECHORANGE
 from cameo.importerForTECHORANGE import ImporterForTECHORANGE
@@ -65,6 +66,7 @@ class CameoShell:
         self.dicImporters = {
             "indiegogo":ImporterForINDIEGOGO(),
             "webackers":ImporterForWEBACKERS(),
+            "jd":ImporterForJD(),
             "techorange":ImporterForTECHORANGE(),
             "bnext":ImporterForBNEXT(),
             "pedaily":ImporterForPEDAILY(),
