@@ -270,8 +270,9 @@ def downloadCategoryPages(strTargetCategory=None):
         strCategoryFilePath = strCategoryFolderPath + r"\category.html"
         if strTargetCategory: #specify strTargetCategory
             if strCategoryName == strTargetCategory:
-                # remove original category.html
-                os.remove(strCategoryFilePath)
+                # if exists, remove original category.html
+                if os.path.exists(strCategoryFilePath):
+                    os.remove(strCategoryFilePath)
             else:
                 # skip other category
                 continue
