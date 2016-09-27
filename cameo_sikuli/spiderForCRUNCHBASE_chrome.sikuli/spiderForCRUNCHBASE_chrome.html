@@ -286,7 +286,13 @@ strBaseResFolderPath = <span class="str">r"C:\Users\muchu\Desktop\cameo_res"</sp
 </span><span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
     <span class="kw">try</span>:
         logging.basicConfig(level=logging.INFO)
-        downloadSearchFundingRoundsPage(strCategoryText=<span class="str">"FinTech"</span>)
+        lstStrArgs = sys.argv
+        <span class="kw">if</span> lstStrArgs[<span class="dig">1</span>] == <span class="str">"search_funding_rounds"</span>:
+            <span class="kw">if</span> len(lstStrArgs) == <span class="dig">3</span>:
+                <span class="cmt">#lstStrArgs[2] is target category arg
+</span>                downloadSearchFundingRoundsPage(strCategoryText=lstStrArgs[<span class="dig">2</span>])
+            <span class="kw">else</span>:
+                downloadSearchFundingRoundsPage(strCategoryText=None)
         <span class="skw">popup</span>(<span class="str">u"spider action completed. ^.^y"</span>)
     <span class="kw">except</span> FindFailed, ff:
         <span class="kw">print</span>(str(ff))

@@ -214,7 +214,13 @@ def downloadSearchFundingRoundsPage(strCategoryText=None):
 if __name__ == "__main__":
     try:
         logging.basicConfig(level=logging.INFO)
-        downloadSearchFundingRoundsPage(strCategoryText="FinTech")
+        lstStrArgs = sys.argv
+        if lstStrArgs[1] == "search_funding_rounds":
+            if len(lstStrArgs) == 3:
+                #lstStrArgs[2] is target category arg
+                downloadSearchFundingRoundsPage(strCategoryText=lstStrArgs[2])
+            else:
+                downloadSearchFundingRoundsPage(strCategoryText=None)
         popup(u"spider action completed. ^.^y")
     except FindFailed, ff:
         print(str(ff))
