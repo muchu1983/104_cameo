@@ -25,6 +25,98 @@ class LocalDbForCurrencyApi:
     #建構子
     def __init__(self):
         self.mongodb = MongoDb().getClient().localdb
+    
+#crunchbase
+class LocalDbForCRUNCHBASE:
+    
+    #建構子
+    def __init__(self):
+        self.db = SQLite3Db(strResFolderPath="cameo_res")
+        self.initialDb()
+        
+    #初取化資料庫
+    def initialDb(self):
+        strSQLCreateTable = (
+            "CREATE TABLE IF NOT EXISTS crunchbase_account("
+                "id INTEGER PRIMARY KEY,"
+                "strEmail TEXT NOT NULL,"
+                "strPassword TEXT NOT NULL,"
+                "strStatus TEXT NOT NULL)"
+        )
+        self.db.commitSQL(strSQL=strSQLCreateTable)
+        strSQLCreateTable = (
+            "CREATE TABLE IF NOT EXISTS crunchbase_organization("
+                "id INTEGER PRIMARY KEY,"
+                "strOrganizationUrl TEXT NOT NULL,"
+                "isGot BOOLEAN NOT NULL)"
+        )
+        self.db.commitSQL(strSQL=strSQLCreateTable)
+        
+    #若無重覆，儲存 account
+    def insertAccountIfNotExists(self, strEmail=None, strPassword=None):
+        strSQL = "SELECT * FROM crunchbase_account WHERE strEmail='%s'"%strEmail
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        if len(lstRowData) == 0:
+            strSQL = "INSERT INTO crunchbase_account VALUES(NULL, '%s', '%s', 'ready')"%(strEmail, strPassword)
+            self.db.commitSQL(strSQL=strSQL)
+        
+    #隨機取得可用的 account
+    def fetchRandomReadyAccount(self):
+        strSQL = "SELECT * FROM crunchbase_account WHERE strStatus='ready'"
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        rowDataAccount = lstRowData[random.randint(0, len(lstRowData)-1)]
+        return (rowDataAccount["strEmail"], rowDataAccount["strPassword"])
+        
+    #若無重覆 儲存 organization URL
+    def insertOrganizationUrlIfNotExists(self, strOrganizationUrl=None):
+        strSQL = "SELECT * FROM crunchbase_organization WHERE strOrganizationUrl='%s'"%strOrganizationUrl
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        if len(lstRowData) == 0:
+            strSQL = "INSERT INTO crunchbase_organization VALUES(NULL, '%s', 0)"%strOrganizationUrl
+            self.db.commitSQL(strSQL=strSQL)
+            
+    #取得所有尚未完成下載的 organization url
+    def fetchallNotObtainedOrganizationUrl(self):
+        strSQL = "SELECT strOrganizationUrl FROM crunchbase_organization WHERE isGot=0"
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        lstStrCompanyUrl = []
+        for rowData in lstRowData:
+            lstStrCompanyUrl.append(rowData["strOrganizationUrl"])
+        return lstStrCompanyUrl
+    
+    #檢查 organization 是否已下載
+    def checkOrganizationIsGot(self, strOrganizationUrl=None):
+        isGot = True
+        strSQL = "SELECT * FROM crunchbase_organization WHERE strOrganizationUrl='%s'"%strOrganizationUrl
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        for rowData in lstRowData:
+            if rowData["isGot"] == 0:
+                isGot = False
+        return isGot
+        
+    #更新 organization 為已完成下載狀態
+    def updateOrganizationStatusIsGot(self, strOrganizationUrl=None):
+        strSQL = "UPDATE crunchbase_organization SET isGot=1 WHERE strOrganizationUrl='%s'"%strOrganizationUrl
+        self.db.commitSQL(strSQL=strSQL)
+    
+    #取得所有已完成下載的 organization url
+    def fetchallCompletedObtainedOrganizationUrl(self):
+        strSQL = "SELECT strOrganizationUrl FROM crunchbase_organization WHERE isGot=1"
+        lstRowData = self.db.fetchallSQL(strSQL=strSQL)
+        lstStrCompanyUrl = []
+        for rowData in lstRowData:
+            lstStrCompanyUrl.append(rowData["strOrganizationUrl"])
+        return lstStrCompanyUrl
+        
+    #更新 organization 尚未開始下載狀態
+    def updateOrganizationStatusIsNotGot(self, strOrganizationUrl=None):
+        strSQL = "UPDATE crunchbase_organization SET isGot=0 WHERE strOrganizationUrl='%s'"%strOrganizationUrl
+        self.db.commitSQL(strSQL=strSQL)
+        
+    #清除測試資料 (clear table)
+    def clearTestData(self):
+        strSQL = "DELETE FROM crunchbase_organization"
+        self.db.commitSQL(strSQL=strSQL)
         
 #crowdcube
 class LocalDbForCROWDCUBE:

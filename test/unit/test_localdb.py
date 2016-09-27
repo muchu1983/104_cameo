@@ -16,6 +16,7 @@ from cameo.localdb import LocalDbForINSIDE
 from cameo.localdb import LocalDbForTECHCRUNCH
 from cameo.localdb import LocalDbForJD
 from cameo.localdb import LocalDbForCROWDCUBE
+from cameo.localdb import LocalDbForCRUNCHBASE
 """
 測試 本地端資料庫存取
 """
@@ -152,7 +153,7 @@ class LocalDbTest(unittest.TestCase):
         self.assertFalse(db.checkProjectIsGot(strProjectUrl="http://project/for/unit/test"))
         self.assertFalse(db.checkFunderIsGot(strFunderUrl="http://funder/for/unit/test"))
         db.clearTestData() #清除本次測試資料
-    """
+    
     #測試 crowdcube 本地端資料庫存取
     def test_localdb_for_crowdcube(self):
         logging.info("LocalDbTest.test_localdb_for_crowdcube")
@@ -170,6 +171,25 @@ class LocalDbTest(unittest.TestCase):
         self.assertEquals(db.fetchallCompletedObtainedCompanyUrl(), ["http://company/for/unit/test"])
         db.updateCompanyStatusIsNotGot(strCompanyUrl="http://company/for/unit/test")
         self.assertFalse(db.checkCompanyIsGot(strCompanyUrl="http://company/for/unit/test"))
+        db.clearTestData() #清除本次測試資料
+    """
+    #測試 crunchbase 本地端資料庫存取
+    def test_localdb_for_crunchbase(self):
+        logging.info("LocalDbTest.test_localdb_for_crunchbase")
+        db = LocalDbForCRUNCHBASE()
+        db.clearTestData() #清除前次測試資料
+        db.insertAccountIfNotExists(strEmail="esabhcnurc+0100@gmail.com", strPassword="bee520")
+        db.insertAccountIfNotExists(strEmail="esabhcnurc+0101@gmail.com", strPassword="bee520")
+        (strAccountEmail, strAccountPassword) = db.fetchRandomReadyAccount()
+        self.assertTrue(strAccountEmail.startswith("esabhcnurc"))
+        db.insertOrganizationUrlIfNotExists(strOrganizationUrl="http://organization/for/unit/test")
+        self.assertEquals(db.fetchallNotObtainedOrganizationUrl(), ["http://organization/for/unit/test"])
+        self.assertFalse(db.checkOrganizationIsGot(strOrganizationUrl="http://organization/for/unit/test"))
+        db.updateOrganizationStatusIsGot(strOrganizationUrl="http://organization/for/unit/test")
+        self.assertTrue(db.checkOrganizationIsGot(strOrganizationUrl="http://organization/for/unit/test"))
+        self.assertEquals(db.fetchallCompletedObtainedOrganizationUrl(), ["http://organization/for/unit/test"])
+        db.updateOrganizationStatusIsNotGot(strOrganizationUrl="http://organization/for/unit/test")
+        self.assertFalse(db.checkOrganizationIsGot(strOrganizationUrl="http://organization/for/unit/test"))
         db.clearTestData() #清除本次測試資料
         
 #測試開始
