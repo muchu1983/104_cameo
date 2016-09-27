@@ -35,9 +35,13 @@ dicPng = {
     "page_proxy_error":"page_proxy_error.png",
     "os_right_save_as":"os_right_save_as.png",
     "os_save_btn":"os_save_btn.png",
-    "page_search":"page_search.png",
+    "page_search_btn":"page_search_btn.png",
     "page_filter_btn":"page_filter_btn.png",
-        
+    "page_filter_funded_company_btn":"page_filter_funded_company_btn.png",
+    "page_filter_funded_companies_btn":"page_filter_funded_companies_btn.png",
+    "page_filter_funded_categories_btn":"page_filter_funded_categories_btn.png",
+    "page_category_text_FinTech":"page_category_text_FinTech.png",
+    "page_query_input":Pattern("page_query_input.png").targetOffset(-100,0)
 }
 lstStrCategoryName = [
     "animals", "art", "comic", "community", "dance",
@@ -47,7 +51,7 @@ lstStrCategoryName = [
     "technology", "theatre", "transmedia", "video_web", "writing"
 ]
 sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
-strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"
+strBaseResFolderPath = r"C:\Users\muchu\Desktop\cameo_res"
 #open chrome
 def openChrome():
     #close prev chrome
@@ -122,7 +126,6 @@ def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None
     wait(10)
     dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 30)
     dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
-    checkAndPauseBeforeSave()
     rightClick(onImage)
     dicRegion["regCenter"].wait(dicPng["os_right_save_as"], 300)
     dicRegion["regCenter"].click(dicPng["os_right_save_as"])
@@ -143,7 +146,6 @@ def saveCurrentPage(strFolderPath=None, strFilename=None):
     wait(10)
     dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 30)
     dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
-    checkAndPauseBeforeSave()
     type("s", Key.CTRL)
     dicRegion["regDown"].wait(dicPng["os_save_btn"], 300)
     if strFolderPath != None:
@@ -177,25 +179,42 @@ def fakeRandomRequest():
         wait(5)
     wait(0.5)
 # go to search page
-def goSearchPage():
+def goSearchFundingRoundsPage():
     openChrome()
-    typeUrlOnChrome(strUrlText="https://www.crunchbase.com/app/search/companies")
-    dicRegion["regUp"].wait(dicPng["page_search"], 300)
+    typeUrlOnChrome(strUrlText="https://www.crunchbase.com/app/search/funding_rounds")
+    dicRegion["regUp"].wait(dicPng["page_search_btn"], 300)
     dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 30)
     dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
 #download explore pages
-def downloadSearchPages():
-    goSearchPage()
-    dicRegion["regNW"].click(dicPng["page_filter_btn"])
+def downloadSearchFundingRoundsPage(strCategoryText=None):
+    goSearchFundingRoundsPage()
+    dicRegion["regUp"].click(dicPng["page_filter_btn"])
+    wait(5)
+    dicRegion["regUp"].click(dicPng["page_filter_funded_company_btn"])
+    wait(5)
+    dicRegion["regUp"].click(dicPng["page_filter_funded_companies_btn"])
+    wait(5)
+    dicRegion["regUp"].click(dicPng["page_filter_funded_categories_btn"])
+    wait(5)
+    dicRegion["regUp"].click(dicPng["page_filter_funded_categories_btn"])
+    wait(5)
+    dicRegion["regNE"].click(dicPng["page_query_input"])
+    wait(5)
+    pasteClipboardText(strText=strCategoryText)
+    wait(5)
+    dicRegion["regNE"].click(dicPng["page_category_text_%s"%strCategoryText])
+    wait(5)
+    dicRegion["regLeft"].click(dicPng["page_search_btn"])
+    wait(5)
     strSearchFolderPath = strBaseResFolderPath + r"\source_html\CRUNCHBASE"
     if not os.path.exists(strSearchFolderPath):
         os.mkdir(strSearchFolderPath)
-    saveCurrentPage(strFolderPath=strSearchFolderPath, strFilename="search.html")
+    saveCurrentPage(strFolderPath=strSearchFolderPath, strFilename="%s_funding_rounds.html"%strCategoryText)
 #main entry point
 if __name__ == "__main__":
     try:
         logging.basicConfig(level=logging.INFO)
-        downloadSearchPages()
+        downloadSearchFundingRoundsPage(strCategoryText="FinTech")
         popup(u"spider action completed. ^.^y")
     except FindFailed, ff:
         print(str(ff))

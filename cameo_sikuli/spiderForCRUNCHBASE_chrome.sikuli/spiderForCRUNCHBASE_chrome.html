@@ -107,9 +107,13 @@ dicPng = {
     <span class="str">"page_proxy_error"</span>:<img src="page_proxy_error.png" />,
     <span class="str">"os_right_save_as"</span>:<img src="os_right_save_as.png" />,
     <span class="str">"os_save_btn"</span>:<img src="os_save_btn.png" />,
-    <span class="str">"page_search"</span>:<img src="page_search.png" />,
+    <span class="str">"page_search_btn"</span>:<img src="page_search_btn.png" />,
     <span class="str">"page_filter_btn"</span>:<img src="page_filter_btn.png" />,
-
+    <span class="str">"page_filter_funded_company_btn"</span>:<img src="page_filter_funded_company_btn.png" />,
+    <span class="str">"page_filter_funded_companies_btn"</span>:<img src="page_filter_funded_companies_btn.png" />,
+    <span class="str">"page_filter_funded_categories_btn"</span>:<img src="page_filter_funded_categories_btn.png" />,
+    <span class="str">"page_category_text_FinTech"</span>:<img src="page_category_text_FinTech.png" />,
+    <span class="str">"page_query_input"</span>:Pattern(<img src="page_query_input.png" />).targetOffset(-<span class="dig">100</span>,<span class="dig">0</span>)
 }
 lstStrCategoryName = [
     <span class="str">"animals"</span>, <span class="str">"art"</span>, <span class="str">"comic"</span>, <span class="str">"community"</span>, <span class="str">"dance"</span>,
@@ -119,7 +123,7 @@ lstStrCategoryName = [
     <span class="str">"technology"</span>, <span class="str">"theatre"</span>, <span class="str">"transmedia"</span>, <span class="str">"video_web"</span>, <span class="str">"writing"</span>
 ]
 sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
-strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"</span>
+strBaseResFolderPath = <span class="str">r"C:\Users\muchu\Desktop\cameo_res"</span>
 <span class="cmt">#open chrome
 </span><span class="kw">def</span> openChrome():
     <span class="cmt">#close prev chrome
@@ -194,7 +198,6 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     <span class="skw">wait</span>(<span class="dig">10</span>)
     dicRegion[<span class="str">"regNW"</span>].waitVanish(dicPng[<span class="str">"chrome_stop"</span>], <span class="dig">30</span>)
     dicRegion[<span class="str">"regNW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"chrome_reload"</span>], <span class="dig">300</span>)
-    checkAndPauseBeforeSave()
     <span class="skw">rightClick</span>(onImage)
     dicRegion[<span class="str">"regCenter"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"os_right_save_as"</span>], <span class="dig">300</span>)
     dicRegion[<span class="str">"regCenter"</span>].<span class="skw">click</span>(dicPng[<span class="str">"os_right_save_as"</span>])
@@ -215,7 +218,6 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     <span class="skw">wait</span>(<span class="dig">10</span>)
     dicRegion[<span class="str">"regNW"</span>].waitVanish(dicPng[<span class="str">"chrome_stop"</span>], <span class="dig">30</span>)
     dicRegion[<span class="str">"regNW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"chrome_reload"</span>], <span class="dig">300</span>)
-    checkAndPauseBeforeSave()
     <span class="skw">type</span>(<span class="str">"s"</span>, Key.CTRL)
     dicRegion[<span class="str">"regDown"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"os_save_btn"</span>], <span class="dig">300</span>)
     <span class="kw">if</span> strFolderPath != None:
@@ -249,25 +251,42 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         <span class="skw">wait</span>(<span class="dig">5</span>)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
 <span class="cmt"># go to search page
-</span><span class="kw">def</span> goSearchPage():
+</span><span class="kw">def</span> goSearchFundingRoundsPage():
     openChrome()
-    typeUrlOnChrome(strUrlText=<span class="str">"https://www.crunchbase.com/app/search/companies"</span>)
-    dicRegion[<span class="str">"regUp"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"page_search"</span>], <span class="dig">300</span>)
+    typeUrlOnChrome(strUrlText=<span class="str">"https://www.crunchbase.com/app/search/funding_rounds"</span>)
+    dicRegion[<span class="str">"regUp"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"page_search_btn"</span>], <span class="dig">300</span>)
     dicRegion[<span class="str">"regNW"</span>].waitVanish(dicPng[<span class="str">"chrome_stop"</span>], <span class="dig">30</span>)
     dicRegion[<span class="str">"regNW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"chrome_reload"</span>], <span class="dig">300</span>)
 <span class="cmt">#download explore pages
-</span><span class="kw">def</span> downloadSearchPages():
-    goSearchPage()
-    dicRegion[<span class="str">"regNW"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_filter_btn"</span>])
+</span><span class="kw">def</span> downloadSearchFundingRoundsPage(strCategoryText=None):
+    goSearchFundingRoundsPage()
+    dicRegion[<span class="str">"regUp"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_filter_btn"</span>])
+    <span class="skw">wait</span>(<span class="dig">5</span>)
+    dicRegion[<span class="str">"regUp"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_filter_funded_company_btn"</span>])
+    <span class="skw">wait</span>(<span class="dig">5</span>)
+    dicRegion[<span class="str">"regUp"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_filter_funded_companies_btn"</span>])
+    <span class="skw">wait</span>(<span class="dig">5</span>)
+    dicRegion[<span class="str">"regUp"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_filter_funded_categories_btn"</span>])
+    <span class="skw">wait</span>(<span class="dig">5</span>)
+    dicRegion[<span class="str">"regUp"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_filter_funded_categories_btn"</span>])
+    <span class="skw">wait</span>(<span class="dig">5</span>)
+    dicRegion[<span class="str">"regNE"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_query_input"</span>])
+    <span class="skw">wait</span>(<span class="dig">5</span>)
+    pasteClipboardText(strText=strCategoryText)
+    <span class="skw">wait</span>(<span class="dig">5</span>)
+    dicRegion[<span class="str">"regNE"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_category_text_%s"</span>%strCategoryText])
+    <span class="skw">wait</span>(<span class="dig">5</span>)
+    dicRegion[<span class="str">"regLeft"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_search_btn"</span>])
+    <span class="skw">wait</span>(<span class="dig">5</span>)
     strSearchFolderPath = strBaseResFolderPath + <span class="str">r"\source_html\CRUNCHBASE"</span>
     <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strSearchFolderPath):
         os.mkdir(strSearchFolderPath)
-    saveCurrentPage(strFolderPath=strSearchFolderPath, strFilename=<span class="str">"search.html"</span>)
+    saveCurrentPage(strFolderPath=strSearchFolderPath, strFilename=<span class="str">"%s_funding_rounds.html"</span>%strCategoryText)
 <span class="cmt">#main entry point
 </span><span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
     <span class="kw">try</span>:
         logging.basicConfig(level=logging.INFO)
-        downloadSearchPages()
+        downloadSearchFundingRoundsPage(strCategoryText=<span class="str">"FinTech"</span>)
         <span class="skw">popup</span>(<span class="str">u"spider action completed. ^.^y"</span>)
     <span class="kw">except</span> FindFailed, ff:
         <span class="kw">print</span>(str(ff))
