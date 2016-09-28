@@ -26,30 +26,30 @@ class ParserForCRUNCHBASETest(unittest.TestCase):
         pass
     
     #測試 解析 explore 頁面
-    def test_parseExplorePage(self):
-        logging.info("ParserV2ForINDIEGOGOTest.test_parseExplorePage")
-        parser = ParserV2ForINDIEGOGO()
-        parser.parseExplorePage()
-    
+    def test_parseSearchFundingRoundsPage(self):
+        logging.info("ParserForCRUNCHBASETest.test_parseSearchFundingRoundsPage")
+        parser = ParserForCRUNCHBASE()
+        parser.parseSearchFundingRoundsPage()
+    """
     #測試 解析 category 頁面
     def test_parseCategoryPage(self):
-        logging.info("ParserV2ForINDIEGOGOTest.test_parseCategoryPage")
+        logging.info("ParserForCRUNCHBASETest.test_parseCategoryPage")
         parser = ParserV2ForINDIEGOGO()
         parser.parseCategoryPage()
     
     #測試 解析 project 頁面
     def test_parseProjectPage(self):
-        logging.info("ParserV2ForINDIEGOGOTest.test_parseProjectPage")
+        logging.info("ParserForCRUNCHBASETest.test_parseProjectPage")
         parser = ParserV2ForINDIEGOGO()
         parser.parseProjectPage("automode")
         
     
     #測試 解析 individuals 頁面
     def test_parseIndividualsPage(self):
-        logging.info("ParserV2ForINDIEGOGOTest.test_parseIndividualsPage")
+        logging.info("ParserForCRUNCHBASETest.test_parseIndividualsPage")
         parser = ParserV2ForINDIEGOGO()
         parser.parseIndividualsPage("automode")
-    
+    """
 #測試開始
 if __name__ == "__main__":
     unittest.main(exit=False)

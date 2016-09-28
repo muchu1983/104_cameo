@@ -13,6 +13,7 @@ import json
 import logging
 from scrapy import Selector
 from cameo.utility import Utility
+from cameo.localdb import LocalDbForCRUNCHBASE
 """
 從 source_html 的 HTML 檔案解析資料
 結果放置於 parsed_result 下
@@ -21,10 +22,11 @@ class ParserForCRUNCHBASE:
     #建構子
     def __init__(self):
         self.utility = Utility()
+        self.db = LocalDbForCRUNCHBASE()
         self.dicSubCommandHandler = {
-            "explore":[self.parseExplorePage],
-            "category":[self.parseCategoryPage],
-            "project":[
+            "search_funding_rounds":[self.parseSearchFundingRoundsPage],
+            "search_investors":[self.parseCategoryPage],
+            "organization":[
                 self.beforeParseProjectPage,
                 self.parseProjectDetailsPage,
                 self.parseProjectStoryPage,
@@ -34,12 +36,6 @@ class ParserForCRUNCHBASE:
                 self.parseProjectRewardPage,
                 self.parseProjectGalleryPage,
                 self.afterParseProjectPage
-            ],
-            "individuals":[
-                self.beforeParseIndividualsPage,
-                self.parseIndividualsProfilePage,
-                self.parseIndividualsCampaignsPage,
-                self.afterParseIndividualsPage
             ],
         }
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
@@ -69,28 +65,21 @@ class ParserForCRUNCHBASE:
             strArg1 = lstSubcommand[1]
         for handler in self.dicSubCommandHandler[strSubcommand]:
             handler(strArg1)
-#explore #####################################################################################
-    #解析 explore.html
-    def parseExplorePage(self, uselessArg1=None):
-        strExploreHtmlPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\INDIEGOGO\\explore.html"
-        strExploreResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\INDIEGOGO"
-        if not os.path.exists(strExploreResultFolderPath):
-            os.mkdir(strExploreResultFolderPath) #mkdir parsed_result/INDIEGOGO/
-        with open(strExploreHtmlPath, "r") as expHtmlFile:
-            strPageSource = expHtmlFile.read()
-        root = Selector(text=strPageSource)
-        lstStrCategoryUrls = root.css("explore-category-link-www a.i-uncolored-link::attr(href)").extract()
-        if len(lstStrCategoryUrls) == 0:
-            lstStrCategoryUrls = root.css("ul.exploreCategories-list li.ng-scope a.ng-binding::attr(href)").extract()
-        strCategoryUrlListFilePath = strExploreResultFolderPath + u"\\" + self.CATEGORY_URL_LIST_FILENAME
-        with open(strCategoryUrlListFilePath, "w+") as catUrlListFile:
-            for strCategoryUrl in lstStrCategoryUrls:
-                strCategoryUrl = re.sub("#/browse", "", strCategoryUrl)
-                strCategoryUrl = re.search("^(https://www.indiegogo.com/explore/[a-z_]*)\??.*$" ,strCategoryUrl).group(1)
-                if strCategoryUrl == "https://www.indiegogo.com/explore/all":
-                    continue
-                else:
-                    catUrlListFile.write(strCategoryUrl + u"\n")
+#funding rounds #####################################################################################
+    #解析 funding_rounds.html
+    def parseSearchFundingRoundsPage(self, uselessArg1=None):
+        strFundingRoundsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\CRUNCHBASE"
+        lstStrFundingRoundsHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strFundingRoundsHtmlFolderPath, strSuffixes="funding_rounds.html")
+        strFundingRoundsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\CRUNCHBASE"
+        if not os.path.exists(strFundingRoundsResultFolderPath):
+            os.mkdir(strFundingRoundsResultFolderPath) #mkdir parsed_result/CRUNCHBASE/
+        for strFundingRoundsHtmlFilePath in lstStrFundingRoundsHtmlFilePath:
+            with open(strFundingRoundsHtmlFilePath, "r") as fundingRoundsHtmlFile:
+                strPageSource = fundingRoundsHtmlFile.read()
+            root = Selector(text=strPageSource)
+            lstStrOrganizationUrl = root.css("div.cbRow div.cbCell:nth-of-type(3) span.identifier a.cb-link::attr(href)").extract()
+            for strOrganizationUrl in lstStrOrganizationUrl:
+                self.db.insertOrganizationUrlIfNotExists(strOrganizationUrl=strOrganizationUrl)
 #category #####################################################################################
     #解析 category.html
     def parseCategoryPage(self, uselessArg1=None):
