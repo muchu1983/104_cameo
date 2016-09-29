@@ -113,7 +113,8 @@ dicPng = {
     <span class="str">"page_filter_funded_companies_btn"</span>:<img src="page_filter_funded_companies_btn.png" />,
     <span class="str">"page_filter_funded_categories_btn"</span>:<img src="page_filter_funded_categories_btn.png" />,
     <span class="str">"page_category_text_FinTech"</span>:<img src="page_category_text_FinTech.png" />,
-    <span class="str">"page_query_input"</span>:Pattern(<img src="page_query_input.png" />).targetOffset(-<span class="dig">100</span>,<span class="dig">0</span>)
+    <span class="str">"page_query_input"</span>:Pattern(<img src="page_query_input.png" />).targetOffset(-<span class="dig">100</span>,<span class="dig">0</span>),
+    <span class="str">"page_buy_btn"</span>:<img src="page_buy_btn.png" />
 }
 lstStrCategoryName = [
     <span class="str">"animals"</span>, <span class="str">"art"</span>, <span class="str">"comic"</span>, <span class="str">"community"</span>, <span class="str">"dance"</span>,
@@ -123,7 +124,7 @@ lstStrCategoryName = [
     <span class="str">"technology"</span>, <span class="str">"theatre"</span>, <span class="str">"transmedia"</span>, <span class="str">"video_web"</span>, <span class="str">"writing"</span>
 ]
 sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
-strBaseResFolderPath = <span class="str">r"C:\Users\muchu\Desktop\cameo_res"</span>
+strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"</span>
 <span class="cmt">#open chrome
 </span><span class="kw">def</span> openChrome():
     <span class="cmt">#close prev chrome
@@ -278,10 +279,39 @@ strBaseResFolderPath = <span class="str">r"C:\Users\muchu\Desktop\cameo_res"</sp
     <span class="skw">wait</span>(<span class="dig">5</span>)
     dicRegion[<span class="str">"regLeft"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_search_btn"</span>])
     <span class="skw">wait</span>(<span class="dig">5</span>)
-    strSearchFolderPath = strBaseResFolderPath + <span class="str">r"\source_html\CRUNCHBASE"</span>
+    <span class="cmt">#create CRUNCHBASE folder
+</span>    strSearchFolderPath = strBaseResFolderPath + <span class="str">r"\source_html\CRUNCHBASE"</span>
     <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strSearchFolderPath):
         os.mkdir(strSearchFolderPath)
-    saveCurrentPage(strFolderPath=strSearchFolderPath, strFilename=<span class="str">"%s_funding_rounds.html"</span>%strCategoryText)
+    intFundingRoundsPage = <span class="dig">1</span>
+    <span class="kw">while</span> <span class="kw">not</span> dicRegion[<span class="str">"regDown"</span>].exists(dicPng[<span class="str">"page_buy_btn"</span>]):
+        saveCurrentPage(strFolderPath=strSearchFolderPath, strFilename=<span class="str">"%s_%d_funding_rounds.html"</span>%(strCategoryText, intFundingRoundsPage))
+        intFundingRoundsPage = intFundingRoundsPage+<span class="dig">1</span>
+        hover(Location(screen.getW()/<span class="dig">2</span>, screen.getH()-<span class="dig">100</span>))
+        wheel(Location(screen.getW()/<span class="dig">2</span>, screen.getH()-<span class="dig">100</span>), WHEEL_DOWN, <span class="dig">1</span>)
+        <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="kw">else</span>:
+        saveCurrentPage(strFolderPath=strSearchFolderPath, strFilename=<span class="str">"%s_%d_funding_rounds.html"</span>%(strCategoryText, intFundingRoundsPage))
+        intFundingRoundsPage = intFundingRoundsPage+<span class="dig">1</span>
+<span class="cmt">#download organization pages
+</span><span class="kw">def</span> downloadOrganizationPage():
+    <span class="cmt">#create organization folder
+</span>    strOrganizationFolderPath = strBaseResFolderPath + <span class="str">r"\source_html\CRUNCHBASE\organization"</span>
+    <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strOrganizationFolderPath):
+        os.mkdir(strOrganizationFolderPath)
+    <span class="cmt">#read organization_url_list.txt 
+</span>    strOrganizationUrlListFilePath = strBaseResFolderPath + <span class="str">r"\parsed_result\CRUNCHBASE\organization\organization_url_list.txt"</span>
+    orgUrlListFile = open(strOrganizationUrlListFilePath)
+    intOrganizationPageIndex = <span class="dig">1</span>
+    <span class="kw">for</span> strOrganizationUrl <span class="kw">in</span> orgUrlListFile:<span class="cmt">#organization loop</span>
+        openChrome()
+        typeUrlOnChrome(strUrlText=strOrganizationUrl)
+        dicRegion[<span class="str">"regNW"</span>].waitVanish(dicPng[<span class="str">"chrome_stop"</span>], <span class="dig">30</span>)
+        dicRegion[<span class="str">"regNW"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"chrome_reload"</span>], <span class="dig">300</span>)
+        saveCurrentPage(strFolderPath=strOrganizationFolderPath, strFilename=<span class="str">"%d_organization.html"</span>%intOrganizationPageIndex)
+        intOrganizationPageIndex = intOrganizationPageIndex+<span class="dig">1</span>
+        <span class="skw">wait</span>(<span class="dig">5</span>)
+
 <span class="cmt">#main entry point
 </span><span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
     <span class="kw">try</span>:
@@ -293,7 +323,9 @@ strBaseResFolderPath = <span class="str">r"C:\Users\muchu\Desktop\cameo_res"</sp
 </span>                downloadSearchFundingRoundsPage(strCategoryText=lstStrArgs[<span class="dig">2</span>])
             <span class="kw">else</span>:
                 downloadSearchFundingRoundsPage(strCategoryText=None)
-        <span class="skw">popup</span>(<span class="str">u"spider action completed. ^.^y"</span>)
+        <span class="kw">elif</span> lstStrArgs[<span class="dig">1</span>] == <span class="str">"organization"</span>:
+            downloadOrganizationPage()
+        logging.info(<span class="str">u"spider action completed. ^.^y timestamp: %s"</span>%datetime.datetime.now().strftime(<span class="str">"%Y-%m-%d %H:%M:%S"</span>))
     <span class="kw">except</span> FindFailed, ff:
         <span class="kw">print</span>(str(ff))
         <span class="skw">popup</span>(<span class="str">u"spider cant find png error! timestamp: %s"</span>%datetime.datetime.now().strftime(<span class="str">"%Y-%m-%d %H:%M:%S"</span>))

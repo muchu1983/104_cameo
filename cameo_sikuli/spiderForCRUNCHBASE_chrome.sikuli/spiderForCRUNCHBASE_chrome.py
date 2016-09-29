@@ -41,7 +41,8 @@ dicPng = {
     "page_filter_funded_companies_btn":"page_filter_funded_companies_btn.png",
     "page_filter_funded_categories_btn":"page_filter_funded_categories_btn.png",
     "page_category_text_FinTech":"page_category_text_FinTech.png",
-    "page_query_input":Pattern("page_query_input.png").targetOffset(-100,0)
+    "page_query_input":Pattern("page_query_input.png").targetOffset(-100,0),
+    "page_buy_btn":"page_buy_btn.png"
 }
 lstStrCategoryName = [
     "animals", "art", "comic", "community", "dance",
@@ -51,7 +52,7 @@ lstStrCategoryName = [
     "technology", "theatre", "transmedia", "video_web", "writing"
 ]
 sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
-strBaseResFolderPath = r"C:\Users\muchu\Desktop\cameo_res"
+strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"
 #open chrome
 def openChrome():
     #close prev chrome
@@ -206,10 +207,39 @@ def downloadSearchFundingRoundsPage(strCategoryText=None):
     wait(5)
     dicRegion["regLeft"].click(dicPng["page_search_btn"])
     wait(5)
+    #create CRUNCHBASE folder
     strSearchFolderPath = strBaseResFolderPath + r"\source_html\CRUNCHBASE"
     if not os.path.exists(strSearchFolderPath):
         os.mkdir(strSearchFolderPath)
-    saveCurrentPage(strFolderPath=strSearchFolderPath, strFilename="%s_funding_rounds.html"%strCategoryText)
+    intFundingRoundsPage = 1
+    while not dicRegion["regDown"].exists(dicPng["page_buy_btn"]):
+        saveCurrentPage(strFolderPath=strSearchFolderPath, strFilename="%s_%d_funding_rounds.html"%(strCategoryText, intFundingRoundsPage))
+        intFundingRoundsPage = intFundingRoundsPage+1
+        hover(Location(screen.getW()/2, screen.getH()-100))
+        wheel(Location(screen.getW()/2, screen.getH()-100), WHEEL_DOWN, 1)
+        wait(1)
+    else:
+        saveCurrentPage(strFolderPath=strSearchFolderPath, strFilename="%s_%d_funding_rounds.html"%(strCategoryText, intFundingRoundsPage))
+        intFundingRoundsPage = intFundingRoundsPage+1
+#download organization pages
+def downloadOrganizationPage():
+    #create organization folder
+    strOrganizationFolderPath = strBaseResFolderPath + r"\source_html\CRUNCHBASE\organization"
+    if not os.path.exists(strOrganizationFolderPath):
+        os.mkdir(strOrganizationFolderPath)
+    #read organization_url_list.txt 
+    strOrganizationUrlListFilePath = strBaseResFolderPath + r"\parsed_result\CRUNCHBASE\organization\organization_url_list.txt"
+    orgUrlListFile = open(strOrganizationUrlListFilePath)
+    intOrganizationPageIndex = 1
+    for strOrganizationUrl in orgUrlListFile:#organization loop
+        openChrome()
+        typeUrlOnChrome(strUrlText=strOrganizationUrl)
+        dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 30)
+        dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
+        saveCurrentPage(strFolderPath=strOrganizationFolderPath, strFilename="%d_organization.html"%intOrganizationPageIndex)
+        intOrganizationPageIndex = intOrganizationPageIndex+1
+        wait(5)
+    
 #main entry point
 if __name__ == "__main__":
     try:
@@ -221,7 +251,9 @@ if __name__ == "__main__":
                 downloadSearchFundingRoundsPage(strCategoryText=lstStrArgs[2])
             else:
                 downloadSearchFundingRoundsPage(strCategoryText=None)
-        popup(u"spider action completed. ^.^y")
+        elif lstStrArgs[1] == "organization":
+            downloadOrganizationPage()
+        logging.info(u"spider action completed. ^.^y timestamp: %s"%datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     except FindFailed, ff:
         print(str(ff))
         popup(u"spider cant find png error! timestamp: %s"%datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))

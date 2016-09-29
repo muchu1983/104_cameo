@@ -50,12 +50,11 @@ class ParserForCRUNCHBASE:
         
     #取得 parser 使用資訊
     def getUseageMessage(self):
-        return ("- INDIEGOGO -\n"
+        return ("- CRUNCHBASE -\n"
                 "useage:\n"
-                "explore - parse explore.html then create category_url_list.txt\n"
-                "category - parse category.html then create project_url_list.txt\n"
-                "project category - parse project's html of given category then create .json\n"
-                "individuals category - parse individuals's html of given category then create .json\n")
+                "search_funding_rounds - parse funding_rounds.html then insert organization url to localdb \n"
+                "search_investors - parse investors.html then insert organization url to localdb \n"
+                "organization - parse organization.html then create .json \n")
 
     #執行 parser
     def runParser(self, lstSubcommand=None):
