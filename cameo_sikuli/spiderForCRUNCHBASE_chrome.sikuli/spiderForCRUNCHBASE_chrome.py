@@ -53,7 +53,7 @@ lstStrCategoryName = [
     "technology", "theatre", "transmedia", "video_web", "writing"
 ]
 sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
-strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"
+strBaseResFolderPath = u"C:\\Users\\Administrator\\Desktop\\pyWorkspace\\CAMEO_git_code\\cameo_res"
 #open chrome
 def openChrome():
     #close prev chrome
@@ -209,7 +209,7 @@ def downloadSearchFundingRoundsPage(strCategoryText=None):
     dicRegion["regLeft"].click(dicPng["page_search_btn"])
     wait(5)
     #create CRUNCHBASE folder
-    strSearchFolderPath = strBaseResFolderPath + r"\source_html\CRUNCHBASE"
+    strSearchFolderPath = strBaseResFolderPath + u"\\source_html\\CRUNCHBASE"
     if not os.path.exists(strSearchFolderPath):
         os.mkdir(strSearchFolderPath)
     intFundingRoundsPage = 1
@@ -221,15 +221,15 @@ def downloadSearchFundingRoundsPage(strCategoryText=None):
         wait(1)
     else:
         saveCurrentPage(strFolderPath=strSearchFolderPath, strFilename="%s_%d_funding_rounds.html"%(strCategoryText, intFundingRoundsPage))
-        intFundingRoundsPage = intFundingRoundsPage+1
+        type("w", Key.CTRL)
 #download organization pages
 def downloadOrganizationPage():
     #create organization folder
-    strOrganizationFolderPath = strBaseResFolderPath + r"\source_html\CRUNCHBASE\organization"
+    strOrganizationFolderPath = strBaseResFolderPath + u"\\source_html\\CRUNCHBASE\\organization"
     if not os.path.exists(strOrganizationFolderPath):
         os.mkdir(strOrganizationFolderPath)
     #read organization_url_list.txt 
-    strOrganizationUrlListFilePath = strBaseResFolderPath + r"\parsed_result\CRUNCHBASE\organization\organization_url_list.txt"
+    strOrganizationUrlListFilePath = strBaseResFolderPath + u"\\parsed_result\\CRUNCHBASE\\organization\\organization_url_list.txt"
     orgUrlListFile = open(strOrganizationUrlListFilePath)
     intOrganizationPageIndex = 1
     for strOrganizationUrl in orgUrlListFile:#organization loop
@@ -240,6 +240,8 @@ def downloadOrganizationPage():
         saveCurrentPage(strFolderPath=strOrganizationFolderPath, strFilename="%d_organization.html"%intOrganizationPageIndex)
         intOrganizationPageIndex = intOrganizationPageIndex+1
         wait(5)
+    else:
+        type("w", Key.CTRL)
     
 #main entry point
 if __name__ == "__main__":
