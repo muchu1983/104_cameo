@@ -30,7 +30,7 @@ dicRegion = {
 
 dicPng = {
     "chrome_home":"chrome_home.png",
-    "chrome_stop": "chrome_stop.png",
+    "chrome_stop":"chrome_stop.png",
     "chrome_reload":"chrome_reload.png",
     "chrome_download_finished":"chrome_download_finished.png",
     "page_end_about":"page_end_about.png",
