@@ -41,7 +41,7 @@ dicPng = {
     "page_filter_funded_companies_btn":"page_filter_funded_companies_btn.png",
     "page_filter_funded_categories_btn":"page_filter_funded_categories_btn.png",
     "page_filter_funded_categories_2_btn":"page_filter_funded_categories_2_btn.png",
-    "page_category_text_FinTech":"page_category_text_FinTech.png",
+    "page_category_target_btn":Pattern("page_category_target_btn.png").targetOffset(-100,40),
     "page_query_input":Pattern("page_query_input.png").targetOffset(-100,0),
     "page_buy_btn":"page_buy_btn.png"
 }
@@ -204,7 +204,7 @@ def downloadSearchFundingRoundsPage(strCategoryText=None):
     wait(5)
     pasteClipboardText(strText=strCategoryText)
     wait(5)
-    dicRegion["regNE"].click(dicPng["page_category_text_%s"%strCategoryText])
+    dicRegion["regNE"].click(dicPng["page_category_target_btn"])
     wait(5)
     dicRegion["regLeft"].click(dicPng["page_search_btn"])
     wait(5)

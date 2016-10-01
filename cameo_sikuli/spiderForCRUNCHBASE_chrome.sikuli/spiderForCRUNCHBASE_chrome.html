@@ -113,7 +113,7 @@ dicPng = {
     <span class="str">"page_filter_funded_companies_btn"</span>:<img src="page_filter_funded_companies_btn.png" />,
     <span class="str">"page_filter_funded_categories_btn"</span>:<img src="page_filter_funded_categories_btn.png" />,
     <span class="str">"page_filter_funded_categories_2_btn"</span>:<img src="page_filter_funded_categories_2_btn.png" />,
-    <span class="str">"page_category_text_FinTech"</span>:<img src="page_category_text_FinTech.png" />,
+    <span class="str">"page_category_target_btn"</span>:Pattern(<img src="page_category_target_btn.png" />).targetOffset(-<span class="dig">100</span>,<span class="dig">40</span>),
     <span class="str">"page_query_input"</span>:Pattern(<img src="page_query_input.png" />).targetOffset(-<span class="dig">100</span>,<span class="dig">0</span>),
     <span class="str">"page_buy_btn"</span>:<img src="page_buy_btn.png" />
 }
@@ -125,7 +125,7 @@ lstStrCategoryName = [
     <span class="str">"technology"</span>, <span class="str">"theatre"</span>, <span class="str">"transmedia"</span>, <span class="str">"video_web"</span>, <span class="str">"writing"</span>
 ]
 sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
-strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"</span>
+strBaseResFolderPath = <span class="str">u"C:\\Users\\Administrator\\Desktop\\pyWorkspace\\CAMEO_git_code\\cameo_res"</span>
 <span class="cmt">#open chrome
 </span><span class="kw">def</span> openChrome():
     <span class="cmt">#close prev chrome
@@ -276,12 +276,12 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
     <span class="skw">wait</span>(<span class="dig">5</span>)
     pasteClipboardText(strText=strCategoryText)
     <span class="skw">wait</span>(<span class="dig">5</span>)
-    dicRegion[<span class="str">"regNE"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_category_text_%s"</span>%strCategoryText])
+    dicRegion[<span class="str">"regNE"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_category_target_btn"</span>])
     <span class="skw">wait</span>(<span class="dig">5</span>)
     dicRegion[<span class="str">"regLeft"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_search_btn"</span>])
     <span class="skw">wait</span>(<span class="dig">5</span>)
     <span class="cmt">#create CRUNCHBASE folder
-</span>    strSearchFolderPath = strBaseResFolderPath + <span class="str">r"\source_html\CRUNCHBASE"</span>
+</span>    strSearchFolderPath = strBaseResFolderPath + <span class="str">u"\\source_html\\CRUNCHBASE"</span>
     <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strSearchFolderPath):
         os.mkdir(strSearchFolderPath)
     intFundingRoundsPage = <span class="dig">1</span>
@@ -293,15 +293,15 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         <span class="skw">wait</span>(<span class="dig">1</span>)
     <span class="kw">else</span>:
         saveCurrentPage(strFolderPath=strSearchFolderPath, strFilename=<span class="str">"%s_%d_funding_rounds.html"</span>%(strCategoryText, intFundingRoundsPage))
-        intFundingRoundsPage = intFundingRoundsPage+<span class="dig">1</span>
+        <span class="skw">type</span>(<span class="str">"w"</span>, Key.CTRL)
 <span class="cmt">#download organization pages
 </span><span class="kw">def</span> downloadOrganizationPage():
     <span class="cmt">#create organization folder
-</span>    strOrganizationFolderPath = strBaseResFolderPath + <span class="str">r"\source_html\CRUNCHBASE\organization"</span>
+</span>    strOrganizationFolderPath = strBaseResFolderPath + <span class="str">u"\\source_html\\CRUNCHBASE\\organization"</span>
     <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strOrganizationFolderPath):
         os.mkdir(strOrganizationFolderPath)
     <span class="cmt">#read organization_url_list.txt 
-</span>    strOrganizationUrlListFilePath = strBaseResFolderPath + <span class="str">r"\parsed_result\CRUNCHBASE\organization\organization_url_list.txt"</span>
+</span>    strOrganizationUrlListFilePath = strBaseResFolderPath + <span class="str">u"\\parsed_result\\CRUNCHBASE\\organization\\organization_url_list.txt"</span>
     orgUrlListFile = open(strOrganizationUrlListFilePath)
     intOrganizationPageIndex = <span class="dig">1</span>
     <span class="kw">for</span> strOrganizationUrl <span class="kw">in</span> orgUrlListFile:<span class="cmt">#organization loop</span>
@@ -312,6 +312,8 @@ strBaseResFolderPath = <span class="str">r"C:\Users\Administrator\Desktop\pyWork
         saveCurrentPage(strFolderPath=strOrganizationFolderPath, strFilename=<span class="str">"%d_organization.html"</span>%intOrganizationPageIndex)
         intOrganizationPageIndex = intOrganizationPageIndex+<span class="dig">1</span>
         <span class="skw">wait</span>(<span class="dig">5</span>)
+    <span class="kw">else</span>:
+        <span class="skw">type</span>(<span class="str">"w"</span>, Key.CTRL)
 
 <span class="cmt">#main entry point
 </span><span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
