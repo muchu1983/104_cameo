@@ -69,18 +69,18 @@ class SpiderForCRUNCHBASE:
 
     #下載 organization 頁面
     def handleOrganizationPage(self, arg1=None):
-        strOrganizationFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\CRUNCHBASE\\organization")
-        if not os.path.exists(strOrganizationFolderPath):
+        strOrganizationResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\CRUNCHBASE\\organization")
+        if not os.path.exists(strOrganizationResultFolderPath):
             #mkdir parsed_result/CRUNCHBASE/organization/
-            os.mkdir(strOrganizationFolderPath)
+            os.mkdir(strOrganizationResultFolderPath)
         lstStrOrganizationUrl = self.db.fetchallNotObtainedOrganizationUrl()
-        strOrganizationUrlListFilePath = strOrganizationFolderPath + u"\\organization_url_list.txt"
-        #刪除原本的 organization_url_list.txt
+        strOrganizationUrlListFilePath = strOrganizationResultFolderPath + u"\\organization_url_list.json"
+        #刪除原本的 organization_url_list.json
         if os.path.exists(strOrganizationUrlListFilePath):
             os.remove(strOrganizationUrlListFilePath)
-        #建立新的 organization_url_list.txt
-        for strOrganizationUrl in lstStrOrganizationUrl:
-            self.utility.appendLineToTxtIfNotExists(strTxtFilePath=strOrganizationUrlListFilePath, strLine=strOrganizationUrl)
+        #建立新的 organization_url_list.json
+        dicLstStrOrganizationUrl = {"organization_url_list": lstStrOrganizationUrl}
+        self.utility.writeObjectToJsonFile(dicData=dicLstStrOrganizationUrl, strJsonFilePath=strOrganizationUrlListFilePath)
         call(
             [
                 r"cameo_sikuli\runsikulix.cmd", "-c",

@@ -14,6 +14,9 @@ import datetime
 import random
 from java.awt import Toolkit
 from java.awt.datatransfer import StringSelection
+sys.path.append("cameo_sikuli\\jyson-1.0.2.jar")
+from com.xhaus.jyson import JysonCodec as jyson
+
 screen = Screen()
 dicRegion = {
     "regUp":Region(0,0,screen.getW(),screen.getH()/2),
@@ -26,9 +29,10 @@ dicRegion = {
     "regNW":Region(0,0,screen.getW()/2,screen.getH()/2),
     "regCenter":Region(screen.getW()/4,screen.getH()/4,screen.getW()/2,screen.getH()/2)
 }
+
 dicPng = {
     "chrome_home":"chrome_home.png",
-    "chrome_stop": "chrome_stop.png",
+    "chrome_stop":"chrome_stop.png",
     "chrome_reload":"chrome_reload.png",
     "chrome_download_finished":"chrome_download_finished.png",
     "page_your_interruption":"page_your_interruption.png",
@@ -45,6 +49,7 @@ dicPng = {
     "page_query_input":Pattern("page_query_input.png").targetOffset(-100,0),
     "page_buy_btn":"page_buy_btn.png"
 }
+
 lstStrCategoryName = [
     "animals", "art", "comic", "community", "dance",
     "design", "education", "environment", "fashion",
@@ -52,8 +57,10 @@ lstStrCategoryName = [
     "politics", "religion", "small_business", "sports",
     "technology", "theatre", "transmedia", "video_web", "writing"
 ]
+
 sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
-strBaseResFolderPath = u"C:\\Users\\Administrator\\Desktop\\pyWorkspace\\CAMEO_git_code\\cameo_res"
+strBaseResFolderPath = u"C:\\Users\\muchu\\Desktop\\caseWorkspace\\003-卡米爾scrapy\\CAMEO_git_code\\cameo_res"
+
 #open chrome
 def openChrome():
     #close prev chrome
@@ -65,24 +72,37 @@ def openChrome():
     wait(5)#wait to running
     dicRegion["regNW"].wait(dicPng["chrome_home"], 300)
     dicRegion["regNW"].click(dicPng["chrome_home"])
-    dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 10)
+    waitChromeLoadingFinished()
+
+#wait chrome loading finished
+def waitChromeLoadingFinished():
+    wait(3)
+    while dicRegion["regNW"].exists(dicPng["chrome_stop"], 2):
+        logging.info(str(dicRegion["regNW"].exists(dicPng["chrome_stop"], 2)))
+        logging.info("wait chrome loading...")
+        wait(1)
     dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
+    logging.info("chrome loading finished.")
+
 # delete origin text
 def delOriginText():
     type("a", Key.CTRL)
     wait(0.5)
     type(Key.BACKSPACE)
     wait(0.5)
+
 # paste text by using clipboard
 def pasteClipboardText(strText=None):
     sysClipboard.setContents(StringSelection(u""+strText), None)
     wait(0.5)
     type("v", Key.CTRL)
     wait(0.5)
+
 #roll to page end
 def rollToPageEnd():
     type(Key.END)
     dicRegion["regLeft"].wait(dicPng["page_end_about"], 300)
+
 #type url on chrome
 def typeUrlOnChrome(strUrlText=None):
     type("l", Key.CTRL)
@@ -92,13 +112,12 @@ def typeUrlOnChrome(strUrlText=None):
     wait(0.5)
     type(Key.ENTER)
     wait(0.5)
-    dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 30)
-    dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
+    waitChromeLoadingFinished()
     wait(5)
     #recheck for server may redirect to home page
-    dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 30)
-    dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
+    waitChromeLoadingFinished()
     wait(0.5)
+
 #choose folder at save progress
 def typeFolderPath(strFolderPath=None):
     wait(0.5)
@@ -111,6 +130,7 @@ def typeFolderPath(strFolderPath=None):
     wait(0.5)
     type(Key.ENTER)
     wait(0.5)
+
 # type in filename at save progress
 def typeFilename(strFilename=None):
     wait(0.5)
@@ -122,12 +142,12 @@ def typeFilename(strFilename=None):
     wait(0.5)
     pasteClipboardText(strText=strFilename)
     wait(0.5)
+
 #rightclick on image to save current page
 def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None):
     logging.info("prepare to save " + strFilename)
     wait(10)
-    dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 30)
-    dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
+    waitChromeLoadingFinished()
     rightClick(onImage)
     dicRegion["regCenter"].wait(dicPng["os_right_save_as"], 300)
     dicRegion["regCenter"].click(dicPng["os_right_save_as"])
@@ -142,12 +162,12 @@ def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None
     hover(Location(100, 620))
     logging.info("save timestamp: %s"%datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     dicRegion["regSW"].wait(dicPng["chrome_download_finished"], 300)#wait save complete
+
 #ask chrome save current page
 def saveCurrentPage(strFolderPath=None, strFilename=None):
     logging.info("prepare to save " + strFilename)
     wait(10)
-    dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 30)
-    dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
+    waitChromeLoadingFinished()
     type("s", Key.CTRL)
     dicRegion["regDown"].wait(dicPng["os_save_btn"], 300)
     if strFolderPath != None:
@@ -160,6 +180,7 @@ def saveCurrentPage(strFolderPath=None, strFilename=None):
     hover(Location(100, 620))
     logging.info("save timestamp: %s"%datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     dicRegion["regSW"].wait(dicPng["chrome_download_finished"], 300)#wait save complete
+
 #fake random request confuse browser fingerpring algorithm
 def fakeRandomRequest():
     wait(0.5)
@@ -180,13 +201,14 @@ def fakeRandomRequest():
         typeUrlOnChrome(strUrlText=strFakeUrl)
         wait(5)
     wait(0.5)
+
 # go to search page
 def goSearchFundingRoundsPage():
     openChrome()
     typeUrlOnChrome(strUrlText="https://www.crunchbase.com/app/search/funding_rounds")
     dicRegion["regUp"].wait(dicPng["page_search_btn"], 300)
-    dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 30)
-    dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
+    waitChromeLoadingFinished()
+
 #download explore pages
 def downloadSearchFundingRoundsPage(strCategoryText=None):
     goSearchFundingRoundsPage()
@@ -211,7 +233,10 @@ def downloadSearchFundingRoundsPage(strCategoryText=None):
     #create CRUNCHBASE folder
     strSearchFolderPath = strBaseResFolderPath + u"\\source_html\\CRUNCHBASE"
     if not os.path.exists(strSearchFolderPath):
-        os.mkdir(strSearchFolderPath)
+        try:
+            os.mkdir(strSearchFolderPath)
+        except:
+            logging.warning("folder already exists: %s"%strSearchFolderPath)
     intFundingRoundsPage = 1
     while not dicRegion["regDown"].exists(dicPng["page_buy_btn"]):
         saveCurrentPage(strFolderPath=strSearchFolderPath, strFilename="%s_%d_funding_rounds.html"%(strCategoryText, intFundingRoundsPage))
@@ -222,27 +247,33 @@ def downloadSearchFundingRoundsPage(strCategoryText=None):
     else:
         saveCurrentPage(strFolderPath=strSearchFolderPath, strFilename="%s_%d_funding_rounds.html"%(strCategoryText, intFundingRoundsPage))
         type("w", Key.CTRL)
+
 #download organization pages
 def downloadOrganizationPage():
     #create organization folder
     strOrganizationFolderPath = strBaseResFolderPath + u"\\source_html\\CRUNCHBASE\\organization"
     if not os.path.exists(strOrganizationFolderPath):
-        os.mkdir(strOrganizationFolderPath)
+        try:
+            os.mkdir(strOrganizationFolderPath)
+        except:
+            logging.warning("folder already exists: %s"%strOrganizationFolderPath)
     #read organization_url_list.txt 
-    strOrganizationUrlListFilePath = strBaseResFolderPath + u"\\parsed_result\\CRUNCHBASE\\organization\\organization_url_list.txt"
-    orgUrlListFile = open(strOrganizationUrlListFilePath)
-    intOrganizationPageIndex = 1
-    for strOrganizationUrl in orgUrlListFile:#organization loop
+    strOrganizationUrlListFilePath = strBaseResFolderPath + u"\\parsed_result\\CRUNCHBASE\\organization\\organization_url_list.json"
+    dicLstOrganizationUrl = None
+    jsonFile = open(strOrganizationUrlListFilePath, "r")
+    dicLstOrganizationUrl = jyson.loads(jsonFile.read(), encoding="utf-8")
+    jsonFile.close()
+    lstStrOrganizationUrl = dicLstOrganizationUrl.get("organization_url_list", [])
+    for strOrganizationUrl in lstStrOrganizationUrl:#organization loop
+        logging.info(u"download organization: %s"%strOrganizationUrl)
         openChrome()
         typeUrlOnChrome(strUrlText=strOrganizationUrl)
-        dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 30)
-        dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
-        saveCurrentPage(strFolderPath=strOrganizationFolderPath, strFilename="%d_organization.html"%intOrganizationPageIndex)
-        intOrganizationPageIndex = intOrganizationPageIndex+1
+        strOrganizationName = re.match(u"^https://www.crunchbase.com/organization/(.*)$", strOrganizationUrl).group(1).strip()
+        saveCurrentPage(strFolderPath=strOrganizationFolderPath, strFilename=u"%s_organization.html"%strOrganizationName)
         wait(5)
     else:
         type("w", Key.CTRL)
-    
+
 #main entry point
 if __name__ == "__main__":
     try:
@@ -260,8 +291,8 @@ if __name__ == "__main__":
     except FindFailed, ff:
         print(str(ff))
         popup(u"spider cant find png error! timestamp: %s"%datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-    except Exception, ex:
-        print(str(ex))
-        popup(u"spider unknow error! timestamp: %s"%datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-    finally:
-        exit()
+    #except Exception, ex:
+    #    print(str(ex))
+    #    popup(u"spider unknow error! timestamp: %s"%datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    #finally:
+    #    exit()
