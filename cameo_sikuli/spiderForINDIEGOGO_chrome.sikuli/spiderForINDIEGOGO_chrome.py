@@ -14,6 +14,7 @@ import datetime
 import random
 from java.awt import Toolkit
 from java.awt.datatransfer import StringSelection
+
 screen = Screen()
 dicRegion = {
     "regUp":Region(0,0,screen.getW(),screen.getH()/2),
@@ -26,6 +27,7 @@ dicRegion = {
     "regNW":Region(0,0,screen.getW()/2,screen.getH()/2),
     "regCenter":Region(screen.getW()/4,screen.getH()/4,screen.getW()/2,screen.getH()/2)
 }
+
 dicPng = {
     "chrome_home":"chrome_home.png",
     "chrome_stop": "chrome_stop.png",
@@ -53,6 +55,7 @@ dicPng = {
     "os_right_save_as":"os_right_save_as.png",
     "os_save_btn":"os_save_btn.png",
 }
+
 lstStrCategoryName = [
     "animals", "art", "comic", "community", "dance",
     "design", "education", "environment", "fashion",
@@ -60,8 +63,10 @@ lstStrCategoryName = [
     "politics", "religion", "small_business", "sports",
     "technology", "theatre", "transmedia", "video_web", "writing"
 ]
+
 sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
 strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"
+
 #open chrome
 def openChrome():
     #close prev chrome
@@ -73,24 +78,37 @@ def openChrome():
     wait(5)#wait to running
     dicRegion["regNW"].wait(dicPng["chrome_home"], 300)
     dicRegion["regNW"].click(dicPng["chrome_home"])
-    dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 10)
+    waitChromeLoadingFinished()
+
+#wait chrome loading finished
+def waitChromeLoadingFinished():
+    wait(3)
+    while dicRegion["regNW"].exists(dicPng["chrome_stop"], 2):
+        logging.info(str(dicRegion["regNW"].exists(dicPng["chrome_stop"], 2)))
+        logging.info("wait chrome loading...")
+        wait(1)
     dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
+    logging.info("chrome loading finished.")
+
 # delete origin text
 def delOriginText():
     type("a", Key.CTRL)
     wait(0.5)
     type(Key.BACKSPACE)
     wait(0.5)
+
 # paste text by using clipboard
 def pasteClipboardText(strText=None):
     sysClipboard.setContents(StringSelection(u""+strText), None)
     wait(0.5)
     type("v", Key.CTRL)
     wait(0.5)
+
 #roll to page end
 def rollToPageEnd():
     type(Key.END)
     dicRegion["regLeft"].wait(dicPng["page_end_about"], 300)
+
 # open all project
 def unfoldCategoryPage():
     rollToPageEnd()
@@ -108,6 +126,7 @@ def unfoldCategoryPage():
             wait(0.5)
         dicRegion["regLeft"].wait(dicPng["page_end_camp"], 300)
         intCategoryUnfoldTimes = intCategoryUnfoldTimes+1
+
 #unfold (updates comments backers) showmore
 def unfoldUCBShowmore():
     while(not dicRegion["regLeft"].exists(dicPng["page_end_about"])):
@@ -119,12 +138,14 @@ def unfoldUCBShowmore():
             wait(2)
     type(Key.HOME)
     dicRegion["regSW"].wait(dicPng["page_blur_story"], 300)
+
 #pause if interruption page found
 def checkAndPauseBeforeSave():
     if dicRegion["regLeft"].exists(dicPng["page_your_interruption"]):
         popup(u"distil networks found us! （╯‵□′）╯︵┴─┴")
     if dicRegion["regUp"].exists(dicPng["page_proxy_error"]):
         popup(u"proxy error! （╯‵□′）╯︵┴─┴")
+
 #type url on chrome
 def typeUrlOnChrome(strUrlText=None):
     while True:
@@ -149,13 +170,14 @@ def typeUrlOnChrome(strUrlText=None):
         else:
             #ok everything is right, go out while loop
             break
+
 # go to explore page
 def goExplorePage():
     openChrome()
     typeUrlOnChrome(strUrlText="https://www.indiegogo.com/explore")
     dicRegion["regUp"].wait(dicPng["page_explore"], 300)
-    dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 30)
-    dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
+    waitChromeLoadingFinished()
+
 #choose folder at save progress
 def typeFolderPath(strFolderPath=None):
     wait(0.5)
@@ -168,6 +190,7 @@ def typeFolderPath(strFolderPath=None):
     wait(0.5)
     type(Key.ENTER)
     wait(0.5)
+
 # type in filename at save progress
 def typeFilename(strFilename=None):
     wait(0.5)
@@ -179,12 +202,12 @@ def typeFilename(strFilename=None):
     wait(0.5)
     pasteClipboardText(strText=strFilename)
     wait(0.5)
+
 #rightclick on image to save current page
 def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None):
     logging.info("prepare to save " + strFilename)
     wait(10)
-    dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 30)
-    dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
+    waitChromeLoadingFinished()
     checkAndPauseBeforeSave()
     rightClick(onImage)
     dicRegion["regCenter"].wait(dicPng["os_right_save_as"], 300)
@@ -200,12 +223,12 @@ def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None
     hover(Location(100, 620))
     logging.info("save timestamp: %s"%datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     dicRegion["regSW"].wait(dicPng["chrome_download_finished"], 300)#wait save complete
+
 #ask chrome save current page
 def saveCurrentPage(strFolderPath=None, strFilename=None):
     logging.info("prepare to save " + strFilename)
     wait(10)
-    dicRegion["regNW"].waitVanish(dicPng["chrome_stop"], 30)
-    dicRegion["regNW"].wait(dicPng["chrome_reload"], 300)
+    waitChromeLoadingFinished()
     checkAndPauseBeforeSave()
     type("s", Key.CTRL)
     dicRegion["regDown"].wait(dicPng["os_save_btn"], 300)
@@ -219,6 +242,7 @@ def saveCurrentPage(strFolderPath=None, strFilename=None):
     hover(Location(100, 620))
     logging.info("save timestamp: %s"%datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     dicRegion["regSW"].wait(dicPng["chrome_download_finished"], 300)#wait save complete
+
 #fake random request confuse browser fingerpring algorithm
 def fakeRandomRequest():
     wait(0.5)
@@ -239,6 +263,8 @@ def fakeRandomRequest():
         typeUrlOnChrome(strUrlText=strFakeUrl)
         wait(5)
     wait(0.5)
+
+#save update comment backer page randomly
 def randomSaveUCBPages(strProjUrl=None, strProjName=None, strProjectsFolderPath=None):
     lstStrUCB = ["updates", "comments", "backers"]
     for i in range(3):
@@ -251,6 +277,7 @@ def randomSaveUCBPages(strProjUrl=None, strProjName=None, strProjectsFolderPath=
         wait(0.5)
         #unfoldUCBShowmore()
         saveCurrentPage(strFolderPath=strProjectsFolderPath, strFilename=strProjName + "_%s.html"%strUCB)
+
 #download explore pages
 def downloadExplorePages():
     goExplorePage()
@@ -258,6 +285,7 @@ def downloadExplorePages():
     if not os.path.exists(strExploreFolderPath):
         os.mkdir(strExploreFolderPath)
     saveCurrentPage(strFolderPath=strExploreFolderPath, strFilename="explore.html")
+
 #download category pages
 def downloadCategoryPages(strTargetCategory=None):
     strCategoryUrlListFilePath = strBaseResFolderPath + r"\parsed_result\INDIEGOGO\category_url_list.txt"
@@ -284,6 +312,7 @@ def downloadCategoryPages(strTargetCategory=None):
             unfoldCategoryPage()
             saveCurrentPage(strFolderPath=strCategoryFolderPath, strFilename="category.html")
     catUrlListFile.close()
+
 #download project pages
 def downloadProjectPages(strTargetCategory=None):
     if strTargetCategory == "automode": #自動抓取所有分類的專案 html
@@ -341,6 +370,7 @@ def downloadProjectPages(strTargetCategory=None):
         #save updates comments backers html
         randomSaveUCBPages(strProjUrl=strProjUrl, strProjName=strProjName, strProjectsFolderPath=strProjectsFolderPath)
     projUrlListFile.close()
+
 #download individuals pages
 def downloadIndividualsPages(strTargetCategory=None):
     if strTargetCategory == "automode": #自動抓取所有分類的個人資料 html
@@ -394,6 +424,7 @@ def downloadIndividualsPages(strTargetCategory=None):
             logging.warning("spider cant find png error! (skip it now) %s"%strIndividualsUrl)
             continue
     individualsUrlListFile.close()
+
 #main entry point
 if __name__ == "__main__":
     try:

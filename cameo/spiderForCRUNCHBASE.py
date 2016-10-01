@@ -39,6 +39,8 @@ class SpiderForCRUNCHBASE:
         #若不存在，建立新的 category_list.json
         if not os.path.exists(strCategoryListFilePath):
             dicCategory = {
+                "intMinRange":1,
+                "intMaxRange":121,
                 "1":"Artificial Intelligence",
                 "2":"Operating Systems",
                 "3":"UX Design",

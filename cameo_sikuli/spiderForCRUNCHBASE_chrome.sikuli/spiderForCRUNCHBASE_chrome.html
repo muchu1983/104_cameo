@@ -102,7 +102,7 @@ dicRegion = {
     <span class="str">"regCenter"</span>:Region(screen.getW()/<span class="dig">4</span>,screen.getH()/<span class="dig">4</span>,screen.getW()/<span class="dig">2</span>,screen.getH()/<span class="dig">2</span>)
 }
 
-dicPng = {
+dicDevelPng = {
     <span class="str">"chrome_home"</span>:<img src="chrome_home.png" />,
     <span class="str">"chrome_stop"</span>:<img src="chrome_stop.png" />,
     <span class="str">"chrome_reload"</span>:<img src="chrome_reload.png" />,
@@ -119,8 +119,30 @@ dicPng = {
     <span class="str">"page_filter_funded_categories_2_btn"</span>:<img src="page_filter_funded_categories_2_btn.png" />,
     <span class="str">"page_category_target_btn"</span>:Pattern(<img src="page_category_target_btn.png" />).targetOffset(-<span class="dig">100</span>,<span class="dig">40</span>), <span class="cmt">#Pattern targetOffset(-100,40)</span>
     <span class="str">"page_query_input"</span>:Pattern(<img src="page_query_input.png" />).targetOffset(-<span class="dig">100</span>,<span class="dig">0</span>), <span class="cmt">#Pattern targetOffset(-100,0)</span>
-    <span class="str">"page_sidebar_end"</span>:<img src="page_sidebar_end.png" />
+    <span class="str">"page_sidebar_end"</span>:Pattern(<img src="page_sidebar_end.png" />).similar(<span class="dig">0.80</span>)
 }
+
+dicRunningPng = {
+    <span class="str">"chrome_home"</span>:<img src="chrome_home.png" />,
+    <span class="str">"chrome_stop"</span>:<img src="chrome_stop.png" />,
+    <span class="str">"chrome_reload"</span>:<img src="chrome_reload.png" />,
+    <span class="str">"chrome_download_finished"</span>:<img src="chrome_download_finished.png" />,
+    <span class="str">"page_your_interruption"</span>:<img src="page_your_interruption.png" />,
+    <span class="str">"page_proxy_error"</span>:<img src="page_proxy_error.png" />,
+    <span class="str">"os_right_save_as"</span>:<img src="os_right_save_as.png" />,
+    <span class="str">"os_save_btn"</span>:<img src="os_save_btn.png" />,
+    <span class="str">"page_search_btn"</span>:<img src="page_search_btn.png" />,
+    <span class="str">"page_filter_btn"</span>:<img src="page_filter_btn.png" />,
+    <span class="str">"page_filter_funded_company_btn"</span>:<img src="page_filter_funded_company_btn.png" />,
+    <span class="str">"page_filter_funded_companies_btn"</span>:<img src="page_filter_funded_companies_btn.png" />,
+    <span class="str">"page_filter_funded_categories_btn"</span>:<img src="page_filter_funded_categories_btn.png" />,
+    <span class="str">"page_filter_funded_categories_2_btn"</span>:<img src="page_filter_funded_categories_2_btn.png" />,
+    <span class="str">"page_category_target_btn"</span>:Pattern(<img src="page_category_target_btn.png" />).targetOffset(-<span class="dig">100</span>,<span class="dig">40</span>), <span class="cmt">#Pattern targetOffset(-100,40)</span>
+    <span class="str">"page_query_input"</span>:Pattern(<img src="page_query_input.png" />).targetOffset(-<span class="dig">100</span>,<span class="dig">0</span>), <span class="cmt">#Pattern targetOffset(-100,0)</span>
+    <span class="str">"page_sidebar_end"</span>:Pattern(<img src="page_sidebar_end.png" />).similar(<span class="dig">0.80</span>)
+}
+
+dicPng = dicDevelPng
 
 sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
 strBaseResFolderPath = <span class="str">u"C:\\Users\\muchu\\Desktop\\caseWorkspace\\003-卡米爾scrapy\\CAMEO_git_code\\cameo_res"</span>
@@ -276,7 +298,9 @@ strBaseResFolderPath = <span class="str">u"C:\\Users\\muchu\\Desktop\\caseWorksp
         jsonFile = open(strCategoryListFilePath, <span class="str">"r"</span>)
         dicCategoryList = jyson.loads(jsonFile.read(), encoding=<span class="str">"utf-8"</span>)
         jsonFile.close()
-        <span class="kw">for</span> intCategoryId <span class="kw">in</span> range(<span class="dig">1</span>, <span class="dig">4</span>): <span class="cmt">#category loop</span>
+        intMinRange = dicCategoryList.get(<span class="str">"intMinRange"</span>, <span class="dig">1</span>)
+        intMaxRange = dicCategoryList.get(<span class="str">"intMaxRange"</span>, <span class="dig">121</span>)
+        <span class="kw">for</span> intCategoryId <span class="kw">in</span> range(intMinRange, intMaxRange+<span class="dig">1</span>): <span class="cmt">#category loop</span>
             strTargetCategoryText = dicCategoryList.get(str(intCategoryId), None)
             <span class="kw">if</span> strTargetCategoryText <span class="kw">is</span> <span class="kw">not</span> None:
                 downloadSearchFundingRoundsPage(strCategoryText=strTargetCategoryText)

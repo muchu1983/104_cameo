@@ -30,7 +30,7 @@ dicRegion = {
     "regCenter":Region(screen.getW()/4,screen.getH()/4,screen.getW()/2,screen.getH()/2)
 }
 
-dicPng = {
+dicDevelPng = {
     "chrome_home":"chrome_home.png",
     "chrome_stop":"chrome_stop.png",
     "chrome_reload":"chrome_reload.png",
@@ -47,8 +47,30 @@ dicPng = {
     "page_filter_funded_categories_2_btn":"page_filter_funded_categories_2_btn.png",
     "page_category_target_btn":Pattern("page_category_target_btn.png").targetOffset(-100,40), #Pattern targetOffset(-100,40)
     "page_query_input":Pattern("page_query_input.png").targetOffset(-100,0), #Pattern targetOffset(-100,0)
-    "page_sidebar_end":"page_sidebar_end.png"
+    "page_sidebar_end":Pattern("page_sidebar_end.png").similar(0.80)
 }
+
+dicRunningPng = {
+    "chrome_home":"chrome_home.png",
+    "chrome_stop":"chrome_stop.png",
+    "chrome_reload":"chrome_reload.png",
+    "chrome_download_finished":"chrome_download_finished.png",
+    "page_your_interruption":"page_your_interruption.png",
+    "page_proxy_error":"page_proxy_error.png",
+    "os_right_save_as":"os_right_save_as.png",
+    "os_save_btn":"os_save_btn.png",
+    "page_search_btn":"page_search_btn.png",
+    "page_filter_btn":"page_filter_btn.png",
+    "page_filter_funded_company_btn":"page_filter_funded_company_btn.png",
+    "page_filter_funded_companies_btn":"page_filter_funded_companies_btn.png",
+    "page_filter_funded_categories_btn":"page_filter_funded_categories_btn.png",
+    "page_filter_funded_categories_2_btn":"page_filter_funded_categories_2_btn.png",
+    "page_category_target_btn":Pattern("page_category_target_btn.png").targetOffset(-100,40), #Pattern targetOffset(-100,40)
+    "page_query_input":Pattern("page_query_input.png").targetOffset(-100,0), #Pattern targetOffset(-100,0)
+    "page_sidebar_end":Pattern("page_sidebar_end.png").similar(0.80)
+}
+
+dicPng = dicDevelPng
 
 sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
 strBaseResFolderPath = u"C:\\Users\\muchu\\Desktop\\caseWorkspace\\003-卡米爾scrapy\\CAMEO_git_code\\cameo_res"
@@ -204,7 +226,9 @@ def downloadSearchFundingRoundsPage(strCategoryText=None):
         jsonFile = open(strCategoryListFilePath, "r")
         dicCategoryList = jyson.loads(jsonFile.read(), encoding="utf-8")
         jsonFile.close()
-        for intCategoryId in range(1, 4): #category loop
+        intMinRange = dicCategoryList.get("intMinRange", 1)
+        intMaxRange = dicCategoryList.get("intMaxRange", 121)
+        for intCategoryId in range(intMinRange, intMaxRange+1): #category loop
             strTargetCategoryText = dicCategoryList.get(str(intCategoryId), None)
             if strTargetCategoryText is not None:
                 downloadSearchFundingRoundsPage(strCategoryText=strTargetCategoryText)
