@@ -119,16 +119,8 @@ dicPng = {
     <span class="str">"page_filter_funded_categories_2_btn"</span>:<img src="page_filter_funded_categories_2_btn.png" />,
     <span class="str">"page_category_target_btn"</span>:Pattern(<img src="page_category_target_btn.png" />).targetOffset(-<span class="dig">100</span>,<span class="dig">40</span>), <span class="cmt">#Pattern targetOffset(-100,40)</span>
     <span class="str">"page_query_input"</span>:Pattern(<img src="page_query_input.png" />).targetOffset(-<span class="dig">100</span>,<span class="dig">0</span>), <span class="cmt">#Pattern targetOffset(-100,0)</span>
-    <span class="str">"page_buy_btn"</span>:<img src="page_buy_btn.png" />
+    <span class="str">"page_sidebar_end"</span>:<img src="page_sidebar_end.png" />
 }
-
-lstStrCategoryName = [
-    <span class="str">"animals"</span>, <span class="str">"art"</span>, <span class="str">"comic"</span>, <span class="str">"community"</span>, <span class="str">"dance"</span>,
-    <span class="str">"design"</span>, <span class="str">"education"</span>, <span class="str">"environment"</span>, <span class="str">"fashion"</span>,
-    <span class="str">"film"</span>, <span class="str">"food"</span>, <span class="str">"gaming"</span>, <span class="str">"health"</span>, <span class="str">"music"</span>, <span class="str">"photography"</span>,
-    <span class="str">"politics"</span>, <span class="str">"religion"</span>, <span class="str">"small_business"</span>, <span class="str">"sports"</span>,
-    <span class="str">"technology"</span>, <span class="str">"theatre"</span>, <span class="str">"transmedia"</span>, <span class="str">"video_web"</span>, <span class="str">"writing"</span>
-]
 
 sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
 strBaseResFolderPath = <span class="str">u"C:\\Users\\muchu\\Desktop\\caseWorkspace\\003-卡米爾scrapy\\CAMEO_git_code\\cameo_res"</span>
@@ -169,11 +161,6 @@ strBaseResFolderPath = <span class="str">u"C:\\Users\\muchu\\Desktop\\caseWorksp
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
     <span class="skw">type</span>(<span class="str">"v"</span>, Key.CTRL)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
-
-<span class="cmt">#roll to page end
-</span><span class="kw">def</span> rollToPageEnd():
-    <span class="skw">type</span>(Key.END)
-    dicRegion[<span class="str">"regLeft"</span>].<span class="skw">wait</span>(dicPng[<span class="str">"page_end_about"</span>], <span class="dig">300</span>)
 
 <span class="cmt">#type url on chrome
 </span><span class="kw">def</span> typeUrlOnChrome(strUrlText=None):
@@ -322,7 +309,7 @@ strBaseResFolderPath = <span class="str">u"C:\\Users\\muchu\\Desktop\\caseWorksp
             <span class="kw">except</span>:
                 logging.warning(<span class="str">"folder already exists: %s"</span>%strSearchFolderPath)
         intFundingRoundsPage = <span class="dig">1</span>
-        <span class="kw">while</span> <span class="kw">not</span> dicRegion[<span class="str">"regDown"</span>].exists(dicPng[<span class="str">"page_buy_btn"</span>]):
+        <span class="kw">while</span> <span class="kw">not</span> dicRegion[<span class="str">"regSE"</span>].exists(dicPng[<span class="str">"page_sidebar_end"</span>]):
             saveCurrentPage(strFolderPath=strSearchFolderPath, strFilename=<span class="str">"%s_%d_funding_rounds.html"</span>%(strCategoryText, intFundingRoundsPage))
             intFundingRoundsPage = intFundingRoundsPage+<span class="dig">1</span>
             hover(Location(screen.getW()/<span class="dig">2</span>, screen.getH()-<span class="dig">100</span>))
@@ -375,11 +362,11 @@ strBaseResFolderPath = <span class="str">u"C:\\Users\\muchu\\Desktop\\caseWorksp
     <span class="kw">except</span> FindFailed, ff:
         <span class="kw">print</span>(str(ff))
         <span class="skw">popup</span>(<span class="str">u"spider cant find png error! timestamp: %s"</span>%datetime.datetime.now().strftime(<span class="str">"%Y-%m-%d %H:%M:%S"</span>))
-    <span class="cmt">#except Exception, ex:
-</span>    <span class="cmt">#    print(str(ex))
-</span>    <span class="cmt">#    popup(u"spider unknow error! timestamp: %s"%datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-</span>    <span class="cmt">#finally:
-</span>    <span class="cmt">#    exit()</span>
+    <span class="kw">except</span> Exception, ex:
+        <span class="kw">print</span>(str(ex))
+        <span class="skw">popup</span>(<span class="str">u"spider unknow error! timestamp: %s"</span>%datetime.datetime.now().strftime(<span class="str">"%Y-%m-%d %H:%M:%S"</span>))
+    <span class="kw">finally</span>:
+        exit()
 </pre>
 </body>
 </html>

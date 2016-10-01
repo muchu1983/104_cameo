@@ -47,16 +47,8 @@ dicPng = {
     "page_filter_funded_categories_2_btn":"page_filter_funded_categories_2_btn.png",
     "page_category_target_btn":Pattern("page_category_target_btn.png").targetOffset(-100,40), #Pattern targetOffset(-100,40)
     "page_query_input":Pattern("page_query_input.png").targetOffset(-100,0), #Pattern targetOffset(-100,0)
-    "page_buy_btn":"page_buy_btn.png"
+    "page_sidebar_end":"page_sidebar_end.png"
 }
-
-lstStrCategoryName = [
-    "animals", "art", "comic", "community", "dance",
-    "design", "education", "environment", "fashion",
-    "film", "food", "gaming", "health", "music", "photography",
-    "politics", "religion", "small_business", "sports",
-    "technology", "theatre", "transmedia", "video_web", "writing"
-]
 
 sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
 strBaseResFolderPath = u"C:\\Users\\muchu\\Desktop\\caseWorkspace\\003-卡米爾scrapy\\CAMEO_git_code\\cameo_res"
@@ -97,11 +89,6 @@ def pasteClipboardText(strText=None):
     wait(0.5)
     type("v", Key.CTRL)
     wait(0.5)
-
-#roll to page end
-def rollToPageEnd():
-    type(Key.END)
-    dicRegion["regLeft"].wait(dicPng["page_end_about"], 300)
 
 #type url on chrome
 def typeUrlOnChrome(strUrlText=None):
@@ -250,7 +237,7 @@ def downloadSearchFundingRoundsPage(strCategoryText=None):
             except:
                 logging.warning("folder already exists: %s"%strSearchFolderPath)
         intFundingRoundsPage = 1
-        while not dicRegion["regDown"].exists(dicPng["page_buy_btn"]):
+        while not dicRegion["regSE"].exists(dicPng["page_sidebar_end"]):
             saveCurrentPage(strFolderPath=strSearchFolderPath, strFilename="%s_%d_funding_rounds.html"%(strCategoryText, intFundingRoundsPage))
             intFundingRoundsPage = intFundingRoundsPage+1
             hover(Location(screen.getW()/2, screen.getH()-100))
@@ -303,8 +290,8 @@ if __name__ == "__main__":
     except FindFailed, ff:
         print(str(ff))
         popup(u"spider cant find png error! timestamp: %s"%datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-    #except Exception, ex:
-    #    print(str(ex))
-    #    popup(u"spider unknow error! timestamp: %s"%datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-    #finally:
-    #    exit()
+    except Exception, ex:
+        print(str(ex))
+        popup(u"spider unknow error! timestamp: %s"%datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    finally:
+        exit()
