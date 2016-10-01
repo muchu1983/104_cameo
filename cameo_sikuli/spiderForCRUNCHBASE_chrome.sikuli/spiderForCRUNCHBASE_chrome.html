@@ -117,8 +117,8 @@ dicPng = {
     <span class="str">"page_filter_funded_companies_btn"</span>:<img src="page_filter_funded_companies_btn.png" />,
     <span class="str">"page_filter_funded_categories_btn"</span>:<img src="page_filter_funded_categories_btn.png" />,
     <span class="str">"page_filter_funded_categories_2_btn"</span>:<img src="page_filter_funded_categories_2_btn.png" />,
-    <span class="str">"page_category_target_btn"</span>:Pattern(<img src="page_category_target_btn.png" />).targetOffset(-<span class="dig">100</span>,<span class="dig">40</span>),
-    <span class="str">"page_query_input"</span>:Pattern(<img src="page_query_input.png" />).targetOffset(-<span class="dig">100</span>,<span class="dig">0</span>),
+    <span class="str">"page_category_target_btn"</span>:Pattern(<img src="page_category_target_btn.png" />).targetOffset(-<span class="dig">100</span>,<span class="dig">40</span>), <span class="cmt">#Pattern targetOffset(-100,40)</span>
+    <span class="str">"page_query_input"</span>:Pattern(<img src="page_query_input.png" />).targetOffset(-<span class="dig">100</span>,<span class="dig">0</span>), <span class="cmt">#Pattern targetOffset(-100,0)</span>
     <span class="str">"page_buy_btn"</span>:<img src="page_buy_btn.png" />
 }
 
@@ -283,42 +283,54 @@ strBaseResFolderPath = <span class="str">u"C:\\Users\\muchu\\Desktop\\caseWorksp
 
 <span class="cmt">#download explore pages
 </span><span class="kw">def</span> downloadSearchFundingRoundsPage(strCategoryText=None):
-    goSearchFundingRoundsPage()
-    dicRegion[<span class="str">"regUp"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_filter_btn"</span>])
-    <span class="skw">wait</span>(<span class="dig">5</span>)
-    dicRegion[<span class="str">"regUp"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_filter_funded_company_btn"</span>])
-    <span class="skw">wait</span>(<span class="dig">5</span>)
-    dicRegion[<span class="str">"regUp"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_filter_funded_companies_btn"</span>])
-    <span class="skw">wait</span>(<span class="dig">5</span>)
-    dicRegion[<span class="str">"regUp"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_filter_funded_categories_btn"</span>])
-    <span class="skw">wait</span>(<span class="dig">5</span>)
-    dicRegion[<span class="str">"regUp"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_filter_funded_categories_2_btn"</span>])
-    <span class="skw">wait</span>(<span class="dig">5</span>)
-    dicRegion[<span class="str">"regNE"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_query_input"</span>])
-    <span class="skw">wait</span>(<span class="dig">5</span>)
-    pasteClipboardText(strText=strCategoryText)
-    <span class="skw">wait</span>(<span class="dig">5</span>)
-    dicRegion[<span class="str">"regNE"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_category_target_btn"</span>])
-    <span class="skw">wait</span>(<span class="dig">5</span>)
-    dicRegion[<span class="str">"regLeft"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_search_btn"</span>])
-    <span class="skw">wait</span>(<span class="dig">5</span>)
-    <span class="cmt">#create CRUNCHBASE folder
-</span>    strSearchFolderPath = strBaseResFolderPath + <span class="str">u"\\source_html\\CRUNCHBASE"</span>
-    <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strSearchFolderPath):
-        <span class="kw">try</span>:
-            os.mkdir(strSearchFolderPath)
-        <span class="kw">except</span>:
-            logging.warning(<span class="str">"folder already exists: %s"</span>%strSearchFolderPath)
-    intFundingRoundsPage = <span class="dig">1</span>
-    <span class="kw">while</span> <span class="kw">not</span> dicRegion[<span class="str">"regDown"</span>].exists(dicPng[<span class="str">"page_buy_btn"</span>]):
-        saveCurrentPage(strFolderPath=strSearchFolderPath, strFilename=<span class="str">"%s_%d_funding_rounds.html"</span>%(strCategoryText, intFundingRoundsPage))
-        intFundingRoundsPage = intFundingRoundsPage+<span class="dig">1</span>
-        hover(Location(screen.getW()/<span class="dig">2</span>, screen.getH()-<span class="dig">100</span>))
-        wheel(Location(screen.getW()/<span class="dig">2</span>, screen.getH()-<span class="dig">100</span>), WHEEL_DOWN, <span class="dig">1</span>)
-        <span class="skw">wait</span>(<span class="dig">1</span>)
-    <span class="kw">else</span>:
-        saveCurrentPage(strFolderPath=strSearchFolderPath, strFilename=<span class="str">"%s_%d_funding_rounds.html"</span>%(strCategoryText, intFundingRoundsPage))
-        <span class="skw">type</span>(<span class="str">"w"</span>, Key.CTRL)
+    <span class="kw">if</span> strCategoryText == None: <span class="cmt">#no specify category</span>
+        <span class="cmt">#read category_list.json 
+</span>        strCategoryListFilePath = strBaseResFolderPath + <span class="str">u"\\parsed_result\\CRUNCHBASE\\category_list.json"</span>
+        jsonFile = open(strCategoryListFilePath, <span class="str">"r"</span>)
+        dicCategoryList = jyson.loads(jsonFile.read(), encoding=<span class="str">"utf-8"</span>)
+        jsonFile.close()
+        <span class="kw">for</span> intCategoryId <span class="kw">in</span> range(<span class="dig">1</span>, <span class="dig">4</span>): <span class="cmt">#category loop</span>
+            strTargetCategoryText = dicCategoryList.get(str(intCategoryId), None)
+            <span class="kw">if</span> strTargetCategoryText <span class="kw">is</span> <span class="kw">not</span> None:
+                downloadSearchFundingRoundsPage(strCategoryText=strTargetCategoryText)
+    <span class="kw">else</span>: <span class="cmt">#specify category</span>
+        logging.info(<span class="str">"download category :%s"</span>%strCategoryText)
+        goSearchFundingRoundsPage()
+        dicRegion[<span class="str">"regUp"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_filter_btn"</span>])
+        <span class="skw">wait</span>(<span class="dig">5</span>)
+        dicRegion[<span class="str">"regUp"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_filter_funded_company_btn"</span>])
+        <span class="skw">wait</span>(<span class="dig">5</span>)
+        dicRegion[<span class="str">"regUp"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_filter_funded_companies_btn"</span>])
+        <span class="skw">wait</span>(<span class="dig">5</span>)
+        dicRegion[<span class="str">"regUp"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_filter_funded_categories_btn"</span>])
+        <span class="skw">wait</span>(<span class="dig">5</span>)
+        dicRegion[<span class="str">"regUp"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_filter_funded_categories_2_btn"</span>])
+        <span class="skw">wait</span>(<span class="dig">5</span>)
+        dicRegion[<span class="str">"regNE"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_query_input"</span>])
+        <span class="skw">wait</span>(<span class="dig">5</span>)
+        pasteClipboardText(strText=strCategoryText)
+        <span class="skw">wait</span>(<span class="dig">5</span>)
+        dicRegion[<span class="str">"regNE"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_category_target_btn"</span>])
+        <span class="skw">wait</span>(<span class="dig">5</span>)
+        dicRegion[<span class="str">"regLeft"</span>].<span class="skw">click</span>(dicPng[<span class="str">"page_search_btn"</span>])
+        <span class="skw">wait</span>(<span class="dig">5</span>)
+        <span class="cmt">#create CRUNCHBASE folder
+</span>        strSearchFolderPath = strBaseResFolderPath + <span class="str">u"\\source_html\\CRUNCHBASE"</span>
+        <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strSearchFolderPath):
+            <span class="kw">try</span>:
+                os.mkdir(strSearchFolderPath)
+            <span class="kw">except</span>:
+                logging.warning(<span class="str">"folder already exists: %s"</span>%strSearchFolderPath)
+        intFundingRoundsPage = <span class="dig">1</span>
+        <span class="kw">while</span> <span class="kw">not</span> dicRegion[<span class="str">"regDown"</span>].exists(dicPng[<span class="str">"page_buy_btn"</span>]):
+            saveCurrentPage(strFolderPath=strSearchFolderPath, strFilename=<span class="str">"%s_%d_funding_rounds.html"</span>%(strCategoryText, intFundingRoundsPage))
+            intFundingRoundsPage = intFundingRoundsPage+<span class="dig">1</span>
+            hover(Location(screen.getW()/<span class="dig">2</span>, screen.getH()-<span class="dig">100</span>))
+            wheel(Location(screen.getW()/<span class="dig">2</span>, screen.getH()-<span class="dig">100</span>), WHEEL_DOWN, <span class="dig">1</span>)
+            <span class="skw">wait</span>(<span class="dig">1</span>)
+        <span class="kw">else</span>:
+            saveCurrentPage(strFolderPath=strSearchFolderPath, strFilename=<span class="str">"%s_%d_funding_rounds.html"</span>%(strCategoryText, intFundingRoundsPage))
+            <span class="skw">type</span>(<span class="str">"w"</span>, Key.CTRL)
 
 <span class="cmt">#download organization pages
 </span><span class="kw">def</span> downloadOrganizationPage():
@@ -329,7 +341,7 @@ strBaseResFolderPath = <span class="str">u"C:\\Users\\muchu\\Desktop\\caseWorksp
             os.mkdir(strOrganizationFolderPath)
         <span class="kw">except</span>:
             logging.warning(<span class="str">"folder already exists: %s"</span>%strOrganizationFolderPath)
-    <span class="cmt">#read organization_url_list.txt 
+    <span class="cmt">#read organization_url_list.json
 </span>    strOrganizationUrlListFilePath = strBaseResFolderPath + <span class="str">u"\\parsed_result\\CRUNCHBASE\\organization\\organization_url_list.json"</span>
     dicLstOrganizationUrl = None
     jsonFile = open(strOrganizationUrlListFilePath, <span class="str">"r"</span>)

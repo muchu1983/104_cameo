@@ -39,17 +39,22 @@ class SpiderForCRUNCHBASETest(unittest.TestCase):
         logging.info("SpiderForCRUNCHBASETest.test_downloadCompaniesPage")
         self.spider.downloadCompaniesPage()
     """
-    """
+    
     #測試抓取 funding rounds page
     def test_handleSearchFundingRoundsPage(self):
         logging.info("SpiderForCRUNCHBASETest.test_handleSearchFundingRoundsPage")
-        self.spider.handleSearchFundingRoundsPage(arg1="FinTech")
+        self.spider.handleSearchFundingRoundsPage(arg1=None)
     """
     #測試抓取 organization page
     def test_handleOrganizationPage(self):
         logging.info("SpiderForCRUNCHBASETest.test_handleOrganizationPage")
         self.spider.handleOrganizationPage(arg1=None)
     
+    #測試建立 category 清單
+    def test_createCategoryListJsonFile(self):
+        logging.info("SpiderForCRUNCHBASETest.test_createCategoryListJsonFile")
+        self.spider.createCategoryListJsonFile()
+    """
 #測試開始
 if __name__ == "__main__":
     unittest.main(exit=False)

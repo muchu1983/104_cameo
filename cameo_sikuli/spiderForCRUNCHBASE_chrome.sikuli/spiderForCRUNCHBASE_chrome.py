@@ -45,8 +45,8 @@ dicPng = {
     "page_filter_funded_companies_btn":"page_filter_funded_companies_btn.png",
     "page_filter_funded_categories_btn":"page_filter_funded_categories_btn.png",
     "page_filter_funded_categories_2_btn":"page_filter_funded_categories_2_btn.png",
-    "page_category_target_btn":Pattern("page_category_target_btn.png").targetOffset(-100,40),
-    "page_query_input":Pattern("page_query_input.png").targetOffset(-100,0),
+    "page_category_target_btn":Pattern("page_category_target_btn.png").targetOffset(-100,40), #Pattern targetOffset(-100,40)
+    "page_query_input":Pattern("page_query_input.png").targetOffset(-100,0), #Pattern targetOffset(-100,0)
     "page_buy_btn":"page_buy_btn.png"
 }
 
@@ -211,42 +211,54 @@ def goSearchFundingRoundsPage():
 
 #download explore pages
 def downloadSearchFundingRoundsPage(strCategoryText=None):
-    goSearchFundingRoundsPage()
-    dicRegion["regUp"].click(dicPng["page_filter_btn"])
-    wait(5)
-    dicRegion["regUp"].click(dicPng["page_filter_funded_company_btn"])
-    wait(5)
-    dicRegion["regUp"].click(dicPng["page_filter_funded_companies_btn"])
-    wait(5)
-    dicRegion["regUp"].click(dicPng["page_filter_funded_categories_btn"])
-    wait(5)
-    dicRegion["regUp"].click(dicPng["page_filter_funded_categories_2_btn"])
-    wait(5)
-    dicRegion["regNE"].click(dicPng["page_query_input"])
-    wait(5)
-    pasteClipboardText(strText=strCategoryText)
-    wait(5)
-    dicRegion["regNE"].click(dicPng["page_category_target_btn"])
-    wait(5)
-    dicRegion["regLeft"].click(dicPng["page_search_btn"])
-    wait(5)
-    #create CRUNCHBASE folder
-    strSearchFolderPath = strBaseResFolderPath + u"\\source_html\\CRUNCHBASE"
-    if not os.path.exists(strSearchFolderPath):
-        try:
-            os.mkdir(strSearchFolderPath)
-        except:
-            logging.warning("folder already exists: %s"%strSearchFolderPath)
-    intFundingRoundsPage = 1
-    while not dicRegion["regDown"].exists(dicPng["page_buy_btn"]):
-        saveCurrentPage(strFolderPath=strSearchFolderPath, strFilename="%s_%d_funding_rounds.html"%(strCategoryText, intFundingRoundsPage))
-        intFundingRoundsPage = intFundingRoundsPage+1
-        hover(Location(screen.getW()/2, screen.getH()-100))
-        wheel(Location(screen.getW()/2, screen.getH()-100), WHEEL_DOWN, 1)
-        wait(1)
-    else:
-        saveCurrentPage(strFolderPath=strSearchFolderPath, strFilename="%s_%d_funding_rounds.html"%(strCategoryText, intFundingRoundsPage))
-        type("w", Key.CTRL)
+    if strCategoryText == None: #no specify category
+        #read category_list.json 
+        strCategoryListFilePath = strBaseResFolderPath + u"\\parsed_result\\CRUNCHBASE\\category_list.json"
+        jsonFile = open(strCategoryListFilePath, "r")
+        dicCategoryList = jyson.loads(jsonFile.read(), encoding="utf-8")
+        jsonFile.close()
+        for intCategoryId in range(1, 4): #category loop
+            strTargetCategoryText = dicCategoryList.get(str(intCategoryId), None)
+            if strTargetCategoryText is not None:
+                downloadSearchFundingRoundsPage(strCategoryText=strTargetCategoryText)
+    else: #specify category
+        logging.info("download category :%s"%strCategoryText)
+        goSearchFundingRoundsPage()
+        dicRegion["regUp"].click(dicPng["page_filter_btn"])
+        wait(5)
+        dicRegion["regUp"].click(dicPng["page_filter_funded_company_btn"])
+        wait(5)
+        dicRegion["regUp"].click(dicPng["page_filter_funded_companies_btn"])
+        wait(5)
+        dicRegion["regUp"].click(dicPng["page_filter_funded_categories_btn"])
+        wait(5)
+        dicRegion["regUp"].click(dicPng["page_filter_funded_categories_2_btn"])
+        wait(5)
+        dicRegion["regNE"].click(dicPng["page_query_input"])
+        wait(5)
+        pasteClipboardText(strText=strCategoryText)
+        wait(5)
+        dicRegion["regNE"].click(dicPng["page_category_target_btn"])
+        wait(5)
+        dicRegion["regLeft"].click(dicPng["page_search_btn"])
+        wait(5)
+        #create CRUNCHBASE folder
+        strSearchFolderPath = strBaseResFolderPath + u"\\source_html\\CRUNCHBASE"
+        if not os.path.exists(strSearchFolderPath):
+            try:
+                os.mkdir(strSearchFolderPath)
+            except:
+                logging.warning("folder already exists: %s"%strSearchFolderPath)
+        intFundingRoundsPage = 1
+        while not dicRegion["regDown"].exists(dicPng["page_buy_btn"]):
+            saveCurrentPage(strFolderPath=strSearchFolderPath, strFilename="%s_%d_funding_rounds.html"%(strCategoryText, intFundingRoundsPage))
+            intFundingRoundsPage = intFundingRoundsPage+1
+            hover(Location(screen.getW()/2, screen.getH()-100))
+            wheel(Location(screen.getW()/2, screen.getH()-100), WHEEL_DOWN, 1)
+            wait(1)
+        else:
+            saveCurrentPage(strFolderPath=strSearchFolderPath, strFilename="%s_%d_funding_rounds.html"%(strCategoryText, intFundingRoundsPage))
+            type("w", Key.CTRL)
 
 #download organization pages
 def downloadOrganizationPage():
@@ -257,7 +269,7 @@ def downloadOrganizationPage():
             os.mkdir(strOrganizationFolderPath)
         except:
             logging.warning("folder already exists: %s"%strOrganizationFolderPath)
-    #read organization_url_list.txt 
+    #read organization_url_list.json
     strOrganizationUrlListFilePath = strBaseResFolderPath + u"\\parsed_result\\CRUNCHBASE\\organization\\organization_url_list.json"
     dicLstOrganizationUrl = None
     jsonFile = open(strOrganizationUrlListFilePath, "r")

@@ -29,8 +29,145 @@ class SpiderForCRUNCHBASE:
         self.db = LocalDbForCRUNCHBASE()
         self.utility = Utility()
     
+    #建立 category 清單
+    def createCategoryListJsonFile(self):
+        strFundingRoundsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\CRUNCHBASE")
+        if not os.path.exists(strFundingRoundsResultFolderPath):
+            #mkdir parsed_result/CRUNCHBASE/
+            os.mkdir(strFundingRoundsResultFolderPath)
+        strCategoryListFilePath = strFundingRoundsResultFolderPath + u"\\category_list.json"
+        #若不存在，建立新的 category_list.json
+        if not os.path.exists(strCategoryListFilePath):
+            dicCategory = {
+                "1":"Artificial Intelligence",
+                "2":"Operating Systems",
+                "3":"UX Design",
+                "4":"Cloud Computing",
+                "5":"Big Data",
+                "6":"Web Development",
+                "7":"Internet",
+                "8":"Computer",
+                "9":"Electronics",
+                "10":"3D Technology",
+                "11":"Virtual Reality",
+                "12":"Apps",
+                "13":"Software",
+                "14":"Enterprise Software",
+                "15":"Software Engineering",
+                "16":"E-Commerce",
+                "17":"Online to offline",
+                "18":"PaaS",
+                "19":"B2B",
+                "20":"Sharing Economy",
+                "21":"Transaction Processing",
+                "22":"Social Media",
+                "23":"Social Network",
+                "24":"Content",
+                "25":"Mobile",
+                "26":"Mobile Devices",
+                "27":"GPS",
+                "28":"Communications Infrastructure",
+                "29":"ICT",
+                "30":"Wearables",
+                "31":"Robotics",
+                "32":"Internet of Things",
+                "33":"Drones",
+                "34":"Embedded Systems",
+                "35":"Biotechnology",
+                "36":"Medical",
+                "37":"Pharmaceutical",
+                "38":"Health Care",
+                "39":"Lifestyle",
+                "40":"Consumer",
+                "41":"Housekeeping Service",
+                "42":"Personalization",
+                "43":"Communities",
+                "44":"Women's",
+                "45":"Men's",
+                "46":"Elderly",
+                "47":"Food Processing",
+                "48":"Cosmetics",
+                "49":"Children",
+                "50":"Food and Beverage",
+                "51":"Shopping",
+                "52":"Fashion",
+                "53":"Home and Garden",
+                "54":"Real Estate",
+                "55":"Restaurants",
+                "56":"Transportation",
+                "57":"Pet",
+                "58":"FinTech",
+                "59":"Property Management",
+                "60":"Finance",
+                "61":"Venture Capital",
+                "62":"Insurance",
+                "63":"Rental",
+                "64":"Digital Media",
+                "65":"Advertising",
+                "66":"Travel",
+                "67":"Gaming",
+                "68":"Sports",
+                "69":"Digital Entertainment",
+                "70":"Leisure",
+                "71":"Outdoors",
+                "72":"Professional Services",
+                "73":"Business Intelligence",
+                "74":"Homeland Security",
+                "75":"Infrastructure",
+                "76":"Consulting",
+                "77":"Local",
+                "78":"Procurement",
+                "79":"Product Research",
+                "80":"Brand Marketing",
+                "81":"Marketing",
+                "82":"CRM",
+                "83":"Human Resources",
+                "84":"Logistics",
+                "85":"Outsourcing",
+                "86":"Small and Medium Businesses",
+                "87":"Trading Platform",
+                "88":"Music",
+                "89":"Fashion",
+                "90":"Product Design",
+                "91":"Publishing",
+                "92":"Photography",
+                "93":"Art",
+                "94":"Creative Agency",
+                "95":"Animation",
+                "96":"Jewelry",
+                "97":"Education",
+                "98":"Charter Schools",
+                "99":"E-Learning",
+                "100":"Training",
+                "101":"Energy",
+                "102":"Natural Resources",
+                "103":"Recycling",
+                "104":"Geospatial",
+                "105":"Advanced Materials",
+                "106":"Social Entrepreneurship",
+                "107":"Innovation Management",
+                "108":"Public Relations",
+                "109":"Politics",
+                "110":"Charity",
+                "111":"National Security",
+                "112":"Manufacturing",
+                "113":"Printing",
+                "114":"Construction",
+                "115":"Architecture",
+                "116":"Industrial",
+                "117":"Retail",
+                "118":"Chemical",
+                "119":"Aerospace",
+                "120":"Freelance",
+                "121":"Funerals",
+            }
+            self.utility.writeObjectToJsonFile(dicData=dicCategory, strJsonFilePath=strCategoryListFilePath)
+        else:
+            pass
+    
     #下載 funding rounds 頁面
     def handleSearchFundingRoundsPage(self, arg1=None):
+        self.createCategoryListJsonFile()
         if arg1:
             call(
                 [
@@ -50,6 +187,7 @@ class SpiderForCRUNCHBASE:
     
     #下載 investors 頁面
     def handleSearchInvestorsPage(self, arg1=None):
+        self.createCategoryListJsonFile()
         if arg1:
             call(
                 [
