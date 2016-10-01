@@ -20,7 +20,7 @@ class CleanerForINDIEGOGO:
     
     #rmtree 失敗時呼叫此方法
     def rmtreeOnError(self, funcRmtree, strPath, _):
-        logging.warning("rmtree 發生錯誤，嘗試修改檔案為可寫入模式，再進行刪除。")
+        logging.warning("rmtree error,try to chmod the file,then retry rmtree action.")
         os.chmod(strPath, stat.S_IWRITE) #chmod to writeable
         if os.path.isdir(strPath):
             #處理資料夾 (使用遞迴)
