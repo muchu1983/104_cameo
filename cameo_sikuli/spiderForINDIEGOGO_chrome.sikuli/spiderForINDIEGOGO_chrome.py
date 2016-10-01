@@ -65,7 +65,7 @@ lstStrCategoryName = [
 ]
 
 sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
-strBaseResFolderPath = r"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"
+strBaseResFolderPath = r"C:\Users\muchu\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"
 
 #open chrome
 def openChrome():
