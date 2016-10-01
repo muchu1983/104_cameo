@@ -19,7 +19,8 @@ class CleanerForINDIEGOGO:
     
     def rmtreeOnError(self, funcRmtree, strPath, _):
         os.chmod(strPath, stat.S_IWRITE) #chmod to writeable
-        funcRmtree(strPath)
+        #funcRmtree(strPath)
+        os.remove(strPath)
     
     def clean(self):
         for base, dirs, files in os.walk(self.strBasedir):
