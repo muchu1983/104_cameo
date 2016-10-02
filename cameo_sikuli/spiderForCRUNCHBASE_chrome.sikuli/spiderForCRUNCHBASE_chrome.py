@@ -50,31 +50,31 @@ dicDevelPng = {
     "page_sidebar_end":Pattern("page_sidebar_end.png").similar(0.80)
 }
 
-dicRunningPng = {
-    "chrome_home":"chrome_home.png",
-    "chrome_stop":"chrome_stop.png",
-    "chrome_reload":"chrome_reload.png",
-    "chrome_download_finished":"chrome_download_finished.png",
-    "page_your_interruption":"page_your_interruption.png",
-    "page_proxy_error":"page_proxy_error.png",
-    "os_right_save_as":"os_right_save_as.png",
-    "os_save_btn":"os_save_btn.png",
-    "page_search_btn":"page_search_btn.png",
-    "page_filter_btn":"page_filter_btn.png",
-    "page_filter_funded_company_btn":"page_filter_funded_company_btn.png",
-    "page_filter_funded_companies_btn":"page_filter_funded_companies_btn.png",
-    "page_filter_funded_categories_btn":"page_filter_funded_categories_btn.png",
-    "page_filter_funded_categories_2_btn":"page_filter_funded_categories_2_btn.png",
-    "page_category_target_btn":Pattern("page_category_target_btn.png").targetOffset(-100,40), #Pattern targetOffset(-100,40)
-    "page_query_input":Pattern("page_query_input.png").targetOffset(-100,0), #Pattern targetOffset(-100,0)
-    "page_sidebar_end":Pattern("page_sidebar_end.png").similar(0.80)
+dicRunningPng = { #running_XXX.png
+    "chrome_home":"running_chrome_home.png", #ex: running_chrome_home.png
+    "chrome_stop":"running_chrome_stop.png",
+    "chrome_reload":"running_chrome_reload.png",
+    "chrome_download_finished":"running_chrome_download_finished.png",
+    "page_your_interruption":"running_page_your_interruption.png",
+    "page_proxy_error":"running_page_proxy_error.png",
+    "os_right_save_as":"running_os_right_save_as.png",
+    "os_save_btn":"running_os_save_btn.png",
+    "page_search_btn":"running_page_search_btn.png",
+    "page_filter_btn":"running_page_filter_btn.png",
+    "page_filter_funded_company_btn":"running_page_filter_funded_company_btn.png",
+    "page_filter_funded_companies_btn":"running_page_filter_funded_companies_btn.png",
+    "page_filter_funded_categories_btn":"running_page_filter_funded_categories_btn.png",
+    "page_filter_funded_categories_2_btn":"running_page_filter_funded_categories_2_btn.png",
+    "page_category_target_btn":Pattern("running_page_category_target_btn.png").targetOffset(-100,40), #Pattern targetOffset(-100,40)
+    "page_query_input":Pattern("running_page_query_input.png").targetOffset(-100,0), #Pattern targetOffset(-100,0)
+    "page_sidebar_end":Pattern("running_page_sidebar_end.png").similar(0.80)
 }
 
-dicPng = dicDevelPng
-
+#dicPng = dicDevelPng
+dicPng = dicRunningPng
 sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
-strBaseResFolderPath = u"C:\\Users\\muchu\\Desktop\\caseWorkspace\\003-卡米爾scrapy\\CAMEO_git_code\\cameo_res"
-
+#strBaseResFolderPath = u"C:\\Users\\muchu\\Desktop\\caseWorkspace\\003-卡米爾scrapy\\CAMEO_git_code\\cameo_res"
+strBaseResFolderPath = u"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"
 #open chrome
 def openChrome():
     #close prev chrome

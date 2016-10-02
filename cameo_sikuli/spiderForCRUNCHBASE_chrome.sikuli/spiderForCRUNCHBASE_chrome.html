@@ -122,31 +122,31 @@ dicDevelPng = {
     <span class="str">"page_sidebar_end"</span>:Pattern(<img src="page_sidebar_end.png" />).similar(<span class="dig">0.80</span>)
 }
 
-dicRunningPng = {
-    <span class="str">"chrome_home"</span>:<img src="chrome_home.png" />,
-    <span class="str">"chrome_stop"</span>:<img src="chrome_stop.png" />,
-    <span class="str">"chrome_reload"</span>:<img src="chrome_reload.png" />,
-    <span class="str">"chrome_download_finished"</span>:<img src="chrome_download_finished.png" />,
-    <span class="str">"page_your_interruption"</span>:<img src="page_your_interruption.png" />,
-    <span class="str">"page_proxy_error"</span>:<img src="page_proxy_error.png" />,
-    <span class="str">"os_right_save_as"</span>:<img src="os_right_save_as.png" />,
-    <span class="str">"os_save_btn"</span>:<img src="os_save_btn.png" />,
-    <span class="str">"page_search_btn"</span>:<img src="page_search_btn.png" />,
-    <span class="str">"page_filter_btn"</span>:<img src="page_filter_btn.png" />,
-    <span class="str">"page_filter_funded_company_btn"</span>:<img src="page_filter_funded_company_btn.png" />,
-    <span class="str">"page_filter_funded_companies_btn"</span>:<img src="page_filter_funded_companies_btn.png" />,
-    <span class="str">"page_filter_funded_categories_btn"</span>:<img src="page_filter_funded_categories_btn.png" />,
-    <span class="str">"page_filter_funded_categories_2_btn"</span>:<img src="page_filter_funded_categories_2_btn.png" />,
-    <span class="str">"page_category_target_btn"</span>:Pattern(<img src="page_category_target_btn.png" />).targetOffset(-<span class="dig">100</span>,<span class="dig">40</span>), <span class="cmt">#Pattern targetOffset(-100,40)</span>
-    <span class="str">"page_query_input"</span>:Pattern(<img src="page_query_input.png" />).targetOffset(-<span class="dig">100</span>,<span class="dig">0</span>), <span class="cmt">#Pattern targetOffset(-100,0)</span>
-    <span class="str">"page_sidebar_end"</span>:Pattern(<img src="page_sidebar_end.png" />).similar(<span class="dig">0.80</span>)
+dicRunningPng = { <span class="cmt">#running_XXX.png</span>
+    <span class="str">"chrome_home"</span>:<img src="running_chrome_home.png" />, <span class="cmt">#ex: running_chrome_home.png</span>
+    <span class="str">"chrome_stop"</span>:<img src="running_chrome_stop.png" />,
+    <span class="str">"chrome_reload"</span>:<img src="running_chrome_reload.png" />,
+    <span class="str">"chrome_download_finished"</span>:<img src="running_chrome_download_finished.png" />,
+    <span class="str">"page_your_interruption"</span>:<img src="running_page_your_interruption.png" />,
+    <span class="str">"page_proxy_error"</span>:<img src="running_page_proxy_error.png" />,
+    <span class="str">"os_right_save_as"</span>:<img src="running_os_right_save_as.png" />,
+    <span class="str">"os_save_btn"</span>:<img src="running_os_save_btn.png" />,
+    <span class="str">"page_search_btn"</span>:<img src="running_page_search_btn.png" />,
+    <span class="str">"page_filter_btn"</span>:<img src="running_page_filter_btn.png" />,
+    <span class="str">"page_filter_funded_company_btn"</span>:<img src="running_page_filter_funded_company_btn.png" />,
+    <span class="str">"page_filter_funded_companies_btn"</span>:<img src="running_page_filter_funded_companies_btn.png" />,
+    <span class="str">"page_filter_funded_categories_btn"</span>:<img src="running_page_filter_funded_categories_btn.png" />,
+    <span class="str">"page_filter_funded_categories_2_btn"</span>:<img src="running_page_filter_funded_categories_2_btn.png" />,
+    <span class="str">"page_category_target_btn"</span>:Pattern(<img src="running_page_category_target_btn.png" />).targetOffset(-<span class="dig">100</span>,<span class="dig">40</span>), <span class="cmt">#Pattern targetOffset(-100,40)</span>
+    <span class="str">"page_query_input"</span>:Pattern(<img src="running_page_query_input.png" />).targetOffset(-<span class="dig">100</span>,<span class="dig">0</span>), <span class="cmt">#Pattern targetOffset(-100,0)</span>
+    <span class="str">"page_sidebar_end"</span>:Pattern(<img src="running_page_sidebar_end.png" />).similar(<span class="dig">0.80</span>)
 }
 
-dicPng = dicDevelPng
-
+<span class="cmt">#dicPng = dicDevelPng
+</span>dicPng = dicRunningPng
 sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
-strBaseResFolderPath = <span class="str">u"C:\\Users\\muchu\\Desktop\\caseWorkspace\\003-卡米爾scrapy\\CAMEO_git_code\\cameo_res"</span>
-
+<span class="cmt">#strBaseResFolderPath = u"C:\\Users\\muchu\\Desktop\\caseWorkspace\\003-卡米爾scrapy\\CAMEO_git_code\\cameo_res"
+</span>strBaseResFolderPath = <span class="str">u"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"</span>
 <span class="cmt">#open chrome
 </span><span class="kw">def</span> openChrome():
     <span class="cmt">#close prev chrome
