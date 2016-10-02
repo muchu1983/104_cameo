@@ -74,7 +74,7 @@ dicRunningPng = { #running_XXX.png
 dicPng = dicRunningPng
 sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
 #strBaseResFolderPath = u"C:\\Users\\muchu\\Desktop\\caseWorkspace\\003-卡米爾scrapy\\CAMEO_git_code\\cameo_res"
-strBaseResFolderPath = u"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"
+strBaseResFolderPath = u"C:\\Users\\Administrator\\Desktop\\pyWorkspace\\CAMEO_git_code\\cameo_res"
 #open chrome
 def openChrome():
     #close prev chrome
