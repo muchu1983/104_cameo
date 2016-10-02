@@ -261,7 +261,7 @@ def downloadSearchFundingRoundsPage(strCategoryText=None):
             except:
                 logging.warning("folder already exists: %s"%strSearchFolderPath)
         intFundingRoundsPage = 1
-        while dicRegion["regUp"].exists(dicPng["page_search_btn"]) is not None:
+        while dicRegion["regLeft"].exists(dicPng["page_search_btn"]) is not None:
             saveCurrentPage(strFolderPath=strSearchFolderPath, strFilename="%s_%d_funding_rounds.html"%(strCategoryText, intFundingRoundsPage))
             intFundingRoundsPage = intFundingRoundsPage+1
             hover(Location(screen.getW()/2, screen.getH()-100))
