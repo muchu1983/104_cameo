@@ -6,36 +6,46 @@ This file is part of BSD license
 
 <https://opensource.org/licenses/BSD-3-Clause>
 """
+#INDIEGOGO
 from cameo.spiderForINDIEGOGO import SpiderForINDIEGOGO
 from cameo.parserForINDIEGOGO import ParserForINDIEGOGO #old style
 from cameo.parserV2ForINDIEGOGO import ParserV2ForINDIEGOGO #new style
 from cameo.importerForINDIEGOGO import ImporterForINDIEGOGO
+from cameo.cleaner import CleanerForINDIEGOGO
+from cameo.reporter import ReporterForINDIEGOGO
+#WEBACKERS
 from cameo.spiderForWEBACKERS import SpiderForWEBACKERS
 from cameo.parserForWEBACKERS import ParserForWEBACKERS
 from cameo.importerForWEBACKERS import ImporterForWEBACKERS
+from cameo.reporter import ReporterForWEBACKERS
+#CRUNCHBASE
 from cameo.spiderForCRUNCHBASE import SpiderForCRUNCHBASE
 from cameo.parserForCRUNCHBASE import ParserForCRUNCHBASE
+from cameo.cleaner import CleanerForCRUNCHBASE
+#JD
 from cameo.spiderForJD import SpiderForJD
 from cameo.parserForJD import ParserForJD
 from cameo.importerForJD import ImporterForJD
+#TECHORANGE
 from cameo.spiderForTECHORANGE import SpiderForTECHORANGE
 from cameo.parserForTECHORANGE import ParserForTECHORANGE
 from cameo.importerForTECHORANGE import ImporterForTECHORANGE
+#BNEXT
 from cameo.spiderForBNEXT import SpiderForBNEXT
 from cameo.parserForBNEXT import ParserForBNEXT
 from cameo.importerForBNEXT import ImporterForBNEXT
+#PEDAILY
 from cameo.spiderForPEDAILY import SpiderForPEDAILY
 from cameo.parserForPEDAILY import ParserForPEDAILY
 from cameo.importerForPEDAILY import ImporterForPEDAILY
+#INSIDE
 from cameo.spiderForINSIDE import SpiderForINSIDE
 from cameo.parserForINSIDE import ParserForINSIDE
 from cameo.importerForINSIDE import ImporterForINSIDE
+#TECHCRUNCH
 from cameo.spiderForTECHCRUNCH import SpiderForTECHCRUNCH
 from cameo.parserForTECHCRUNCH import ParserForTECHCRUNCH
 from cameo.importerForTECHCRUNCH import ImporterForTECHCRUNCH
-from cameo.cleaner import CleanerForINDIEGOGO
-from cameo.reporter import ReporterForINDIEGOGO
-from cameo.reporter import ReporterForWEBACKERS
 """
 shell 操作介面
 """
@@ -78,7 +88,8 @@ class CameoShell:
             "techcrunch":ImporterForTECHCRUNCH()
         }
         self.dicCleaners = {
-            "indiegogo":CleanerForINDIEGOGO()
+            "indiegogo":CleanerForINDIEGOGO(),
+            "crunchbase":CleanerForCRUNCHBASE()
         }
         self.dicReporters = {
             "indiegogo":ReporterForINDIEGOGO(),
