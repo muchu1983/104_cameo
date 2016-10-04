@@ -351,3 +351,66 @@ class MongoDbRepairman:
                             logging.warning("docInvestmentStartup is None")
             else:
                 logging.warning("lstDicInvestment is None")
+                
+    #initial ModelCategoryMappingReward table
+    def initialModelCategoryMappingReward(self):
+        self.db.ModelCategoryMappingReward.remove({})
+        dicRewardCategoryMapping = {
+            "04": "遊戲",
+            "0401": "遊戲設備 (Gaming Hardware)",
+            "0402": "手遊 (Mobile Games)",
+            "0403": "桌遊 (Tabletop Games)",
+            "0404": "電動遊戲 (Video Games)",
+            "0405": "實境遊戲 (Live Game)",
+            "0406": "電腦遊戲",
+            "0407": "其他",
+            "02": "設計",
+            "0201": "商品設計 (Product Design)",
+            "0202": "互動設計 (Interactive Design)",
+            "0203": "時尚 (Fashion)",
+            "0204": "其他",
+            "07": "科技",
+            "0701": "3D列印 (3D Printing)",
+            "0702": "Apps",
+            "0703": "自組電子 (DIY Electronics)",
+            "0704": "制作工具 (Fabrication Tools)",
+            "0705": "飛機 (Flight)",
+            "0706": "小工具 (Gadgets)",
+            "0707": "硬體 (Hardware)",
+            "0708": "機械人 (Robots)",
+            "0709": "軟體 (Software)",
+            "0710": "音效 (Sound)",
+            "0711": "航太航天 (Space Exploration)",
+            "0712": "穿戴式裝置 (Wearable)",
+            "0713": "網站 (Web)",
+            "0714": "健康照護",
+            "0715": "其他",
+            "08": "生活",
+            "0801": "飲食 (Food)",
+            "0802": "運動休閒",
+            "0803": "健康",
+            "0804": "其他",
+            "06": "創作出版",
+            "0601": "書籍",
+            "0602": "童書 (Children's Book)",
+            "0603": "漫畫 (Comics)",
+            "0604": "其他",
+            "03": "影視",
+            "0301": "其他",
+            "05": "音樂",
+            "0501": "其他",
+            "01": "藝術",
+            "0101": "其他",
+            "09": "公共",
+            "0901": "報章雜誌 (Journalism)",
+            "10": "其他",
+            "1001": "其他",
+        }
+        for strCategoryKey in dicRewardCategoryMapping.keys():
+            strCategoryValue = dicRewardCategoryMapping.get(strCategoryKey, None)
+            self.db.ModelCategoryMappingReward.update_one(
+                {"strCategoryKey":strCategoryKey},
+                {"$set":{"strCategoryValue":strCategoryValue}},
+                upsert=True
+            )
+    
