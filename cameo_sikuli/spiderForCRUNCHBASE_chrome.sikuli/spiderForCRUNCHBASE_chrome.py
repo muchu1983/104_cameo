@@ -289,11 +289,14 @@ def downloadOrganizationPage():
     lstStrOrganizationUrl = dicLstOrganizationUrl.get("organization_url_list", [])
     for strOrganizationUrl in lstStrOrganizationUrl:#organization loop
         logging.info(u"download organization: %s"%strOrganizationUrl)
-        openChrome()
-        typeUrlOnChrome(strUrlText=strOrganizationUrl)
         strOrganizationName = re.match(u"^https://www.crunchbase.com/organization/(.*)$", strOrganizationUrl).group(1).strip()
-        saveCurrentPage(strFolderPath=strOrganizationFolderPath, strFilename=u"%s_organization.html"%strOrganizationName)
-        wait(5)
+        strOrganizationHtmlFileName = u"%s_organization.html"%strOrganizationName
+        logging.info(strOrganizationFolderPath + u"\\" + strOrganizationHtmlFileName)
+        if not os.path.exists(strOrganizationFolderPath + u"\\" + strOrganizationHtmlFileName):
+            openChrome()
+            typeUrlOnChrome(strUrlText=strOrganizationUrl)
+            saveCurrentPage(strFolderPath=strOrganizationFolderPath, strFilename=strOrganizationHtmlFileName)
+            wait(5)
     else:
         type("w", Key.CTRL)
 
