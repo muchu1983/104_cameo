@@ -146,7 +146,7 @@ dicRunningPng = { <span class="cmt">#running_XXX.png</span>
 </span>dicPng = dicRunningPng
 sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
 <span class="cmt">#strBaseResFolderPath = u"C:\\Users\\muchu\\Desktop\\caseWorkspace\\003-卡米爾scrapy\\CAMEO_git_code\\cameo_res"
-</span>strBaseResFolderPath = <span class="str">u"C:\Users\Administrator\Desktop\pyWorkspace\CAMEO_git_code\cameo_res"</span>
+</span>strBaseResFolderPath = <span class="str">u"C:\\Users\\Administrator\\Desktop\\pyWorkspace\\CAMEO_git_code\\cameo_res"</span>
 <span class="cmt">#open chrome
 </span><span class="kw">def</span> openChrome():
     <span class="cmt">#close prev chrome
@@ -333,7 +333,7 @@ sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
             <span class="kw">except</span>:
                 logging.warning(<span class="str">"folder already exists: %s"</span>%strSearchFolderPath)
         intFundingRoundsPage = <span class="dig">1</span>
-        <span class="kw">while</span> <span class="kw">not</span> dicRegion[<span class="str">"regSE"</span>].exists(dicPng[<span class="str">"page_sidebar_end"</span>]):
+        <span class="kw">while</span> dicRegion[<span class="str">"regLeft"</span>].exists(dicPng[<span class="str">"page_search_btn"</span>]) <span class="kw">is</span> <span class="kw">not</span> None:
             saveCurrentPage(strFolderPath=strSearchFolderPath, strFilename=<span class="str">"%s_%d_funding_rounds.html"</span>%(strCategoryText, intFundingRoundsPage))
             intFundingRoundsPage = intFundingRoundsPage+<span class="dig">1</span>
             hover(Location(screen.getW()/<span class="dig">2</span>, screen.getH()-<span class="dig">100</span>))
@@ -361,11 +361,14 @@ sysClipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
     lstStrOrganizationUrl = dicLstOrganizationUrl.get(<span class="str">"organization_url_list"</span>, [])
     <span class="kw">for</span> strOrganizationUrl <span class="kw">in</span> lstStrOrganizationUrl:<span class="cmt">#organization loop</span>
         logging.info(<span class="str">u"download organization: %s"</span>%strOrganizationUrl)
-        openChrome()
-        typeUrlOnChrome(strUrlText=strOrganizationUrl)
         strOrganizationName = re.match(<span class="str">u"^https://www.crunchbase.com/organization/(.*)$"</span>, strOrganizationUrl).group(<span class="dig">1</span>).strip()
-        saveCurrentPage(strFolderPath=strOrganizationFolderPath, strFilename=<span class="str">u"%s_organization.html"</span>%strOrganizationName)
-        <span class="skw">wait</span>(<span class="dig">5</span>)
+        strOrganizationHtmlFileName = <span class="str">u"%s_organization.html"</span>%strOrganizationName
+        logging.info(strOrganizationFolderPath + <span class="str">u"\\"</span> + strOrganizationHtmlFileName)
+        <span class="kw">if</span> <span class="kw">not</span> os.path.exists(strOrganizationFolderPath + <span class="str">u"\\"</span> + strOrganizationHtmlFileName):
+            openChrome()
+            typeUrlOnChrome(strUrlText=strOrganizationUrl)
+            saveCurrentPage(strFolderPath=strOrganizationFolderPath, strFilename=strOrganizationHtmlFileName)
+            <span class="skw">wait</span>(<span class="dig">5</span>)
     <span class="kw">else</span>:
         <span class="skw">type</span>(<span class="str">"w"</span>, Key.CTRL)
 
