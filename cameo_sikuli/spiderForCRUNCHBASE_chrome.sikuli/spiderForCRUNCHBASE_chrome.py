@@ -260,15 +260,22 @@ def downloadSearchFundingRoundsPage(strCategoryText=None):
                 os.mkdir(strSearchFolderPath)
             except:
                 logging.warning("folder already exists: %s"%strSearchFolderPath)
+        #save funding_rounds.html
         intFundingRoundsPage = 1
         while dicRegion["regLeft"].exists(dicPng["page_search_btn"]) is not None:
-            saveCurrentPage(strFolderPath=strSearchFolderPath, strFilename="%s_%d_funding_rounds.html"%(strCategoryText, intFundingRoundsPage))
+            strFundingRoundsHtmlFileName = "%s_%d_funding_rounds.html"%(strCategoryText, intFundingRoundsPage)
+            #check file exists
+            if not os.path.exists(strSearchFolderPath + u"\\" + strFundingRoundsHtmlFileName):
+                saveCurrentPage(strFolderPath=strSearchFolderPath, strFilename=strFundingRoundsHtmlFileName)
             intFundingRoundsPage = intFundingRoundsPage+1
             hover(Location(screen.getW()/2, screen.getH()-100))
             wheel(Location(screen.getW()/2, screen.getH()-100), WHEEL_DOWN, 1)
             wait(1)
         else:
-            saveCurrentPage(strFolderPath=strSearchFolderPath, strFilename="%s_%d_funding_rounds.html"%(strCategoryText, intFundingRoundsPage))
+            strFundingRoundsHtmlFileName = "%s_%d_funding_rounds.html"%(strCategoryText, intFundingRoundsPage)
+            #check file exists
+            if not os.path.exists(strSearchFolderPath + u"\\" + strFundingRoundsHtmlFileName):
+                saveCurrentPage(strFolderPath=strSearchFolderPath, strFilename=strFundingRoundsHtmlFileName)
             type("w", Key.CTRL)
 
 #download organization pages
