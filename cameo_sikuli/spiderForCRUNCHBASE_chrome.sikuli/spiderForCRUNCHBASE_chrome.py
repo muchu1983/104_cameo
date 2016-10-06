@@ -127,6 +127,13 @@ def typeUrlOnChrome(strUrlText=None):
     waitChromeLoadingFinished()
     wait(0.5)
 
+#pause if interruption page found
+def checkAndPauseBeforeSave():
+    if dicRegion["regLeft"].exists(dicPng["page_your_interruption"]):
+        popup(u"distil networks found us! （╯‵□′）╯︵┴─┴")
+    if dicRegion["regUp"].exists(dicPng["page_proxy_error"]):
+        popup(u"proxy error! （╯‵□′）╯︵┴─┴")
+    
 #choose folder at save progress
 def typeFolderPath(strFolderPath=None):
     wait(0.5)
@@ -157,6 +164,7 @@ def rightClickSaveCurrentPage(onImage=None, strFolderPath=None, strFilename=None
     logging.info("prepare to save " + strFilename)
     wait(10)
     waitChromeLoadingFinished()
+    checkAndPauseBeforeSave()
     rightClick(onImage)
     dicRegion["regCenter"].wait(dicPng["os_right_save_as"], 300)
     dicRegion["regCenter"].click(dicPng["os_right_save_as"])
@@ -177,6 +185,7 @@ def saveCurrentPage(strFolderPath=None, strFilename=None):
     logging.info("prepare to save " + strFilename)
     wait(10)
     waitChromeLoadingFinished()
+    checkAndPauseBeforeSave()
     type("s", Key.CTRL)
     dicRegion["regDown"].wait(dicPng["os_save_btn"], 300)
     if strFolderPath != None:
