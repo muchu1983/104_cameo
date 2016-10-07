@@ -24,32 +24,25 @@ class ParserForCRUNCHBASETest(unittest.TestCase):
     #收尾
     def tearDown(self):
         pass
-    
-    #測試 解析 explore 頁面
+    """
+    #測試 解析 funding_rounds 頁面
     def test_parseSearchFundingRoundsPage(self):
         logging.info("ParserForCRUNCHBASETest.test_parseSearchFundingRoundsPage")
         parser = ParserForCRUNCHBASE()
         parser.parseSearchFundingRoundsPage()
-    """
-    #測試 解析 category 頁面
-    def test_parseCategoryPage(self):
-        logging.info("ParserForCRUNCHBASETest.test_parseCategoryPage")
-        parser = ParserV2ForINDIEGOGO()
-        parser.parseCategoryPage()
     
-    #測試 解析 project 頁面
-    def test_parseProjectPage(self):
-        logging.info("ParserForCRUNCHBASETest.test_parseProjectPage")
-        parser = ParserV2ForINDIEGOGO()
-        parser.parseProjectPage("automode")
-        
-    
-    #測試 解析 individuals 頁面
-    def test_parseIndividualsPage(self):
-        logging.info("ParserForCRUNCHBASETest.test_parseIndividualsPage")
-        parser = ParserV2ForINDIEGOGO()
-        parser.parseIndividualsPage("automode")
+    #測試 解析 investors 頁面
+    def test_parseSearchInvestorsPage(self):
+        logging.info("ParserForCRUNCHBASETest.test_parseSearchInvestorsPage")
+        parser = ParserForCRUNCHBASE()
+        parser.parseSearchInvestorsPage()
     """
+    #測試 解析 organization 頁面
+    def test_parseOrganizationPage(self):
+        logging.info("ParserForCRUNCHBASETest.test_parseOrganizationPage")
+        parser = ParserForCRUNCHBASE()
+        parser.parseOrganizationPage()
+    
 #測試開始
 if __name__ == "__main__":
     unittest.main(exit=False)
