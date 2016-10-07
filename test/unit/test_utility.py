@@ -77,10 +77,10 @@ class UtilityTest(unittest.TestCase):
         logging.info("UtilityTest.test_getCtimeOfFile")
         self.assertEquals(u"2016-04-28", self.utility.getCtimeOfFile(strFilePath=u"cameo\\utility.py"))
         
-    #測試 geopy
-    def test_geopy(self):
+    #測試 geopy.geocode
+    def test_geopyGeocode(self):
         logging.info("UtilityTest.test_geopy")
-        print(self.utility.geopy())
+        print(self.utility.geopyGeocode(strOriginLocation="台南"))
         
     #測試 解析 list_of_country_by_continent_on_wikipedia.html
     def test_parseListOfCountryWikiPage(self):

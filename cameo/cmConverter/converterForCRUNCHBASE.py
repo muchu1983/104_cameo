@@ -22,84 +22,62 @@ class ConverterForCRUNCHBASE:
         
     #轉換 startup 資訊
     def convertStartup(self, lstLstDicRawData=[]):
-        pass
-        """
-        #_proj.html raw data
-        lstDicProjPageRawData = lstLstDicRawData[0]
-        for dicProjPageRawData in lstDicProjPageRawData:
-            strProjHtmlFileName = dicProjPageRawData.get("meta-data-html-filepath", None)
-            logging.info("convert: %s"%strProjHtmlFileName)
-            strProfileId = re.search("^.*\\\\([\d]+)_proj.html$", strProjHtmlFileName).group(1)
-            strProfUrl = u"http://z.jd.com/funderCenter.action?flag=2&id=" + strProfileId
-            if strProfUrl not in self.dicParsedResultOfProfile:
-                self.dicParsedResultOfProfile[strProfUrl] = {}
+        #_organization.html raw data
+        lstDicOrganizationPageRawData = lstLstDicRawData[0]
+        for dicOrganizationPageRawData in lstDicOrganizationPageRawData:
+            strOrganizationHtmlFilePath = dicOrganizationPageRawData.get("meta-data-html-filepath", None)
+            logging.info("convert: %s"%strOrganizationHtmlFilePath)
+            strOrganizationId = re.search("^.*\\\\(.*)_organization.html$", strOrganizationHtmlFilePath).group(1)
+            strOrganizationUrl = u"https://www.crunchbase.com/organization/" + strOrganizationId
+            if strOrganizationUrl not in self.dicParsedResultOfStartup:
+                self.dicParsedResultOfStartup[strOrganizationUrl] = {}
             #strUrl
-            self.dicParsedResultOfProfile[strProfUrl]["strUrl"] = strProfUrl
-            #strName
-            strName = self.cmUtility.extractFirstInList(lstSource=dicProjPageRawData.get("jd-creator", [])).strip()
-            self.dicParsedResultOfProfile[strProfUrl]["strName"] = strName
-            #strIdentityName 同 strName
-            self.dicParsedResultOfProfile[strProfUrl]["strIdentityName"] = strName
-            #strDescription
-            strDescription = self.cmUtility.extractFirstInList(lstSource=dicProjPageRawData.get("jd-creator-descript", [])).strip()
-            self.dicParsedResultOfProfile[strProfUrl]["strDescription"] = strDescription
+            self.dicParsedResultOfStartup[strOrganizationUrl]["strUrl"] = strOrganizationUrl
+            #strCrawlTime
+            strCrawlTime = self.cmUtility.getCtimeOfFile(strFilePath=strOrganizationHtmlFilePath)
+            self.dicParsedResultOfStartup[strOrganizationUrl]["strCrawlTime"] = strCrawlTime
+            #strCompany
+            strCompany = self.cmUtility.extractFirstInList(lstSource=dicOrganizationPageRawData.get("cb-strCompany", []))
+            self.dicParsedResultOfStartup[strOrganizationUrl]["strCompany"] = strCompany
+            #lstStrFounders
+            lstStrFounders = dicOrganizationPageRawData.get("cb-lstStrFounders", [])
+            self.dicParsedResultOfStartup[strOrganizationUrl]["lstStrFounders"] = lstStrFounders
+            #strIntro
+            lstStrIntro = dicOrganizationPageRawData.get("cb-strIntro", [])
+            self.dicParsedResultOfStartup[strOrganizationUrl]["strIntro"] = u" ".join(lstStrIntro)
+            #lstStrTeam
+            lstStrTeam = dicOrganizationPageRawData.get("cb-lstStrTeam", [])
+            self.dicParsedResultOfStartup[strOrganizationUrl]["lstStrTeam"] = lstStrTeam
+            #lstStrTeamDesc
+            lstStrTeamDesc = dicOrganizationPageRawData.get("cb-lstStrTeamDesc", [])
+            self.dicParsedResultOfStartup[strOrganizationUrl]["lstStrTeamDesc"] = lstStrTeamDesc
+            #lstStrProduct
+            lstStrProduct = dicOrganizationPageRawData.get("cb-lstStrProduct", [])
+            self.dicParsedResultOfStartup[strOrganizationUrl]["lstStrProduct"] = lstStrProduct
+            #lstIndustry
+            lstIndustry = dicOrganizationPageRawData.get("cb-lstIndustry", [])
+            self.dicParsedResultOfStartup[strOrganizationUrl]["lstIndustry"] = lstIndustry
             #strLocation
-            self.dicParsedResultOfProfile[strProfUrl]["strLocation"] = u"China"
+            lstStrLocation = dicOrganizationPageRawData.get("cb-strLocation", [])
+            strLocation = u" ".join(lstStrLocation)
+            self.dicParsedResultOfStartup[strOrganizationUrl]["strLocation"] = strLocation
             #strCity
-            self.dicParsedResultOfProfile[strProfUrl]["strCity"] = u"China"
+            (strAddress, fLatitude, fLongitude) = self.cameoUtility.geopyGeocode(strOriginLocation=strLocation)
+            self.dicParsedResultOfStartup[strOrganizationUrl]["strCity"] = strAddress
             #strCountry
-            self.dicParsedResultOfProfile[strProfUrl]["strCountry"] = u"CN"
+            strOriginCountry = strAddress.split(u",")[-1].strip()
+            self.dicParsedResultOfStartup[strOrganizationUrl]["strCountry"] = self.cameoUtility.getCountryCode(strCountryName=strOriginCountry)
             #strContinent
-            self.dicParsedResultOfProfile[strProfUrl]["strContinent"] = u"AS"
-            #intCreatedCount
-            intCreatedCount = int(self.cmUtility.extractFirstInList(lstSource=dicProjPageRawData.get("jd-creator-CreatedCount", [])).strip())
-            self.dicParsedResultOfProfile[strProfUrl]["intCreatedCount"] = intCreatedCount
-            #isCreator
-            isCreator = False
-            if intCreatedCount > 0:
-                isCreator = True
-            self.dicParsedResultOfProfile[strProfUrl]["isCreator"] = isCreator
-            #lstStrCreatedProject
-            self.dicParsedResultOfProfile[strProfUrl]["lstStrCreatedProject"] = dicProjPageRawData.get("jd-creator-CreatedProject", [])
-            #lstStrCreatedProjectUrl
-            lstStrCreatedProjectUrl = self.stripAndCompleteProjectUrlList(lstStrOriginUrl=dicProjPageRawData.get("jd-creator-CreatedProjectUrl", []))
-            self.dicParsedResultOfProfile[strProfUrl]["lstStrCreatedProjectUrl"] = lstStrCreatedProjectUrl
-            #intSuccessProject 無法取得
-            self.dicParsedResultOfProfile[strProfUrl]["intSuccessProject"] = None
-            #intFailedProject 無法取得
-            self.dicParsedResultOfProfile[strProfUrl]["intFailedProject"] = None
-            #intLiveProject 無法取得
-            self.dicParsedResultOfProfile[strProfUrl]["intLiveProject"] = None
-            #lstStrSocialNetwork 無法取得
-            self.dicParsedResultOfProfile[strProfUrl]["lstStrSocialNetwork"] = None
-            #intFbFriend 無法取得
-            self.dicParsedResultOfProfile[strProfUrl]["intFbFriend"] = None
-            #strLastLoginDate 無法取得
-            self.dicParsedResultOfProfile[strProfUrl]["strLastLoginDate"] = None
-        #_order.html raw data
-        lstDicOrderPageRawData = lstLstDicRawData[1]
-        for dicOrderPageRawData in lstDicOrderPageRawData:
-            strOrderHtmlFileName = dicOrderPageRawData.get("meta-data-html-filepath", None)
-            logging.info("convert: %s"%strOrderHtmlFileName)
-            strProfileId = re.search("^.*\\\\([\d]+)_order.html$", strOrderHtmlFileName).group(1)
-            strProfUrl = u"http://z.jd.com/funderCenter.action?flag=2&id=" + strProfileId
-            if strProfUrl not in self.dicParsedResultOfProfile:
-                self.dicParsedResultOfProfile[strProfUrl] = {}
-            #intBackedCount
-            intBackedCount = int(self.cmUtility.extractFirstInList(lstSource=dicOrderPageRawData.get("jd-creator-BackedCount", [])).strip())
-            self.dicParsedResultOfProfile[strProfUrl]["intBackedCount"] = intBackedCount
-            #isBacker
-            isBacker = False
-            if intBackedCount > 0:
-                isBacker = True
-            self.dicParsedResultOfProfile[strProfUrl]["isBacker"] = isBacker
-            #lstStrBackedProject
-            self.dicParsedResultOfProfile[strProfUrl]["lstStrBackedProject"] = dicOrderPageRawData.get("jd-creator-BackedProject", [])
-            #lstStrBackedProjectUrl
-            lstStrBackedProjectUrl = self.stripAndCompleteProjectUrlList(lstStrOriginUrl=dicOrderPageRawData.get("jd-creator-BackedProjectUrl", []))
-            self.dicParsedResultOfProfile[strProfUrl]["lstStrBackedProjectUrl"] = lstStrBackedProjectUrl
-        """
-    
+            self.dicParsedResultOfStartup[strOrganizationUrl]["strContinent"] = self.cameoUtility.getContinentByCountryNameWikiVersion(strCountryName=strOriginCountry)
+            #lstStrInvestor
+            lstStrInvestor = dicOrganizationPageRawData.get("cb-lstStrInvestor", [])
+            self.dicParsedResultOfStartup[strOrganizationUrl]["lstStrInvestor"] = lstStrInvestor
+            #isFundraising (需定義問題)
+            #lstStrTopic (無此資料)
+            #lstStrFoundersDesc (無此資料)
+            #lstStrFollowers (無此資料)
+            #intFollower (無此資料)
+            
     #將 startup convert 結果寫入 startup.json
     def flushConvertedStartupDataToJsonFile(self, strJsonFilePath=None):
         self.cmUtility.writeObjectToJsonFile(dicData=self.dicParsedResultOfStartup, strJsonFilePath=strJsonFilePath)

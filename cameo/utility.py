@@ -167,10 +167,10 @@ class Utility:
         return strCTime
         
     #使用 geopy 查找 洲別 資料 (目前不可用)
-    def geopy(self):
+    def geopyGeocode(self, strOriginLocation=""):
         geolocator = GoogleV3()
-        location, (x, y) = geolocator.geocode("tainan", exactly_one=True)
-        return location
+        location = geolocator.geocode(strOriginLocation, exactly_one=True)
+        return (location.address, location.latitude, location.longitude)
         
     #解析 list_of_country_by_continent_on_wikipedia.html
     def parseListOfCountryWikiPage(self):
@@ -209,6 +209,8 @@ class Utility:
                 dicParsedResult[dicContinentName[intCurrentTableIndex]] = lstDicCountryData
             #自訂資料區
             dicParsedResult["NA"].append({"name":"united states", "code":"US"})
+            dicParsedResult["NA"].append({"name":"usa", "code":"US"})
+            dicParsedResult["EU"].append({"name":"uk", "code":"GB"})
             self.writeObjectToJsonFile(dicData=dicParsedResult, strJsonFilePath=strParsedResultJsonFilePath)
             
     #取得國家簡碼 IOS-3166-1
