@@ -1,0 +1,111 @@
+{
+    "rawdata-converter-name":"crunchBase",
+    "local-html-file-pattern":{
+        "strBasedir":"C:\\Users\\SJack\\Desktop\\crawlermaster",
+        "strSuffixes":"news.html"
+    },
+    "csslist":[
+
+        {
+            "name":"cb-strUrl",
+            "sampleUrl":"  https://www.crunchbase.com/organization/500-startups",
+            "preAction": [],
+            "cssRule":"h1#profile_header_heading a::attr(href)",
+            "sampleAns":[
+                "https://www.crunchbase.com/organization/500-startups"
+                ],
+            "ansType":"exact"
+        },
+        {
+            "name":"cb-strName",
+            "sampleUrl":"  https://www.crunchbase.com/organization/500-startups",
+            "preAction": [],
+            "cssRule":"h1#profile_header_heading a::text",
+            "sampleAns":[
+                "500 Startups"
+                ],
+            "ansType":"exact"
+        },
+        
+        {
+            "name":"cb-strLocation",
+            "sampleUrl":"  https://www.crunchbase.com/organization/500-startups",
+            "preAction": [],
+            "cssRule":"div.addresses div.info-block p::text",
+            "sampleAns":[
+                "Mexico City, ", 
+            "MEX", 
+            "814 Mission St", 
+            "San Francisco, CA 94105", 
+            "USA", 
+            "444 Castro Street", 
+            "#1200", 
+            "Mountain View, CA 94041", 
+            "USA"
+                ],
+            "ansType":"exact"
+        },
+        {
+            "name":"cb-Investor-Details-dt",
+            "sampleUrl":"  https://www.crunchbase.com/organization/500-startups",
+            "preAction": [],
+            "cssRule":"div.description div.container dt::text",
+            "sampleAns":[
+                "Founded:",
+                "Type:",
+                "Investment Size:",
+                "Program:",
+                "Demo Days:",
+                "Application Deadline:",
+                "More Info:"
+                ],
+            "ansType":"exact"
+        },
+        {
+            "name":"cb-Investor-Details-dd",
+            "sampleUrl":"  https://www.crunchbase.com/organization/500-startups",
+            "preAction": [],
+            "cssRule":"div.description div.container dd",
+            "sampleAns":[
+                "<dd>April 1, 2010</dd>", 
+            "<dd>Accelerator that does Seed and Early Stage Venture Investments</dd>", 
+            "<dd>100k - 200k</dd>", 
+            "<dd>On-Site</dd>", 
+            "<dd>Yes</dd>", 
+            "<dd>September 30, 2016</dd>", 
+            "<dd><a href=\"http://500.co/batch-19-application/?rel=site_accelerator\" target=\"_blank\">http://500.co/batch-19-application/?rel=site_accelerator</a></dd>"
+       
+                ],
+            "ansType":"exact"
+        },
+        
+        {
+            "name":"cb-lstStrMarketIndustry-dt",
+            "sampleUrl":"  https://www.crunchbase.com/organization/500-startups",
+            "preAction": [],
+            "cssRule":"div.timeline div.description div.details dt::text",
+            "sampleAns":[
+                "Founded:", 
+            "Type:", 
+            "Investment Size:"
+                ],
+            "ansType":"exact"
+        },
+        {
+            "name":"cb-lstStrMarketIndustry-dd",
+            "sampleUrl":"  https://www.crunchbase.com/organization/500-startups",
+            "preAction": [],
+            "cssRule":"div.timeline div.description div.details dd::text",
+            "sampleAns":[
+                "April 1, 2010", 
+            "Accelerator that does Seed and Early Stage Venture Investments", 
+            "100k - 200k"
+                ],
+            "ansType":"exact"
+        }
+
+
+
+
+ ]
+}

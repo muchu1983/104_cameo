@@ -14,6 +14,8 @@ import logging
 from scrapy import Selector
 from cameo.utility import Utility
 from cameo.localdb import LocalDbForCRUNCHBASE
+from crawlermaster.cmparser import CmParser
+from cameo.cmConverter.converterForCRUNCHBASE import ConverterForCRUNCHBASE
 """
 從 source_html 的 HTML 檔案解析資料
 結果放置於 parsed_result 下
@@ -30,11 +32,7 @@ class ParserForCRUNCHBASE:
         }
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
-        self.dicParsedResultOfProject = {} #project.json 資料
-        self.dicParsedResultOfUpdate = {} #update.json 資料
-        self.dicParsedResultOfComment = {} #comment.json 資料
-        self.dicParsedResultOfReward = {} #reward.json 資料
-        self.dicParsedResultOfProfile = {} #profile.json 資料
+        self.dicParsedResultOfStartup = {} #startup.json 資料
         
     #取得 parser 使用資訊
     def getUseageMessage(self):
@@ -83,61 +81,16 @@ class ParserForCRUNCHBASE:
             for strOrganizationUrl in lstStrOrganizationUrl:
                 self.db.insertOrganizationUrlIfNotExists(strOrganizationUrl=strOrganizationUrl)
 #organization #####################################################################################
-    #解析 organization page 進入點
-    def parseOrganizationPage(self, uselessArg1=None):
-        lstFuncOfParseOrganization = [
-            self.beforeParseOrganizationPage,
-            self.parseOrganizationHtmlPage,
-            self.afterParseOrganizationPage
-        ]
-        for funcOfParseOrganization in lstFuncOfParseOrganization:
-            funcOfParseOrganization()
-    #解析 organization page 之前
-    def beforeParseOrganizationPage(self):
-        self.dicParsedResultOfProject = {} #project.json 資料
-        self.dicParsedResultOfUpdate = {} #update.json 資料
-        self.dicParsedResultOfComment = {} #comment.json 資料
-        self.dicParsedResultOfReward = {} #reward.json 資料
-        strProjectsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\INDIEGOGO\\%s\\projects"%strCategoryName)
-        if not os.path.exists(strProjectsResultFolderPath):
-            #mkdir parsed_result/INDIEGOGO/category/projects/
-            os.mkdir(strProjectsResultFolderPath)
-            
-    #解析 organization page 之後
-    def afterParseOrganizationPage(self):
-        strProjectsResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\INDIEGOGO\\%s\\projects"%strCategoryName)
-        #將 parse 結果寫入 json 檔案
-        self.utility.writeObjectToJsonFile(self.dicParsedResultOfProject, strProjectsResultFolderPath + u"\\project.json")
-        self.utility.writeObjectToJsonFile(self.dicParsedResultOfUpdate, strProjectsResultFolderPath + u"\\update.json")
-        self.utility.writeObjectToJsonFile(self.dicParsedResultOfComment, strProjectsResultFolderPath + u"\\comment.json")
-        self.utility.writeObjectToJsonFile(self.dicParsedResultOfReward, strProjectsResultFolderPath + u"\\reward.json")
-        
     #解析 organization.html
-    def parseOrganizationHtmlPage(self):
-        strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"\\INDIEGOGO\\%s\\projects"%strCategoryName)
-        lstStrDetailsHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strProjectsHtmlFolderPath, strSuffixes="_details.html")
-        for strProjectDetailsHtmlPath in lstStrDetailsHtmlFilePath:
-            logging.info("parsing %s"%strProjectDetailsHtmlPath)
-            with open(strProjectDetailsHtmlPath, "r") as projDetailsHtmlFile: #open *_details.html
-                strProjHtmlFileName = os.path.basename(projDetailsHtmlFile.name)
-                strProjUrl = "https://www.indiegogo.com/projects/" + re.search("^(.*)_details.html$", strProjHtmlFileName).group(1)
-                if not self.checkIsProjUrlInProjUrlListFile(strCategoryName=strCategoryName, strProjUrl=strProjUrl):
-                    logging.warning("%s not in project_url_list.txt, skip parse it"%strProjUrl)
-                    continue #skip
-                if strProjUrl not in self.dicParsedResultOfProject:
-                    self.dicParsedResultOfProject[strProjUrl] = {}
-                strPageSource = projDetailsHtmlFile.read()
-                root = Selector(text=strPageSource)
-                #parse *_details.html
-                #strCreatorUrl
-                strIndividualsUrl = root.css("div.campaignTrustPassportDesktop-ownerInfo a.ng-binding[href*='individuals']::attr(href)").extract_first() #parse individuals url
-                self.dicParsedResultOfProject[strProjUrl]["strCreatorUrl"] = strIndividualsUrl
-                # append url to parsed_result/*/category/individuals_url_list.txt
-                strIndividualsUrlListFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\INDIEGOGO\\%s\\individuals_url_list.txt"%(strCategoryName))
-                lstStrExistsIndividualsUrl = []
-                if os.path.exists(strIndividualsUrlListFilePath):
-                    with open(strIndividualsUrlListFilePath, "r") as individualsUrlListFile:
-                        lstStrExistsIndividualsUrl = individualsUrlListFile.readlines()
-                if strIndividualsUrl+u"\n" not in lstStrExistsIndividualsUrl:#檢查有無重覆的 individuals url
-                    with open(strIndividualsUrlListFilePath, "a") as individualsUrlListFile:
-                        individualsUrlListFile.write(strIndividualsUrl + u"\n") #append url to individuals_url_list.txt
+    def parseOrganizationPage(self, uselessArg1=None):
+        strOrganizationResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\CRUNCHBASE\\organization"
+        strOrganizationHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\CRUNCHBASE\\organization"
+        #organization.html
+        strCssJsonFilePath = "cameo_res\\selector_rule\\crunchbase_organization.json"
+        cmParser = CmParser(strCssJsonFilePath=strCssJsonFilePath)
+        lstDicOrganizationPageRawData = cmParser.localHtmlFileParse(strBasedir=strOrganizationHtmlFolderPath, strSuffixes="_organization.html")
+        #converter
+        rawDataConverter = ConverterForCRUNCHBASE()
+        rawDataConverter.convertStartup(lstLstDicRawData=[lstDicOrganizationPageRawData])
+        strStartupJsonFilePath = strOrganizationResultFolderPath + u"\\startup.json"
+        rawDataConverter.flushConvertedStartupDataToJsonFile(strJsonFilePath=strStartupJsonFilePath)

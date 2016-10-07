@@ -1,0 +1,104 @@
+{
+    "rawdata-converter-name":"CrunchBase",
+    "local-html-file-pattern":
+        {
+        "strBasedir":"C:\\Users\\SJack\\Desktop\\crawlermaster",
+        "strSuffixes":"news.html"
+        },
+    "csslist":[
+
+        {
+            "name":"cb-strUrl",
+            "sampleUrl":"https://www.crunchbase.com/person/dave-mcclurel",
+            "preAction": [],
+            "cssRule":"h1#profile_header_heading a::attr(href)",
+            "sampleAns":[
+                "https://www.crunchbase.com/person/dave-mcclure"
+                ],
+            "ansType":"exact"
+        },
+        {
+            "name":"cb-strName",
+            "sampleUrl":"https://www.crunchbase.com/person/dave-mcclurel",
+            "preAction": [],
+            "cssRule":"h1#profile_header_heading a::text",
+            "sampleAns":[
+                "Dave McClure"
+                ],
+            "ansType":"exact"
+        },
+        {
+            "name":"cb-strCompany",
+            "sampleUrl":"https://www.crunchbase.com/person/dave-mcclurel",
+            "preAction": [],
+            "cssRule":"div#info-card-overview-content dd:nth-child(2)  a.follow_card::text",
+            "sampleAns":[
+                "500 Startups"
+                ],
+            "ansType":"exact"
+        },
+        {
+            "name":"cb-strRole",
+            "sampleUrl":"https://www.crunchbase.com/person/dave-mcclurel",
+            "preAction": [],
+            "cssRule":"div.overview-stats dd:nth-child(2)::text",
+            "sampleAns":[
+                "Founding Partner ", 
+            " "
+                ],
+            "ansType":"exact"
+        },
+        {
+            "name":"cb-intTypicalInvestment",
+            "sampleUrl":"https://www.crunchbase.com/person/dave-mcclurel",
+            "preAction": [],
+            "cssRule":"div.investments table.investors tr td:nth-child(3)::text",
+            "sampleAns":[
+                "$2.3M / ", 
+            "undisclosed amount / ", 
+            "$500k / ", 
+            "$3.08M / ", 
+            "$620k / ", 
+            "undisclosed amount / ", 
+            "$1.8M / ", 
+            "$300k / ", 
+            "$1.52M / ", 
+            "$600k / ", 
+            "$320k / ", 
+            "undisclosed amount / ", 
+            "$2.8M / ", 
+            "$100k / ", 
+            "undisclosed amount / ", 
+            "$293k / ", 
+            "€150k / ", 
+            "$7.3M / ", 
+            "$750k / ", 
+            "$100k / ", 
+            "$500k / ", 
+            "$250k / ", 
+            "$150k / ", 
+            "undisclosed amount / ", 
+            "$50k / ", 
+            "$1M / ", 
+            "$3M / ", 
+            "$50k / ", 
+            "$800k / ", 
+            "$1M / ", 
+            "$2.1M / ", 
+            "$10M / ", 
+            "$400k / ", 
+            "$1.32M / ", 
+            "$1.5M / ", 
+            "$2.15M / ", 
+            "$50k / ", 
+            "$30M / ", 
+            "$6.62M / ", 
+            "$1.2M / "
+                ],
+            "ansType":"exist"
+        }
+
+
+
+    ]
+}

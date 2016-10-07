@@ -1,0 +1,353 @@
+{
+    "rawdata-converter-name":"CrunchBase",
+    "local-html-file-pattern":{
+        "strBasedir":"C:\\Users\\SJack\\Desktop\\crawlermaster",
+        "strSuffixes":"news.html"
+    },
+    "csslist":[
+
+        {
+            "name":"cb-strUrl",
+            "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
+            "preAction": [],
+            "cssRule":"h1#profile_header_heading a::attr(href)",
+            "sampleAns":[
+                "https://www.crunchbase.com/organization/airbnb"
+                ],
+            "ansType":"exact"
+        },
+
+        {
+            "name":"cb-strCompany",
+            "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
+            "preAction": [],
+            "cssRule":"h1#profile_header_heading a::text",
+            "sampleAns":[
+                "Airbnb"
+                ],
+            "ansType":"exact"
+        },
+
+        {
+            "name":"cb-lstStrFounders",
+            "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
+            "preAction": [],
+            "cssRule":"div#info-card-overview-content dl.definition-list div.definition-list dd a.follow_card::text",
+            "sampleAns":[
+                "Nathan Blecharczyk","Joe Gebbia","Brian Chesky"
+                ],
+            "ansType":"exact"
+        },
+
+        {
+            "name":"cb-strIntro",
+            "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
+            "preAction": [],
+            "cssRule":"div.description-ellipsis p::text",
+            "sampleAns":[
+                "Airbnb is a community marketplace for people to list, discover and book unique spaces around the world through mobile phones or the internet. Whether an apartment for a night, a castle for a week, or a villa for a month, Airbnb connects people to unique travel experiences at any price point, with ", 
+            ".", 
+            "With a growing community of users, Airbnb also provides an easy way for people to monetize their extra space and showcase it to an audience of millions. ", 
+            "Founded in August 2008, Airbnb has acquired several of its competitors, including ", 
+            ", ", 
+            ", ", 
+            ", and ", 
+            ".", 
+            "Airbnb was founded in August 2008 by ", 
+            " and ", 
+            ", and is currently headquartered in ", 
+            ", USA."
+        ],
+            "ansType":"exact"
+        },
+
+        {
+            "name":"cb-lstStrTeam",
+            "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
+            "preAction": [],
+            "cssRule":"div.people div.card-content ul li h4 a::text",
+            "sampleAns":[
+                "Brian Chesky", 
+                "Nathan Blecharczyk", 
+                "Joe Gebbia", 
+                "Joe Zadeh", 
+                "Laurence A. Tosi", 
+                "Chip Conley"
+                ],
+            "ansType":"exact"
+        },
+
+        {
+            "name":"cb-lstStrTeamDesc",
+            "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
+            "preAction": [],
+            "cssRule":"div.people div.card-content ul li h5::text",
+            "sampleAns":[
+                "Co-Founder & CEO", 
+                "Co-Founder & CTO", 
+                "Co-Founder, Chief Product Officer & Executive staff", 
+                "Director - Product", 
+                "CFO", 
+                "Head - Global Hospitality & Strategy"
+                ],
+            "ansType":"exact"
+        },
+        {
+            "name":"cb-lstStrProduct",
+            "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
+            "preAction": [],
+            "cssRule":"div.products div.box ul li div.info-block h5::text",
+            "sampleAns":[
+                "Rent unique places to stay from local hosts in 190+ countries."
+                ],
+            "ansType":"exact"
+        },
+
+        {
+            "name":"cb-lstIndustry",
+            "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
+            "preAction": [],
+            "cssRule":"div#info-card-overview-content dl.definition-list div.definition-list dd:nth-child(8) a::text",
+            "sampleAns":[
+                "Marketplace", 
+            "Travel", 
+            "Travel Accommodations", 
+            "Sharing Economy", 
+            "Hospitality"
+                 ],
+            "ansType":"exact"
+        },
+
+        {
+            "name":"cb-strLocation",
+            "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
+            "preAction": [],
+            "cssRule":"ul.office li div p::text",
+            "sampleAns":[
+                "888 Brannan Street", 
+            "San Francisco, CA 94103", 
+            "USA"
+                ],
+            "ansType":"exact"
+        },       
+
+        {
+            "name":"cb-strSeriesType",
+            "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
+            "preAction": [],
+            "cssRule":"div.funding_rounds table tr td:nth-child(2) a::text",
+            "sampleAns":[
+                "Private Equity", 
+            "Debt Financing", 
+            "Private Equity", 
+            "Series E", 
+            "Series D", 
+            "Series C", 
+            "Series B", 
+            "Series A", 
+            "Seed", 
+            "Seed"
+                ],
+            "ansType":"exist"
+        },
+
+        {
+            "name":"cb-intSeriesMoney",
+            "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
+            "preAction": [],
+            "cssRule":"div.funding_rounds table tr td:nth-child(2)::text",
+            "sampleAns":[
+                "$555.46M / ", 
+            "$1B / ", 
+            "$100M / ", 
+            "$1.5B / ", 
+            "$475M / ", 
+            "$200M / ", 
+            "$112M / ", 
+            "$7.2M / ", 
+            "$600k / ", 
+            "$20k / "
+                ],
+            "ansType":"exist"
+        },
+
+        {
+            "name":"cb-intSeriesValuation",
+            "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
+            "preAction": [],
+            "cssRule":"div.funding_rounds table tr td:nth-child(3)::text",
+            "sampleAns":[
+                "—", 
+            "—", 
+            "—", 
+            "—", 
+            "$10B", 
+            "—", 
+            "—", 
+            "—", 
+            "—", 
+            "—"
+                ],
+            "ansType":"exist"
+        },
+
+        {
+            "name":"cb-strSeriesDate",
+            "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
+            "preAction": [],
+            "cssRule":"div.funding_rounds table tr td.date::text",
+            "sampleAns":[
+                "Sep, 2016", 
+            "Jun, 2016", 
+            "Nov, 2015", 
+            "Jun, 2015", 
+            "Apr, 2014", 
+            "Oct, 2013", 
+            "Jul, 2011", 
+            "Nov, 2010", 
+            "Apr, 2009", 
+            "Jan, 2009"
+                ],
+            "ansType":"exist"
+        },
+
+        {
+            "name":"cb-lstStrInvestor",
+            "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
+            "preAction": [],
+            "cssRule":"div.funding_rounds table tr td:nth-child(4) a::text",
+            "sampleAns":[
+                "Google Capital", 
+            "TCV", 
+            "JP Morgan Chase & Co.", 
+            "FirstMark Capital", 
+            "General Atlantic", 
+            "Hillhouse Capital Group", 
+            "Tiger Global Management", 
+            "Founders Fund", 
+            "Andreessen Horowitz", 
+            "Greylock Partners", 
+            "Sequoia Capital", 
+            "Y Combinator"
+                ],
+            "ansType":"exist"
+        },
+
+        {
+            "name":"cb-lstStrInvestorUrl",
+            "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
+            "preAction": [],
+            "cssRule":"div.investors table.investors tbody tr:first-child td:first-child a::attr(href)",
+            "sampleAns":[
+                "https://www.crunchbase.com/organization/airbnb", 
+            "https://www.crunchbase.com/organization/andreessen-horowitz", 
+            "https://www.crunchbase.com/person/ashton-kutcher", 
+            "https://www.crunchbase.com/organization/baillie-gifford", 
+            "https://www.crunchbase.com/organization/brandcapital", 
+            "https://www.crunchbase.com/organization/china-broadband-capital", 
+            "https://www.crunchbase.com/organization/citigroup", 
+            "https://www.crunchbase.com/organization/crunchfund", 
+            "https://www.crunchbase.com/organization/dragoneer-investment-group", 
+            "https://www.crunchbase.com/organization/digital-sky-technologies-fo", 
+            "https://www.crunchbase.com/person/elad-gil", 
+            "https://www.crunchbase.com/organization/fidelity-investments", 
+            "https://www.crunchbase.com/organization/firstmark-capital", 
+            "https://www.crunchbase.com/organization/founders-fund", 
+            "https://www.crunchbase.com/organization/general-atlantic"
+                ],
+            "ansType":"exist"
+        },
+
+        {
+            "name":"cb-strCurrency",
+            "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
+            "preAction": [],
+            "cssRule":"div#info-card-overview-content  span.funding_amount  sup::text",
+            "sampleAns":[
+                "$"
+                ],
+            "ansType":"exact"
+        },
+
+        {
+            "name":"cb-strSourceUrl",
+            "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
+            "preAction": [],
+            "cssRule":"table.press_mentions a.track-article-click::attr(href)",
+            "sampleAns":[
+                "https://techcrunch.com/2016/09/27/airbnb-revamps-its-app-with-new-tools-for-hosts-improved-messaging/", 
+            "http://www.sbsun.com/business/20160926/who-was-the-biggest-winner-from-the-rams-opening-weekend-airbnb-hosts", 
+            "http://www.miamiherald.com/news/business/article104264181.html", 
+            "http://www.cio.in/case-study/dollar-shave-club-grooming-aws-cloud-services-smoother-growth", 
+            "http://www.economist.com/news/business/21707599-rocket-internet-fizzles-other-startups-take-freaks-are-coming", 
+            "https://www.tnooz.com/article/airbnb-scoops-up-another-555-million-in-investment/", 
+            "http://www.bostonherald.com/business/business_markets/2016/09/airbnb_founder_touts_new_30b_valuation_in_hub_visit", 
+            "https://techcrunch.com/2016/09/23/weekly-roundup-apples-auto-rumors-gopros-new-devices-and-czis-3b-pledge/"
+       
+       ],
+            "ansType":"exist"
+        },
+
+        {
+            "name":"cb-strSourceDomain",
+            "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
+            "preAction": [],
+            "cssRule":"table.press_mentions tr td.article span.publication::text",
+            "sampleAns":[
+                "TechCrunch", 
+            "SB Sun", 
+            "Miami Herald", 
+            "CIO India", 
+            "The Economist", 
+            "TNooz", 
+            "Boston Herald", 
+            "TechCrunch"
+                ],
+            "ansType":"exist"
+        },
+
+        {
+            "name":"cb-strTitle",
+            "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
+            "preAction": [],
+            "cssRule":"table.press_mentions a.track-article-click::text",
+            "sampleAns":[
+                "Airbnb revamps its app with new tools for hosts, improved messaging", 
+            "Who was the biggest winner from the Rams’ opening weekend? Airbnb hosts", 
+            "Lawmakers' report finds crowded Airbnb rentals in New York", 
+            "Dollar Shave Club grooming AWS cloud services for smoother growth", 
+            "The freaks are coming", 
+            "Airbnb scoops up another $555 million in investment", 
+            "Airbnb founder touts new $30B valuation in Hub visit", 
+            "Weekly Roundup: Apple’s auto rumors, GoPro’s new devices and CZI’s $3B pledge"
+        
+                ],
+            "ansType":"exist"
+        },
+
+        {
+            "name":"cb-strDate",
+            "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
+            "preAction": [],
+            "cssRule":"table.press_mentions tr td.date::text",
+            "sampleAns":[
+                "Sep 27, 2016", 
+            "Sep 27, 2016", 
+            "Sep 26, 2016", 
+            "Sep 26, 2016", 
+            "Sep 24, 2016", 
+            "Sep 23, 2016", 
+            "Sep 23, 2016", 
+            "Sep 23, 2016"
+                ],
+            "ansType":"exist"
+        }
+
+
+
+
+
+
+
+ ]
+}
