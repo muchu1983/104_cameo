@@ -32,7 +32,8 @@ class ConverterForCRUNCHBASE:
             strOrganizationUrl = u"https://www.crunchbase.com/organization/" + strOrganizationId
             #檢查 資料是否有誤
             lstCompanyData = dicOrganizationPageRawData.get("cb-strCompany", [])
-            if lstCompanyData == []:
+            lstLocationData = dicOrganizationPageRawData.get("cb-strLocation", [])
+            if lstCompanyData == [] or lstLocationData == []:
                 #錯誤資料 刪除 html 檔並跳過
                 os.remove(strOrganizationHtmlFilePath)
                 continue
