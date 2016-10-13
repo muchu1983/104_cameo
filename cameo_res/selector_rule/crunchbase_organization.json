@@ -122,7 +122,7 @@
             "name":"cb-strLocation",
             "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
             "preAction": [],
-            "cssRule":"ul.office li div p::text",
+            "cssRule":"ul.office li:nth-of-type(1) div p::text",
             "sampleAns":[
                 "888 Brannan Street", 
             "San Francisco, CA 94103", 
