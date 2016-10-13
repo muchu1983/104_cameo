@@ -71,7 +71,7 @@ class ConverterForCRUNCHBASE:
             strLocation = u" ".join(lstStrLocation)
             self.dicParsedResultOfStartup[strOrganizationUrl]["strLocation"] = strLocation
             #strCity
-            (strAddress, fLatitude, fLongitude) = self.cameoUtility.geopyGeocode(strOriginLocation=strLocation)
+            (strAddress, fLatitude, fLongitude) = self.cameoUtility.geopyGeocode(strOriginLocation=lstStrLocation[-1])
             self.dicParsedResultOfStartup[strOrganizationUrl]["strCity"] = strAddress
             #strCountry
             strOriginCountry = strAddress.split(u",")[-1].strip()
