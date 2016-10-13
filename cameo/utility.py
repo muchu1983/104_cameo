@@ -9,6 +9,7 @@ This file is part of BSD license
 import os
 import re
 import json
+import time
 import datetime
 import dateparser
 import pkg_resources
@@ -169,6 +170,7 @@ class Utility:
     #使用 geopy 查找 洲別 資料 (目前不可用)
     def geopyGeocode(self, strOriginLocation=""):
         geolocator = GoogleV3()
+        time.sleep(5) #避免太快送出 geopy 查詢
         location = geolocator.geocode(strOriginLocation, exactly_one=True)
         return (location.address, location.latitude, location.longitude)
         
