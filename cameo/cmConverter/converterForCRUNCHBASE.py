@@ -8,6 +8,7 @@ This file is part of BSD license
 """
 import logging
 import re
+import os
 import dateparser
 from cameo.utility import Utility as CameoUtility
 from crawlermaster.utility import Utility as CmUtility
@@ -29,16 +30,23 @@ class ConverterForCRUNCHBASE:
             logging.info("convert: %s"%strOrganizationHtmlFilePath)
             strOrganizationId = re.search("^.*\\\\(.*)_organization.html$", strOrganizationHtmlFilePath).group(1)
             strOrganizationUrl = u"https://www.crunchbase.com/organization/" + strOrganizationId
+            #檢查 資料是否有誤
+            strCompany = self.cmUtility.extractFirstInList(lstSource=dicOrganizationPageRawData.get("cb-strCompany", []))
+            if strCompany == []:
+                #錯誤資料 刪除 html 檔並跳過
+                os.remove(strOrganizationHtmlFilePath)
+                continue
+            #建立 dict
             if strOrganizationUrl not in self.dicParsedResultOfStartup:
                 self.dicParsedResultOfStartup[strOrganizationUrl] = {}
+            #strCompany
+            strCompany = self.cmUtility.extractFirstInList(lstSource=dicOrganizationPageRawData.get("cb-strCompany", []))
+            self.dicParsedResultOfStartup[strOrganizationUrl]["strCompany"] = strCompany
             #strUrl
             self.dicParsedResultOfStartup[strOrganizationUrl]["strUrl"] = strOrganizationUrl
             #strCrawlTime
             strCrawlTime = self.cmUtility.getCtimeOfFile(strFilePath=strOrganizationHtmlFilePath)
             self.dicParsedResultOfStartup[strOrganizationUrl]["strCrawlTime"] = strCrawlTime
-            #strCompany
-            strCompany = self.cmUtility.extractFirstInList(lstSource=dicOrganizationPageRawData.get("cb-strCompany", []))
-            self.dicParsedResultOfStartup[strOrganizationUrl]["strCompany"] = strCompany
             #lstStrFounders
             lstStrFounders = dicOrganizationPageRawData.get("cb-lstStrFounders", [])
             self.dicParsedResultOfStartup[strOrganizationUrl]["lstStrFounders"] = lstStrFounders
