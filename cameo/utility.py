@@ -172,7 +172,7 @@ class Utility:
         geolocator = GoogleV3()
         time.sleep(1) #避免太快送出 geopy 查詢
         location = geolocator.geocode(strOriginLocation, exactly_one=True)
-        (strAddress, flatitude, flongitude) = (None, 0, 0)
+        (strAddress, fLatitude, fLongitude) = (None, 0, 0)
         if location is not None:
             strAddress = location.address
             fLatitude = location.latitude
