@@ -172,7 +172,12 @@ class Utility:
         geolocator = GoogleV3()
         time.sleep(1) #避免太快送出 geopy 查詢
         location = geolocator.geocode(strOriginLocation, exactly_one=True)
-        return (location.address, location.latitude, location.longitude)
+        (strAddress, flatitude, flongitude) = (None, 0, 0)
+        if location is not None:
+            strAddress = location.address
+            fLatitude = location.latitude
+            fLongitude = location.longitude
+        return (strAddress, fLatitude, fLongitude)
         
     #解析 list_of_country_by_continent_on_wikipedia.html
     def parseListOfCountryWikiPage(self):
