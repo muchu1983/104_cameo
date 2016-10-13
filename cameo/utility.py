@@ -170,7 +170,7 @@ class Utility:
     #使用 geopy 整理原始地區資訊
     def geopyGeocode(self, strOriginLocation=""):
         geolocator = GoogleV3()
-        time.sleep(1) #避免太快送出 geopy 查詢
+        time.sleep(2) #避免太快送出 geopy 查詢
         location = geolocator.geocode(strOriginLocation, exactly_one=True)
         (strAddress, fLatitude, fLongitude) = (None, 0, 0)
         if location is not None:
