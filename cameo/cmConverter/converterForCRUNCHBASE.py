@@ -31,8 +31,8 @@ class ConverterForCRUNCHBASE:
             strOrganizationId = re.search("^.*\\\\(.*)_organization.html$", strOrganizationHtmlFilePath).group(1)
             strOrganizationUrl = u"https://www.crunchbase.com/organization/" + strOrganizationId
             #檢查 資料是否有誤
-            strCompany = self.cmUtility.extractFirstInList(lstSource=dicOrganizationPageRawData.get("cb-strCompany", []))
-            if strCompany == []:
+            lstCompanyData = dicOrganizationPageRawData.get("cb-strCompany", [])
+            if lstCompanyData == []:
                 #錯誤資料 刪除 html 檔並跳過
                 os.remove(strOrganizationHtmlFilePath)
                 continue
