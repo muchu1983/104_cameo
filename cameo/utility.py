@@ -15,6 +15,7 @@ import dateparser
 import pkg_resources
 import smtplib
 import logging
+import random
 from email.mime.text import MIMEText
 from scrapy import Selector
 from geopy.geocoders import GoogleV3
@@ -169,7 +170,10 @@ class Utility:
         
     #使用 geopy 整理原始地區資訊
     def geopyGeocode(self, strOriginLocation=""):
-        geolocator = GoogleV3(api_key=u"AIzaSyDc71hTtE2XTTiVnad-Jz3rXe338VcqWBY")
+        lstStrApiKey = [
+            u"AIzaSyDc71hTtE2XTTiVnad-Jz3rXe338VcqWBY"
+        ]
+        geolocator = GoogleV3(api_key=random.choice(lstStrApiKey))
         time.sleep(2) #避免太快送出 geopy 查詢
         location = geolocator.geocode(strOriginLocation, exactly_one=True)
         (strAddress, fLatitude, fLongitude) = (None, 0, 0)
