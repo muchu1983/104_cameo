@@ -167,10 +167,10 @@ class Utility:
         strCTime = dtCTime.strftime("%Y-%m-%d")
         return strCTime
         
-    #使用 geopy 查找 洲別 資料 (目前不可用)
+    #使用 geopy 整理原始地區資訊
     def geopyGeocode(self, strOriginLocation=""):
         geolocator = GoogleV3()
-        time.sleep(5) #避免太快送出 geopy 查詢
+        time.sleep(1) #避免太快送出 geopy 查詢
         location = geolocator.geocode(strOriginLocation, exactly_one=True)
         return (location.address, location.latitude, location.longitude)
         
