@@ -26,6 +26,7 @@ class Utility:
     #建構子
     def __init__(self):
         self.fsUtil = FileSystemUtility()
+        self.strListOfCountryByContinentJsonFilePath = self.fsUtil.getPackageResourcePath(strPackageName="cameo_res", strResourceName="list_of_country_by_continent.json")
         self.parseListOfCountryWikiPage()
         #email helper setting
         self.DEFAULT_SMTP = "smtp.gmail.com:587"
