@@ -21,6 +21,7 @@ from cameo.reporter import ReporterForWEBACKERS
 #CRUNCHBASE
 from cameo.spiderForCRUNCHBASE import SpiderForCRUNCHBASE
 from cameo.parserForCRUNCHBASE import ParserForCRUNCHBASE
+from cameo.importerForCRUNCHBASE import ImporterForCRUNCHBASE
 from cameo.cleaner import CleanerForCRUNCHBASE
 #JD
 from cameo.spiderForJD import SpiderForJD
@@ -80,6 +81,7 @@ class CameoShell:
         self.dicImporters = {
             "indiegogo":ImporterForINDIEGOGO(),
             "webackers":ImporterForWEBACKERS(),
+            "crunchbase":ImporterForCRUNCHBASE(),
             "jd":ImporterForJD(),
             "techorange":ImporterForTECHORANGE(),
             "bnext":ImporterForBNEXT(),
