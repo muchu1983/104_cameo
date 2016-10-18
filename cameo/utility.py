@@ -26,9 +26,7 @@ class Utility:
     #建構子
     def __init__(self):
         self.fsUtil = FileSystemUtility()
-        self.strListOfCountryByContinentJsonFilePath = self.fsUtil.getPackageResourcePath(strPackageName="cameo_res", strResourceName="list_of_country_by_continent.json")
-        if not os.path.exists(self.strListOfCountryByContinentJsonFilePath): #建立 list_of_country_by_continent.json
-            self.parseListOfCountryWikiPage()
+        self.parseListOfCountryWikiPage()
         #email helper setting
         self.DEFAULT_SMTP = "smtp.gmail.com:587"
         self.DEFAULT_ACCOUNT = "cameoinfotech.tw@gmail.com"
@@ -171,7 +169,7 @@ class Utility:
     #使用 geopy 整理原始地區資訊
     def geopyGeocode(self, strOriginLocation=""):
         lstStrApiKey = [
-            u"AIzaSyDc71hTtE2XTTiVnad-Jz3rXe338VcqWBY"
+            u"AIzaSyB71s7yWXJajGDgfZXHGBXYnOww6eLx9vU"
         ]
         geolocator = GoogleV3(api_key=random.choice(lstStrApiKey))
         time.sleep(2) #避免太快送出 geopy 查詢
