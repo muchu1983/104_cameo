@@ -34,64 +34,8 @@ def entry_point():
     filesysUtility = FileSystemUtility()
     strSettingsJsonFilePath = filesysUtility.getPackageResourcePath(strPackageName="cameo.automation", strResourceName="automationForALLNEWS_settings.json")
     dicSettings = cameoUtility.readObjectFromJsonFile(strJsonFilePath=strSettingsJsonFilePath)
+    #TECHCRUNCH
     try:
-        #TECHORANGE
-        spider = SpiderForTECHORANGE()
-        parser = ParserForTECHORANGE()
-        importer = ImporterForTECHORANGE()
-        spider.runSpider(["index"])
-        parser.runParser(["index"])
-        spider.runSpider(["tag"])
-        parser.runParser(["tag"])
-        spider.runSpider(["news"])
-        parser.runParser(["news"])
-        spider.runSpider(["tag"])
-        parser.runParser(["tag"])
-        spider.runSpider(["news"])
-        parser.runParser(["json"])
-        importer.runImporter(["import"])
-        #BNEXT
-        spider = SpiderForBNEXT()
-        parser = ParserForBNEXT()
-        importer = ImporterForBNEXT()
-        spider.runSpider(["index"])
-        parser.runParser(["index"])
-        spider.runSpider(["tag"])
-        parser.runParser(["tag"])
-        spider.runSpider(["news"])
-        parser.runParser(["news"])
-        spider.runSpider(["tag"])
-        parser.runParser(["tag"])
-        spider.runSpider(["news"])
-        parser.runParser(["json"])
-        importer.runImporter(["import"])
-        #PEDAILY
-        spider = SpiderForPEDAILY()
-        parser = ParserForPEDAILY()
-        importer = ImporterForPEDAILY()
-        spider.runSpider(["index"])
-        parser.runParser(["index"])
-        spider.runSpider(["category"])
-        parser.runParser(["category"])
-        spider.runSpider(["news"])
-        parser.runParser(["json"])
-        importer.runImporter(["import"])
-        #INSIDE
-        spider = SpiderForINSIDE()
-        parser = ParserForINSIDE()
-        importer = ImporterForINSIDE()
-        spider.runSpider(["index"])
-        parser.runParser(["index"])
-        spider.runSpider(["tag"])
-        parser.runParser(["tag"])
-        spider.runSpider(["news"])
-        parser.runParser(["news"])
-        spider.runSpider(["tag"])
-        parser.runParser(["tag"])
-        spider.runSpider(["news"])
-        parser.runParser(["json"])
-        importer.runImporter(["import"])
-        #TECHCRUNCH
         spider = SpiderForTECHCRUNCH()
         parser = ParserForTECHCRUNCH()
         importer = ImporterForTECHCRUNCH()
@@ -110,7 +54,103 @@ def entry_point():
             lstStrTarget=dicSettings["lstStrMail"]
         )
     except Exception as e:
-        logging.warning("automation for WEBACKERS fail: %s"%str(e))
+        logging.warning("automation for ALLNEWS fail: %s"%str(e))
+        cameoUtility.sendEmail(
+            strSubject="Failed!",
+            strFrom=dicSettings["strMachine"],
+            strTo="me",
+            strMsg=str(e),
+            lstStrTarget=dicSettings["lstStrMail"]
+        )
+    #TECHORANGE
+    try:
+        spider = SpiderForTECHORANGE()
+        parser = ParserForTECHORANGE()
+        importer = ImporterForTECHORANGE()
+        spider.runSpider(["index"])
+        parser.runParser(["index"])
+        spider.runSpider(["tag"])
+        parser.runParser(["tag"])
+        spider.runSpider(["news"])
+        parser.runParser(["news"])
+        spider.runSpider(["tag"])
+        parser.runParser(["tag"])
+        spider.runSpider(["news"])
+        parser.runParser(["json"])
+        importer.runImporter(["import"])
+    except Exception as e:
+        logging.warning("automation for ALLNEWS fail: %s"%str(e))
+        cameoUtility.sendEmail(
+            strSubject="Failed!",
+            strFrom=dicSettings["strMachine"],
+            strTo="me",
+            strMsg=str(e),
+            lstStrTarget=dicSettings["lstStrMail"]
+        )
+    #BNEXT
+    try:
+        spider = SpiderForBNEXT()
+        parser = ParserForBNEXT()
+        importer = ImporterForBNEXT()
+        spider.runSpider(["index"])
+        parser.runParser(["index"])
+        spider.runSpider(["tag"])
+        parser.runParser(["tag"])
+        spider.runSpider(["news"])
+        parser.runParser(["news"])
+        spider.runSpider(["tag"])
+        parser.runParser(["tag"])
+        spider.runSpider(["news"])
+        parser.runParser(["json"])
+        importer.runImporter(["import"])
+    except Exception as e:
+        logging.warning("automation for ALLNEWS fail: %s"%str(e))
+        cameoUtility.sendEmail(
+            strSubject="Failed!",
+            strFrom=dicSettings["strMachine"],
+            strTo="me",
+            strMsg=str(e),
+            lstStrTarget=dicSettings["lstStrMail"]
+        )
+    #PEDAILY
+    try:
+        spider = SpiderForPEDAILY()
+        parser = ParserForPEDAILY()
+        importer = ImporterForPEDAILY()
+        spider.runSpider(["index"])
+        parser.runParser(["index"])
+        spider.runSpider(["category"])
+        parser.runParser(["category"])
+        spider.runSpider(["news"])
+        parser.runParser(["json"])
+        importer.runImporter(["import"])
+    except Exception as e:
+        logging.warning("automation for ALLNEWS fail: %s"%str(e))
+        cameoUtility.sendEmail(
+            strSubject="Failed!",
+            strFrom=dicSettings["strMachine"],
+            strTo="me",
+            strMsg=str(e),
+            lstStrTarget=dicSettings["lstStrMail"]
+        )
+    #INSIDE
+    try:
+        spider = SpiderForINSIDE()
+        parser = ParserForINSIDE()
+        importer = ImporterForINSIDE()
+        spider.runSpider(["index"])
+        parser.runParser(["index"])
+        spider.runSpider(["tag"])
+        parser.runParser(["tag"])
+        spider.runSpider(["news"])
+        parser.runParser(["news"])
+        spider.runSpider(["tag"])
+        parser.runParser(["tag"])
+        spider.runSpider(["news"])
+        parser.runParser(["json"])
+        importer.runImporter(["import"])
+    except Exception as e:
+        logging.warning("automation for ALLNEWS fail: %s"%str(e))
         cameoUtility.sendEmail(
             strSubject="Failed!",
             strFrom=dicSettings["strMachine"],
