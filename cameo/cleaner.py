@@ -20,7 +20,8 @@ class CleanerForINDIEGOGO:
         self.strBasedir = "cameo_res\\source_html\\INDIEGOGO"
     
     #rmtree 失敗時呼叫此方法
-    def rmtreeOnError(self, funcRmtree, strPath, _):
+    def rmtreeOnError(self, func, strPath, excInfo):
+        logging.warning(str(excInfo))
         logging.warning("rmtree error,try to chmod the file,then retry rmtree action.")
         os.chmod(strPath, stat.S_IWRITE) #chmod to writeable
         if os.path.isdir(strPath):
@@ -45,7 +46,8 @@ class CleanerForCRUNCHBASE:
         self.strBasedir = "cameo_res\\source_html\\CRUNCHBASE"
     
     #rmtree 失敗時呼叫此方法
-    def rmtreeOnError(self, funcRmtree, strPath, _):
+    def rmtreeOnError(self, func, strPath, excInfo):
+        logging.warning(str(excInfo))
         logging.warning("rmtree error,try to chmod the file,then retry rmtree action.")
         os.chmod(strPath, stat.S_IWRITE) #chmod to writeable
         if os.path.isdir(strPath):
