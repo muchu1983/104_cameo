@@ -25,7 +25,7 @@ class CleanerForINDIEGOGO:
         os.chmod(strPath, stat.S_IWRITE) #chmod to writeable
         if os.path.isdir(strPath):
             #處理資料夾 (使用遞迴)
-            funcRmtree(strPath, onerror=self.rmtreeOnError)
+            shutil.rmtree(strPath, onerror=self.rmtreeOnError)
         else:
             #處理檔案
             os.remove(strPath)
@@ -50,7 +50,7 @@ class CleanerForCRUNCHBASE:
         os.chmod(strPath, stat.S_IWRITE) #chmod to writeable
         if os.path.isdir(strPath):
             #處理資料夾 (使用遞迴)
-            funcRmtree(strPath, onerror=self.rmtreeOnError)
+            shutil.rmtree(strPath, onerror=self.rmtreeOnError)
         else:
             #處理檔案
             os.remove(strPath)
