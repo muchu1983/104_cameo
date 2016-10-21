@@ -172,7 +172,8 @@ class Utility:
         lstStrApiKey = [
             u"AIzaSyB71s7yWXJajGDgfZXHGBXYnOww6eLx9vU",
             u"AIzaSyDFYBYcwMkicRxE1hVUIHVNk5K2UFvV9Yk",
-            u"AIzaSyCCU72G1ID4zIfWN8I8zeoRtkLWFSG_jC8"
+            u"AIzaSyCCU72G1ID4zIfWN8I8zeoRtkLWFSG_jC8",
+            u"AIzaSyDc71hTtE2XTTiVnad-Jz3rXe338VcqWBY"
         ]
         geolocator = GoogleV3(api_key=random.choice(lstStrApiKey))
         time.sleep(2) #避免太快送出 geopy 查詢
