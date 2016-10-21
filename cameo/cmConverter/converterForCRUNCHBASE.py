@@ -25,7 +25,7 @@ class ConverterForCRUNCHBASE:
     def convertStartup(self, lstLstDicRawData=[]):
         #_organization.html raw data
         lstDicOrganizationPageRawData = lstLstDicRawData[0]
-        for dicOrganizationPageRawData in lstDicOrganizationPageRawData[0:100]:
+        for dicOrganizationPageRawData in lstDicOrganizationPageRawData:
             strOrganizationHtmlFilePath = dicOrganizationPageRawData.get("meta-data-html-filepath", None)
             logging.info("convert: %s"%strOrganizationHtmlFilePath)
             strOrganizationId = re.search("^.*\\\\(.*)_organization.html$", strOrganizationHtmlFilePath).group(1)
