@@ -25,7 +25,7 @@ class ConverterForCRUNCHBASE:
     def convertStartup(self, lstLstDicRawData=[]):
         #_organization.html raw data
         lstDicOrganizationPageRawData = lstLstDicRawData[0]
-        for dicOrganizationPageRawData in lstDicOrganizationPageRawData[0:2450]:
+        for dicOrganizationPageRawData in lstDicOrganizationPageRawData[0:100]:
             strOrganizationHtmlFilePath = dicOrganizationPageRawData.get("meta-data-html-filepath", None)
             logging.info("convert: %s"%strOrganizationHtmlFilePath)
             strOrganizationId = re.search("^.*\\\\(.*)_organization.html$", strOrganizationHtmlFilePath).group(1)
@@ -88,7 +88,65 @@ class ConverterForCRUNCHBASE:
             #lstStrFoundersDesc (無此資料)
             #lstStrFollowers (無此資料)
             #intFollower (無此資料)
+            #lstDicSeries
+            lstDicSeries = []
+            lstStrSeriesDate = dicOrganizationPageRawData.get("cb-strSeriesDate", [])
+            for intSeriesIndex in range(len(lstStrSeriesDate)):
+                dicSeries = {}
+                #intSeriesValuation
+                lstStrSeriesValuation = dicOrganizationPageRawData.get("cb-intSeriesValuation", [])
+                if len(lstStrSeriesValuation) >= intSeriesIndex:
+                    dicSeries.setdefault("intSeriesValuation", self.parseCrunchbaseMoney(strOriginMoney=lstStrSeriesValuation[intSeriesIndex]))
+                else:
+                    dicSeries.setdefault("intSeriesValuation", 0)
+                #intSeriesMoney
+                lstStrSeriesMoney = dicOrganizationPageRawData.get("cb-intSeriesMoney", [])
+                if len(lstStrSeriesMoney) >= intSeriesIndex:
+                    dicSeries.setdefault("intSeriesMoney", self.parseCrunchbaseMoney(strOriginMoney=lstStrSeriesMoney[intSeriesIndex]))
+                else:
+                    dicSeries.setdefault("intSeriesMoney", 0)
+                #lstStrInvestorUrl
+                dicSeries.setdefault("lstStrInvestorUrl", dicOrganizationPageRawData.get("cb-lstStrInvestorUrl", []))
+                #strDate
+                lstStrSeriesDate = dicOrganizationPageRawData.get("cb-strSeriesDate", [])
+                if len(lstStrSeriesDate) >= intSeriesIndex:
+                    dicSeries.setdefault("strDate", self.cameoUtility.parseStrDateByDateparser(strOriginDate=lstStrSeriesDate[intSeriesIndex]))
+                else:
+                    dicSeries.setdefault("strDate", "")
+                dicSeries.setdefault("strDate", )
+                #strSeriesType
+                lstStrSeriesType = dicOrganizationPageRawData.get("cb-strSeriesType", [])
+                if len(lstStrSeriesType) >= intSeriesIndex:
+                    dicSeries.setdefault("strSeriesType", lstStrSeriesType[intSeriesIndex])
+                else:
+                    dicSeries.setdefault("strSeriesType", "")
+                #lstStrInvestor
+                dicSeries.setdefault("lstStrInvestor", dicOrganizationPageRawData.get("cb-lstStrInvestor", []))
+                #strCurrency
+                dicSeries.setdefault("strCurrency", "USD")
+                #strCrawlTime
+                dicSeries.setdefault("strCrawlTime", strCrawlTime)
+                lstDicSeries.append(dicSeries)
+            self.dicParsedResultOfStartup[strOrganizationUrl]["lstDicSeries"] = lstDicSeries
             
+    #解析 crunchbase 金額的數字
+    def parseCrunchbaseMoney(self, strOriginMoney=None):
+        intDefaultMoney = 0
+        if not strOriginMoney or not re.search("[\d\.]+", strOriginMoney):
+            return intDefaultMoney
+        else:
+            intParsedMoney = 0
+            mMoneyWithK = re.search("([\d\.]+)k", strOriginMoney)
+            mMoneyWithM = re.search("([\d\.]+)M", strOriginMoney)
+            mMoneyWithB = re.search("([\d\.]+)B", strOriginMoney)
+            if mMoneyWithK:
+                intParsedMoney = int(float(mMoneyWithK.group(1)) * 1000)
+            if mMoneyWithM:
+                intParsedMoney = int(float(mMoneyWithM.group(1)) * 1000000)
+            if mMoneyWithB:
+                intParsedMoney = int(float(mMoneyWithB.group(1)) * 1000000000)
+            return intParsedMoney
+        
     #將 startup convert 結果寫入 startup.json
     def flushConvertedStartupDataToJsonFile(self, strJsonFilePath=None):
         self.cmUtility.writeObjectToJsonFile(dicData=self.dicParsedResultOfStartup, strJsonFilePath=strJsonFilePath)

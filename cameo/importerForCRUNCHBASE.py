@@ -50,7 +50,7 @@ class ImporterForCRUNCHBASE:
             #strSource
             dicStartup.setdefault("strSource", "CRUNCHBASE")
             #strCrawlTime
-            dicStartup.setdefault("strCrawlTime", self.getCorrectFormatDateTime(dicStartup.get("strCrawlTime")))
+            dicStartup["strCrawlTime"] = self.getCorrectFormatDateTime(dicStartup.get("strCrawlTime"))
             #lstIntCategoryId
             dicStartup.setdefault("lstIntCategoryId", [])
             #lstStrCategory
@@ -59,10 +59,15 @@ class ImporterForCRUNCHBASE:
             dicStartup.setdefault("lstIntSubCategoryId", [])
             #lstStrSubCategory
             dicStartup.setdefault("lstStrSubCategory", [])
-            #lstDicSeries
-            dicStartup.setdefault("lstDicSeries", [])
             #lstDicPress
             dicStartup.setdefault("lstDicPress", [])
+            #lstDicSeries
+            lstDicSeries = []
+            for dicSeries in dicStartup.get("lstDicSeries", []):
+                dicSeries["strCrawlTime"] = self.getCorrectFormatDateTime(dicSeries.get("strCrawlTime"))
+                dicSeries["strDate"] = self.getCorrectFormatDateTime(dicSeries.get("strDate"))
+                lstDicSeries.append(dicSeries)
+            dicStartup["lstDicSeries"] = lstDicSeries
             #upsert startup
             collectionStartup.update_one(
                 {"strUrl": strUrl},
