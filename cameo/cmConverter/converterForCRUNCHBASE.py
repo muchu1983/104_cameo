@@ -25,7 +25,7 @@ class ConverterForCRUNCHBASE:
     def convertStartup(self, lstLstDicRawData=[]):
         #_organization.html raw data
         lstDicOrganizationPageRawData = lstLstDicRawData[0]
-        for dicOrganizationPageRawData in lstDicOrganizationPageRawData:
+        for dicOrganizationPageRawData in lstDicOrganizationPageRawData[0:3000]:
             strOrganizationHtmlFilePath = dicOrganizationPageRawData.get("meta-data-html-filepath", None)
             logging.info("convert: %s"%strOrganizationHtmlFilePath)
             strOrganizationId = re.search("^.*\\\\(.*)_organization.html$", strOrganizationHtmlFilePath).group(1)
@@ -83,11 +83,6 @@ class ConverterForCRUNCHBASE:
             #lstStrInvestor
             lstStrInvestor = dicOrganizationPageRawData.get("cb-lstStrInvestor", [])
             self.dicParsedResultOfStartup[strOrganizationUrl]["lstStrInvestor"] = lstStrInvestor
-            #isFundraising (需定義問題)
-            #lstStrTopic (無此資料)
-            #lstStrFoundersDesc (無此資料)
-            #lstStrFollowers (無此資料)
-            #intFollower (無此資料)
             #lstDicSeries
             lstDicSeries = []
             lstStrSeriesDate = dicOrganizationPageRawData.get("cb-strSeriesDate", [])
@@ -128,6 +123,24 @@ class ConverterForCRUNCHBASE:
                 dicSeries.setdefault("strCrawlTime", strCrawlTime)
                 lstDicSeries.append(dicSeries)
             self.dicParsedResultOfStartup[strOrganizationUrl]["lstDicSeries"] = lstDicSeries
+            #lstStrFollowers (無此資料)
+            self.dicParsedResultOfStartup[strOrganizationUrl]["lstStrFollowers"] = []
+            #isFundraising (需定義問題)
+            self.dicParsedResultOfStartup[strOrganizationUrl]["isFundraising"] = True
+            #lstStrFoundersDesc (無此資料)
+            self.dicParsedResultOfStartup[strOrganizationUrl]["lstStrFoundersDesc"] = []
+            #intRaisedMoney
+            self.dicParsedResultOfStartup[strOrganizationUrl]["intRaisedMoney"] = 0
+            #intRaisedMoneyInTWD
+            self.dicParsedResultOfStartup[strOrganizationUrl]["intRaisedMoneyInTWD"] = 0
+            #lstStrTierTagId
+            self.dicParsedResultOfStartup[strOrganizationUrl]["lstStrTierTagId"] = []
+            #lstStrNewSubCategoryId
+            self.dicParsedResultOfStartup[strOrganizationUrl]["lstStrNewSubCategoryId"] = []
+            #lstStrNewCategoryId
+            self.dicParsedResultOfStartup[strOrganizationUrl]["lstStrNewCategoryId"] = []
+            #lstStrTopic (無此資料)
+            #intFollower (無此資料)
             
     #解析 crunchbase 金額的數字
     def parseCrunchbaseMoney(self, strOriginMoney=None):
