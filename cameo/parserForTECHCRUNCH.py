@@ -108,5 +108,5 @@ class ParserForTECHCRUNCH:
         cmParser = CmParser(strCssJsonFilePath=strCssJsonFilePath)
         lstDicNewsRawData = cmParser.localHtmlFileParse()
         rawDataConverter = ConverterForTECHCRUNCH()
-        rawDataConverter.convert(lstDicNewsRawData=lstDicNewsRawData, toFolderPath=strNewsResultFolderPath)
+        rawDataConverter.convert(lstDicNewsRawData=lstDicNewsRawData, strToFolderPath=strNewsResultFolderPath)
         
