@@ -29,8 +29,10 @@ class ConverterForTECHCRUNCH:
     def __init__(self):
         self.cmUtility = Utility()
         self.lstDicNewsData = []
+        self.intJsonFileIndex = 1
     
-    def convert(self, lstDicNewsRawData=[]):
+    def convert(self, lstDicNewsRawData=[], toFolderPath=None):
+        self.intJsonFileIndex = 1
         for dicRawData in lstDicNewsRawData:
             strHtmlFilePath = dicRawData.get("meta-data-html-filepath", None)
             logging.info("convert %s"%strHtmlFilePath)
@@ -50,7 +52,16 @@ class ConverterForTECHCRUNCH:
             except Exception as e:
                 logging.warning(str(e))
                 logging.warning("parse failed skip: %s"%strHtmlFilePath)
-        
+            if len(self.lstDicNewsData) == 1000:
+                strNewsJsonFilePath = toFolderPath + u"\\%d_news.json"%self.intJsonFileIndex*1000
+                self.flushConvertedDataToJsonFile(strJsonFilePath=strNewsJsonFilePath)
+                self.intJsonFileIndex = self.intJsonFileIndex+1
+                logging.info("save %s"%strNewsJsonFilePath)
+        if len(self.lstDicNewsData) > 0:
+                strNewsJsonFilePath = toFolderPath + u"\\%d_news.json"%self.intJsonFileIndex*1000
+                self.flushConvertedDataToJsonFile(strJsonFilePath=strNewsJsonFilePath)
+                logging.info("save %s"%strNewsJsonFilePath)
+                
     def flushConvertedDataToJsonFile(self, strJsonFilePath=None):
         self.cmUtility.writeObjectToJsonFile(dicData=self.lstDicNewsData, strJsonFilePath=strJsonFilePath)
         self.lstDicNewsData = []
