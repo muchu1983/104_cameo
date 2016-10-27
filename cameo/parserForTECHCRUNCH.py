@@ -106,7 +106,12 @@ class ParserForTECHCRUNCH:
         strNewsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\TECHCRUNCH\\news"
         strCssJsonFilePath = "cameo_res\\selector_rule\\techcrunch_csslist.json"
         cmParser = CmParser(strCssJsonFilePath=strCssJsonFilePath)
-        lstDicNewsRawData = cmParser.localHtmlFileParse()
         rawDataConverter = ConverterForTECHCRUNCH()
-        rawDataConverter.convert(lstDicNewsRawData=lstDicNewsRawData, strToFolderPath=strNewsResultFolderPath)
+        intNewsJsonIndex = 1
+        lstDicNewsRawData = cmParser.localHtmlFileParse(isIterable=True, isResetIteration=True)
+        while len(lstDicNewsRawData)>0:
+            strNewsJsonFilePath = strNewsResultFolderPath + u"\\%d_news.json"%(intNewsJsonIndex*1000)
+            rawDataConverter.convert(lstDicNewsRawData=lstDicNewsRawData, strNewsJsonFilePath=strNewsJsonFilePath)
+            intNewsJsonIndex = intNewsJsonIndex+1
+            lstDicNewsRawData = cmParser.localHtmlFileParse(isIterable=True)
         

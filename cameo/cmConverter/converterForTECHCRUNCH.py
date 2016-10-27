@@ -29,10 +29,8 @@ class ConverterForTECHCRUNCH:
     def __init__(self):
         self.cmUtility = Utility()
         self.lstDicNewsData = []
-        self.intJsonFileIndex = 1
-    
-    def convert(self, lstDicNewsRawData=[], strToFolderPath=None):
-        self.intJsonFileIndex = 1
+        
+    def convert(self, lstDicNewsRawData=[], strNewsJsonFilePath=None):
         for dicRawData in lstDicNewsRawData:
             strHtmlFilePath = dicRawData.get("meta-data-html-filepath", None)
             logging.info("convert %s"%strHtmlFilePath)
@@ -52,19 +50,9 @@ class ConverterForTECHCRUNCH:
             except Exception as e:
                 logging.warning(str(e))
                 logging.warning("convert failed skip: %s"%strHtmlFilePath)
-            #每 1000 筆輸出一個 json
-            logging.info("進度：%d/1000"%len(self.lstDicNewsData))
-            if len(self.lstDicNewsData) == 1000:
-                strNewsJsonFilePath = strToFolderPath + u"\\%d_news.json"%self.intJsonFileIndex*1000
-                self.flushConvertedDataToJsonFile(strJsonFilePath=strNewsJsonFilePath)
-                self.intJsonFileIndex = self.intJsonFileIndex+1
-                logging.info("save %s"%strNewsJsonFilePath)
-        #輸出剩餘資料
-        if len(self.lstDicNewsData) > 0:
-                strNewsJsonFilePath = strToFolderPath + u"\\%d_news.json"%self.intJsonFileIndex*1000
-                self.flushConvertedDataToJsonFile(strJsonFilePath=strNewsJsonFilePath)
-                logging.info("save %s"%strNewsJsonFilePath)
-                
+        self.flushConvertedDataToJsonFile(strJsonFilePath=strNewsJsonFilePath)
+        logging.info("save %s"%strNewsJsonFilePath)
+        
     def flushConvertedDataToJsonFile(self, strJsonFilePath=None):
         self.cmUtility.writeObjectToJsonFile(dicData=self.lstDicNewsData, strJsonFilePath=strJsonFilePath)
         self.lstDicNewsData = []
