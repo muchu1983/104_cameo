@@ -23,22 +23,17 @@ class ParserForCROWDCUBETest(unittest.TestCase):
     #收尾
     def tearDown(self):
         pass
-    
+    """
     #測試 解析 companies.html
     def test_parseCompaniesPage(self):
         logging.info("ParserForCROWDCUBETest.test_parseCompaniesPage")
         self.parser.parseCompaniesPage()
     """
     #測試 解析 company.html 並建立 json
-    def test_parseProjectPage(self):
-        logging.info("ParserForCROWDCUBETest.test_parseProjectPage")
-        self.parser.parseProjectPage(strCategoryPage1Url=None)
+    def test_parseCompanyPage(self):
+        logging.info("ParserForCROWDCUBETest.test_parseCompanyPage")
+        self.parser.parseCompanyPage()
     
-    #測試 解析 funder.html 並建立 json
-    def test_parseFunderPage(self):
-        logging.info("ParserForJDTest.test_parseFunderPage")
-        self.parser.parseFunderPage()
-    """
 #測試開始
 if __name__ == "__main__":
     unittest.main(exit=False)

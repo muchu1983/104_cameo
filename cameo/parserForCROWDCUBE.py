@@ -28,7 +28,7 @@ class ParserForCROWDCUBE:
         self.db = LocalDbForCROWDCUBE()
         self.dicSubCommandHandler = {
             "companies":[self.parseCompaniesPage],
-            "company":[self.parseProjectPage]
+            "company":[self.parseCompanyPage]
         }
         self.strWebsiteDomain = u"https://www.crowdcube.com"
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
@@ -71,44 +71,19 @@ class ParserForCROWDCUBE:
                 logging.info("insert company: %s"%strCompanyPageUrl)
                 self.db.insertCompanyUrlIfNotExists(strCompanyUrl=strCompanyPageUrl)
                 
-    #解析 projects/*.html 產生 json (strCategoryPage1Url == None 會自動找尋已完成下載之 category)
-    def parseProjectPage(self, strCategoryPage1Url=None):
-        if strCategoryPage1Url is None:
-            #未指定 category url
-            #取得已下載完成的 strCategoryUrl list
-            lstStrObtainedCategoryUrl = self.db.fetchallCompletedObtainedCategoryUrl()
-            for strObtainedCategoryUrl in lstStrObtainedCategoryUrl: #category loop
-                strCategoryName = self.db.fetchCategoryNameByUrl(strCategoryPage1Url=strObtainedCategoryUrl)
-                self.parseProjectPageWithGivenCategory(strCategoryPage1Url=strObtainedCategoryUrl, strCategoryName=strCategoryName)
-        else:
-            #有指定 category url
-            strCategoryName = self.db.fetchCategoryNameByUrl(strCategoryPage1Url=strCategoryPage1Url)
-            self.parseProjectPageWithGivenCategory(strCategoryPage1Url=strCategoryPage1Url, strCategoryName=strCategoryName)
-    
-    #解析 指定 category 的 projects/*.html 產生 json 並 取得 funder url
-    def parseProjectPageWithGivenCategory(self, strCategoryPage1Url=None, strCategoryName=None):
-        strProjectResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\JD\\%s\\projects"%strCategoryName
-        if not os.path.exists(strProjectResultFolderPath):
-            os.mkdir(strProjectResultFolderPath) #mkdir parsed_result/JD/category/projects
-        strProjectHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\JD\\%s\\projects"%strCategoryName
-        #_intro.html
-        strCssJsonFilePath = "cameo_res\\selector_rule\\jd_main_page_csslist.json"
+    #解析 companies/*.html 產生 json
+    def parseCompanyPage(self, uselessArg1=None):
+        strCompanyResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\CROWDCUBE\\companies"
+        strCompanyHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\CROWDCUBE\\companies"
+        if not os.path.exists(strCompanyResultFolderPath):
+            os.mkdir(strCompanyResultFolderPath) #mkdir parsed_result/CROWDCUBE/companies/
+        #company.html
+        strCssJsonFilePath = "cameo_res\\selector_rule\\crowdcube_company.json"
         cmParser = CmParser(strCssJsonFilePath=strCssJsonFilePath)
-        lstDicIntroPageRawData = cmParser.localHtmlFileParse(strBasedir=strProjectHtmlFolderPath, strSuffixes="_intro.html")
-        #_progress.html
-        strCssJsonFilePath = "cameo_res\\selector_rule\\jd_qa_update_csslist.json"
-        cmParser = CmParser(strCssJsonFilePath=strCssJsonFilePath)
-        lstDicProgressPageRawData = cmParser.localHtmlFileParse(strBasedir=strProjectHtmlFolderPath, strSuffixes="_progress.html")
-        #_qanda.html
-        strCssJsonFilePath = "cameo_res\\selector_rule\\jd_comment_csslist.json"
-        cmParser = CmParser(strCssJsonFilePath=strCssJsonFilePath)
-        lstDicQandaPageRawData = cmParser.localHtmlFileParse(strBasedir=strProjectHtmlFolderPath, strSuffixes="_qanda.html")
-        #_sponsor.html
-        strCssJsonFilePath = "cameo_res\\selector_rule\\jd_backer_csslist.json"
-        cmParser = CmParser(strCssJsonFilePath=strCssJsonFilePath)
-        lstDicSponsorPageRawData = cmParser.localHtmlFileParse(strBasedir=strProjectHtmlFolderPath, strSuffixes="_sponsor.html")
+        lstDicCompanyPageRawData = cmParser.localHtmlFileParse(strBasedir=strCompanyHtmlFolderPath, strSuffixes="_company.html")
         #converter
-        rawDataConverter = ConverterForJD()
-        rawDataConverter.convertProject(lstLstDicRawData=[lstDicIntroPageRawData, lstDicProgressPageRawData, lstDicQandaPageRawData, lstDicSponsorPageRawData])
-        rawDataConverter.flushConvertedProjectDataToJsonFile(strJsonFolderPath=strProjectResultFolderPath)
+        rawDataConverter = ConverterForCROWDCUBE()
+        rawDataConverter.convertStartup(lstLstDicRawData=[lstDicCompanyPageRawData])
+        strStartupJsonFilePath = strCompanyResultFolderPath + u"\\startup.json"
+        rawDataConverter.flushConvertedStartupDataToJsonFile(strJsonFilePath=strStartupJsonFilePath)
         

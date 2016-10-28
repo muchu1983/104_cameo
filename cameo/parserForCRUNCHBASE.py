@@ -85,6 +85,8 @@ class ParserForCRUNCHBASE:
     def parseOrganizationPage(self, uselessArg1=None):
         strOrganizationResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\CRUNCHBASE\\organization"
         strOrganizationHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\CRUNCHBASE\\organization"
+        if not os.path.exists(strOrganizationResultFolderPath):
+            os.mkdir(strOrganizationResultFolderPath) #mkdir parsed_result/CRUNCHBASE/organization/
         #organization.html
         strCssJsonFilePath = "cameo_res\\selector_rule\\crunchbase_organization.json"
         cmParser = CmParser(strCssJsonFilePath=strCssJsonFilePath)
