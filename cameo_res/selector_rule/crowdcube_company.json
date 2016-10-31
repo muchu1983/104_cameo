@@ -1,0 +1,114 @@
+{
+    "rawdata-converter-name":"crowdcube",
+    "local-html-file-pattern":{
+        "strBasedir":"C:\\Users\\SJack\\Desktop\\crawlermaster",
+        "strSuffixes":"news.html"
+    },
+    "csslist":[
+
+        {
+            "name":"cc-url",
+            "sampleUrl":"https://www.crowdcube.com/companies/this-mum-runs-ltd",
+            "preAction": [],
+            "cssRule":"div.cc-companyHeader__action ul.cc-dropLinks__links li:nth-child(2) a::attr(href)",
+            "sampleAns":[
+                "https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.crowdcube.com%2Fcompanies%2Fthis-mum-runs-ltd"
+                ],
+            "ansType":"exact"
+        },
+
+        {
+            "name":"cc-company",
+            "sampleUrl":"https://www.crowdcube.com/companies/this-mum-runs-ltd",
+            "preAction": [],
+            "cssRule":"div.cc-companyHeader__heading h1::text",
+            "sampleAns":[
+                "THIS MUM RUNS LTD"
+            ],
+            "ansType":"exact"
+        },
+
+     {
+            "name":"cc-company-founders",
+            "sampleUrl":"https://www.crowdcube.com/companies/this-mum-runs-ltd",
+            "preAction": [],
+            "cssRule":"section.cc-company__people table.cc-table tbody tr td:first-child span.cc-company__person::text",
+            "sampleAns":[
+                "BOUND, Mel"
+                ],
+            "ansType":"exact"
+        },
+
+     {
+            "name":"cc-company-foundersDesc",
+            "sampleUrl":"https://www.crowdcube.com/companies/this-mum-runs-ltd",
+            "preAction": [],
+            "cssRule":"section.cc-company__people table.cc-table tbody tr td::text",
+            "sampleAns":[
+                "Director","British"
+                ],
+            "ansType":"exact"
+        },
+
+        {
+            "name":"cc-company-intro",
+            "sampleUrl":"https://www.crowdcube.com/companies/this-mum-runs-ltd",
+            "preAction": [],
+            "cssRule":"section.cc-company__statements div.row p::text",
+            "sampleAns":[
+                "This Mum Runs is a fast growing, profitable women’s running brand. Combining a busy online community and networks of local runners with over 50 monthly women's only runs and courses at times that fit around work & family."
+                ],
+            "ansType":"exact"
+        },
+
+        {
+            "name":"cc-Industry",
+            "sampleUrl":"https://www.crowdcube.com/companies/this-mum-runs-ltd",
+            "preAction": [],
+            "cssRule":"section.cc-company__details div.cc-contentPanel ul li.cc-item__container:nth-child(4) p::text",
+            "sampleAns":[
+                "n/a"
+                ],
+            "ansType":"exact"
+        },
+        {
+            "name":"cc-Location",
+            "sampleUrl":"https://www.crowdcube.com/companies/this-mum-runs-ltd",
+            "preAction": [],
+            "cssRule":"div.cc-company__address address::text",
+            "sampleAns":[
+                "\n                    Unit 11, Hove Business Centre", 
+            "Fonthill Road", 
+            "Hove", 
+            "East Sussex", 
+            "BN3 6HA\n            "
+                ],
+            "ansType":"exact"
+        },
+
+        {
+            "name":"cc-isFundraising",
+            "sampleUrl":"https://www.crowdcube.com/companies/this-mum-runs-ltd",
+            "preAction": [],
+            "cssRule":"section.cc-company__history table.cc-table tbody tr td::text",
+            "sampleAns":[
+                "28/07/2016", 
+                "£103.28k", 
+                "367"
+                ],
+            "ansType":"exist"
+        },
+        {
+            "name":"cc-SeriesDate",
+            "sampleUrl":"https://www.crowdcube.com/companies/this-mum-runs-ltd",
+            "preAction": [],
+            "cssRule":"section.cc-company__history table.cc-table tbody tr td:first-child::text",
+            "sampleAns":[
+                "28/07/2016"
+                ],
+            "ansType":"exact"
+        }
+
+
+ ]
+}

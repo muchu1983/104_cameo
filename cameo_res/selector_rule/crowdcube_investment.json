@@ -1,0 +1,66 @@
+{
+    "rawdata-converter-name":"crowdcube",
+    "local-html-file-pattern":{
+        "strBasedir":"C:\\Users\\SJack\\Desktop\\crawlermaster",
+        "strSuffixes":"news.html"
+    },
+    "csslist":[
+
+     {
+            "name":"cc-in-company-founders",
+            "sampleUrl":"https://www.crowdcube.com/investment/london-doctors-clinic-21125",
+            "preAction": [],
+            "cssRule":"div.pitch-profile h4::text",
+            "sampleAns":[
+                "Founder: Dr. Seth Rankin MBChB MRCGP"
+                ],
+            "ansType":"exact"
+        },
+
+        {
+            "name":"cc-in-FoundersDesc",
+            "sampleUrl":"https://www.crowdcube.com/investment/london-doctors-clinic-21125",
+            "preAction": [],
+            "cssRule":"div.pitch-profile p::text",
+            "sampleAns":[
+                "Dr Seth Rankin MBChB MRCGP is a serial entrepreneur and has extensive experience of healthcare systems here and internationally."
+                ],
+            "ansType":"exact"
+        },
+
+        {
+            "name":"cc-in-SeriesType",
+            "sampleUrl":"https://www.crowdcube.com/investment/london-doctors-clinic-21125",
+            "preAction": [],
+            "cssRule":"div.cc-pitch__stats dl:first-child dt:nth-child(3)::text",
+            "sampleAns":[
+                "Equity on offer"
+                ],
+            "ansType":"exact"
+        },
+
+        {
+            "name":"cc-in-SeriesMoney",
+            "sampleUrl":"https://www.crowdcube.com/investment/london-doctors-clinic-21125",
+            "preAction": [],
+            "cssRule":"div.cc-pitch__raised b::text",
+            "sampleAns":[
+                "£827,030"
+                ],
+            "ansType":"exist"
+        },
+
+        {
+            "name":"cc-in-currency",
+            "sampleUrl":"https://www.crowdcube.com/investment/london-doctors-clinic-21125",
+            "preAction": [],
+            "cssRule":"div.cc-pitch__raised b::text",
+            "sampleAns":[
+                "£827,030"
+                ],
+            "ansType":"exist"
+        }
+
+
+ ]
+}

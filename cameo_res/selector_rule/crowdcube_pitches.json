@@ -1,0 +1,70 @@
+{
+    "rawdata-converter-name":"crowdcube",
+    "local-html-file-pattern":{
+        "strBasedir":"C:\\Users\\SJack\\Desktop\\crawlermaster",
+        "strSuffixes":"news.html"
+    },
+    "csslist":[
+
+        
+
+        {
+            "name":"cc-co-company-product",
+            "sampleUrl":"https://www.crowdcube.com/companies/this-mum-runs-ltd/pitches/qBwz0l",
+            "preAction": [],
+            "cssRule":"div#the_idea p::text",
+            "sampleAns":[
+                "This Mum Runs is a women’s running brand with a strong social purpose and robust commercial vision; to inspire Mums everywhere to get their trainers on and give running a try. Our long term aim is to build a global network of women’s running communities offering a range of runs, coaching and classes at times that fit around the kids.", 
+            "Running is one of the fastest growing sports in the UK growing from 1.4 million runners in 2005-06 to over 10.5 million in 2015. Women’s running is a rapidly growing market with “sales of Nike's training and running apparel for women growing by double digits in the last quarter, outpacing the men's business for the first time ever”. And yet, that we know of, there is no real alternative to traditional running clubs for women who want something different, for the estimated 6 million Mums in the UK who want to exercise more but struggle for time, childcare and confidence. In just over a year we’ve grown an online community of over 4000 Mums and an active running community of 2500.", 
+            "We offer 50 monthly runs and a wide range of coaching & courses across 9 locations in the Bristol and Bath area. We have trained a team of 60 coaches (Run Makers) and volunteers (Run Angels). Over 30% of our runners are booking courses and buying merchandise from us and we are developing a growing programme of paid for classes & a detailed playbook for roll out to other locations."
+            ],
+            "ansType":"exact"
+        },
+
+        {
+            "name":"cc-co-SeriesType",
+            "sampleUrl":"https://www.crowdcube.com/companies/this-mum-runs-ltd/pitches/qBwz0l",
+            "preAction": [],
+            "cssRule":"div.cc-pitchHead__statsSecondary dl:nth-child(2) dd::text",
+            "sampleAns":[
+                "Equity"
+                ],
+            "ansType":"exact"
+        },
+
+        {
+            "name":"cc-co-SeriesMoney",
+            "sampleUrl":"https://www.crowdcube.com/companies/this-mum-runs-ltd/pitches/qBwz0l",
+            "preAction": [],
+            "cssRule":"div.cc-pitchHead__statsMain dl:nth-child(2) dt::text",
+            "sampleAns":[
+                "£103,280"
+                ],
+            "ansType":"exist"
+        },
+        
+        {
+            "name":"cc-co-valuation",
+            "sampleUrl":"https://www.crowdcube.com/companies/this-mum-runs-ltd/pitches/qBwz0l",
+            "preAction": [],
+            "cssRule":"div.cc-pitchHead__statsSecondary dl:nth-child(3) dt::text",
+            "sampleAns":[
+                "£600,000"
+                ],
+            "ansType":"exact"
+        },
+        
+        {
+            "name":"cc-co-currency",
+            "sampleUrl":"https://www.crowdcube.com/companies/this-mum-runs-ltd/pitches/qBwz0l",
+            "preAction": [],
+            "cssRule":"div.cc-pitchHead__statsMain dl:nth-child(2) dt::text",
+            "sampleAns":[
+                "£103,280"
+                ],
+            "ansType":"exist"
+        }
+
+
+ ]
+}
