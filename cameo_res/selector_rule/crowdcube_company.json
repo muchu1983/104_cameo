@@ -107,6 +107,16 @@
                 "28/07/2016"
                 ],
             "ansType":"exact"
+        },
+        {
+            "name":"cc-SeriesMoney",
+            "sampleUrl":"https://www.crowdcube.com/companies/this-mum-runs-ltd",
+            "preAction": [],
+            "cssRule":"section.cc-company__history table.cc-table tbody tr td:nth-of-type(2)::text",
+            "sampleAns":[
+                "£103.23k"
+                ],
+            "ansType":"exist"
         }
 
 

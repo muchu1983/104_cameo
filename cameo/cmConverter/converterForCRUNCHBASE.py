@@ -108,7 +108,6 @@ class ConverterForCRUNCHBASE:
                     dicSeries.setdefault("strDate", self.cameoUtility.parseStrDateByDateparser(strOriginDate=lstStrSeriesDate[intSeriesIndex]))
                 else:
                     dicSeries.setdefault("strDate", "")
-                dicSeries.setdefault("strDate", )
                 #strSeriesType
                 lstStrSeriesType = dicOrganizationPageRawData.get("cb-strSeriesType", [])
                 if len(lstStrSeriesType) >= intSeriesIndex:

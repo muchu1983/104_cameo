@@ -30,126 +30,115 @@ class ConverterForCROWDCUBE:
             logging.info("convert: %s"%strCompanyFilePath)
             strCompanyId = re.search("^.*\\\\(.*)_company.html$", strCompanyFilePath).group(1)
             strCompanyUrl = u"https://www.crowdcube.com/companies/" + strCompanyId
-            """
             #檢查 資料是否有誤
-            lstCompanyData = dicOrganizationPageRawData.get("cb-strCompany", [])
-            lstLocationData = dicOrganizationPageRawData.get("cb-strLocation", [])
+            lstCompanyData = dicCompanyPageRawData.get("cc-company", [])
+            lstLocationData = dicCompanyPageRawData.get("cc-Location", [])
             if lstCompanyData == [] or lstLocationData == []:
-                #錯誤資料 刪除 html 檔並跳過
-                os.remove(strOrganizationHtmlFilePath)
+                #錯誤資料 跳過
+                #os.remove(strOrganizationHtmlFilePath)
                 continue
-            """
             #建立 dict
             if strCompanyUrl not in self.dicParsedResultOfStartup:
                 self.dicParsedResultOfStartup[strCompanyUrl] = {}
-            """
             #strCompany
-            strCompany = self.cmUtility.extractFirstInList(lstSource=dicOrganizationPageRawData.get("cb-strCompany", []))
-            self.dicParsedResultOfStartup[strOrganizationUrl]["strCompany"] = strCompany
+            strCompany = self.cmUtility.extractFirstInList(lstSource=dicCompanyPageRawData.get("cc-company", []))
+            self.dicParsedResultOfStartup[strCompanyUrl]["strCompany"] = strCompany
             #strUrl
-            self.dicParsedResultOfStartup[strOrganizationUrl]["strUrl"] = strOrganizationUrl
-            """
+            self.dicParsedResultOfStartup[strCompanyUrl]["strUrl"] = strCompanyUrl
             #strCrawlTime
             strCrawlTime = self.cmUtility.getCtimeOfFile(strFilePath=strCompanyFilePath)
             self.dicParsedResultOfStartup[strCompanyUrl]["strCrawlTime"] = strCrawlTime
-            """
             #lstStrFounders
-            lstStrFounders = dicOrganizationPageRawData.get("cb-lstStrFounders", [])
-            self.dicParsedResultOfStartup[strOrganizationUrl]["lstStrFounders"] = lstStrFounders
+            lstStrFounders = dicCompanyPageRawData.get("cc-company-founders", [])
+            self.dicParsedResultOfStartup[strCompanyUrl]["lstStrFounders"] = lstStrFounders
             #strIntro
-            lstStrIntro = dicOrganizationPageRawData.get("cb-strIntro", [])
-            self.dicParsedResultOfStartup[strOrganizationUrl]["strIntro"] = u" ".join(lstStrIntro)
-            #lstStrTeam
-            lstStrTeam = dicOrganizationPageRawData.get("cb-lstStrTeam", [])
-            self.dicParsedResultOfStartup[strOrganizationUrl]["lstStrTeam"] = lstStrTeam
-            #lstStrTeamDesc
-            lstStrTeamDesc = dicOrganizationPageRawData.get("cb-lstStrTeamDesc", [])
-            self.dicParsedResultOfStartup[strOrganizationUrl]["lstStrTeamDesc"] = lstStrTeamDesc
+            lstStrIntro = dicCompanyPageRawData.get("cc-company-intro", [])
+            self.dicParsedResultOfStartup[strCompanyUrl]["strIntro"] = u" ".join(lstStrIntro)
+            """
             #lstStrProduct
-            lstStrProduct = dicOrganizationPageRawData.get("cb-lstStrProduct", [])
-            self.dicParsedResultOfStartup[strOrganizationUrl]["lstStrProduct"] = lstStrProduct
+            lstStrProduct = dicCompanyPageRawData.get("cb-lstStrProduct", [])
+            self.dicParsedResultOfStartup[strCompanyUrl]["lstStrProduct"] = lstStrProduct
+            """
             #lstIndustry
-            lstIndustry = dicOrganizationPageRawData.get("cb-lstIndustry", [])
-            self.dicParsedResultOfStartup[strOrganizationUrl]["lstIndustry"] = lstIndustry
+            lstIndustry = dicCompanyPageRawData.get("cc-Industry", [])
+            self.dicParsedResultOfStartup[strCompanyUrl]["lstIndustry"] = lstIndustry
             #strLocation
-            lstStrLocation = dicOrganizationPageRawData.get("cb-strLocation", [])
-            strLocation = u" ".join(lstStrLocation)
-            self.dicParsedResultOfStartup[strOrganizationUrl]["strLocation"] = strLocation
+            lstStrLocation = dicCompanyPageRawData.get("cc-Location", [])
+            strLocation = u" ".join(lstStrLocation[0:-1])
+            strLocation = re.sub("[\s]+", " ", strLocation).strip()
+            self.dicParsedResultOfStartup[strCompanyUrl]["strLocation"] = strLocation
             #strCity
-            (strAddress, fLatitude, fLongitude) = self.cameoUtility.geopyGeocode(strOriginLocation=lstStrLocation[-1])
-            self.dicParsedResultOfStartup[strOrganizationUrl]["strCity"] = strAddress
+            strAddress = None
+            if strLocation and strLocation != u"":
+                (strAddress, fLatitude, fLongitude) = self.cameoUtility.geopyGeocode(strOriginLocation=strLocation)
+            else:
+                pass
+            self.dicParsedResultOfStartup[strCompanyUrl]["strCity"] = strAddress
             #strCountry
             strOriginCountry = None
             if strAddress:
                 strOriginCountry = strAddress.split(u",")[-1].strip()
-            self.dicParsedResultOfStartup[strOrganizationUrl]["strCountry"] = self.cameoUtility.getCountryCode(strCountryName=strOriginCountry)
+            self.dicParsedResultOfStartup[strCompanyUrl]["strCountry"] = self.cameoUtility.getCountryCode(strCountryName=strOriginCountry)
             #strContinent
-            self.dicParsedResultOfStartup[strOrganizationUrl]["strContinent"] = self.cameoUtility.getContinentByCountryNameWikiVersion(strCountryName=strOriginCountry)
-            #lstStrInvestor
-            lstStrInvestor = dicOrganizationPageRawData.get("cb-lstStrInvestor", [])
-            self.dicParsedResultOfStartup[strOrganizationUrl]["lstStrInvestor"] = lstStrInvestor
+            self.dicParsedResultOfStartup[strCompanyUrl]["strContinent"] = self.cameoUtility.getContinentByCountryNameWikiVersion(strCountryName=strOriginCountry)
             #lstDicSeries
             lstDicSeries = []
-            lstStrSeriesDate = dicOrganizationPageRawData.get("cb-strSeriesDate", [])
+            lstStrSeriesDate = dicCompanyPageRawData.get("cc-SeriesDate", [])
             for intSeriesIndex in range(len(lstStrSeriesDate)):
                 dicSeries = {}
                 #intSeriesValuation
-                lstStrSeriesValuation = dicOrganizationPageRawData.get("cb-intSeriesValuation", [])
-                if len(lstStrSeriesValuation) >= intSeriesIndex:
-                    dicSeries.setdefault("intSeriesValuation", self.parseCrunchbaseMoney(strOriginMoney=lstStrSeriesValuation[intSeriesIndex]))
-                else:
-                    dicSeries.setdefault("intSeriesValuation", 0)
+                dicSeries.setdefault("intSeriesValuation", 0)
                 #intSeriesMoney
-                lstStrSeriesMoney = dicOrganizationPageRawData.get("cb-intSeriesMoney", [])
+                lstStrSeriesMoney = dicCompanyPageRawData.get("cc-SeriesMoney", [])
                 if len(lstStrSeriesMoney) >= intSeriesIndex:
-                    dicSeries.setdefault("intSeriesMoney", self.parseCrunchbaseMoney(strOriginMoney=lstStrSeriesMoney[intSeriesIndex]))
+                    dicSeries.setdefault("intSeriesMoney", self.parseCrowdcubeMoney(strOriginMoney=lstStrSeriesMoney[intSeriesIndex]))
                 else:
                     dicSeries.setdefault("intSeriesMoney", 0)
                 #lstStrInvestorUrl
-                dicSeries.setdefault("lstStrInvestorUrl", dicOrganizationPageRawData.get("cb-lstStrInvestorUrl", []))
+                dicSeries.setdefault("lstStrInvestorUrl", [])
                 #strDate
-                lstStrSeriesDate = dicOrganizationPageRawData.get("cb-strSeriesDate", [])
+                lstStrSeriesDate = dicCompanyPageRawData.get("cc-SeriesDate", [])
                 if len(lstStrSeriesDate) >= intSeriesIndex:
                     dicSeries.setdefault("strDate", self.cameoUtility.parseStrDateByDateparser(strOriginDate=lstStrSeriesDate[intSeriesIndex]))
                 else:
                     dicSeries.setdefault("strDate", "")
-                dicSeries.setdefault("strDate", )
                 #strSeriesType
-                lstStrSeriesType = dicOrganizationPageRawData.get("cb-strSeriesType", [])
-                if len(lstStrSeriesType) >= intSeriesIndex:
-                    dicSeries.setdefault("strSeriesType", lstStrSeriesType[intSeriesIndex])
-                else:
-                    dicSeries.setdefault("strSeriesType", "")
+                dicSeries.setdefault("strSeriesType", "")
                 #lstStrInvestor
-                dicSeries.setdefault("lstStrInvestor", dicOrganizationPageRawData.get("cb-lstStrInvestor", []))
+                dicSeries.setdefault("lstStrInvestor", [])
                 #strCurrency
-                dicSeries.setdefault("strCurrency", "USD")
+                dicSeries.setdefault("strCurrency", "GBP")
                 #strCrawlTime
                 dicSeries.setdefault("strCrawlTime", strCrawlTime)
                 lstDicSeries.append(dicSeries)
-            self.dicParsedResultOfStartup[strOrganizationUrl]["lstDicSeries"] = lstDicSeries
+            self.dicParsedResultOfStartup[strCompanyUrl]["lstDicSeries"] = lstDicSeries
             #lstStrFollowers (無此資料)
-            self.dicParsedResultOfStartup[strOrganizationUrl]["lstStrFollowers"] = []
+            self.dicParsedResultOfStartup[strCompanyUrl]["lstStrFollowers"] = []
             #isFundraising (需定義問題)
-            self.dicParsedResultOfStartup[strOrganizationUrl]["isFundraising"] = True
+            self.dicParsedResultOfStartup[strCompanyUrl]["isFundraising"] = True
             #lstStrFoundersDesc (無此資料)
-            self.dicParsedResultOfStartup[strOrganizationUrl]["lstStrFoundersDesc"] = []
+            self.dicParsedResultOfStartup[strCompanyUrl]["lstStrFoundersDesc"] = []
             #intRaisedMoney
-            self.dicParsedResultOfStartup[strOrganizationUrl]["intRaisedMoney"] = 0
+            self.dicParsedResultOfStartup[strCompanyUrl]["intRaisedMoney"] = 0
             #intRaisedMoneyInTWD
-            self.dicParsedResultOfStartup[strOrganizationUrl]["intRaisedMoneyInTWD"] = 0
+            self.dicParsedResultOfStartup[strCompanyUrl]["intRaisedMoneyInTWD"] = 0
             #lstStrTierTagId
-            self.dicParsedResultOfStartup[strOrganizationUrl]["lstStrTierTagId"] = []
+            self.dicParsedResultOfStartup[strCompanyUrl]["lstStrTierTagId"] = []
             #lstStrNewSubCategoryId
-            self.dicParsedResultOfStartup[strOrganizationUrl]["lstStrNewSubCategoryId"] = []
+            self.dicParsedResultOfStartup[strCompanyUrl]["lstStrNewSubCategoryId"] = []
             #lstStrNewCategoryId
-            self.dicParsedResultOfStartup[strOrganizationUrl]["lstStrNewCategoryId"] = []
+            self.dicParsedResultOfStartup[strCompanyUrl]["lstStrNewCategoryId"] = []
             #lstStrTopic (無此資料)
             #intFollower (無此資料)
-            """
+            #lstStrTeam
+            self.dicParsedResultOfStartup[strCompanyUrl]["lstStrTeam"] = []
+            #lstStrTeamDesc
+            self.dicParsedResultOfStartup[strCompanyUrl]["lstStrTeamDesc"] = []
+            #lstStrInvestor
+            self.dicParsedResultOfStartup[strCompanyUrl]["lstStrInvestor"] = []
             
-    #解析 crunchbase 金額的數字
-    def parseCrunchbaseMoney(self, strOriginMoney=None):
+    #解析 crowdcube 金額的數字
+    def parseCrowdcubeMoney(self, strOriginMoney=None):
         intDefaultMoney = 0
         if not strOriginMoney or not re.search("[\d\.]+", strOriginMoney):
             return intDefaultMoney
