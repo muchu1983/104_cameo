@@ -28,19 +28,19 @@ class MonitorUtilityTest(unittest.TestCase):
     #測試 更新爬蟲 狀態
     def test_updateMonitorStatus(self):
         logging.info("MonitorUtilityTest.test_updateMonitorStatus")
-        monitor = MonitorUtility(strIp="192.168.1.6", strCrawlerName="test_monitor")
+        monitor = MonitorUtility(strIp="210.61.46.64", strCrawlerName="[tier 爬蟲][CrunchBase]")
         monitor.updateMonitorStatus(
-            strIp="192.168.1.6",
-            strCrawlerName="test_monitor",
-            strJob="test2",
-            strCrawlerUrl="http://test",
+            strIp="210.61.46.64",
+            strCrawlerName="[tier 爬蟲][CrunchBase + Indiegogo]",
+            strJob="idle",
+            strCrawlerUrl="https://www.crunchbase.com/organization/groupon",
             dtCrawlerJobTime=datetime.datetime.now(),
             dtStratCrawlingTime=datetime.datetime.now(),
             dtParsingTime=datetime.datetime.now(),
             dtImporterTime=datetime.datetime.now(),
             dtUploadingFTPTime=datetime.datetime.now(),
             dtErrorMsgTime=datetime.datetime.now(),
-            strErrorMsg="test_err_msg"
+            strErrorMsg=""
         )
 
 #測試開始
