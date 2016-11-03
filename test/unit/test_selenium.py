@@ -25,7 +25,7 @@ class SeleniumTest(unittest.TestCase):
     #收尾
     def tearDown(self):
         pass
-    
+    """
     #測試 firefox selenium
     def test_firefox_selenium(self):
         for i in range(100):
@@ -35,13 +35,15 @@ class SeleniumTest(unittest.TestCase):
             time.sleep(5)
             driver.quit()
             driver = None
-    
+    """
     #測試 chrome selenium
     def test_chrome_selenium(self):
         chromedriver = ".\cameo_res\chromedriver.exe"
         driver = webdriver.Chrome(chromedriver)
-        driver.get("https://www.crowdcube.com/")
-        source = driver.page_source
+        for i in range(100):
+            driver.get("https://www.crunchbase.com/organization/alibaba")
+            source = driver.page_source
+            time.sleep(2)
         #f = open("currency.html", "w+")
         #f.write(source.encode("utf-8"))
         #f.close()
