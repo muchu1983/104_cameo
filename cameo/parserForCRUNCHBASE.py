@@ -29,6 +29,7 @@ class ParserForCRUNCHBASE:
             "search_funding_rounds":[self.parseSearchFundingRoundsPage],
             "search_investors":[self.parseSearchInvestorsPage],
             "organization":[self.parseOrganizationPage],
+            "cb_companies.csv":[self.parseCompaniesCsv]
         }
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
@@ -40,7 +41,9 @@ class ParserForCRUNCHBASE:
                 "useage:\n"
                 "search_funding_rounds - parse funding_rounds.html then insert organization url to localdb \n"
                 "search_investors - parse investors.html then insert organization url to localdb \n"
-                "organization - parse organization.html then create .json \n")
+                "organization - parse organization.html then create .json \n"
+                "cb_companies.csv - parse cb_companies.csv then insert organization url to localdb \n"
+                )
 
     #執行 parser
     def runParser(self, lstSubcommand=None):
@@ -96,3 +99,13 @@ class ParserForCRUNCHBASE:
         rawDataConverter.convertStartup(lstLstDicRawData=[lstDicOrganizationPageRawData])
         strStartupJsonFilePath = strOrganizationResultFolderPath + u"\\startup.json"
         rawDataConverter.flushConvertedStartupDataToJsonFile(strJsonFilePath=strStartupJsonFilePath)
+#CB_companies.csv ##################################################################################
+    #解析 CB_companies.csv
+    def parseCompaniesCsv(self, uselessArg1=None):
+        strCompaniesCsvFilePath = u"cameo_res\\CB_companies.csv"
+        with open(strCompaniesCsvFilePath, "r") as companiesCsvFile:
+            for strCompanyUrlLine in companiesCsvFile:
+                lstStrCompanyUrlLine = strCompanyUrlLine.split(",")
+                if lstStrCompanyUrlLine[0] == "Mark":
+                    strOrganizationUrl = lstStrCompanyUrlLine[1]
+                    self.db.insertOrganizationUrlIfNotExists(strOrganizationUrl=strOrganizationUrl)

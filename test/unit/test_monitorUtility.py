@@ -32,9 +32,9 @@ class MonitorUtilityTest(unittest.TestCase):
         monitor.updateMonitorStatus(
             strIp="210.61.46.64",
             strCrawlerName="[tier 爬蟲][CrunchBase + Indiegogo]",
-            strJob="idle",
+            strJob="Crawling",
             strCrawlerUrl="https://www.crunchbase.com/organization/groupon",
-            dtCrawlerJobTime=datetime.datetime.now(),
+            dtCrawlerJobTime=datetime.datetime.strptime("2016-11-03 03:59", "%Y-%m-%d %H:%M"),
             dtStratCrawlingTime=datetime.datetime.now(),
             dtParsingTime=datetime.datetime.now(),
             dtImporterTime=datetime.datetime.now(),

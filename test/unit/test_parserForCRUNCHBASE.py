@@ -36,12 +36,18 @@ class ParserForCRUNCHBASETest(unittest.TestCase):
         logging.info("ParserForCRUNCHBASETest.test_parseSearchInvestorsPage")
         parser = ParserForCRUNCHBASE()
         parser.parseSearchInvestorsPage()
-    """
+    
     #測試 解析 organization 頁面
     def test_parseOrganizationPage(self):
         logging.info("ParserForCRUNCHBASETest.test_parseOrganizationPage")
         parser = ParserForCRUNCHBASE()
         parser.parseOrganizationPage()
+    """
+    #測試 解析 CB_companies.csv 頁面
+    def test_parseCompaniesCsv(self):
+        logging.info("ParserForCRUNCHBASETest.test_parseCompaniesCsv")
+        parser = ParserForCRUNCHBASE()
+        parser.parseCompaniesCsv()
     
 #測試開始
 if __name__ == "__main__":
