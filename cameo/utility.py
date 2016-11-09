@@ -176,8 +176,12 @@ class Utility:
             u"AIzaSyDc71hTtE2XTTiVnad-Jz3rXe338VcqWBY"
         ]
         geolocator = GoogleV3(api_key=random.choice(lstStrApiKey))
-        time.sleep(2) #避免太快送出 geopy 查詢
-        location = geolocator.geocode(strOriginLocation, exactly_one=True)
+        time.sleep(1) #避免太快送出 geopy 查詢
+        location = None
+        try:
+            location = geolocator.geocode(strOriginLocation, exactly_one=True)
+        except:
+            logging.error("[geopy error] find geocode faild. origin string: %s"%strOriginLocation)
         (strAddress, fLatitude, fLongitude) = (None, 0, 0)
         if location is not None:
             strAddress = location.address
