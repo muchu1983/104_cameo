@@ -107,7 +107,7 @@
             "name":"cb-lstIndustry",
             "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
             "preAction": [],
-            "cssRule":"div#info-card-overview-content dl.definition-list div.definition-list dd:nth-child(8) a::text",
+            "cssRule":"div#info-card-overview-content dl.definition-list div.definition-list dd a[href*=category]::text",
             "sampleAns":[
                 "Marketplace", 
             "Travel", 
@@ -117,7 +117,7 @@
                  ],
             "ansType":"exact"
         },
-
+        
         {
             "name":"cb-strLocation",
             "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
