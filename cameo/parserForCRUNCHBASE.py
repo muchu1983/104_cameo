@@ -93,12 +93,26 @@ class ParserForCRUNCHBASE:
         #organization.html
         strCssJsonFilePath = "cameo_res\\selector_rule\\crunchbase_organization.json"
         cmParser = CmParser(strCssJsonFilePath=strCssJsonFilePath)
-        lstDicOrganizationPageRawData = cmParser.localHtmlFileParse(strBasedir=strOrganizationHtmlFolderPath, strSuffixes="_organization.html")
-        #converter
         rawDataConverter = ConverterForCRUNCHBASE()
-        rawDataConverter.convertStartup(lstLstDicRawData=[lstDicOrganizationPageRawData])
-        strStartupJsonFilePath = strOrganizationResultFolderPath + u"\\startup.json"
-        rawDataConverter.flushConvertedStartupDataToJsonFile(strJsonFilePath=strStartupJsonFilePath)
+        lstDicOrganizationPageRawData = cmParser.localHtmlFileParse(
+            strBasedir=strOrganizationHtmlFolderPath,
+            strSuffixes="_organization.html",
+            isIterable=True,
+            isResetIteration=True
+        )
+        #convert
+        intStartupJsonIndex = 1
+        while len(lstDicOrganizationPageRawData)>0:
+            strStartupJsonFilePath = strOrganizationResultFolderPath + u"\\%d_startup.json"%(intStartupJsonIndex*1000)
+            rawDataConverter.convertStartup(lstLstDicRawData=[lstDicOrganizationPageRawData])
+            rawDataConverter.flushConvertedStartupDataToJsonFile(strJsonFilePath=strStartupJsonFilePath)
+            intStartupJsonIndex = intStartupJsonIndex+1
+            lstDicOrganizationPageRawData = cmParser.localHtmlFileParse(
+                strBasedir=strOrganizationHtmlFolderPath,
+                strSuffixes="_organization.html",
+                isIterable=True
+            )
+        
 #CB_companies.csv ##################################################################################
     #解析 CB_companies.csv
     def parseCompaniesCsv(self, uselessArg1=None):

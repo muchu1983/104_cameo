@@ -43,54 +43,55 @@ class ImporterForCRUNCHBASE:
     
     #匯入 startup.json
     def importStartupJson(self):
-        logging.info("import startup json")
-        dicTotalStartup = self.utility.readObjectFromJsonFile(strJsonFilePath=self.getParsedStartupFilePath())
-        collectionStartup = self.db.ModelStartup
-        for strUrl, dicStartup in dicTotalStartup.items():
-            #strSource
-            dicStartup.setdefault("strSource", "CRUNCHBASE")
-            #strCrawlTime
-            dicStartup["strCrawlTime"] = self.getCorrectFormatDateTime(dicStartup.get("strCrawlTime"))
-            #lstIntCategoryId
-            dicStartup.setdefault("lstIntCategoryId", [])
-            #lstStrCategory
-            dicStartup.setdefault("lstStrCategory", [])
-            #lstIntSubCategoryId
-            dicStartup.setdefault("lstIntSubCategoryId", [])
-            #lstStrSubCategory
-            dicStartup.setdefault("lstStrSubCategory", [])
-            #lstDicPress
-            dicStartup.setdefault("lstDicPress", [])
-            #lstDicSeries
-            lstDicSeries = []
-            for dicSeries in dicStartup.get("lstDicSeries", []):
-                dicSeries["strCrawlTime"] = self.getCorrectFormatDateTime(dicSeries.get("strCrawlTime"))
-                dicSeries["strDate"] = self.getCorrectFormatDateTime(dicSeries.get("strDate"))
-                lstDicSeries.append(dicSeries)
-            dicStartup["lstDicSeries"] = lstDicSeries
-            #upsert startup
-            collectionStartup.update_one(
-                {"strUrl": strUrl},
-                {
-                    "$set":dicStartup
-                },
-                upsert=True
-            )
-            #lstStrTag
-            lstStrTag = self.makeTagFieldOnModelStartup(
-                dicStartup.get("lstIndustry", []),
-                dicStartup.get("lstStrCategory", []),
-                dicStartup.get("lstStrSubCategory", [])
-            )
-            collectionStartup.update_one(
-                {"strUrl": strUrl},
-                {
-                    "$set":{
-                        "lstStrTag":lstStrTag
-                    }
-                },
-                upsert=True
-            )
+        for strStartupJsonFilePath in self.getParsedStartupFilePath():
+            logging.info("import: %s"%strStartupJsonFilePath)
+            dicTotalStartup = self.utility.readObjectFromJsonFile(strJsonFilePath=strStartupJsonFilePath)
+            collectionStartup = self.db.ModelStartup
+            for strUrl, dicStartup in dicTotalStartup.items():
+                #strSource
+                dicStartup.setdefault("strSource", "CRUNCHBASE")
+                #strCrawlTime
+                dicStartup["strCrawlTime"] = self.getCorrectFormatDateTime(dicStartup.get("strCrawlTime"))
+                #lstIntCategoryId
+                dicStartup.setdefault("lstIntCategoryId", [])
+                #lstStrCategory
+                dicStartup.setdefault("lstStrCategory", [])
+                #lstIntSubCategoryId
+                dicStartup.setdefault("lstIntSubCategoryId", [])
+                #lstStrSubCategory
+                dicStartup.setdefault("lstStrSubCategory", [])
+                #lstDicPress
+                dicStartup.setdefault("lstDicPress", [])
+                #lstDicSeries
+                lstDicSeries = []
+                for dicSeries in dicStartup.get("lstDicSeries", []):
+                    dicSeries["strCrawlTime"] = self.getCorrectFormatDateTime(dicSeries.get("strCrawlTime"))
+                    dicSeries["strDate"] = self.getCorrectFormatDateTime(dicSeries.get("strDate"))
+                    lstDicSeries.append(dicSeries)
+                dicStartup["lstDicSeries"] = lstDicSeries
+                #upsert startup
+                collectionStartup.update_one(
+                    {"strUrl": strUrl},
+                    {
+                        "$set":dicStartup
+                    },
+                    upsert=True
+                )
+                #lstStrTag
+                lstStrTag = self.makeTagFieldOnModelStartup(
+                    dicStartup.get("lstIndustry", []),
+                    dicStartup.get("lstStrCategory", []),
+                    dicStartup.get("lstStrSubCategory", [])
+                )
+                collectionStartup.update_one(
+                    {"strUrl": strUrl},
+                    {
+                        "$set":{
+                            "lstStrTag":lstStrTag
+                        }
+                    },
+                    upsert=True
+                )
     
     #建立 lstStrTag 欄位內容
     def makeTagFieldOnModelStartup(self, lstIndustry, lstStrCategory, lstStrSubCategory):
@@ -107,7 +108,7 @@ class ImporterForCRUNCHBASE:
     
     #取得 startup.json 檔案位置
     def getParsedStartupFilePath(self):
-        return self.strParsedResultPath() + "/organization/startup.json"
+        return self.utility.getFilePathListWithSuffixes(strBasedir=self.strParsedResultPath() + "\\organization", strSuffixes="startup.json")
     
     #修改日期格式
     def getCorrectFormatDateTime(self, strDate):
