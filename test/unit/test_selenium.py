@@ -40,10 +40,10 @@ class SeleniumTest(unittest.TestCase):
     def test_chrome_selenium(self):
         chromedriver = ".\cameo_res\chromedriver.exe"
         driver = webdriver.Chrome(chromedriver)
-        for i in range(100):
+        while True:
             driver.get("https://www.crunchbase.com/organization/alibaba")
             source = driver.page_source
-            time.sleep(2)
+            time.sleep(1)
         #f = open("currency.html", "w+")
         #f.write(source.encode("utf-8"))
         #f.close()
