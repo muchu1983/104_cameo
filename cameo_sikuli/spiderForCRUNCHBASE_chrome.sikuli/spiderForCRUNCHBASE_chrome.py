@@ -296,6 +296,13 @@ def downloadOrganizationPage():
             os.mkdir(strOrganizationFolderPath)
         except:
             logging.warning("folder already exists: %s"%strOrganizationFolderPath)
+    #create investors folder
+    strInvestorsFolderPath = strBaseResFolderPath + u"\\source_html\\CRUNCHBASE\\investors"
+    if not os.path.exists(strInvestorsFolderPath):
+        try:
+            os.mkdir(strInvestorsFolderPath)
+        except:
+            logging.warning("folder already exists: %s"%strInvestorsFolderPath)
     #read organization_url_list.json
     strOrganizationUrlListFilePath = strBaseResFolderPath + u"\\parsed_result\\CRUNCHBASE\\organization\\organization_url_list.json"
     dicLstOrganizationUrl = None
@@ -306,12 +313,21 @@ def downloadOrganizationPage():
     for strOrganizationUrl in lstStrOrganizationUrl:#organization loop
         logging.info(u"download organization: %s"%strOrganizationUrl)
         strOrganizationName = re.match(u"^https://www.crunchbase.com/organization/(.*)$", strOrganizationUrl).group(1).strip()
+        #save organization.html
         strOrganizationHtmlFileName = u"%s_organization.html"%strOrganizationName
         logging.info(strOrganizationFolderPath + u"\\" + strOrganizationHtmlFileName)
         if not os.path.exists(strOrganizationFolderPath + u"\\" + strOrganizationHtmlFileName):
             openChrome()
             typeUrlOnChrome(strUrlText=strOrganizationUrl)
             saveCurrentPage(strFolderPath=strOrganizationFolderPath, strFilename=strOrganizationHtmlFileName)
+            wait(5)
+        #save investors.html
+        strInvestorsHtmlFileName = u"%s_investors.html"%strOrganizationName
+        logging.info(strInvestorsFolderPath + u"\\" + strInvestorsHtmlFileName)
+        if not os.path.exists(strInvestorsFolderPath + u"\\" + strInvestorsHtmlFileName):
+            openChrome()
+            typeUrlOnChrome(strUrlText=strOrganizationUrl + u"/investors")
+            saveCurrentPage(strFolderPath=strInvestorsFolderPath, strFilename=strInvestorsHtmlFileName)
             wait(5)
     else:
         type("w", Key.CTRL)
