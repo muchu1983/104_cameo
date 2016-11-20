@@ -236,7 +236,7 @@ class SpiderForCRUNCHBASE:
             "useage:\n"
             "search_funding_rounds [category]- download category_funding_rounds.html \n"
             "search_investors [category]- download category_investors.html \n"
-            "organization - download organization.html \n"
+            "organization - download organization.html and investors.html \n"
         )
         
     #執行 spider
