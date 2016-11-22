@@ -34,7 +34,7 @@ class MonitorUtilityTest(unittest.TestCase):
             strCrawlerName="[tier 爬蟲][CrunchBase + Indiegogo]",
             strJob="Crawling",
             strCrawlerUrl="https://www.crunchbase.com/organization/thumbs-up-or-down",
-            dtCrawlerJobTime=datetime.datetime.strptime("2016-11-17 03:59", "%Y-%m-%d %H:%M"),
+            dtCrawlerJobTime=datetime.datetime.strptime("2016-11-23 03:59", "%Y-%m-%d %H:%M"),
             dtStratCrawlingTime=datetime.datetime.now(),
             dtParsingTime=datetime.datetime.now(),
             dtImporterTime=datetime.datetime.now(),

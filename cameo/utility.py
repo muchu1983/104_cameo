@@ -222,7 +222,8 @@ class Utility:
                     for strCountryNameKey in dicCountryNameCodeMapping:
                         if re.search(dicCountryData["name"], strCountryNameKey):
                             dicCountryData["code"] = dicCountryNameCodeMapping[strCountryNameKey]
-                    lstDicCountryData.append(dicCountryData)
+                    if dicCountryData.get("code", None) is not None:
+                        lstDicCountryData.append(dicCountryData)
                 dicParsedResult[dicContinentName[intCurrentTableIndex]] = lstDicCountryData
             #自訂資料區
             dicParsedResult["NA"].append({"name":"united states", "code":"US"})
