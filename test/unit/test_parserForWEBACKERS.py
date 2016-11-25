@@ -42,7 +42,7 @@ class ParserForWEBACKERSTest(unittest.TestCase):
         logging.info("ParserForWEBACKERSTest.test_parseCategoryPage")
         parser = ParserForWEBACKERS()
         parser.parseCategoryPage()
-    
+    """
     #測試 解析 project 頁面
     def test_parseProjectPage(self):
         logging.info("ParserForWEBACKERSTest.test_parseProjectPage")
@@ -54,7 +54,7 @@ class ParserForWEBACKERSTest(unittest.TestCase):
         parser.parseProgressPage(strCategoryName)
         parser.parseFaqPage(strCategoryName)
         parser.afterParseProjectPage(strCategoryName)
-    """
+    
     #測試 解析 profile 頁面
     def test_parseProfilePage(self):
         logging.info("ParserForWEBACKERSTest.test_parseProfilePage")

@@ -29,7 +29,7 @@ class ParserForBNEXTTest(unittest.TestCase):
         logging.info("ParserForBNEXTTest.test_parseIndexPage")
         parser = ParserForBNEXT()
         parser.parseIndexPage()
-    
+    """
     #測試 解析 tag.html
     def test_parseTagPage(self):
         logging.info("ParserForBNEXTTest.test_parseTagPage")
@@ -47,7 +47,7 @@ class ParserForBNEXTTest(unittest.TestCase):
         logging.info("ParserForBNEXTTest.test_parseNewsPageThenCreateNewsJson")
         parser = ParserForBNEXT()
         parser.parseNewsPageThenCreateNewsJson()
-    
+    """
 #測試開始
 if __name__ == "__main__":
     unittest.main(exit=False)

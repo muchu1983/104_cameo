@@ -24,20 +24,24 @@ class SpiderForBNEXT:
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
         self.strWebsiteDomain = u"http://www.bnext.com.tw"
-        self.dicSubCommandHandler = {"index":self.downloadIndexPage,
-                                     "tag":self.downloadTagPage,
-                                     "news":self.downloadNewsPage}
+        self.dicSubCommandHandler = {
+            "index":self.downloadIndexPage,
+            "tag":self.downloadTagPage,
+            "news":self.downloadNewsPage
+        }
         self.utility = Utility()
         self.db = LocalDbForBNEXT()
         self.driver = None
         
     #取得 spider 使用資訊
     def getUseageMessage(self):
-        return ("- BNEXT -\n"
-                "useage:\n"
-                "index - download entry page of BNEXT \n"
-                "tag - download not obtained tag page \n"
-                "news [tag] - download not obtained news [of given tag] \n")
+        return (
+            "- BNEXT -\n"
+            "useage:\n"
+            "index - download entry page of BNEXT \n"
+            "tag - download not obtained tag page \n"
+            "news [tag] - download not obtained news [of given tag] \n"
+        )
     
     #取得 selenium driver 物件
     def getDriver(self):

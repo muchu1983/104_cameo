@@ -189,8 +189,21 @@ class ParserForWEBACKERS:
         self.utility.writeObjectToJsonFile(self.dicParsedResultOfUpdate, strProjectsResultFolderPath + u"\\update.json")
         self.utility.writeObjectToJsonFile(self.dicParsedResultOfQanda, strProjectsResultFolderPath + u"\\qanda.json")
         
+    #取得 在 category 頁面上的 project 資料，若無該 project return null
+    def findDicProjectDataOnCategoryJson(self, dicCategoryData=None, strProjUrl=None):
+        dicCurrentProjectData = None
+        for dicProjectData in dicCategoryData["project_url_list"]:
+            if dicProjectData["strUrl"] == strProjUrl:
+                dicCurrentProjectData = dicProjectData
+                break
+        return dicCurrentProjectData
+        
     #解析 intro.html
     def parseIntroPage(self, strCategoryName=None):
+        #取得 category 頁面上的 project 資料
+        strCategoryJsonFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\WEBACKERS\\%s\\category.json"%strCategoryName)
+        dicCategoryData = self.utility.readObjectFromJsonFile(strJsonFilePath=strCategoryJsonFilePath)
+        #load html
         strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"\\WEBACKERS\\%s\\projects"%strCategoryName)
         lstStrIntroHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strProjectsHtmlFolderPath, strSuffixes="_intro.html")
         for strProjectIntroHtmlFilePath in lstStrIntroHtmlFilePath:
@@ -202,164 +215,165 @@ class ParserForWEBACKERS:
                 strProjUrl = u"https://www.webackers.com/Proposal/Display/" + strProjId
                 if strProjUrl not in self.dicParsedResultOfProject:
                     self.dicParsedResultOfProject[strProjUrl] = {}
-                #取得 category 頁面的 project 資料
-                strCategoryJsonFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\WEBACKERS\\%s\\category.json"%strCategoryName)
-                dicCategoryData = self.utility.readObjectFromJsonFile(strJsonFilePath=strCategoryJsonFilePath)
-                dicCurrentProjectData = None
-                for dicProjectData in dicCategoryData["project_url_list"]:
-                    if dicProjectData["strUrl"] == strProjUrl:
-                        dicCurrentProjectData = dicProjectData
                 #開始解析
                 strPageSource = projectIntroHtmlFile.read()
                 root = Selector(text=strPageSource)
-                # - 解析 project.json -
-                #strSource
-                self.dicParsedResultOfProject[strProjUrl]["strSource"] = \
-                    u"WEBACKERS"
-                #strUrl
-                self.dicParsedResultOfProject[strProjUrl]["strUrl"] = \
-                    strProjUrl
-                #strCrawlTime
-                strCrawlTime = dicCategoryData["strCrawlTime"]
-                self.dicParsedResultOfProject[strProjUrl]["strCrawlTime"] = strCrawlTime
-                #strProjectName
-                self.dicParsedResultOfProject[strProjUrl]["strProjectName"] = \
-                    root.css("a[href*='%s'] span.case_title::text"%strProjId).extract_first().strip()
-                #strLocation
-                self.dicParsedResultOfProject[strProjUrl]["strLocation"] = u"Taiwan"
-                #strCity
-                self.dicParsedResultOfProject[strProjUrl]["strCity"] = u"Taiwan"
-                #strCountry
-                self.dicParsedResultOfProject[strProjUrl]["strCountry"] = u"TW"
-                #strContinent
-                self.dicParsedResultOfProject[strProjUrl]["strContinent"] = u"AS"
-                #strDescription
-                strDescription = dicCurrentProjectData["strDescription"]
-                self.dicParsedResultOfProject[strProjUrl]["strDescription"] = strDescription
-                #strIntroduction
-                strIntroduction = u""
-                for strIntroductionText in root.css("div.description *::text").extract():
-                    strIntroduction = strIntroduction + strIntroductionText
-                self.dicParsedResultOfProject[strProjUrl]["strIntroduction"] = strIntroduction
-                #intStatus
-                dicMappingStatus = {
-                    u"已完成":1,
-                    u"已結束":2,
-                }
+            #category.json 中若無 project 資料，略過處理
+            dicCurrentProjectData = self.findDicProjectDataOnCategoryJson(dicCategoryData=dicCategoryData, strProjUrl=strProjUrl)
+            if not dicCurrentProjectData:
+                continue
+            # - 解析 project.json -
+            #strSource
+            self.dicParsedResultOfProject[strProjUrl]["strSource"] = \
+                u"WEBACKERS"
+            #strUrl
+            self.dicParsedResultOfProject[strProjUrl]["strUrl"] = \
+                strProjUrl
+            #strCrawlTime
+            strCrawlTime = dicCategoryData["strCrawlTime"]
+            self.dicParsedResultOfProject[strProjUrl]["strCrawlTime"] = strCrawlTime
+            #strProjectName
+            self.dicParsedResultOfProject[strProjUrl]["strProjectName"] = \
+                root.css("a[href*='%s'] span.case_title::text"%strProjId).extract_first().strip()
+            #strLocation
+            self.dicParsedResultOfProject[strProjUrl]["strLocation"] = u"Taiwan"
+            #strCity
+            self.dicParsedResultOfProject[strProjUrl]["strCity"] = u"Taiwan"
+            #strCountry
+            self.dicParsedResultOfProject[strProjUrl]["strCountry"] = u"TW"
+            #strContinent
+            self.dicParsedResultOfProject[strProjUrl]["strContinent"] = u"AS"
+            #strDescription
+            strDescription = dicCurrentProjectData["strDescription"]
+            self.dicParsedResultOfProject[strProjUrl]["strDescription"] = strDescription
+            #strIntroduction
+            strIntroduction = u""
+            for strIntroductionText in root.css("div.description *::text").extract():
+                strIntroduction = strIntroduction + strIntroductionText
+            self.dicParsedResultOfProject[strProjUrl]["strIntroduction"] = strIntroduction
+            #intStatus
+            dicMappingStatus = {
+                u"已完成":1,
+                u"已結束":2,
+            }
+            intStatus = 0
+            strStatus = dicCurrentProjectData["strStatus"]
+            if strStatus in dicMappingStatus:
+                intStatus = dicMappingStatus[strStatus]
+            else:
                 intStatus = 0
-                strStatus = dicCurrentProjectData["strStatus"]
-                if strStatus in dicMappingStatus:
-                    intStatus = dicMappingStatus[strStatus]
-                else:
-                    intStatus = 0
-                self.dicParsedResultOfProject[strProjUrl]["intStatus"] = intStatus
-                #strCreator
-                strCreator = root.css("aside.col-md-3 article:nth-of-type(5) h3 a::text").extract_first().strip()
-                self.dicParsedResultOfProject[strProjUrl]["strCreator"] = strCreator
-                #strCreatorUrl
-                strCreatorUrl = root.css("aside.col-md-3 article:nth-of-type(5) h3 a::attr('href')").extract_first().strip()
-                self.dicParsedResultOfProject[strProjUrl]["strCreatorUrl"] = self.strWebsiteDomain + strCreatorUrl
-                #strCategory and strSubCategory
-                strCategory = root.css("a[href*='category='] span.case_title::text").extract_first().strip()
-                self.dicParsedResultOfProject[strProjUrl]["strCategory"] = strCategory
-                self.dicParsedResultOfProject[strProjUrl]["strSubCategory"] = strCategory
-                #intFundTarget
-                strFundTarget = root.css("span.money_target::text").extract_first().strip()
-                intFundTarget = int(re.sub("[^0-9]", "", strFundTarget))
-                self.dicParsedResultOfProject[strProjUrl]["intFundTarget"] = intFundTarget
-                #intRaisedMoney
-                strRaisedMoney = root.css("span.money_now::text").extract_first().strip()
-                intRaisedMoney = int(re.sub("[^0-9]", "", strRaisedMoney))
-                self.dicParsedResultOfProject[strProjUrl]["intRaisedMoney"] = intRaisedMoney
-                #fFundProgress
-                fFundProgress = (float(intRaisedMoney) / float(intFundTarget)) * 100
-                self.dicParsedResultOfProject[strProjUrl]["fFundProgress"] = int(fFundProgress)
-                #strCurrency
-                self.dicParsedResultOfProject[strProjUrl]["strCurrency"] = u"NTD"
-                #intRemainDays
-                intRemainDays = self.utility.translateTimeleftTextToPureNum(strTimeleftText=strStatus, strVer="WEBACKERS")
-                self.dicParsedResultOfProject[strProjUrl]["intRemainDays"] = intRemainDays
-                #strEndDate
-                strEndDate = None
-                if intRemainDays > 0: #進行中
-                    strCrawlTime = dicCategoryData["strCrawlTime"]
-                    dtCrawlTime = datetime.datetime.strptime(strCrawlTime, "%Y-%m-%d")
-                    dtEndDate = dtCrawlTime + datetime.timedelta(days=intRemainDays)
-                    strEndDate = dtEndDate.strftime("%Y-%m-%d")
-                else:#已完成 或 已結束
-                    strEndDate = root.css("aside.col-md-3 article:nth-of-type(4) div.panel-body span:nth-of-type(2)::text").extract_first().strip()
-                    dtEndDate = datetime.datetime.strptime(strEndDate, "%Y/%m/%d %H:%M")
-                    strEndDate = dtEndDate.strftime("%Y-%m-%d")
-                self.dicParsedResultOfProject[strProjUrl]["strEndDate"] = strEndDate
-                #strStartDate 無法取得
-                self.dicParsedResultOfProject[strProjUrl]["strStartDate"] = None
-                #intUpdate
-                intUpdate = int(root.css("ul.nav-tabs li a[href*='tab=progress'] div.badge::text").extract_first().strip())
-                self.dicParsedResultOfProject[strProjUrl]["intUpdate"] = intUpdate
-                #intBacker
-                intBacker = int(root.css("ul.nav-tabs li a[href*='tab=sponsor'] div.badge::text").extract_first().strip())
-                self.dicParsedResultOfProject[strProjUrl]["intBacker"] = intBacker
-                #intComment
-                intComment = int(root.css("ul.nav-tabs li a[href*='tab=faq'] div.badge::text").extract_first().strip())
-                self.dicParsedResultOfProject[strProjUrl]["intComment"] = intComment
-                #intFbLike
-                intFbLike = int(root.css("span.fbBtn span.fb_share_count::text").extract_first().strip())
-                self.dicParsedResultOfProject[strProjUrl]["intFbLike"] = intFbLike
-                #intVideoCount
-                intVideoCount = len(root.css("div.description iframe[src*='youtube'], div.flex-video"))
-                self.dicParsedResultOfProject[strProjUrl]["intVideoCount"] = intVideoCount
-                #intImageCount
-                intImageCount = len(root.css("div.description img[src*='image']"))
-                self.dicParsedResultOfProject[strProjUrl]["intImageCount"] = intImageCount
-                #isPMSelect 無法取得
-                self.dicParsedResultOfProject[strProjUrl]["isPMSelect"] = None
-                #
-                # - 解析 reward.json -
-                lstDicRewardData = []
-                elesReward = root.css("aside article div.panel")
-                for eleReward in elesReward:
-                    if len(eleReward.css("div.panel-case")) != 0:
-                        dicRewardData = {}
-                        #strUrl
-                        dicRewardData["strUrl"] = strProjUrl
-                        #strRewardContent
-                        lstStrRewardContent = eleReward.css("div.panel-body div.fa-black_h.padding_space.txt_line_fix::text").extract()
-                        strRewardContent = self.stripTextArray(lstStrText=lstStrRewardContent)
-                        dicRewardData["strRewardContent"] = strRewardContent
-                        #intRewardMoney
-                        strRewardMoney = eleReward.css("div.panel-case div.pull-left span.font_m1::text").extract_first().strip()
-                        intRewardMoney = int(re.sub("[^0-9]", "", strRewardMoney))
-                        dicRewardData["intRewardMoney"] = intRewardMoney
-                        #intRewardBacker
-                        lstStrRewardBacker = eleReward.css("div.panel-case div.pull-right::text").extract()
-                        strRewardBacker = self.stripTextArray(lstStrText=lstStrRewardBacker) #ex. "1人待繳5人剩餘94人"
-                        (intPayed, intNotPayYet, intRemainQuta) = self.parseStrRewardBacker(strRewardBacker=strRewardBacker)
-                        intRewardBacker = intPayed
-                        dicRewardData["intRewardBacker"] = intRewardBacker
-                        #intRewardLimit
-                        intRewardLimit = 0
-                        if intRemainQuta is not None:
-                            intRewardLimit = sum((intPayed, intNotPayYet, intRemainQuta))
-                        dicRewardData["intRewardLimit"] = intRewardLimit
-                        #strRewardShipTo and strRewardDeliveryDate
-                        lstStrDeliveryDateAndShipTo = eleReward.css("div.panel-body div.fa-black_h.bg_gray_h::text").extract()
-                        strDeliveryDateAndShipTo = self.stripTextArray(lstStrText=lstStrDeliveryDateAndShipTo) #"寄送條件：.*預計送達：.*"
-                        mDeliveryDateAndShipTo = re.match(u"^寄送條件：(.*)預計送達：(.*)$", strDeliveryDateAndShipTo)
-                        (strRewardDeliveryDate, strRewardShipTo) = (None, None)
-                        if mDeliveryDateAndShipTo is not None:
-                            strRewardShipTo = mDeliveryDateAndShipTo.group(1)
-                            strRewardDeliveryDate = mDeliveryDateAndShipTo.group(2)
-                        dicRewardData["strRewardShipTo"] = strRewardShipTo
-                        strRewardDeliveryDate = self.formatOriginStrRewardDeliveryDate(strOrigin=strRewardDeliveryDate) #轉換格式 2016年04月 -> 2016-04-01
-                        dicRewardData["strRewardDeliveryDate"] = strRewardDeliveryDate
-                        #intRewardRetailPrice
-                        dicRewardData["intRewardRetailPrice"] = scrapyUtility.getRetailPrice(strRewardContent,  [u"原價", u"市價", u"價", u"零售"], intRewardMoney=intRewardMoney)
-                        #append reward 資料
-                        lstDicRewardData.append(dicRewardData)
-                self.dicParsedResultOfReward[strProjUrl] = lstDicRewardData
+            self.dicParsedResultOfProject[strProjUrl]["intStatus"] = intStatus
+            #strCreator
+            strCreator = root.css("aside.col-md-3 article:nth-of-type(5) h3 a::text").extract_first().strip()
+            self.dicParsedResultOfProject[strProjUrl]["strCreator"] = strCreator
+            #strCreatorUrl
+            strCreatorUrl = root.css("aside.col-md-3 article:nth-of-type(5) h3 a::attr('href')").extract_first().strip()
+            self.dicParsedResultOfProject[strProjUrl]["strCreatorUrl"] = self.strWebsiteDomain + strCreatorUrl
+            #strCategory and strSubCategory
+            strCategory = root.css("a[href*='category='] span.case_title::text").extract_first().strip()
+            self.dicParsedResultOfProject[strProjUrl]["strCategory"] = strCategory
+            self.dicParsedResultOfProject[strProjUrl]["strSubCategory"] = strCategory
+            #intFundTarget
+            strFundTarget = root.css("span.money_target::text").extract_first().strip()
+            intFundTarget = int(re.sub("[^0-9]", "", strFundTarget))
+            self.dicParsedResultOfProject[strProjUrl]["intFundTarget"] = intFundTarget
+            #intRaisedMoney
+            strRaisedMoney = root.css("span.money_now::text").extract_first().strip()
+            intRaisedMoney = int(re.sub("[^0-9]", "", strRaisedMoney))
+            self.dicParsedResultOfProject[strProjUrl]["intRaisedMoney"] = intRaisedMoney
+            #fFundProgress
+            fFundProgress = (float(intRaisedMoney) / float(intFundTarget)) * 100
+            self.dicParsedResultOfProject[strProjUrl]["fFundProgress"] = int(fFundProgress)
+            #strCurrency
+            self.dicParsedResultOfProject[strProjUrl]["strCurrency"] = u"NTD"
+            #intRemainDays
+            intRemainDays = self.utility.translateTimeleftTextToPureNum(strTimeleftText=strStatus, strVer="WEBACKERS")
+            self.dicParsedResultOfProject[strProjUrl]["intRemainDays"] = intRemainDays
+            #strEndDate
+            strEndDate = None
+            if intRemainDays > 0: #進行中
+                strCrawlTime = dicCategoryData["strCrawlTime"]
+                dtCrawlTime = datetime.datetime.strptime(strCrawlTime, "%Y-%m-%d")
+                dtEndDate = dtCrawlTime + datetime.timedelta(days=intRemainDays)
+                strEndDate = dtEndDate.strftime("%Y-%m-%d")
+            else:#已完成 或 已結束
+                strEndDate = root.css("aside.col-md-3 article:nth-of-type(4) div.panel-body span:nth-of-type(2)::text").extract_first().strip()
+                dtEndDate = datetime.datetime.strptime(strEndDate, "%Y/%m/%d %H:%M")
+                strEndDate = dtEndDate.strftime("%Y-%m-%d")
+            self.dicParsedResultOfProject[strProjUrl]["strEndDate"] = strEndDate
+            #strStartDate 無法取得
+            self.dicParsedResultOfProject[strProjUrl]["strStartDate"] = None
+            #intUpdate
+            intUpdate = int(root.css("ul.nav-tabs li a[href*='tab=progress'] div.badge::text").extract_first().strip())
+            self.dicParsedResultOfProject[strProjUrl]["intUpdate"] = intUpdate
+            #intBacker
+            intBacker = int(root.css("ul.nav-tabs li a[href*='tab=sponsor'] div.badge::text").extract_first().strip())
+            self.dicParsedResultOfProject[strProjUrl]["intBacker"] = intBacker
+            #intComment
+            intComment = int(root.css("ul.nav-tabs li a[href*='tab=faq'] div.badge::text").extract_first().strip())
+            self.dicParsedResultOfProject[strProjUrl]["intComment"] = intComment
+            #intFbLike
+            intFbLike = int(root.css("span.fbBtn span.fb_share_count::text").extract_first().strip())
+            self.dicParsedResultOfProject[strProjUrl]["intFbLike"] = intFbLike
+            #intVideoCount
+            intVideoCount = len(root.css("div.description iframe[src*='youtube'], div.flex-video"))
+            self.dicParsedResultOfProject[strProjUrl]["intVideoCount"] = intVideoCount
+            #intImageCount
+            intImageCount = len(root.css("div.description img[src*='image']"))
+            self.dicParsedResultOfProject[strProjUrl]["intImageCount"] = intImageCount
+            #isPMSelect 無法取得
+            self.dicParsedResultOfProject[strProjUrl]["isPMSelect"] = None
+            #
+            # - 解析 reward.json -
+            lstDicRewardData = []
+            elesReward = root.css("aside article div.panel")
+            for eleReward in elesReward:
+                if len(eleReward.css("div.panel-case")) != 0:
+                    dicRewardData = {}
+                    #strUrl
+                    dicRewardData["strUrl"] = strProjUrl
+                    #strRewardContent
+                    lstStrRewardContent = eleReward.css("div.panel-body div.fa-black_h.padding_space.txt_line_fix::text").extract()
+                    strRewardContent = self.stripTextArray(lstStrText=lstStrRewardContent)
+                    dicRewardData["strRewardContent"] = strRewardContent
+                    #intRewardMoney
+                    strRewardMoney = eleReward.css("div.panel-case div.pull-left span.font_m1::text").extract_first().strip()
+                    intRewardMoney = int(re.sub("[^0-9]", "", strRewardMoney))
+                    dicRewardData["intRewardMoney"] = intRewardMoney
+                    #intRewardBacker
+                    lstStrRewardBacker = eleReward.css("div.panel-case div.pull-right::text").extract()
+                    strRewardBacker = self.stripTextArray(lstStrText=lstStrRewardBacker) #ex. "1人待繳5人剩餘94人"
+                    (intPayed, intNotPayYet, intRemainQuta) = self.parseStrRewardBacker(strRewardBacker=strRewardBacker)
+                    intRewardBacker = intPayed
+                    dicRewardData["intRewardBacker"] = intRewardBacker
+                    #intRewardLimit
+                    intRewardLimit = 0
+                    if intRemainQuta is not None:
+                        intRewardLimit = sum((intPayed, intNotPayYet, intRemainQuta))
+                    dicRewardData["intRewardLimit"] = intRewardLimit
+                    #strRewardShipTo and strRewardDeliveryDate
+                    lstStrDeliveryDateAndShipTo = eleReward.css("div.panel-body div.fa-black_h.bg_gray_h::text").extract()
+                    strDeliveryDateAndShipTo = self.stripTextArray(lstStrText=lstStrDeliveryDateAndShipTo) #"寄送條件：.*預計送達：.*"
+                    mDeliveryDateAndShipTo = re.match(u"^寄送條件：(.*)預計送達：(.*)$", strDeliveryDateAndShipTo)
+                    (strRewardDeliveryDate, strRewardShipTo) = (None, None)
+                    if mDeliveryDateAndShipTo is not None:
+                        strRewardShipTo = mDeliveryDateAndShipTo.group(1)
+                        strRewardDeliveryDate = mDeliveryDateAndShipTo.group(2)
+                    dicRewardData["strRewardShipTo"] = strRewardShipTo
+                    strRewardDeliveryDate = self.formatOriginStrRewardDeliveryDate(strOrigin=strRewardDeliveryDate) #轉換格式 2016年04月 -> 2016-04-01
+                    dicRewardData["strRewardDeliveryDate"] = strRewardDeliveryDate
+                    #intRewardRetailPrice
+                    dicRewardData["intRewardRetailPrice"] = scrapyUtility.getRetailPrice(strRewardContent,  [u"原價", u"市價", u"價", u"零售"], intRewardMoney=intRewardMoney)
+                    #append reward 資料
+                    lstDicRewardData.append(dicRewardData)
+            self.dicParsedResultOfReward[strProjUrl] = lstDicRewardData
                 
     #解析 sponsor.html
     def parseSponsorPage(self, strCategoryName=None):
+        #取得 category 頁面上的 project 資料
+        strCategoryJsonFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\WEBACKERS\\%s\\category.json"%strCategoryName)
+        dicCategoryData = self.utility.readObjectFromJsonFile(strJsonFilePath=strCategoryJsonFilePath)
+        #load html
         strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"\\WEBACKERS\\%s\\projects"%strCategoryName)
         lstStrSponsorHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strProjectsHtmlFolderPath, strSuffixes="_sponsor.html")
         for strProjectSponsorHtmlFilePath in lstStrSponsorHtmlFilePath:
@@ -374,12 +388,20 @@ class ParserForWEBACKERS:
                 #開始解析
                 strPageSource = projectSponsorHtmlFile.read()
                 root = Selector(text=strPageSource)
-                #lstStrBacker
-                lstStrBacker = root.css("div#sponsor_panel p a.fa-black_h::text").extract()
-                self.dicParsedResultOfProject[strProjUrl]["lstStrBacker"] = lstStrBacker
+            #category.json 中若無 project 資料，略過處理
+            dicCurrentProjectData = self.findDicProjectDataOnCategoryJson(dicCategoryData=dicCategoryData, strProjUrl=strProjUrl)
+            if not dicCurrentProjectData:
+                continue
+            #lstStrBacker
+            lstStrBacker = root.css("div#sponsor_panel p a.fa-black_h::text").extract()
+            self.dicParsedResultOfProject[strProjUrl]["lstStrBacker"] = lstStrBacker
     
     #解析 progress.html
     def parseProgressPage(self, strCategoryName=None):
+        #取得 category 頁面上的 project 資料
+        strCategoryJsonFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\WEBACKERS\\%s\\category.json"%strCategoryName)
+        dicCategoryData = self.utility.readObjectFromJsonFile(strJsonFilePath=strCategoryJsonFilePath)
+        #load html
         strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"\\WEBACKERS\\%s\\projects"%strCategoryName)
         lstStrProgressHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strProjectsHtmlFolderPath, strSuffixes="_progress.html")
         for strProjectProgressHtmlFilePath in lstStrProgressHtmlFilePath:
@@ -392,29 +414,38 @@ class ParserForWEBACKERS:
                 #開始解析
                 strPageSource = projectProgressHtmlFile.read()
                 root = Selector(text=strPageSource)
-                lstDicUpdateData = []
-                elesUpdate = root.css("div.active div.panel-group")
-                for eleUpdate in elesUpdate:
-                    dicUpdateData = {}
-                    #strUrl
-                    dicUpdateData["strUrl"] = strProjUrl
-                    #strUpdateTitle
-                    strUpdateTitle = eleUpdate.css("div.panel-heading div.pull-left h4::text").extract_first().strip()
-                    dicUpdateData["strUpdateTitle"] = strUpdateTitle
-                    #strUpdateContent
-                    lstStrUpdateContentText = eleUpdate.css("div.panel-body div.content_area *::text").extract()
-                    strUpdateContent = self.stripTextArray(lstStrText=lstStrUpdateContentText)
-                    dicUpdateData["strUpdateContent"] = strUpdateContent
-                    #strUpdateDate
-                    strUpdateDate = eleUpdate.css("div.panel-heading div.pull-right span:nth-of-type(2)::text").extract_first().strip()
-                    strUpdateDate = re.sub("/", "-", strUpdateDate)
-                    dicUpdateData["strUpdateDate"] = strUpdateDate
-                    #append update 資料
-                    lstDicUpdateData.append(dicUpdateData)
-                self.dicParsedResultOfUpdate[strProjUrl] = lstDicUpdateData
+            #category.json 中若無 project 資料，略過處理
+            dicCurrentProjectData = self.findDicProjectDataOnCategoryJson(dicCategoryData=dicCategoryData, strProjUrl=strProjUrl)
+            if not dicCurrentProjectData:
+                continue
+            #-解析 update.json-
+            lstDicUpdateData = []
+            elesUpdate = root.css("div.active div.panel-group")
+            for eleUpdate in elesUpdate:
+                dicUpdateData = {}
+                #strUrl
+                dicUpdateData["strUrl"] = strProjUrl
+                #strUpdateTitle
+                strUpdateTitle = eleUpdate.css("div.panel-heading div.pull-left h4::text").extract_first().strip()
+                dicUpdateData["strUpdateTitle"] = strUpdateTitle
+                #strUpdateContent
+                lstStrUpdateContentText = eleUpdate.css("div.panel-body div.content_area *::text").extract()
+                strUpdateContent = self.stripTextArray(lstStrText=lstStrUpdateContentText)
+                dicUpdateData["strUpdateContent"] = strUpdateContent
+                #strUpdateDate
+                strUpdateDate = eleUpdate.css("div.panel-heading div.pull-right span:nth-of-type(2)::text").extract_first().strip()
+                strUpdateDate = re.sub("/", "-", strUpdateDate)
+                dicUpdateData["strUpdateDate"] = strUpdateDate
+                #append update 資料
+                lstDicUpdateData.append(dicUpdateData)
+            self.dicParsedResultOfUpdate[strProjUrl] = lstDicUpdateData
 
     #解析 faq.html
     def parseFaqPage(self, strCategoryName=None):
+        #取得 category 頁面上的 project 資料
+        strCategoryJsonFilePath = self.PARSED_RESULT_BASE_FOLDER_PATH + (u"\\WEBACKERS\\%s\\category.json"%strCategoryName)
+        dicCategoryData = self.utility.readObjectFromJsonFile(strJsonFilePath=strCategoryJsonFilePath)
+        #load html
         strProjectsHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + (u"\\WEBACKERS\\%s\\projects"%strCategoryName)
         lstStrFaqHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strProjectsHtmlFolderPath, strSuffixes="_faq.html")
         for strProjectFaqHtmlFilePath in lstStrFaqHtmlFilePath:
@@ -427,25 +458,30 @@ class ParserForWEBACKERS:
                 #開始解析
                 strPageSource = projectFaqHtmlFile.read()
                 root = Selector(text=strPageSource)
-                lstDicQandaData = []
-                elesQanda = root.css("div.panel-group div.panel")
-                for eleQanda in elesQanda:
-                    dicQandaData = {}
-                    #strUrl
-                    dicQandaData["strUrl"] = strProjUrl
-                    #strQnaQuestion
-                    lstStrQnaQuestionText = eleQanda.css("div.panel-heading a::text").extract()
-                    strQnaQuestion = self.stripTextArray(lstStrText=lstStrQnaQuestionText)
-                    dicQandaData["strQnaQuestion"] = strQnaQuestion
-                    #strQnaAnswer
-                    lstStrQnaAnswerText = eleQanda.css("div.panel-collapse div.panel-body div.reply::text").extract()
-                    strQnaAnswer = self.stripTextArray(lstStrText=lstStrQnaAnswerText)
-                    dicQandaData["strQnaAnswer"] = strQnaAnswer
-                    #strQnaDate 無法取得
-                    dicQandaData["strQnaDate"] = None
-                    #append qanda 資料
-                    lstDicQandaData.append(dicQandaData)
-                self.dicParsedResultOfQanda[strProjUrl] = lstDicQandaData
+            #category.json 中若無 project 資料，略過處理
+            dicCurrentProjectData = self.findDicProjectDataOnCategoryJson(dicCategoryData=dicCategoryData, strProjUrl=strProjUrl)
+            if not dicCurrentProjectData:
+                continue
+            #-解析 qanda.json-
+            lstDicQandaData = []
+            elesQanda = root.css("div.panel-group div.panel")
+            for eleQanda in elesQanda:
+                dicQandaData = {}
+                #strUrl
+                dicQandaData["strUrl"] = strProjUrl
+                #strQnaQuestion
+                lstStrQnaQuestionText = eleQanda.css("div.panel-heading a::text").extract()
+                strQnaQuestion = self.stripTextArray(lstStrText=lstStrQnaQuestionText)
+                dicQandaData["strQnaQuestion"] = strQnaQuestion
+                #strQnaAnswer
+                lstStrQnaAnswerText = eleQanda.css("div.panel-collapse div.panel-body div.reply::text").extract()
+                strQnaAnswer = self.stripTextArray(lstStrText=lstStrQnaAnswerText)
+                dicQandaData["strQnaAnswer"] = strQnaAnswer
+                #strQnaDate 無法取得
+                dicQandaData["strQnaDate"] = None
+                #append qanda 資料
+                lstDicQandaData.append(dicQandaData)
+            self.dicParsedResultOfQanda[strProjUrl] = lstDicQandaData
 
 #profile #####################################################################################
     #解析 profile page(s) 之前
