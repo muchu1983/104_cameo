@@ -24,12 +24,12 @@ class SpiderForWEBACKERSTest(unittest.TestCase):
     #收尾
     def tearDown(self):
         self.spider.quitDriver()
-    
+    """
     #測試抓取 Browse page
     def test_downloadBrowsePageAndParseBrowsePage(self):
         logging.info("SpiderForWEBACKERSTest.test_downloadBrowsePageAndParseBrowsePage")
         self.spider.downloadBrowsePageAndParseBrowsePage()
-
+    
     #測試抓取 Category page
     def test_downloadCategoryPage(self):
         logging.info("SpiderForWEBACKERSTest.test_downloadCategoryPage")
@@ -39,7 +39,7 @@ class SpiderForWEBACKERSTest(unittest.TestCase):
     def test_downloadProjectPage(self):
         logging.info("SpiderForWEBACKERSTest.test_downloadProjectPage")
         self.spider.downloadProjectPage("sport")
-    
+    """
     #測試抓取 profile page
     def test_downloadProfilePage(self):
         logging.info("SpiderForWEBACKERSTest.test_downloadProfilePage")

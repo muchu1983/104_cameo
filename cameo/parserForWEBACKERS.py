@@ -242,8 +242,10 @@ class ParserForWEBACKERS:
                     strIntroduction = strIntroduction + strIntroductionText
                 self.dicParsedResultOfProject[strProjUrl]["strIntroduction"] = strIntroduction
                 #intStatus
-                dicMappingStatus = {u"已完成":1,
-                               u"已結束":2,}
+                dicMappingStatus = {
+                    u"已完成":1,
+                    u"已結束":2,
+                }
                 intStatus = 0
                 strStatus = dicCurrentProjectData["strStatus"]
                 if strStatus in dicMappingStatus:

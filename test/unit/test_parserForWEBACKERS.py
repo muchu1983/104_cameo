@@ -25,7 +25,7 @@ class ParserForWEBACKERSTest(unittest.TestCase):
     #收尾
     def tearDown(self):
         pass
-    
+    """
     #測試 解析 回饋組合的贊助狀態 字串
     def test_parseStrRewardBacker(self):
         logging.info("ParserForWEBACKERSTest.test_parseStrRewardBacker")
@@ -46,7 +46,7 @@ class ParserForWEBACKERSTest(unittest.TestCase):
     #測試 解析 project 頁面
     def test_parseProjectPage(self):
         logging.info("ParserForWEBACKERSTest.test_parseProjectPage")
-        strCategoryName = "design"
+        strCategoryName = "sport"
         parser = ParserForWEBACKERS()
         parser.beforeParseProjectPage(strCategoryName)
         parser.parseIntroPage(strCategoryName)
@@ -54,11 +54,11 @@ class ParserForWEBACKERSTest(unittest.TestCase):
         parser.parseProgressPage(strCategoryName)
         parser.parseFaqPage(strCategoryName)
         parser.afterParseProjectPage(strCategoryName)
-    
+    """
     #測試 解析 profile 頁面
     def test_parseProfilePage(self):
         logging.info("ParserForWEBACKERSTest.test_parseProfilePage")
-        strCategoryName = "design"
+        strCategoryName = "sport"
         parser = ParserForWEBACKERS()
         parser.beforeParseProfilePage(strCategoryName)
         parser.parseProjPage(strCategoryName)
