@@ -213,8 +213,6 @@ class ParserForWEBACKERS:
                 #取得 url
                 strProjId = re.search("^(.*)_intro.html$", strProjHtmlFileName).group(1)
                 strProjUrl = u"https://www.webackers.com/Proposal/Display/" + strProjId
-                if strProjUrl not in self.dicParsedResultOfProject:
-                    self.dicParsedResultOfProject[strProjUrl] = {}
                 #開始解析
                 strPageSource = projectIntroHtmlFile.read()
                 root = Selector(text=strPageSource)
@@ -223,6 +221,8 @@ class ParserForWEBACKERS:
             if not dicCurrentProjectData:
                 continue
             # - 解析 project.json -
+            if strProjUrl not in self.dicParsedResultOfProject:
+                self.dicParsedResultOfProject[strProjUrl] = {}
             #strSource
             self.dicParsedResultOfProject[strProjUrl]["strSource"] = \
                 u"WEBACKERS"
@@ -383,8 +383,6 @@ class ParserForWEBACKERS:
                 #取得 url
                 strProjId = re.search("^(.*)_sponsor.html$", strProjHtmlFileName).group(1)
                 strProjUrl = u"https://www.webackers.com/Proposal/Display/" + strProjId
-                if strProjUrl not in self.dicParsedResultOfProject:
-                    self.dicParsedResultOfProject[strProjUrl] = {}
                 #開始解析
                 strPageSource = projectSponsorHtmlFile.read()
                 root = Selector(text=strPageSource)
@@ -392,6 +390,9 @@ class ParserForWEBACKERS:
             dicCurrentProjectData = self.findDicProjectDataOnCategoryJson(dicCategoryData=dicCategoryData, strProjUrl=strProjUrl)
             if not dicCurrentProjectData:
                 continue
+            # - 解析 project.json (加入 lstStrBacker)-
+            if strProjUrl not in self.dicParsedResultOfProject:
+                self.dicParsedResultOfProject[strProjUrl] = {}
             #lstStrBacker
             lstStrBacker = root.css("div#sponsor_panel p a.fa-black_h::text").extract()
             self.dicParsedResultOfProject[strProjUrl]["lstStrBacker"] = lstStrBacker
