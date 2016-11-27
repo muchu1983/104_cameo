@@ -147,24 +147,22 @@ class ParserForBNEXT:
             #strUrl
             strUrl = root.css("div.fb-like::attr(data-href)").extract_first()
             dicNewsData["strUrl"] = strUrl
-            """
             #strTitle
-            strTitle = root.css("div.main_title::text").extract_first()
+            strTitle = root.css("div.article_header h1.article_title::text").extract_first()
             dicNewsData["strTitle"] = strTitle
             #strContent
-            lstStrContent = root.css("div.content.htmlview *:not(script):not(h2.chk)::text").extract()
-            strContent = re.sub("\s", "", u"".join(lstStrContent)) #接合 新聞內容 並去除空白字元
+            lstStrContent = root.css("div.main_content *:not(script):not(h2.chk)::text").extract()
+            strContent = re.sub("\s+", " ", u" ".join(lstStrContent)) #接合 新聞內容 並去除空白字元
             dicNewsData["strContent"] = strContent.strip()
             #lstStrKeyword
-            lstStrKeyword = root.css("div.tag_box a.tag_link::text").extract()
+            lstStrKeyword = root.css("div.article_tags a.tag::text").extract()
             dicNewsData["lstStrKeyword"] = lstStrKeyword
             #strPublishDate
-            strPublishDate = root.css("div.info_box span.info:nth-of-type(2)::text").extract_first()
-            strPublishDate = re.sub("[^0-9-]", "", re.sub("/", "-", strPublishDate)) #date format 2016-04-24
+            strPublishDate = root.css("div.article_info span.item::text").extract_first()
+            strPublishDate = re.sub("[^0-9-]", "", re.sub("\.", "-", strPublishDate)) #date format 2016-04-24
             dicNewsData["strPublishDate"] = strPublishDate
             #strCrawlDate
             dicNewsData["strCrawlDate"] = self.utility.getCtimeOfFile(strFilePath=strNewsHtmlFilePath)
-            """
             #將 新聞資料物件 加入 json
             self.dicParsedResultOfNews.append(dicNewsData)
             #每一千筆資料另存一個 json

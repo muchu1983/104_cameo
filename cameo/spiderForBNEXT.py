@@ -109,12 +109,9 @@ class SpiderForBNEXT:
             time.sleep(random.randint(5,7)) #sleep random time
             #點開 tag more
             elesMoreBtn = self.driver.find_elements_by_css_selector("div.more_btn")
-            intClickTimes = 0 ##############
-            while len(elesMoreBtn) > 0 and elesMoreBtn[0].is_displayed():
-                #########
+            intClickTimes = 0
+            while len(elesMoreBtn) > 0 and elesMoreBtn[0].is_displayed() and intClickTimes < 50:
                 intClickTimes = intClickTimes + 1
-                print(intClickTimes)
-                ########
                 elesMoreBtn[0].click()
                 time.sleep(random.randint(5,7)) #sleep random time
                 elesMoreBtn = self.driver.find_elements_by_css_selector("div.more_btn")
