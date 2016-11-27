@@ -160,5 +160,5 @@ class SpiderForBNEXT:
                 strNewsHtmlFilePath = strNewsHtmlFolderPath + u"\\%s_news.html"%strNewsName
                 self.utility.overwriteSaveAs(strFilePath=strNewsHtmlFilePath, unicodeData=self.driver.page_source)
                 #更新news DB 為已抓取 (isGot = 1)
-                #self.db.updateNewsStatusIsGot(strNewsUrl=strNewsUrl)
+                self.db.updateNewsStatusIsGot(strNewsUrl=strNewsUrl)
             
