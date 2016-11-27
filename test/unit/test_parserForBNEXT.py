@@ -23,14 +23,14 @@ class ParserForBNEXTTest(unittest.TestCase):
     #收尾
     def tearDown(self):
         pass
-    
-    #測試 解析 index.html
-    def test_parseIndexPage(self):
-        logging.info("ParserForBNEXTTest.test_parseIndexPage")
-        parser = ParserForBNEXT()
-        parser.parseIndexPage()
     """
-    #測試 解析 tag.html
+    #測試 解析 category.html
+    def test_parseCategoryPage(self):
+        logging.info("ParserForBNEXTTest.test_parseCategoryPage")
+        parser = ParserForBNEXT()
+        parser.parseCategoryPage()
+    
+    #測試 解析 tag.html 找出 news url
     def test_parseTagPage(self):
         logging.info("ParserForBNEXTTest.test_parseTagPage")
         parser = ParserForBNEXT()
@@ -41,13 +41,13 @@ class ParserForBNEXTTest(unittest.TestCase):
         logging.info("ParserForBNEXTTest.test_findMoreTagByParseNewsPage")
         parser = ParserForBNEXT()
         parser.findMoreTagByParseNewsPage()
-    
+    """
     #測試 解析 news.html 並建立 news.json
     def test_parseNewsPageThenCreateNewsJson(self):
         logging.info("ParserForBNEXTTest.test_parseNewsPageThenCreateNewsJson")
         parser = ParserForBNEXT()
         parser.parseNewsPageThenCreateNewsJson()
-    """
+    
 #測試開始
 if __name__ == "__main__":
     unittest.main(exit=False)

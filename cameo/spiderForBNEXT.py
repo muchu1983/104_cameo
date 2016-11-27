@@ -25,7 +25,7 @@ class SpiderForBNEXT:
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
         self.strWebsiteDomain = u"http://www.bnext.com.tw"
         self.dicSubCommandHandler = {
-            "index":self.downloadIndexPage,
+            "category":self.downloadCategoryPage,
             "tag":self.downloadTagPage,
             "news":self.downloadNewsPage
         }
@@ -38,7 +38,7 @@ class SpiderForBNEXT:
         return (
             "- BNEXT -\n"
             "useage:\n"
-            "index - download entry page of BNEXT \n"
+            "category - download category page of BNEXT \n"
             "tag - download not obtained tag page \n"
             "news [tag] - download not obtained news [of given tag] \n"
         )
@@ -69,26 +69,26 @@ class SpiderForBNEXT:
         self.dicSubCommandHandler[strSubcommand](strArg1)
         self.quitDriver() #quit selenium driver
         
-    #下載 index 頁面
-    def downloadIndexPage(self, uselessArg1=None):
-        logging.info("download index page")
-        strIndexHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\BNEXT"
-        if not os.path.exists(strIndexHtmlFolderPath):
-            os.mkdir(strIndexHtmlFolderPath) #mkdir source_html/BNEXT/
+    #下載 category 頁面
+    def downloadCategoryPage(self, uselessArg1=None):
+        logging.info("download category page")
+        strCategoryHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\BNEXT"
+        if not os.path.exists(strCategoryHtmlFolderPath):
+            os.mkdir(strCategoryHtmlFolderPath) #mkdir source_html/BNEXT/
         #數位時代首頁
         self.driver.get("http://www.bnext.com.tw")
-        #儲存 html
-        strIndexHtmlFilePath = strIndexHtmlFolderPath + u"\\index.html"
-        self.utility.overwriteSaveAs(strFilePath=strIndexHtmlFilePath, unicodeData=self.driver.page_source)
-        
-    #找出下一頁 tag 的 element
-    def findNextPageElements(self):
-        elesNextPageA = []
-        elesPageA = self.driver.find_elements_by_css_selector("ul.pagination li a")
-        for elePageA in elesPageA:
-            if elePageA.text == ">":
-                elesNextPageA.append(elePageA)
-        return elesNextPageA
+        #找出 category link
+        lstStrCategoryHref = []
+        elesCategoryA = self.driver.find_elements_by_css_selector("a.dropdown-toggle")
+        for eleCategoryA in elesCategoryA:
+            strCategoryHref = eleCategoryA.get_attribute("href")
+            lstStrCategoryHref.append(strCategoryHref)
+        #儲存 category.html
+        for strCategoryHref in lstStrCategoryHref:
+            strCategoryName = re.match("^http://www\.bnext\.com\.tw/categories/(.*)$", strCategoryHref).group(1)
+            strCategoryHtmlFilePath = strCategoryHtmlFolderPath + u"\\%s_category.html"%strCategoryName
+            self.driver.get(strCategoryHref)
+            self.utility.overwriteSaveAs(strFilePath=strCategoryHtmlFilePath, unicodeData=self.driver.page_source)
         
     #下載 tag 頁面
     def downloadTagPage(self, uselessArg1=None):
@@ -104,25 +104,23 @@ class SpiderForBNEXT:
                 # skip tag 名稱中有包含 u"/" 的 tag，避免 url 錯誤
                 continue
             strTagUrl = strTagWebsiteDomain + u"/" + strNotObtainedTagName
-            #tag 第0頁
-            intPageNum = 0
-            time.sleep(random.randint(2,5)) #sleep random time
+            #tag 頁面
             self.driver.get(strTagUrl)
+            time.sleep(random.randint(5,7)) #sleep random time
+            #點開 tag more
+            elesMoreBtn = self.driver.find_elements_by_css_selector("div.more_btn")
+            intClickTimes = 0 ##############
+            while len(elesMoreBtn) > 0 and elesMoreBtn[0].is_displayed():
+                #########
+                intClickTimes = intClickTimes + 1
+                print(intClickTimes)
+                ########
+                elesMoreBtn[0].click()
+                time.sleep(random.randint(5,7)) #sleep random time
+                elesMoreBtn = self.driver.find_elements_by_css_selector("div.more_btn")
             #儲存 html
-            strTagHtmlFilePath = strTagHtmlFolderPath + u"\\%d_%s_tag.html"%(intPageNum, strNotObtainedTagName)
+            strTagHtmlFilePath = strTagHtmlFolderPath + u"\\%s_tag.html"%(strNotObtainedTagName)
             self.utility.overwriteSaveAs(strFilePath=strTagHtmlFilePath, unicodeData=self.driver.page_source)
-            #tag 下一頁
-            elesNextPageA = self.findNextPageElements()
-            while len(elesNextPageA) != 0:
-                time.sleep(random.randint(2,5)) #sleep random time
-                intPageNum = intPageNum+1
-                strTagUrl = elesNextPageA[0].get_attribute("href")
-                self.driver.get(strTagUrl)
-                #儲存 html
-                strTagHtmlFilePath = strTagHtmlFolderPath + u"\\%d_%s_tag.html"%(intPageNum, strNotObtainedTagName)
-                self.utility.overwriteSaveAs(strFilePath=strTagHtmlFilePath, unicodeData=self.driver.page_source)
-                #tag 再下一頁
-                elesNextPageA = self.findNextPageElements()
             #更新tag DB 為已抓取 (isGot = 1)
             self.db.updateTagStatusIsGot(strTagName=strNotObtainedTagName)
             logging.info("got tag %s"%strNotObtainedTagName)
@@ -161,9 +159,9 @@ class SpiderForBNEXT:
                 time.sleep(random.randint(2,5)) #sleep random time
                 self.driver.get(strNewsUrl)
                 #儲存 html
-                strNewsName = re.match("^http://www.bnext.com.tw/article/view/id/([0-9]*)$", strNewsUrl).group(1)
+                strNewsName = re.match("^http://www.bnext.com.tw/article/.*/(.*)$", strNewsUrl).group(1)
                 strNewsHtmlFilePath = strNewsHtmlFolderPath + u"\\%s_news.html"%strNewsName
                 self.utility.overwriteSaveAs(strFilePath=strNewsHtmlFilePath, unicodeData=self.driver.page_source)
                 #更新news DB 為已抓取 (isGot = 1)
-                self.db.updateNewsStatusIsGot(strNewsUrl=strNewsUrl)
+                #self.db.updateNewsStatusIsGot(strNewsUrl=strNewsUrl)
             

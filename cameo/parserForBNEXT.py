@@ -25,7 +25,7 @@ class ParserForBNEXT:
         self.utility = Utility()
         self.db = LocalDbForBNEXT()
         self.dicSubCommandHandler = {
-            "index":[self.parseIndexPage],
+            "category":[self.parseCategoryPage],
             "tag":[self.parseTagPage],
             "news":[self.findMoreTagByParseNewsPage],
             "json":[self.parseNewsPageThenCreateNewsJson]
@@ -40,12 +40,14 @@ class ParserForBNEXT:
         
     #取得 parser 使用資訊
     def getUseageMessage(self):
-        return ("- BNEXT -\n"
-                "useage:\n"
-                "index - parse index.html then insert tag into DB \n"
-                "tag - parse tag.html then insert news and newstag into DB \n"
-                "news - parse news.html then insert tag into DB \n"
-                "json - parse news.html then create json \n")
+        return (
+            "- BNEXT -\n"
+            "useage:\n"
+            "category - parse category.html then insert tag into DB \n"
+            "tag - parse tag.html then insert news and newstag into DB \n"
+            "news - parse news.html then insert tag into DB \n"
+            "json - parse news.html then create json \n"
+        )
                 
     #執行 parser
     def runParser(self, lstSubcommand=None):
@@ -56,23 +58,26 @@ class ParserForBNEXT:
         for handler in self.dicSubCommandHandler[strSubcommand]:
             handler(strArg1)
     
-    #解析 index.html
-    def parseIndexPage(self, uselessArg1=None):
-        strIndexResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\BNEXT"
-        if not os.path.exists(strIndexResultFolderPath):
-            os.mkdir(strIndexResultFolderPath) #mkdir parsed_result/BNEXT/
-        strIndexHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\BNEXT"
-        strIndexHtmlFilePath = strIndexHtmlFolderPath + u"\\index.html"
-        with open(strIndexHtmlFilePath, "r") as indexHtmlFile:
-            strPageSource = indexHtmlFile.read()
-            root = Selector(text=strPageSource)
-            lstStrHotTagUrl = root.css("div#keyword_block div a::attr(href)").extract()
+    #解析 category.html
+    def parseCategoryPage(self, uselessArg1=None):
+        strCategoryResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\BNEXT"
+        if not os.path.exists(strCategoryResultFolderPath):
+            os.mkdir(strCategoryResultFolderPath) #mkdir parsed_result/BNEXT/
+        strCategoryHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\BNEXT"
+        strCategorySuffixes = u"category.html"
+        lstStrCategoryHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strCategoryHtmlFolderPath, strSuffixes=strCategorySuffixes)
+        for strCategoryHtmlFilePath in lstStrCategoryHtmlFilePath:
+            print(strCategoryHtmlFilePath)
+            with open(strCategoryHtmlFilePath, "r") as categoryHtmlFile:
+                strPageSource = categoryHtmlFile.read()
+                root = Selector(text=strPageSource)
+            lstStrHotTagUrl = root.css("div.item_box div.item_tags a::attr(href)").extract()
             for strHotTagUrl in lstStrHotTagUrl:
-                strHotTagName = re.match("^/search/tag/(.*)$", strHotTagUrl).group(1)
-                strHotTagName = urllib.quote(strHotTagName.encode("utf-8")) #url encode
+                print(strHotTagUrl)
+                strHotTagName = re.match("^http://www\.bnext\.com\.tw/search/tag/(.*)$", strHotTagUrl).group(1)
                 self.db.insertTagIfNotExists(strTagName=strHotTagName)
                 
-    #解析 tag.html
+    #解析 tag.html 找出 news url
     def parseTagPage(self, uselessArg1=None):
         strTagResultFolderPath = self.PARSED_RESULT_BASE_FOLDER_PATH + u"\\BNEXT\\tag"
         if not os.path.exists(strTagResultFolderPath):
@@ -82,20 +87,19 @@ class ParserForBNEXT:
         #取得已下載完成的 strTagName list
         lstStrObtainedTagName = self.db.fetchallCompletedObtainedTagName()
         for strObtainedTagName in lstStrObtainedTagName: #tag loop
-            strTagSuffixes = u"_%s_tag.html"%strObtainedTagName
+            strTagSuffixes = u"%s_tag.html"%strObtainedTagName
             lstStrTagHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strTagHtmlFolderPath, strSuffixes=strTagSuffixes)
             for strTagHtmlFilePath in lstStrTagHtmlFilePath: #tag page loop
                 logging.info("parse %s"%strTagHtmlFilePath)
                 with open(strTagHtmlFilePath, "r") as tagHtmlFile:
                     strPageSource = tagHtmlFile.read()
                     root = Selector(text=strPageSource)
-                    #解析 news URL
-                    lstStrNewsUrl = root.css("div#search_list div.item_box div.div_tr div.item_text a.item_title::attr(href)").extract()
-                    for strNewsUrl in lstStrNewsUrl: #news loop
-                        #儲存 news url 及 news tag mapping 至 DB
-                        if strNewsUrl.startswith("/article/view/id/"): #filter remove AD and px... url
-                            strNewsUrl = self.strWebsiteDomain + strNewsUrl
-                            self.db.insertNewsUrlAndNewsTagMappingIfNotExists(strNewsUrl=strNewsUrl, strTagName=strObtainedTagName)
+                #解析 news URL
+                lstStrNewsUrl = root.css("div.left div.item_box div.item_text_box a:nth-of-type(1)::attr(href)").extract()
+                for strNewsUrl in lstStrNewsUrl: #news loop
+                    #儲存 news url 及 news tag mapping 至 DB
+                    if strNewsUrl.startswith("http://www.bnext.com.tw/article/"): #過瀘非新聞 url
+                        self.db.insertNewsUrlAndNewsTagMappingIfNotExists(strNewsUrl=strNewsUrl, strTagName=strObtainedTagName)
                     
     #解析 news.html 之一 (取得更多 tag)
     def findMoreTagByParseNewsPage(self, uselessArg1=None):
@@ -108,11 +112,11 @@ class ParserForBNEXT:
                 strPageSource = newsHtmlFile.read()
                 root = Selector(text=strPageSource)
                 #解析 news.html
-                lstStrTagUrl = root.css("div.tag_box a.tag_link::attr(href)").extract()
+                lstStrTagUrl = root.css("div.article_tags a.tag::attr(href)").extract()
                 for strTagUrl in lstStrTagUrl:
-                    strTagName = re.match("^/search/tag/(.*)$", strTagUrl).group(1)
-                    strTagName = urllib.quote(strTagName.encode("utf-8")) #url encode
-                    self.db.insertTagIfNotExists(strTagName=strTagName)
+                    if strTagUrl.startswith("http://www.bnext.com.tw/search/tag/"):
+                        strTagName = re.match("^http://www\.bnext\.com.tw/search/tag/(.*)$", strTagUrl).group(1)
+                        self.db.insertTagIfNotExists(strTagName=strTagName)
         
     #解析 news.html 之二 (產生 news.json )
     def parseNewsPageThenCreateNewsJson(self, uselessArg1=None):
@@ -143,6 +147,7 @@ class ParserForBNEXT:
             #strUrl
             strUrl = root.css("div.fb-like::attr(data-href)").extract_first()
             dicNewsData["strUrl"] = strUrl
+            """
             #strTitle
             strTitle = root.css("div.main_title::text").extract_first()
             dicNewsData["strTitle"] = strTitle
@@ -159,6 +164,7 @@ class ParserForBNEXT:
             dicNewsData["strPublishDate"] = strPublishDate
             #strCrawlDate
             dicNewsData["strCrawlDate"] = self.utility.getCtimeOfFile(strFilePath=strNewsHtmlFilePath)
+            """
             #將 新聞資料物件 加入 json
             self.dicParsedResultOfNews.append(dicNewsData)
             #每一千筆資料另存一個 json

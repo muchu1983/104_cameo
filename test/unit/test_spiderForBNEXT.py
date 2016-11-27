@@ -24,17 +24,17 @@ class SpiderForBNEXTTest(unittest.TestCase):
     #收尾
     def tearDown(self):
         self.spider.quitDriver()
-    
-    #測試抓取 index page
-    def test_downloadIndexPage(self):
-        logging.info("SpiderForBNEXTTest.test_downloadIndexPage")
-        self.spider.downloadIndexPage()
+    """
+    #測試抓取 category page
+    def test_downloadCategoryPage(self):
+        logging.info("SpiderForBNEXTTest.test_downloadCategoryPage")
+        self.spider.downloadCategoryPage()
     """
     #測試抓取 tag page
     def test_downloadTagPage(self):
         logging.info("SpiderForBNEXTTest.test_downloadTagPage")
         self.spider.downloadTagPage()
-    
+    """
     #測試抓取 news page
     def test_downloadNewsPage(self):
         logging.info("SpiderForBNEXTTest.test_downloadNewsPage")
