@@ -34,6 +34,31 @@ def entry_point():
     filesysUtility = FileSystemUtility()
     strSettingsJsonFilePath = filesysUtility.getPackageResourcePath(strPackageName="cameo.automation", strResourceName="automationForALLNEWS_settings.json")
     dicSettings = cameoUtility.readObjectFromJsonFile(strJsonFilePath=strSettingsJsonFilePath)
+    #BNEXT
+    try:
+        spider = SpiderForBNEXT()
+        parser = ParserForBNEXT()
+        importer = ImporterForBNEXT()
+        spider.runSpider(["category"])
+        parser.runParser(["category"])
+        spider.runSpider(["tag"])
+        parser.runParser(["tag"])
+        spider.runSpider(["news"])
+        parser.runParser(["news"])
+        spider.runSpider(["tag"])
+        parser.runParser(["tag"])
+        spider.runSpider(["news"])
+        parser.runParser(["json"])
+        importer.runImporter(["import"])
+    except Exception as e:
+        logging.warning("automation for ALLNEWS fail: %s"%str(e))
+        cameoUtility.sendEmail(
+            strSubject="Failed!",
+            strFrom=dicSettings["strMachine"],
+            strTo="me",
+            strMsg=str(e),
+            lstStrTarget=dicSettings["lstStrMail"]
+        )
     #TECHCRUNCH
     try:
         spider = SpiderForTECHCRUNCH()
@@ -69,31 +94,6 @@ def entry_point():
         importer = ImporterForTECHORANGE()
         spider.runSpider(["index"])
         parser.runParser(["index"])
-        spider.runSpider(["tag"])
-        parser.runParser(["tag"])
-        spider.runSpider(["news"])
-        parser.runParser(["news"])
-        spider.runSpider(["tag"])
-        parser.runParser(["tag"])
-        spider.runSpider(["news"])
-        parser.runParser(["json"])
-        importer.runImporter(["import"])
-    except Exception as e:
-        logging.warning("automation for ALLNEWS fail: %s"%str(e))
-        cameoUtility.sendEmail(
-            strSubject="Failed!",
-            strFrom=dicSettings["strMachine"],
-            strTo="me",
-            strMsg=str(e),
-            lstStrTarget=dicSettings["lstStrMail"]
-        )
-    #BNEXT
-    try:
-        spider = SpiderForBNEXT()
-        parser = ParserForBNEXT()
-        importer = ImporterForBNEXT()
-        spider.runSpider(["category"])
-        parser.runParser(["category"])
         spider.runSpider(["tag"])
         parser.runParser(["tag"])
         spider.runSpider(["news"])
