@@ -159,6 +159,7 @@ class ParserForBNEXT:
             dicNewsData["lstStrKeyword"] = lstStrKeyword
             #strPublishDate
             strPublishDate = root.css("div.article_info span.item::text").extract_first()
+            print(strPublishDate)
             strPublishDate = re.sub("[^0-9-]", "", re.sub("\.", "-", strPublishDate)) #date format 2016-04-24
             dicNewsData["strPublishDate"] = strPublishDate
             #strCrawlDate
