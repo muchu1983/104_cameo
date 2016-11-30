@@ -135,12 +135,12 @@ class ParserForBNEXT:
                 strPageSource = newsHtmlFile.read()
                 root = Selector(text=strPageSource)
             #解析 news.html
-            #檢查 news 是否為看板新聞
-            eleBoardLabel = root.css("span.board-label").extract_first()
-            if eleBoardLabel: # is not None
+            #檢查 news html 是否正常
+            strPublishDate = root.css("div.article_info span.item::text").extract_first()
+            if strPublishDate is None:
                 # rename news 檔名為 xxx_news.html.error
                 os.rename(strNewsHtmlFilePath, strNewsHtmlFilePath + u".error")
-                logging.warning("%s is board news,skip parse it."%strNewsHtmlFilePath)
+                logging.warning("news format invalid,skip parse it: %s"%strNewsHtmlFilePath)
                 continue #略過該筆 news
             #strSiteName
             dicNewsData["strSiteName"] = u"BNEXT"
@@ -159,7 +159,6 @@ class ParserForBNEXT:
             dicNewsData["lstStrKeyword"] = lstStrKeyword
             #strPublishDate
             strPublishDate = root.css("div.article_info span.item::text").extract_first()
-            print(strPublishDate)
             strPublishDate = re.sub("[^0-9-]", "", re.sub("\.", "-", strPublishDate)) #date format 2016-04-24
             dicNewsData["strPublishDate"] = strPublishDate
             #strCrawlDate
