@@ -13,6 +13,7 @@ import time
 import datetime
 import dateparser
 import pkg_resources
+import shutil
 import smtplib
 import logging
 import random
@@ -288,6 +289,15 @@ class Utility:
                 strText = re.sub("\s", " ", strText)
                 strTextLine = strTextLine + u" " + strText.strip()
         return strTextLine.strip()
+    
+    #測試 crunchbase html 檔案重新命名
+    def crunchbaseOrganizationHtmlFileRename(self, strSourceFolder=None, strTargetFolder=None):
+        lstStrSourceHtmlFilePath = self.getFilePathListWithSuffixes(strBasedir=strSourceFolder, strSuffixes="crunchbase.html")
+        for strSourceHtmlFilePath in lstStrSourceHtmlFilePath:
+            strCrunchbaseId = re.search("^.*\\\\(.*)crunchbase.html$", strSourceHtmlFilePath).group(1)
+            strCrunchbaseId = re.sub("[^a-zA-Z]+", "-", strCrunchbaseId.lower()).strip("-")
+            strTargetHtmlFilePath = strTargetFolder + u"\\%s_organization.html"%strCrunchbaseId
+            shutil.copy(strSourceHtmlFilePath, strTargetHtmlFilePath)
     
     #使用 國家對照表 查找 洲別 資料
     def getContinentByCountryName(self, strCountryName=None):

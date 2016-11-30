@@ -23,7 +23,7 @@ class UtilityTest(unittest.TestCase):
     #收尾
     def tearDown(self):
         pass
-    
+    """
     #測試 轉換數字字串為純數字
     def test_translateNumTextToPureNum(self):
         logging.info("UtilityTest.test_translateNumTextToPureNum")
@@ -96,6 +96,14 @@ class UtilityTest(unittest.TestCase):
         print(self.utility.parseStrDateByDateparser(strOriginDate="5 years ago", strBaseDate="2016-7-19"))
         print(self.utility.parseStrDateByDateparser(strOriginDate="July 2016"))
         self.assertIsNone(self.utility.parseStrDateByDateparser(strOriginDate=None))
+    """
+    #測試 crunchbase html 檔案重新命名
+    def test_crunchbaseOrganizationHtmlFileRename(self):
+        logging.info("UtilityTest.test_crunchbaseOrganizationHtmlFileRename")
+        strSourceFolder = u"cameo_res\\source_html\\CRUNCHBASE\\dennis"
+        strTargetFolder = u"cameo_res\\source_html\\CRUNCHBASE\\mark"
+        self.utility.crunchbaseOrganizationHtmlFileRename(strSourceFolder=strSourceFolder, strTargetFolder=strTargetFolder)
+    
 #測試開始
 if __name__ == "__main__":
     unittest.main(exit=False)
