@@ -295,7 +295,7 @@ class Utility:
         lstStrSourceHtmlFilePath = self.getFilePathListWithSuffixes(strBasedir=strSourceFolder, strSuffixes="crunchbase.html")
         for strSourceHtmlFilePath in lstStrSourceHtmlFilePath:
             strCrunchbaseId = re.search("^.*\\\\(.*)crunchbase.html$", strSourceHtmlFilePath).group(1)
-            strCrunchbaseId = re.sub("[^a-zA-Z]+", "-", strCrunchbaseId.lower()).strip("-")
+            strCrunchbaseId = re.sub("[^a-zA-Z0-9]+", "-", strCrunchbaseId.lower()).strip("-")
             strTargetHtmlFilePath = strTargetFolder + u"\\%s_organization.html"%strCrunchbaseId
             shutil.copy(strSourceHtmlFilePath, strTargetHtmlFilePath)
     
