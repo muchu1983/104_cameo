@@ -293,8 +293,9 @@ class Utility:
     #測試 crunchbase html 檔案重新命名
     def crunchbaseOrganizationHtmlFileRename(self, strSourceFolder=None, strTargetFolder=None):
         lstStrSourceHtmlFilePath = self.getFilePathListWithSuffixes(strBasedir=strSourceFolder, strSuffixes="crunchbase.html")
+        lstStrSourceHtmlFilePath = lstStrSourceHtmlFilePath + self.getFilePathListWithSuffixes(strBasedir=strSourceFolder, strSuffixes="crunchbase.htm")
         for strSourceHtmlFilePath in lstStrSourceHtmlFilePath:
-            strCrunchbaseId = re.search("^.*\\\\(.*)crunchbase.html$", strSourceHtmlFilePath).group(1)
+            strCrunchbaseId = re.search("^.*\\\\(.*)crunchbase.html?$", strSourceHtmlFilePath).group(1)
             strCrunchbaseId = re.sub("[^a-zA-Z0-9]+", "-", strCrunchbaseId.lower()).strip("-")
             strTargetHtmlFilePath = strTargetFolder + u"\\%s_organization.html"%strCrunchbaseId
             shutil.copy(strSourceHtmlFilePath, strTargetHtmlFilePath)
