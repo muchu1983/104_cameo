@@ -31,6 +31,7 @@ def entry_point():
         #spider.runSpider(["organization"])
         parser.runParser(["organization"])
         importer.runImporter(["import"])
+        logging.info("automation for CRUNCHBASE SUCCESS")
         cameoUtility.sendEmail(
             strSubject="SUCCESS!",
             strFrom=dicSettings["strMachine"],

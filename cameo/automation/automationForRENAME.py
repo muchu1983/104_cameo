@@ -23,6 +23,7 @@ def entry_point():
         strSourceFolder = u"cameo_res\\source_html\\CRUNCHBASE\\other_organization"
         strTargetFolder = u"cameo_res\\source_html\\CRUNCHBASE\\organization"
         cameoUtility.crunchbaseOrganizationHtmlFileRename(strSourceFolder=strSourceFolder, strTargetFolder=strTargetFolder)
+        logging.info("automation for RENAME SUCCESS")
         cameoUtility.sendEmail(
             strSubject="SUCCESS!",
             strFrom=dicSettings["strMachine"],
