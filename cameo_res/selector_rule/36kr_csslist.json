@@ -1,0 +1,49 @@
+{
+    "rawdata-converter-name":"36kr_news",
+    "local-html-file-pattern":{
+        "strBasedir":"cameo_res\\source_html\\36KR\\news",
+        "strSuffixes":".html"
+    },
+    "csslist":[
+        {
+            "name": "36kr-news-title", 
+            "sampleUrl": "", 
+            "cssRule": "head title::text", 
+            "preAction": [], 
+            "sampleAns": [], 
+            "ansType": "exact" 
+        },
+        {
+            "name":"36kr-news-tags",
+            "sampleUrl":"",
+            "cssRule":"head meta[name=keywords]::attr(content)",
+            "preAction": [], 
+            "sampleAns":[],
+            "ansType":"exact"
+        },
+        {
+            "name":"36kr-news-pubtime",
+            "sampleUrl":"",
+            "cssRule":"head meta time",
+            "preAction": [], 
+            "sampleAns":[],
+            "ansType":"exist"
+        },
+        {
+            "name":"36kr-news-content",
+            "sampleUrl":"",
+            "cssRule":"head meta[name=description]::attr(content)",
+            "preAction": [], 
+            "sampleAns":[],
+            "ansType":"exist"
+        },
+        {
+            "name":"36kr-news-url",
+            "sampleUrl":"",
+            "cssRule":"head meta::attr(content)",
+            "preAction": [], 
+            "sampleAns":[],
+            "ansType":"exact"
+        }
+    ]
+}
