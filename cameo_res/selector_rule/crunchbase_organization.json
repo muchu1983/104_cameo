@@ -1,11 +1,10 @@
 {
     "rawdata-converter-name":"CrunchBase",
     "local-html-file-pattern":{
-        "strBasedir":"C:\\Users\\SJack\\Desktop\\crawlermaster",
-        "strSuffixes":"news.html"
+        "strBasedir":"cameo_res\\source_html\\CRUNCHBASE\\organization",
+        "strSuffixes":"_organization.html"
     },
     "csslist":[
-
         {
             "name":"cb-strUrl",
             "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
@@ -16,7 +15,6 @@
                 ],
             "ansType":"exact"
         },
-
         {
             "name":"cb-strCompany",
             "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
@@ -27,7 +25,6 @@
                 ],
             "ansType":"exact"
         },
-
         {
             "name":"cb-lstStrFounders",
             "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
@@ -38,7 +35,6 @@
                 ],
             "ansType":"exact"
         },
-
         {
             "name":"cb-strIntro",
             "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
@@ -60,7 +56,6 @@
         ],
             "ansType":"exact"
         },
-
         {
             "name":"cb-lstStrTeam",
             "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
@@ -76,7 +71,6 @@
                 ],
             "ansType":"exact"
         },
-
         {
             "name":"cb-lstStrTeamDesc",
             "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
@@ -102,7 +96,6 @@
                 ],
             "ansType":"exact"
         },
-
         {
             "name":"cb-lstIndustry",
             "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
@@ -117,7 +110,6 @@
                  ],
             "ansType":"exact"
         },
-        
         {
             "name":"cb-strLocation",
             "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
@@ -129,8 +121,7 @@
             "USA"
                 ],
             "ansType":"exact"
-        },       
-
+        },
         {
             "name":"cb-strSeriesType",
             "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
@@ -150,7 +141,6 @@
                 ],
             "ansType":"exist"
         },
-
         {
             "name":"cb-intSeriesMoney",
             "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
@@ -170,7 +160,6 @@
                 ],
             "ansType":"exist"
         },
-
         {
             "name":"cb-intSeriesValuation",
             "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
@@ -190,7 +179,6 @@
                 ],
             "ansType":"exist"
         },
-
         {
             "name":"cb-strSeriesDate",
             "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
@@ -210,12 +198,11 @@
                 ],
             "ansType":"exist"
         },
-
         {
             "name":"cb-lstStrInvestor",
             "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
             "preAction": [],
-            "cssRule":"div.funding_rounds table tr td:nth-child(4) a::text",
+            "cssRule":"div.investors table.investors tbody tr:nth-of-type(1) td:nth-of-type(1) a::text",
             "sampleAns":[
                 "Google Capital", 
             "TCV", 
@@ -232,12 +219,11 @@
                 ],
             "ansType":"exist"
         },
-
         {
             "name":"cb-lstStrInvestorUrl",
             "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
             "preAction": [],
-            "cssRule":"div.investors table.investors tbody tr:first-child td:first-child a::attr(href)",
+            "cssRule":"div.investors table.investors tbody tr:nth-of-type(1) td:nth-of-type(1) a::attr(href)",
             "sampleAns":[
                 "https://www.crunchbase.com/organization/airbnb", 
             "https://www.crunchbase.com/organization/andreessen-horowitz", 
@@ -257,7 +243,6 @@
                 ],
             "ansType":"exist"
         },
-
         {
             "name":"cb-strCurrency",
             "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
@@ -268,7 +253,6 @@
                 ],
             "ansType":"exact"
         },
-
         {
             "name":"cb-strSourceUrl",
             "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
@@ -287,7 +271,6 @@
        ],
             "ansType":"exist"
         },
-
         {
             "name":"cb-strSourceDomain",
             "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
@@ -305,7 +288,6 @@
                 ],
             "ansType":"exist"
         },
-
         {
             "name":"cb-strTitle",
             "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
@@ -324,7 +306,6 @@
                 ],
             "ansType":"exist"
         },
-
         {
             "name":"cb-strDate",
             "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
@@ -342,12 +323,5 @@
                 ],
             "ansType":"exist"
         }
-
-
-
-
-
-
-
- ]
+    ]
 }

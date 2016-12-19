@@ -92,7 +92,51 @@ class ImporterForCRUNCHBASE:
                     },
                     upsert=True
                 )
-    
+                #領投人資料表 ModelSyndicateCrunchbase
+                collectionSyndicateCrunchbase = self.db.ModelSyndicateCrunchbase
+                for dicSeries in dicStartup.get("lstDicSeries", []):
+                    lstStrInvestorUrl = dicSeries.get("lstStrInvestorUrl", [])
+                    lstStrInvestor = dicSeries.get("lstStrInvestor", [])
+                    lstStrLeadInvestor = dicSeries.get("lstStrLeadInvestor", [])
+                    strCrawlTime = dicSeries.get("strCrawlTime", "")
+                    if len(lstStrInvestorUrl) == len(lstStrInvestor): #檢查 investor 列表與 investor url 列表是否一致
+                        for intIndexOfLstStrInvestorUrl in range(len(lstStrInvestorUrl)):
+                            strInvestor = lstStrInvestor[intIndexOfLstStrInvestorUrl]
+                            #檢查是否為領投人之一
+                            if strInvestor in lstStrLeadInvestor:
+                                strLeadInvestorUrl = lstStrInvestorUrl[intIndexOfLstStrInvestorUrl]
+                                #投資資訊
+                                dicInvestment = {
+                                    "campanyName":dicStartup.get("strCompany", None),
+                                    "series":dicSeries.get("strSeriesType", None),
+                                    "lstStrBackers":lstStrInvestor
+                                }
+                                collectionSyndicateCrunchbase.update_one(
+                                    {"strUrl": strLeadInvestorUrl},
+                                    {
+                                        "$set":{
+                                            "strName":strInvestor,
+                                            "strCrawTime":dicSeries.get("strCrawlTime", None),
+                                            "dicInvestment":dicInvestment
+                                        }
+                                    },
+                                    upsert=True
+                                )
+                                """
+                strUrl:領投人的網址
+                strName:名稱
+                strCrawTime:抓取時間
+                lstStrBackers:{
+                    campanyName:"Airbnb"
+                    series:"a輪"
+                    lstStrBackers: {
+                        backerA
+                        backerB
+                        ...
+                    }  
+                }
+                            """
+                            
     #建立 lstStrTag 欄位內容
     def makeTagFieldOnModelStartup(self, lstIndustry, lstStrCategory, lstStrSubCategory):
         lstStrTag = []

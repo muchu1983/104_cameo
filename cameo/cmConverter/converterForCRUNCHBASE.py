@@ -10,6 +10,7 @@ import logging
 import re
 import os
 import dateparser
+from scrapy import Selector
 from cameo.utility import Utility as CameoUtility
 from crawlermaster.utility import Utility as CmUtility
 
@@ -33,10 +34,14 @@ class ConverterForCRUNCHBASE:
             #檢查 資料是否有誤
             lstCompanyData = dicOrganizationPageRawData.get("cb-strCompany", [])
             lstLocationData = dicOrganizationPageRawData.get("cb-strLocation", [])
-            if lstCompanyData == [] or lstLocationData == []:
+            if lstCompanyData == []:
                 #錯誤資料 刪除 html 檔並跳過
-                os.remove(strOrganizationHtmlFilePath)
+                #os.remove(strOrganizationHtmlFilePath)
+                os.rename(strOrganizationHtmlFilePath, strOrganizationHtmlFilePath + u".error")
                 continue
+            with open(strOrganizationHtmlFilePath, "r") as organizationHtmlFile:
+                strPageSource = organizationHtmlFile.read()
+                root = Selector(text=strPageSource)
             #建立 dict
             if strOrganizationUrl not in self.dicParsedResultOfStartup:
                 self.dicParsedResultOfStartup[strOrganizationUrl] = {}
@@ -70,6 +75,7 @@ class ConverterForCRUNCHBASE:
             lstStrLocation = dicOrganizationPageRawData.get("cb-strLocation", [])
             strLocation = u" ".join(lstStrLocation)
             self.dicParsedResultOfStartup[strOrganizationUrl]["strLocation"] = strLocation
+            """
             #strCity
             (strAddress, fLatitude, fLongitude) = self.cameoUtility.geopyGeocode(strOriginLocation=lstStrLocation[-1])
             self.dicParsedResultOfStartup[strOrganizationUrl]["strCity"] = strAddress
@@ -80,7 +86,17 @@ class ConverterForCRUNCHBASE:
             self.dicParsedResultOfStartup[strOrganizationUrl]["strCountry"] = self.cameoUtility.getCountryCode(strCountryName=strOriginCountry)
             #strContinent
             self.dicParsedResultOfStartup[strOrganizationUrl]["strContinent"] = self.cameoUtility.getContinentByCountryNameWikiVersion(strCountryName=strOriginCountry)
-            #lstStrInvestor
+            """
+            ############################## develop code ###################################
+            if len(lstStrLocation) >= 2:
+                with open("location_record.csv", "a+") as locRecFile:
+                    strLocationRecord = u"%s,%s\n"%(lstStrLocation[-1], lstStrLocation[-2])
+                    locRecFile.write(strLocationRecord.encode("utf-8"))
+            self.dicParsedResultOfStartup[strOrganizationUrl]["strCity"] = None
+            self.dicParsedResultOfStartup[strOrganizationUrl]["strCountry"] = None
+            self.dicParsedResultOfStartup[strOrganizationUrl]["strContinent"] = None
+            ############################### develop code #######################################
+            #lstStrInvestor (所有投資者)
             lstStrInvestor = dicOrganizationPageRawData.get("cb-lstStrInvestor", [])
             self.dicParsedResultOfStartup[strOrganizationUrl]["lstStrInvestor"] = lstStrInvestor
             #lstDicSeries
@@ -100,8 +116,6 @@ class ConverterForCRUNCHBASE:
                     dicSeries.setdefault("intSeriesMoney", self.parseCrunchbaseMoney(strOriginMoney=lstStrSeriesMoney[intSeriesIndex]))
                 else:
                     dicSeries.setdefault("intSeriesMoney", 0)
-                #lstStrInvestorUrl
-                dicSeries.setdefault("lstStrInvestorUrl", dicOrganizationPageRawData.get("cb-lstStrInvestorUrl", []))
                 #strDate
                 lstStrSeriesDate = dicOrganizationPageRawData.get("cb-strSeriesDate", [])
                 if len(lstStrSeriesDate) >= intSeriesIndex:
@@ -114,8 +128,41 @@ class ConverterForCRUNCHBASE:
                     dicSeries.setdefault("strSeriesType", lstStrSeriesType[intSeriesIndex])
                 else:
                     dicSeries.setdefault("strSeriesType", "")
-                #lstStrInvestor
-                dicSeries.setdefault("lstStrInvestor", dicOrganizationPageRawData.get("cb-lstStrInvestor", []))
+                #lstStrInvestorUrl (過濾出目前這一個 round 的投資者)
+                lstStrInvestorUrlInThisRound = []
+                elesInvestorTbody = root.css("div.investors table.investors tbody")
+                for eleInvestorTbody in elesInvestorTbody:
+                    strInvestorUrl = eleInvestorTbody.css("tr:nth-of-type(1) td:nth-of-type(1) a::attr(href)").extract_first()
+                    lstStrRoundOfInvestor = eleInvestorTbody.css("tr td a::text").extract()
+                    if dicSeries.get("strSeriesType", "") in lstStrRoundOfInvestor:
+                        lstStrInvestorUrlInThisRound.append(strInvestorUrl)
+                #修正 url 加上 https://www.crunchbase.com
+                lstStrFixedInvestorUrl = []
+                for strInvestorUrlInThisRound in lstStrInvestorUrlInThisRound:
+                    if strInvestorUrlInThisRound.startswith(u"/organization/"):
+                        lstStrFixedInvestorUrl.append(u"https://www.crunchbase.com" + strInvestorUrlInThisRound)
+                dicSeries.setdefault("lstStrInvestorUrl", lstStrFixedInvestorUrl)
+                #lstStrInvestor (過濾出目前這一個 round 的投資者)
+                lstStrInvestorInThisRound = []
+                elesInvestorTbody = root.css("div.investors table.investors tbody")
+                for eleInvestorTbody in elesInvestorTbody:
+                    strInvestor = eleInvestorTbody.css("tr:nth-of-type(1) td:nth-of-type(1) a::text").extract_first()
+                    lstStrRoundOfInvestor = eleInvestorTbody.css("tr td a::text").extract()
+                    if dicSeries.get("strSeriesType", "") in lstStrRoundOfInvestor:
+                        lstStrInvestorInThisRound.append(strInvestor)
+                dicSeries.setdefault("lstStrInvestor", lstStrInvestorInThisRound)
+                #lstStrLeadInvestor (找出 目前這一個 round 之中有 Lead 的投資者)
+                lstStrLeadInvestorInThisRound = []
+                elesInvestorTbody = root.css("div.investors table.investors tbody")
+                for eleInvestorTbody in elesInvestorTbody:
+                    strInvestor = eleInvestorTbody.css("tr:nth-of-type(1) td:nth-of-type(1) a::text").extract_first()
+                    elesInvestorTd = eleInvestorTbody.css("tr td")
+                    for eleInvestorTd in elesInvestorTd:
+                        if dicSeries.get("strSeriesType", "") == eleInvestorTd.css("a::text").extract_first():
+                            for strRoundAndLeadText in eleInvestorTd.css("::text").extract():
+                                if u"Lead" in strRoundAndLeadText:
+                                    lstStrLeadInvestorInThisRound.append(strInvestor)
+                dicSeries.setdefault("lstStrLeadInvestor", lstStrLeadInvestorInThisRound)
                 #strCurrency
                 dicSeries.setdefault("strCurrency", "USD")
                 #strCrawlTime
