@@ -117,7 +117,8 @@ class ImporterForCRUNCHBASE:
                                         "$set":{
                                             "strName":strInvestor,
                                             "strCrawTime":dicSeries.get("strCrawlTime", None),
-                                            "dicInvestment":dicInvestment
+                                            "dicInvestment":None,
+                                            "lstStrBackers":[dicInvestment]
                                         }
                                     },
                                     upsert=True
