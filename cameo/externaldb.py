@@ -34,7 +34,7 @@ class CameoMongoDbForMonitor:
     #建構子
     def __init__(self):
         logging.info("connect to cameo 203.66.65.239 mongo db.")
-        self.client = MongoClient("mongodb://203.66.65.239/")
+        self.client = MongoClient("mongodb://root:CameoRoot12#$@203.66.65.239/")
         
     #解構子
     def __del__(self):
