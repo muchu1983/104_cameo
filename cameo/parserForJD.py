@@ -111,7 +111,7 @@ class ParserForJD:
                 strPageSource = categoryHtmlFile.read()
                 root = Selector(text=strPageSource)
             #解析 project URL
-            lstStrProjectUrl = root.css("div.l-result div.lr-lists ul.infos li.info a::attr(href)").extract()
+            lstStrProjectUrl = root.css("li.info a::attr(href)").extract()
             for strProjectUrl in lstStrProjectUrl: #project loop
                 #儲存 project url 及 news category id 至 DB
                 if re.match("^/project/details/[\d]+.html$", strProjectUrl): #filter remove AD and other url

@@ -189,23 +189,27 @@ class SpiderForJD:
                     #_intro.html
                     strIntroHtmlFilePath = strProjectHtmlFolderPath + u"\\%s_intro.html"%strProjectName
                     self.utility.overwriteSaveAs(strFilePath=strIntroHtmlFilePath, unicodeData=self.driver.page_source)
+                    time.sleep(random.randint(7,15)) #sleep random time
                     #_progress.html
                     self.driver.find_element_by_css_selector("#qaBtn").click()
-                    time.sleep(random.randint(3,7)) #sleep random time
+                    time.sleep(random.randint(7,15)) #sleep random time
                     strProgressHtmlFilePath = strProjectHtmlFolderPath + u"\\%s_progress.html"%strProjectName
                     self.utility.overwriteSaveAs(strFilePath=strProgressHtmlFilePath, unicodeData=self.driver.page_source)
                     #_qanda.html
                     self.driver.find_element_by_css_selector("#topicBtn").click()
-                    time.sleep(random.randint(3,7)) #sleep random time
+                    time.sleep(random.randint(7,15)) #sleep random time
                     strQandaHtmlFilePath = strProjectHtmlFolderPath + u"\\%s_qanda.html"%strProjectName
                     self.utility.overwriteSaveAs(strFilePath=strQandaHtmlFilePath, unicodeData=self.driver.page_source)
                     #_sponsor.html
+                    """
+                    #_sponsor.html 頁面已消失待查
                     self.driver.find_element_by_css_selector("#supporterBtn").click()
-                    time.sleep(random.randint(3,7)) #sleep random time
+                    time.sleep(random.randint(7,15)) #sleep random time
                     strSponsorHtmlFilePath = strProjectHtmlFolderPath + u"\\%s_sponsor.html"%strProjectName
                     self.utility.overwriteSaveAs(strFilePath=strSponsorHtmlFilePath, unicodeData=self.driver.page_source)
+                    """
                     #取得 funder url 並 insert into DB
-                    time.sleep(random.randint(3,7)) #sleep random time
+                    time.sleep(random.randint(7,15)) #sleep random time
                     strFunderUrl = self.driver.find_element_by_css_selector("div.promoters-detail div.promoters-name a").get_attribute("href")
                     self.db.insertFunderUrlIfNotExists(strFunderUrl=strFunderUrl, strCategoryPage1Url=strCategoryPage1Url)
                     #更新 project DB 為已抓取 (isGot = 1)
