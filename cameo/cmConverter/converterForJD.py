@@ -8,6 +8,7 @@ This file is part of BSD license
 """
 import logging
 import re
+import sys
 import dateparser
 from cameo.utility import Utility as CameoUtility
 from crawlermaster.utility import Utility as CmUtility
@@ -30,6 +31,8 @@ class ConverterForJD:
         #_intro.html raw data
         lstDicIntroPageRawData = lstLstDicRawData[0]
         for dicIntroPageRawData in lstDicIntroPageRawData:
+            if [] == dicIntroPageRawData.get("jd-project-name", []):
+                continue
             strIntroHtmlFilePath = dicIntroPageRawData.get("meta-data-html-filepath", None)
             logging.info("convert: %s"%strIntroHtmlFilePath)
             strProjectId = re.search("^.*\\\\([\d]+)_intro.html$", strIntroHtmlFilePath).group(1)
@@ -74,7 +77,10 @@ class ConverterForJD:
             self.dicParsedResultOfProject[strProjUrl]["strSubCategory"] = strCategory
             #intFundTarget
             strFundTarget = self.cameoUtility.stripTextArray(lstStrText=dicIntroPageRawData.get("jd-fund-target", []))
-            intFundTarget = int(re.sub("[^\d]", "", strFundTarget.strip()))
+            strFundTarget = re.sub("[^\d]", "", strFundTarget.strip())
+            intFundTarget = sys.maxint
+            if strFundTarget and strFundTarget != "":
+                intFundTarget = int(strFundTarget)
             self.dicParsedResultOfProject[strProjUrl]["intFundTarget"] = intFundTarget
             #intRaisedMoney
             strRaisedMoney = self.cmUtility.extractFirstInList(dicIntroPageRawData.get("jd-raised-money", [])).strip()
@@ -84,8 +90,10 @@ class ConverterForJD:
             fFundProgress = int((float(intRaisedMoney)/float(intFundTarget))*100.0)
             self.dicParsedResultOfProject[strProjUrl]["fFundProgress"] = fFundProgress
             #intRemainDays
-            strRemainDays = self.cmUtility.extractFirstInList(dicIntroPageRawData.get("jd-remain-days", [])).strip()
-            intRemainDays = int(re.sub("[^\d]", "", strRemainDays.strip()))
+            strRemainDays = self.cmUtility.extractFirstInList(dicIntroPageRawData.get("jd-remain-days", []))
+            intRemainDays = sys.maxint
+            if strRemainDays and strRemainDays != "":
+                intRemainDays = int(re.sub("[^\d]", "", strRemainDays.strip()))
             self.dicParsedResultOfProject[strProjUrl]["intRemainDays"] = intRemainDays
             #intStatus
             intStatus = 0
@@ -98,8 +106,9 @@ class ConverterForJD:
             #strCurrency
             self.dicParsedResultOfProject[strProjUrl]["strCurrency"] = u"CNY"
             #strEndDate
-            strEndDate = self.cmUtility.extractFirstInList(dicIntroPageRawData.get("jd-end-date", [])).strip()
-            strEndDate = self.cameoUtility.parseStrDateByDateparser(strOriginDate=strEndDate)
+            strEndDate = self.cmUtility.extractFirstInList(dicIntroPageRawData.get("jd-end-date", []))
+            if strEndDate and strEndDate != "":
+                strEndDate = self.cameoUtility.parseStrDateByDateparser(strOriginDate=strEndDate.strip())
             self.dicParsedResultOfProject[strProjUrl]["strEndDate"] = strEndDate
             #strStartDate 無此資料
             self.dicParsedResultOfProject[strProjUrl]["strStartDate"] = None
@@ -112,6 +121,10 @@ class ConverterForJD:
             self.dicParsedResultOfProject[strProjUrl]["intImageCount"] = intImageCount
             #isPMSelect 無法取得
             self.dicParsedResultOfProject[strProjUrl]["isPMSelect"] = False
+            #intBacker
+            self.dicParsedResultOfProject[strProjUrl]["intBacker"] = 0
+            #lstStrBacker
+            self.dicParsedResultOfProject[strProjUrl]["lstStrBacker"] = []
             #
             # - 解析 reward.json -
             #strUrl
@@ -128,6 +141,9 @@ class ConverterForJD:
             logging.info("convert: %s"%strProgressHtmlFilePath)
             strProjectId = re.search("^.*\\\\([\d]+)_progress.html$", strProgressHtmlFilePath).group(1)
             strProjUrl = u"http://z.jd.com/project/details/%s.html"%strProjectId
+            if strProjUrl not in self.dicParsedResultOfProject:
+                #沒有 intro.html 資料，skip
+                continue
             if strProjUrl not in self.dicParsedResultOfUpdate:
                 self.dicParsedResultOfUpdate[strProjUrl] = []
             # - 解析 project.json -
@@ -166,6 +182,9 @@ class ConverterForJD:
             logging.info("convert: %s"%strQandaHtmlFilePath)
             strProjectId = re.search("^.*\\\\([\d]+)_qanda.html$", strQandaHtmlFilePath).group(1)
             strProjUrl = u"http://z.jd.com/project/details/%s.html"%strProjectId
+            if strProjUrl not in self.dicParsedResultOfProject:
+                #沒有 intro.html 資料，skip
+                continue
             if strProjUrl not in self.dicParsedResultOfComment:
                 self.dicParsedResultOfComment[strProjUrl] = []
             if strProjUrl not in self.dicParsedResultOfQanda:
@@ -206,7 +225,8 @@ class ConverterForJD:
             strProjectId = re.search("^.*\\\\([\d]+)_sponsor.html$", strSponsorHtmlFilePath).group(1)
             strProjUrl = u"http://z.jd.com/project/details/%s.html"%strProjectId
             if strProjUrl not in self.dicParsedResultOfProject:
-                self.dicParsedResultOfProject[strProjUrl] = {}
+                #沒有 intro.html 資料，skip
+                continue
             # - 解析 project.json -
             #intBacker
             strBacker = self.cmUtility.extractFirstInList(dicSponsorPageRawData.get("jd-backer", [])).strip()

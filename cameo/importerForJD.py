@@ -92,10 +92,14 @@ class ImporterForJD:
             bIsNew = collectionProj.count({"strUrl": strUrl}) == 0
             #project: 固定資訊只有在db上沒有時才會匯入，status為變動資訊，每次匯入時會確認是否為新的，若是新的則會匯入
             if(bIsNew):
-                dtEndDate = datetime.datetime.strptime(dicProject["strEndDate"], "%Y-%m-%d")
-                dtStartDate = dtEndDate - datetime.timedelta(days=60) # -2months
-                dicProject["strStartDate"] = dtStartDate.strftime("%Y/%m/%d")
-                dicProject["strEndDate"] = self.getCorrectFormatDateTime(dicProject["strEndDate"])
+                if dicProject["strEndDate"]:
+                    dtEndDate = datetime.datetime.strptime(dicProject["strEndDate"], "%Y-%m-%d")
+                    dtStartDate = dtEndDate - datetime.timedelta(days=60) # -2months
+                    dicProject["strStartDate"] = dtStartDate.strftime("%Y/%m/%d")
+                    dicProject["strEndDate"] = self.getCorrectFormatDateTime(dicProject["strEndDate"])
+                else:
+                    dicProject["strStartDate"] = datetime.datetime.now().strftime("%Y/%m/%d")
+                    dicProject["strEndDate"] = datetime.datetime.now().strftime("%Y/%m/%d")
                 #print("==============")
                 #print(dicProject["strStartDate"])
                 #print(dicProject["strEndDate"])

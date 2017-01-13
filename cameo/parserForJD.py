@@ -152,9 +152,12 @@ class ParserForJD:
         cmParser = CmParser(strCssJsonFilePath=strCssJsonFilePath)
         lstDicQandaPageRawData = cmParser.localHtmlFileParse(strBasedir=strProjectHtmlFolderPath, strSuffixes="_qanda.html")
         #_sponsor.html
+        """
         strCssJsonFilePath = "cameo_res\\selector_rule\\jd_backer_csslist.json"
         cmParser = CmParser(strCssJsonFilePath=strCssJsonFilePath)
         lstDicSponsorPageRawData = cmParser.localHtmlFileParse(strBasedir=strProjectHtmlFolderPath, strSuffixes="_sponsor.html")
+        """
+        lstDicSponsorPageRawData = []
         #converter
         rawDataConverter = ConverterForJD()
         rawDataConverter.convertProject(lstLstDicRawData=[lstDicIntroPageRawData, lstDicProgressPageRawData, lstDicQandaPageRawData, lstDicSponsorPageRawData])
