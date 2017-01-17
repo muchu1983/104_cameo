@@ -322,6 +322,30 @@
             "Sep 23, 2016"
                 ],
             "ansType":"exist"
+        },
+        {
+            "name":"cb-strCompanyType",
+            "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
+            "preAction": [],
+            "cssRule":"div.description #details::text",
+            "sampleAns":["Company Details"],
+            "ansType":"exact"
+        },
+        {
+            "name":"cb-strInvestorDataDt",
+            "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
+            "preAction": [],
+            "cssRule":"div.description div.card-content div.details dt::text",
+            "sampleAns":["Type"],
+            "ansType":"exact"
+        },
+        {
+            "name":"cb-strInvestorDataDd",
+            "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
+            "preAction": [],
+            "cssRule":"div.description div.card-content div.details dd::text",
+            "sampleAns":["Venture Capital that does Later Stage Venture and Private Equity Investments"],
+            "ansType":"exact"
         }
     ]
 }

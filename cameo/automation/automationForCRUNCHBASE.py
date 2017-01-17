@@ -25,29 +25,19 @@ def entry_point():
     importer = ImporterForCRUNCHBASE()
     strSettingsJsonFilePath = filesysUtility.getPackageResourcePath(strPackageName="cameo.automation", strResourceName="automationForCRUNCHBASE_settings.json")
     dicSettings = cameoUtility.readObjectFromJsonFile(strJsonFilePath=strSettingsJsonFilePath)
-    try:
-        #spider.runSpider(["search_funding_rounds"])
-        #parser.runParser(["search_funding_rounds"])
-        #spider.runSpider(["organization"])
-        parser.runParser(["organization"])
-        importer.runImporter(["import"])
-        logging.info("automation for CRUNCHBASE SUCCESS")
-        cameoUtility.sendEmail(
-            strSubject="SUCCESS!",
-            strFrom=dicSettings["strMachine"],
-            strTo="me",
-            strMsg="",
-            lstStrTarget=dicSettings["lstStrMail"]
-        )
-    except Exception as e:
-        logging.warning("automation for CRUNCHBASE fail: %s"%str(e))
-        cameoUtility.sendEmail(
-            strSubject="Failed!",
-            strFrom=dicSettings["strMachine"],
-            strTo="me",
-            strMsg=str(e),
-            lstStrTarget=dicSettings["lstStrMail"]
-        )
-        
+    #spider.runSpider(["search_funding_rounds"])
+    #parser.runParser(["search_funding_rounds"])
+    #spider.runSpider(["organization"])
+    parser.runParser(["organization"])
+    importer.runImporter(["import"])
+    logging.info("automation for CRUNCHBASE SUCCESS")
+    cameoUtility.sendEmail(
+        strSubject="SUCCESS!",
+        strFrom=dicSettings["strMachine"],
+        strTo="me",
+        strMsg="",
+        lstStrTarget=dicSettings["lstStrMail"]
+    )
+    
 if __name__ == "__main__":
     entry_point()

@@ -148,20 +148,23 @@ class ImporterForJD:
             #Backer: 如果有新的backer會加入db
             collectionProj.update({"strUrl": strUrl},  {"$addToSet":{"lstStrBacker": {"$each":dicProject["lstStrBacker"]}}})
             #QandA: 使用新的array蓋掉原來array
-            lstDicQna = dicTotalQnA[strUrl]
-            collectionProj.update({"strUrl": strUrl},  {"$set":{"lstDicQna": lstDicQna}})
+            if strUrl in dicTotalQnA:
+                lstDicQna = dicTotalQnA[strUrl]
+                collectionProj.update({"strUrl": strUrl},  {"$set":{"lstDicQna": lstDicQna}})
             #Reward: 使用新的array蓋掉原來array
-            lstDicReward = dicTotalReward[strUrl]
-            for dicReward in lstDicReward:
-                if(dicReward["strRewardDeliveryDate"] != None and len(dicReward["strRewardDeliveryDate"]) > 0):
-                    dicReward["strRewardDeliveryDate"] = self.getCorrectFormatDateTime(dicReward["strRewardDeliveryDate"])
-            collectionProj.update({"strUrl": strUrl},  {"$set":{"lstDicReward": lstDicReward}})
+            if strUrl in dicTotalReward:
+                lstDicReward = dicTotalReward[strUrl]
+                for dicReward in lstDicReward:
+                    if(dicReward["strRewardDeliveryDate"] != None and len(dicReward["strRewardDeliveryDate"]) > 0):
+                        dicReward["strRewardDeliveryDate"] = self.getCorrectFormatDateTime(dicReward["strRewardDeliveryDate"])
+                collectionProj.update({"strUrl": strUrl},  {"$set":{"lstDicReward": lstDicReward}})
             #Update: 使用新的array蓋掉原來array
-            lstDicUpdate = dicTotalUpdate[strUrl]
-            for dicUpdate in lstDicUpdate:
-                if(dicUpdate["strUpdateDate"] != None and len(dicUpdate["strUpdateDate"]) > 0):
-                    dicUpdate["strUpdateDate"] = self.getCorrectFormatDateTime(dicUpdate["strUpdateDate"])
-            collectionProj.update({"strUrl": strUrl},  {"$set":{"lstDicUpdate": lstDicUpdate}})
+            if strUrl in dicTotalUpdate:
+                lstDicUpdate = dicTotalUpdate[strUrl]
+                for dicUpdate in lstDicUpdate:
+                    if(dicUpdate["strUpdateDate"] != None and len(dicUpdate["strUpdateDate"]) > 0):
+                        dicUpdate["strUpdateDate"] = self.getCorrectFormatDateTime(dicUpdate["strUpdateDate"])
+                collectionProj.update({"strUrl": strUrl},  {"$set":{"lstDicUpdate": lstDicUpdate}})
     
     def makeTagFieldOnModelFundProject(self, strCategory=None, strSubCategory=None, lstStrCategory=[], lstStrSubCategory=[]):
         lstStrTag = []

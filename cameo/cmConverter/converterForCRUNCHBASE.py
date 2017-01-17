@@ -10,6 +10,7 @@ import logging
 import re
 import os
 import dateparser
+import time
 from scrapy import Selector
 from cameo.utility import Utility as CameoUtility
 from crawlermaster.utility import Utility as CmUtility
@@ -169,6 +170,21 @@ class ConverterForCRUNCHBASE:
                 dicSeries.setdefault("strCrawlTime", strCrawlTime)
                 lstDicSeries.append(dicSeries)
             self.dicParsedResultOfStartup[strOrganizationUrl]["lstDicSeries"] = lstDicSeries
+            #strCompanyType
+            strCompanyType = self.cmUtility.extractFirstInList(lstSource=dicOrganizationPageRawData.get("cb-strCompanyType", []))
+            self.dicParsedResultOfStartup[strOrganizationUrl]["strCompanyType"] = strCompanyType
+            #strInvestorType
+            strInvestorType = ""
+            if strCompanyType.startswith("Investor"):
+                lstStrDt = dicOrganizationPageRawData.get("cb-strInvestorDataDt", [])
+                lstStrDd = dicOrganizationPageRawData.get("cb-strInvestorDataDd", [])
+                for intIndex, strDt in enumerate(lstStrDt):
+                    if "Type" in strDt and len(lstStrDt) == len(lstStrDd):
+                        strInvestorTypeText = lstStrDd[intIndex]
+                        mInvestorType = re.match("^(.*) that .*$", strInvestorTypeText)
+                        strInvestorType = mInvestorType.group(1) if mInvestorType is not None else ""
+                        break
+            self.dicParsedResultOfStartup[strOrganizationUrl]["strInvestorType"] = strInvestorType
             #lstStrFollowers (無此資料)
             self.dicParsedResultOfStartup[strOrganizationUrl]["lstStrFollowers"] = []
             #isFundraising (需定義問題)
