@@ -52,6 +52,7 @@ def entry_point():
         importer.runImporter(["import"])
     except Exception as e:
         logging.warning("automation for ALLNEWS fail: %s"%str(e))
+        """
         cameoUtility.sendEmail(
             strSubject="Failed!",
             strFrom=dicSettings["strMachine"],
@@ -59,34 +60,7 @@ def entry_point():
             strMsg=str(e),
             lstStrTarget=dicSettings["lstStrMail"]
         )
-    #TECHCRUNCH
-    try:
-        spider = SpiderForTECHCRUNCH()
-        parser = ParserForTECHCRUNCH()
-        importer = ImporterForTECHCRUNCH()
-        spider.runSpider(["index"])
-        parser.runParser(["index"])
-        spider.runSpider(["topic"])
-        parser.runParser(["topic"])
-        spider.runSpider(["news"])
-        parser.runParser(["json"])
-        importer.runImporter(["import"])
-        cameoUtility.sendEmail(
-            strSubject="SUCCESS!",
-            strFrom=dicSettings["strMachine"],
-            strTo="me",
-            strMsg="",
-            lstStrTarget=dicSettings["lstStrMail"]
-        )
-    except Exception as e:
-        logging.warning("automation for ALLNEWS fail: %s"%str(e))
-        cameoUtility.sendEmail(
-            strSubject="Failed!",
-            strFrom=dicSettings["strMachine"],
-            strTo="me",
-            strMsg=str(e),
-            lstStrTarget=dicSettings["lstStrMail"]
-        )
+        """
     #TECHORANGE
     try:
         spider = SpiderForTECHORANGE()
@@ -105,6 +79,7 @@ def entry_point():
         importer.runImporter(["import"])
     except Exception as e:
         logging.warning("automation for ALLNEWS fail: %s"%str(e))
+        """
         cameoUtility.sendEmail(
             strSubject="Failed!",
             strFrom=dicSettings["strMachine"],
@@ -112,6 +87,7 @@ def entry_point():
             strMsg=str(e),
             lstStrTarget=dicSettings["lstStrMail"]
         )
+        """
     #PEDAILY
     try:
         spider = SpiderForPEDAILY()
@@ -126,6 +102,7 @@ def entry_point():
         importer.runImporter(["import"])
     except Exception as e:
         logging.warning("automation for ALLNEWS fail: %s"%str(e))
+        """
         cameoUtility.sendEmail(
             strSubject="Failed!",
             strFrom=dicSettings["strMachine"],
@@ -133,6 +110,7 @@ def entry_point():
             strMsg=str(e),
             lstStrTarget=dicSettings["lstStrMail"]
         )
+        """
     #INSIDE
     try:
         spider = SpiderForINSIDE()
@@ -151,6 +129,7 @@ def entry_point():
         importer.runImporter(["import"])
     except Exception as e:
         logging.warning("automation for ALLNEWS fail: %s"%str(e))
+        """
         cameoUtility.sendEmail(
             strSubject="Failed!",
             strFrom=dicSettings["strMachine"],
@@ -158,6 +137,30 @@ def entry_point():
             strMsg=str(e),
             lstStrTarget=dicSettings["lstStrMail"]
         )
+        """
+    #TECHCRUNCH
+    try:
+        spider = SpiderForTECHCRUNCH()
+        parser = ParserForTECHCRUNCH()
+        importer = ImporterForTECHCRUNCH()
+        spider.runSpider(["index"])
+        parser.runParser(["index"])
+        spider.runSpider(["topic"])
+        parser.runParser(["topic"])
+        spider.runSpider(["news"])
+        parser.runParser(["json"])
+        importer.runImporter(["import"])
+    except Exception as e:
+        logging.warning("automation for ALLNEWS fail: %s"%str(e))
+        """
+        cameoUtility.sendEmail(
+            strSubject="Failed!",
+            strFrom=dicSettings["strMachine"],
+            strTo="me",
+            strMsg=str(e),
+            lstStrTarget=dicSettings["lstStrMail"]
+        )
+        """
         
 if __name__ == "__main__":
     entry_point()

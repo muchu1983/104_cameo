@@ -332,14 +332,6 @@
             "ansType":"exact"
         },
         {
-            "name":"cb-strInvestorDataDt",
-            "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
-            "preAction": [],
-            "cssRule":"div.description div.card-content div.details dt::text",
-            "sampleAns":["Type"],
-            "ansType":"exact"
-        },
-        {
             "name":"cb-strInvestorDataDd",
             "sampleUrl":"  https://www.crunchbase.com/organization/airbnb",
             "preAction": [],

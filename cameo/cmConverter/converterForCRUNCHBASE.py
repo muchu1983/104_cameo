@@ -176,13 +176,11 @@ class ConverterForCRUNCHBASE:
             #strInvestorType
             strInvestorType = ""
             if strCompanyType.startswith("Investor"):
-                lstStrDt = dicOrganizationPageRawData.get("cb-strInvestorDataDt", [])
                 lstStrDd = dicOrganizationPageRawData.get("cb-strInvestorDataDd", [])
-                for intIndex, strDt in enumerate(lstStrDt):
-                    if "Type" in strDt and len(lstStrDt) == len(lstStrDd):
-                        strInvestorTypeText = lstStrDd[intIndex]
-                        mInvestorType = re.match("^(.*) that .*$", strInvestorTypeText)
-                        strInvestorType = mInvestorType.group(1) if mInvestorType is not None else ""
+                for strDd in lstStrDd:
+                    mInvestorType = re.match("^(.*) that .*$", strDd)
+                    if mInvestorType:
+                        strInvestorType = mInvestorType.group(1)
                         break
             self.dicParsedResultOfStartup[strOrganizationUrl]["strInvestorType"] = strInvestorType
             #lstStrFollowers (無此資料)
