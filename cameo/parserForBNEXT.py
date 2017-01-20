@@ -30,7 +30,7 @@ class ParserForBNEXT:
             "news":[self.findMoreTagByParseNewsPage],
             "json":[self.parseNewsPageThenCreateNewsJson]
         }
-        self.strWebsiteDomain = u"http://www.bnext.com.tw"
+        self.strWebsiteDomain = u"https://www.bnext.com.tw"
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
         self.intNewsJsonNum = 0 #news.json 檔案編號
@@ -74,7 +74,7 @@ class ParserForBNEXT:
             lstStrHotTagUrl = root.css("div.item_box div.item_tags a::attr(href)").extract()
             for strHotTagUrl in lstStrHotTagUrl:
                 print(strHotTagUrl)
-                strHotTagName = re.match("^http://www\.bnext\.com\.tw/search/tag/(.*)$", strHotTagUrl).group(1)
+                strHotTagName = re.match("^https://www\.bnext\.com\.tw/search/tag/(.*)$", strHotTagUrl).group(1)
                 self.db.insertTagIfNotExists(strTagName=strHotTagName)
                 
     #解析 tag.html 找出 news url
@@ -98,7 +98,7 @@ class ParserForBNEXT:
                 lstStrNewsUrl = root.css("div.left div.item_box div.item_text_box a:nth-of-type(1)::attr(href)").extract()
                 for strNewsUrl in lstStrNewsUrl: #news loop
                     #儲存 news url 及 news tag mapping 至 DB
-                    if strNewsUrl.startswith("http://www.bnext.com.tw/article/"): #過瀘非新聞 url
+                    if strNewsUrl.startswith("https://www.bnext.com.tw/article/"): #過瀘非新聞 url
                         self.db.insertNewsUrlAndNewsTagMappingIfNotExists(strNewsUrl=strNewsUrl, strTagName=strObtainedTagName)
                     
     #解析 news.html 之一 (取得更多 tag)
@@ -114,8 +114,8 @@ class ParserForBNEXT:
                 #解析 news.html
                 lstStrTagUrl = root.css("div.article_tags a.tag::attr(href)").extract()
                 for strTagUrl in lstStrTagUrl:
-                    if strTagUrl.startswith("http://www.bnext.com.tw/search/tag/"):
-                        strTagName = re.match("^http://www\.bnext\.com.tw/search/tag/(.*)$", strTagUrl).group(1)
+                    if strTagUrl.startswith("https://www.bnext.com.tw/search/tag/"):
+                        strTagName = re.match("^https://www\.bnext\.com.tw/search/tag/(.*)$", strTagUrl).group(1)
                         self.db.insertTagIfNotExists(strTagName=strTagName)
         
     #解析 news.html 之二 (產生 news.json )
@@ -148,7 +148,7 @@ class ParserForBNEXT:
             strUrl = root.css("div.fb-like::attr(data-href)").extract_first()
             dicNewsData["strUrl"] = strUrl
             #strTitle
-            strTitle = root.css("div.article_header h1.article_title::text").extract_first()
+            strTitle = root.css("div.article_header h1.article_title::text").extract_first().strip()
             dicNewsData["strTitle"] = strTitle
             #strContent
             lstStrContent = root.css("div.main_content *:not(script):not(h2.chk)::text").extract()

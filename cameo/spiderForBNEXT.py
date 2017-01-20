@@ -23,7 +23,7 @@ class SpiderForBNEXT:
     def __init__(self):
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
-        self.strWebsiteDomain = u"http://www.bnext.com.tw"
+        self.strWebsiteDomain = u"https://www.bnext.com.tw"
         self.dicSubCommandHandler = {
             "category":self.downloadCategoryPage,
             "tag":self.downloadTagPage,
@@ -76,16 +76,17 @@ class SpiderForBNEXT:
         if not os.path.exists(strCategoryHtmlFolderPath):
             os.mkdir(strCategoryHtmlFolderPath) #mkdir source_html/BNEXT/
         #數位時代首頁
-        self.driver.get("http://www.bnext.com.tw")
+        self.driver.get("https://www.bnext.com.tw")
         #找出 category link
         lstStrCategoryHref = []
-        elesCategoryA = self.driver.find_elements_by_css_selector("a.dropdown-toggle")
+        elesCategoryA = self.driver.find_elements_by_css_selector("ul.dropdown-menu a")
         for eleCategoryA in elesCategoryA:
             strCategoryHref = eleCategoryA.get_attribute("href")
-            lstStrCategoryHref.append(strCategoryHref)
+            if strCategoryHref.startswith("https://www.bnext.com.tw/categories/"):
+                lstStrCategoryHref.append(strCategoryHref)
         #儲存 category.html
         for strCategoryHref in lstStrCategoryHref:
-            strCategoryName = re.match("^http://www\.bnext\.com\.tw/categories/(.*)$", strCategoryHref).group(1)
+            strCategoryName = re.match("^https://www\.bnext\.com\.tw/categories/(.*)$", strCategoryHref).group(1)
             strCategoryHtmlFilePath = strCategoryHtmlFolderPath + u"\\%s_category.html"%strCategoryName
             self.driver.get(strCategoryHref)
             self.utility.overwriteSaveAs(strFilePath=strCategoryHtmlFilePath, unicodeData=self.driver.page_source)
@@ -156,7 +157,7 @@ class SpiderForBNEXT:
                 time.sleep(random.randint(2,5)) #sleep random time
                 self.driver.get(strNewsUrl)
                 #儲存 html
-                strNewsName = re.match("^http://www.bnext.com.tw/article/.*/(.*)$", strNewsUrl).group(1)
+                strNewsName = re.match("^https://www.bnext.com.tw/article/.*/(.*)$", strNewsUrl).group(1)
                 strNewsHtmlFilePath = strNewsHtmlFolderPath + u"\\%s_news.html"%strNewsName
                 self.utility.overwriteSaveAs(strFilePath=strNewsHtmlFilePath, unicodeData=self.driver.page_source)
                 #更新news DB 為已抓取 (isGot = 1)
