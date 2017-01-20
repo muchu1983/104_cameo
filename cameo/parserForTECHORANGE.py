@@ -66,8 +66,10 @@ class ParserForTECHORANGE:
             root = Selector(text=strPageSource)
             lstStrHotTagUrl = root.css("ul#menu-tag-bar li.menu-item-object-post_tag a::attr(href)").extract()
             for strHotTagUrl in lstStrHotTagUrl:
-                strHotTagName = re.match("^https://buzzorange.com/techorange/tag/(.*)/$", strHotTagUrl).group(1)
-                self.db.insertTagIfNotExists(strTagName=strHotTagName)
+                if strHotTagUrl.startswith("https://buzzorange.com/techorange/tag/"):
+                    strHotTagName = re.match("^https://buzzorange\.com/techorange/tag/(.*)/$", strHotTagUrl).group(1)
+                    logging.info("find tag: %s"%strHotTagName)
+                    self.db.insertTagIfNotExists(strTagName=strHotTagName)
                 
     #解析 tag.html
     def parseTagPage(self, uselessArg1=None):
@@ -90,6 +92,7 @@ class ParserForTECHORANGE:
                     lstStrNewsUrl = root.css("#main article.post header.entry-header h4.entry-title a::attr(href)").extract()
                     for strNewsUrl in lstStrNewsUrl: #news loop
                         #儲存 news url 及 news tag mapping 至 DB
+                        logging.info("find news: %s"%strNewsUrl)
                         self.db.insertNewsUrlAndNewsTagMappingIfNotExists(strNewsUrl=strNewsUrl, strTagName=strObtainedTagName)
                     
     #解析 news.html 之一 (取得更多 tag)
@@ -105,8 +108,10 @@ class ParserForTECHORANGE:
                 #解析 news.html
                 lstStrTagUrl = root.css("ul.post-tags li a[rel=tag]::attr(href)").extract()
                 for strTagUrl in lstStrTagUrl:
-                    strTagName = re.match("https://buzzorange.com/techorange/tag/(.*)/", strTagUrl).group(1)
-                    self.db.insertTagIfNotExists(strTagName=strTagName)
+                    if strTagUrl.startswith("https://buzzorange.com/techorange/tag/"):
+                        strTagName = re.match("https://buzzorange\.com/techorange/tag/(.*)/", strTagUrl).group(1)
+                        logging.info("find tag: %s"%strTagName)
+                        self.db.insertTagIfNotExists(strTagName=strTagName)
         
     #解析 news.html 之二 (產生 news.json )
     def parseNewsPageThenCreateNewsJson(self, uselessArg1=None):
