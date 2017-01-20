@@ -29,7 +29,7 @@ class ParserForPEDAILY:
             "category":[self.parseCategoryPage],
             "json":[self.parseNewsPageThenCreateNewsJson]
         }
-        self.strWebsiteDomain = u"http://www.pedaily.cn"
+        self.strWebsiteDomain = u"http://news.pedaily.cn"
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
         self.intNewsJsonNum = 0 #news.json 檔案編號
@@ -64,11 +64,14 @@ class ParserForPEDAILY:
         with open(strIndexHtmlFilePath, "r") as indexHtmlFile:
             strPageSource = indexHtmlFile.read()
             root = Selector(text=strPageSource)
-            lstStrCategoryUrl = root.css("div.footer ul.main li.box-fix-d dl dt:nth-of-type(3) ul li a::attr(href)").extract()
+            lstStrCategoryUrl = root.css("div.nav-industry div.main li a::attr(href)").extract()
             for strCategoryUrl in lstStrCategoryUrl:
-                strCategoryName = re.match("^http://www.pedaily.cn/(.*)/$", strCategoryUrl).group(1)
-                strCategoryName = urllib.quote(strCategoryName.encode("utf-8")) #url encode
-                self.db.insertCategoryIfNotExists(strCategoryName=strCategoryName)
+                matchCategoryName = re.match("^http://news\.pedaily\.cn/([a-zA-Z0-9-]+)/$", strCategoryUrl)
+                if matchCategoryName: #is not None
+                    strCategoryName = matchCategoryName.group(1)
+                    strCategoryName = urllib.quote(strCategoryName.encode("utf-8")) #url encode
+                    logging.info("find category: %s"%strCategoryName)
+                    self.db.insertCategoryIfNotExists(strCategoryName=strCategoryName)
                 
     #解析 category.html
     def parseCategoryPage(self, uselessArg1=None):
@@ -80,17 +83,19 @@ class ParserForPEDAILY:
         #取得已下載完成的 strCategoryName list
         lstStrObtainedCategoryName = self.db.fetchallCompletedObtainedCategoryName()
         for strObtainedCategoryName in lstStrObtainedCategoryName: #category loop
-            strCategoryHtmlFilePath = strCategoryHtmlFolderPath + u"\\%s_category.html"%strObtainedCategoryName
-            logging.info("parse %s"%strCategoryHtmlFilePath)
-            with open(strCategoryHtmlFilePath, "r") as categoryHtmlFile:
-                strPageSource = categoryHtmlFile.read()
-                root = Selector(text=strPageSource)
-                #解析 news URL
-                lstStrNewsUrl = root.css("div.news-list ul#newslist-all li h3 a::attr(href)").extract()
-                for strNewsUrl in lstStrNewsUrl: #news loop
-                    #儲存 news url 至 DB
-                    if strNewsUrl.endswith(".shtml"):
-                        self.db.insertNewsUrlIfNotExists(strNewsUrl=strNewsUrl, strCategoryName=strObtainedCategoryName)
+            lstStrCategoryHtmlFilePath =  self.utility.getFilePathListWithSuffixes(strBasedir=strCategoryHtmlFolderPath, strSuffixes=u"%s_category.html"%strObtainedCategoryName)
+            for strCategoryHtmlFilePath in lstStrCategoryHtmlFilePath:
+                logging.info("parse %s"%strCategoryHtmlFilePath)
+                with open(strCategoryHtmlFilePath, "r") as categoryHtmlFile:
+                    strPageSource = categoryHtmlFile.read()
+                    root = Selector(text=strPageSource)
+                    #解析 news URL
+                    lstStrNewsUrl = root.css("div.news-list ul#newslist-all li h3 a::attr(href)").extract()
+                    for strNewsUrl in lstStrNewsUrl: #news loop
+                        logging.info("find news: %s"%strNewsUrl)
+                        #儲存 news url 至 DB
+                        if strNewsUrl.endswith(".shtml"):
+                            self.db.insertNewsUrlIfNotExists(strNewsUrl=strNewsUrl, strCategoryName=strObtainedCategoryName)
     
     #解析 news.html 產生 news.json (pedaily.cn 將 news 儲放在不同台的 server)
     def parseNewsPageThenCreateNewsJson(self, uselessArg1=None):

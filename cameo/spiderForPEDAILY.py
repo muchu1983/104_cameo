@@ -10,6 +10,7 @@ import os
 import time
 import logging
 import re
+import pdb
 import random
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
@@ -24,7 +25,7 @@ class SpiderForPEDAILY:
     def __init__(self):
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
-        self.strWebsiteDomain = u"http://www.pedaily.cn"
+        self.strWebsiteDomain = u"http://news.pedaily.cn"
         self.dicSubCommandHandler = {
             "index":self.downloadIndexPage,
             "category":self.downloadCategoryPage,
@@ -81,41 +82,26 @@ class SpiderForPEDAILY:
         strIndexHtmlFolderPath = self.SOURCE_HTML_BASE_FOLDER_PATH + u"\\PEDAILY"
         if not os.path.exists(strIndexHtmlFolderPath):
             os.mkdir(strIndexHtmlFolderPath) #mkdir source_html/PEDAILY/
-        #投資界首頁
-        self.driver.get("http://www.pedaily.cn/")
+        #投資界新聞首頁
+        self.driver.get("http://news.pedaily.cn/")
         #儲存 html
         strIndexHtmlFilePath = strIndexHtmlFolderPath + u"\\index.html"
         self.utility.overwriteSaveAs(strFilePath=strIndexHtmlFilePath, unicodeData=self.driver.page_source)
         
-    #click 加載更多
-    def clickLoadMoreElement(self):
-        try:
-            eleLoadMoreBtn = self.driver.find_element_by_css_selector("a#loadmore")
-            strLoadMoreBtnStyle = eleLoadMoreBtn.get_attribute("style")
-            intNewsCount = len(self.driver.find_elements_by_css_selector("div.news-list ul#newslist-all li"))
-            intClickCount = 0
-            while u"none" not in strLoadMoreBtnStyle: #click loop
-                time.sleep(random.randint(2,5)) #sleep random time
-                logging.info("click loadmore button. (%d/15)"%intClickCount)
-                eleLoadMoreBtn.click()
-                time.sleep(random.randint(2,5)) #sleep random time
-                # 檢查 intNewsCount 數量是否有增加
-                intClickCount = (intClickCount+1)%15 # 每 click 15 次檢查一次
-                if intClickCount == 0:
-                    intNewNewsCount = len(self.driver.find_elements_by_css_selector("div.news-list ul#newslist-all li"))
-                    logging.info("news count: %d -> %d"%(intNewsCount, intNewNewsCount))
-                    if intNewsCount == intNewNewsCount or intNewNewsCount >= 8800:
-                        # click 15次 沒有發現新的 news ，中斷 click loop
-                        # 或是 news 總數量超過 8800 筆，也中斷 click loop
-                        break
-                    else:
-                        #持續有發現新的 news ，更新 intClickCount
-                        intNewsCount = intNewNewsCount
-                eleLoadMoreBtn = self.driver.find_element_by_css_selector("a#loadmore")
-                strLoadMoreBtnStyle = eleLoadMoreBtn.get_attribute("style")
-        except NoSuchElementException:
-            logging.info("selenium driver can't find the loadmore button.")
-            return
+    #檢查是否有下一頁
+    def getNextCategoryPageHref(self, isCurrentFirstPage=False):
+        elesNextPageA = self.driver.find_elements_by_css_selector("div.page-list a.next")
+        strNextPageAHref = None
+        #pedaily 的 上一頁與下一頁的 css 語法均相同: div.page-list a.next
+        #若無下一頁則 下一頁會變成 div.page-list span.next
+        if isCurrentFirstPage:
+            strNextPageAHref = elesNextPageA[0].get_attribute("href")
+        elif len(elesNextPageA) == 2: 
+            strNextPageAHref = elesNextPageA[-1].get_attribute("href")
+        if strNextPageAHref and "http://news.pedaily.cn/" in strNextPageAHref:
+            return strNextPageAHref
+        else:
+            return None
         
     #下載 category 頁面
     def downloadCategoryPage(self, uselessArg1=None):
@@ -129,19 +115,23 @@ class SpiderForPEDAILY:
             strCategoryUrl = self.strWebsiteDomain + u"/" + strNotObtainedTCategoryName
             #category 頁面
             time.sleep(random.randint(2,5)) #sleep random time
-            try:
-                self.driver.get(strCategoryUrl)
-                self.clickLoadMoreElement() #點開 加載更多 按鈕
-                #儲存 html
-                strCategoryHtmlFilePath = strCategoryHtmlFolderPath + u"\\%s_category.html"%(strNotObtainedTCategoryName)
+            self.driver.get(strCategoryUrl)
+            intCategoryPageIndex = 0
+            #儲存 html
+            strCategoryHtmlFilePath = strCategoryHtmlFolderPath + u"\\%d_%s_category.html"%(intCategoryPageIndex, strNotObtainedTCategoryName)
+            self.utility.overwriteSaveAs(strFilePath=strCategoryHtmlFilePath, unicodeData=self.driver.page_source)
+            #取得下一頁的 url
+            strNextPageAHref = self.getNextCategoryPageHref(isCurrentFirstPage=True)
+            while strNextPageAHref: #檢查是否有下一頁
+                intCategoryPageIndex = intCategoryPageIndex + 1
+                self.driver.get(strNextPageAHref)
+                time.sleep(random.randint(5,10)) #sleep random time
+                strCategoryHtmlFilePath = strCategoryHtmlFolderPath + u"\\%d_%s_category.html"%(intCategoryPageIndex, strNotObtainedTCategoryName)
                 self.utility.overwriteSaveAs(strFilePath=strCategoryHtmlFilePath, unicodeData=self.driver.page_source)
-                #更新tag DB 為已抓取 (isGot = 1)
-                self.db.updateCategoryStatusIsGot(strCategoryName=strNotObtainedTCategoryName)
-                logging.info("got category %s"%strNotObtainedTCategoryName)
-            except:
-                logging.warning("selenium driver crashed. skip get category: %s"%strCategoryUrl)
-            finally:
-                self.restartDriver() #重啟 
+                strNextPageAHref = self.getNextCategoryPageHref()
+            #更新tag DB 為已抓取 (isGot = 1)
+            self.db.updateCategoryStatusIsGot(strCategoryName=strNotObtainedTCategoryName)
+            logging.info("got category %s"%strNotObtainedTCategoryName)
             
     #下載 news 頁面 (strCategoryName == None 會自動找尋已下載完成之 category)
     def downloadNewsPage(self, strCategoryName=None):
