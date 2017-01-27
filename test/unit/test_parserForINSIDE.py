@@ -23,19 +23,19 @@ class ParserForINSIDETest(unittest.TestCase):
     #收尾
     def tearDown(self):
         pass
-    
+    """
     #測試 解析 index.html
     def test_parseIndexPage(self):
         logging.info("ParserForINSIDETest.test_parseIndexPage")
         parser = ParserForINSIDE()
         parser.parseIndexPage()
-    
+    """
     #測試 解析 tag.html
     def test_parseTagPage(self):
         logging.info("ParserForINSIDETest.test_parseTagPage")
         parser = ParserForINSIDE()
         parser.parseTagPage()
-    
+    """
     #測試 解析 news.html 以找出更多 tag
     def test_findMoreTagByParseNewsPage(self):
         logging.info("ParserForINSIDETest.test_findMoreTagByParseNewsPage")
@@ -47,7 +47,7 @@ class ParserForINSIDETest(unittest.TestCase):
         logging.info("ParserForINSIDETest.test_parseNewsPageThenCreateNewsJson")
         parser = ParserForINSIDE()
         parser.parseNewsPageThenCreateNewsJson()
-    
+    """
 #測試開始
 if __name__ == "__main__":
     unittest.main(exit=False)

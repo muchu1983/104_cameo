@@ -23,7 +23,7 @@ class SpiderForINSIDE:
     def __init__(self):
         self.SOURCE_HTML_BASE_FOLDER_PATH = u"cameo_res\\source_html"
         self.PARSED_RESULT_BASE_FOLDER_PATH = u"cameo_res\\parsed_result"
-        self.strWebsiteDomain = u"http://www.inside.com.tw/"
+        self.strWebsiteDomain = u"https://www.inside.com.tw/"
         self.dicSubCommandHandler = {
             "index":self.downloadIndexPage,
             "tag":self.downloadTagPage,
@@ -97,7 +97,7 @@ class SpiderForINSIDE:
         lstStrNotObtainedTagPage1Url = self.db.fetchallNotObtainedTagPage1Url()
         for strNotObtainedTagPage1Url in lstStrNotObtainedTagPage1Url:
             #re 找出 tag 名稱
-            strTagNamePartInUrl = re.match("^http://www.inside.com.tw/category/(.*)$", strNotObtainedTagPage1Url).group(1)
+            strTagNamePartInUrl = re.match("^https://www.inside.com.tw/category/(.*)$", strNotObtainedTagPage1Url).group(1)
             strTagName = re.sub(u"/", u"__", strTagNamePartInUrl)
             #tag 第0頁
             intPageNum = 0

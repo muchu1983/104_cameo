@@ -69,7 +69,8 @@ class ParserForINSIDE:
             root = Selector(text=strPageSource)
             lstStrUrlInIndexPage = root.css("a::attr(href)").extract()
             for strUrlInIndexPage in lstStrUrlInIndexPage:
-                if strUrlInIndexPage.startswith("http://www.inside.com.tw/category/"):
+                if strUrlInIndexPage.startswith("https://www.inside.com.tw/category/"):
+                    logging.info("find tag: %s"%strUrlInIndexPage)
                     self.db.insertTagIfNotExists(strTagPage1Url=strUrlInIndexPage)
                 
     #解析 tag.html
@@ -96,7 +97,8 @@ class ParserForINSIDE:
                     lstStrNewsUrl = root.css("section#articles article div.post-container h2.entry-title a::attr(href)").extract()
                     for strNewsUrl in lstStrNewsUrl: #news loop
                         #儲存 news url 及 news tag mapping 至 DB
-                        if re.match("^http://www.inside.com.tw/[\d]{4}/[\d]{2}/[\d]{2}/.*$", strNewsUrl): #filter remove AD and other url
+                        if re.match("^https://www.inside.com.tw/[\d]{4}/[\d]{2}/[\d]{2}/.*$", strNewsUrl): #filter remove AD and other url
+                            logging.info("find news: %s"%strNewsUrl)
                             self.db.insertNewsUrlAndNewsTagMappingIfNotExists(strNewsUrl=strNewsUrl, strTagPage1Url=strObtainedTagPage1Url)
                     
     #解析 news.html 之一 (取得更多 tag)
