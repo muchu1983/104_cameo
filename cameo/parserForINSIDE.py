@@ -11,6 +11,7 @@ import datetime
 import re
 import json
 import logging
+import pdb
 import urllib
 import dateparser
 from scrapy import Selector
@@ -84,7 +85,7 @@ class ParserForINSIDE:
         lstStrObtainedTagPage1Url = self.db.fetchallCompletedObtainedTagPage1Url()
         for strObtainedTagPage1Url in lstStrObtainedTagPage1Url: #tag loop
             #re 找出 tag 名稱
-            strTagNamePartInUrl = re.match("^http://www.inside.com.tw/category/(.*)$", strObtainedTagPage1Url).group(1)
+            strTagNamePartInUrl = re.match("^https://www.inside.com.tw/((category)|(tag))/(?P<tag_name>.*)$", strObtainedTagPage1Url).group("tag_name")
             strTagName = re.sub(u"/", u"__", strTagNamePartInUrl)
             strTagSuffixes = u"_%s_tag.html"%strTagName
             lstStrTagHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strTagHtmlFolderPath, strSuffixes=strTagSuffixes)
@@ -94,7 +95,7 @@ class ParserForINSIDE:
                     strPageSource = tagHtmlFile.read()
                     root = Selector(text=strPageSource)
                     #解析 news URL
-                    lstStrNewsUrl = root.css("section#articles article div.post-container h2.entry-title a::attr(href)").extract()
+                    lstStrNewsUrl = root.css("div.container div.post_list div.post_list_item .post_title a::attr(href)").extract()
                     for strNewsUrl in lstStrNewsUrl: #news loop
                         #儲存 news url 及 news tag mapping 至 DB
                         if re.match("^https://www.inside.com.tw/[\d]{4}/[\d]{2}/[\d]{2}/.*$", strNewsUrl): #filter remove AD and other url
@@ -114,7 +115,8 @@ class ParserForINSIDE:
                 #解析 news.html
                 lstStrUrlInNewsPage = root.css("a::attr(href)").extract()
                 for strUrlInNewsPage in lstStrUrlInNewsPage:
-                    if strUrlInNewsPage.startswith("http://www.inside.com.tw/category/"):
+                    if strUrlInNewsPage.startswith("https://www.inside.com.tw/category/") or strUrlInNewsPage.startswith("https://www.inside.com.tw/tag/"):
+                        logging.info("find tag: %s"%strUrlInNewsPage)
                         self.db.insertTagIfNotExists(strTagPage1Url=strUrlInNewsPage)
         
     #解析 news.html 之二 (產生 news.json )
@@ -129,7 +131,7 @@ class ParserForINSIDE:
         lstStrNewsHtmlFilePath = self.utility.getFilePathListWithSuffixes(strBasedir=strNewsHtmlFolderPath, strSuffixes=u"_news.html")
         for strNewsHtmlFilePath in lstStrNewsHtmlFilePath:
             logging.info("parse %s"%strNewsHtmlFilePath)
-            try:
+            if True:
                 dicNewsData = {} #新聞資料物件
                 with open(strNewsHtmlFilePath, "r") as newsHtmlFile:
                     strPageSource = newsHtmlFile.read()
@@ -138,26 +140,27 @@ class ParserForINSIDE:
                 #strSiteName
                 dicNewsData["strSiteName"] = u"INSIDE"
                 #strUrl
-                strUrl = root.css("div.post-container a.published-time::attr(href)").extract_first()
+                strUrl = root.css("meta[property*=url]::attr(content)").extract_first().strip()
                 dicNewsData["strUrl"] = strUrl
                 #strTitle
-                strTitle = root.css("div.post-container h2.entry-title::text").extract_first()
+                strTitle = root.css("div.post_header .post_header_title::text").extract_first().strip()
                 dicNewsData["strTitle"] = strTitle
                 #strContent
-                lstStrContent = root.css("div.post-container div.content *:not(script)::text").extract()
+                lstStrContent = root.css("div.post_content_wrapper div.post_content *:not(script)::text").extract()
                 strContent = re.sub("\s", "", u"".join(lstStrContent)) #接合 新聞內容 並去除空白字元
                 dicNewsData["strContent"] = strContent.strip()
                 #lstStrKeyword
-                lstStrKeyword = root.css("div.cat-list a::text").extract()
+                lstStrKeyword = root.css("div.post_header .post_meta .hero_slide_tag::text").extract()
                 dicNewsData["lstStrKeyword"] = lstStrKeyword
                 #strPublishDate
-                strPublishDate = root.css("div.post-container a.published-time::text").extract_first().strip()
+                strPublishDate = root.css("div.post_header .post_meta .post_date span::text").extract_first().strip()
                 strPublishDate = self.utility.parseStrDateByDateparser(strOriginDate=strPublishDate)
                 dicNewsData["strPublishDate"] = strPublishDate
                 #strCrawlDate
                 dicNewsData["strCrawlDate"] = self.utility.getCtimeOfFile(strFilePath=strNewsHtmlFilePath)
                 #將 新聞資料物件 加入 json
                 self.dicParsedResultOfNews.append(dicNewsData)
+            """
             except:
                 logging.error("parse %s fail skip it"%strNewsHtmlFilePath)
                 # set isGot = 0
@@ -165,6 +168,7 @@ class ParserForINSIDE:
                 strNewsName = re.match(u"^(?P<newsName>.*)_news.html$", strNewsHtmlFileName).group("newsName")
                 self.db.updateNewsStatusIsNotGot(strNewsUrlPart=strNewsName)
                 continue #skip it
+            """
             #每一千筆資料另存一個 json
             if len(self.dicParsedResultOfNews) == self.intMaxNewsPerNewsJsonFile:
                 self.intNewsJsonNum = self.intNewsJsonNum + self.intMaxNewsPerNewsJsonFile

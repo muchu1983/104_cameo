@@ -97,7 +97,7 @@ class SpiderForINSIDE:
         lstStrNotObtainedTagPage1Url = self.db.fetchallNotObtainedTagPage1Url()
         for strNotObtainedTagPage1Url in lstStrNotObtainedTagPage1Url:
             #re 找出 tag 名稱
-            strTagNamePartInUrl = re.match("^https://www.inside.com.tw/category/(.*)$", strNotObtainedTagPage1Url).group(1)
+            strTagNamePartInUrl = re.match("^https://www.inside.com.tw/((category)|(tag))/(?P<tag_name>.*)$", strNotObtainedTagPage1Url).group("tag_name")
             strTagName = re.sub(u"/", u"__", strTagNamePartInUrl)
             #tag 第0頁
             intPageNum = 0
@@ -155,7 +155,7 @@ class SpiderForINSIDE:
                 time.sleep(random.randint(2,5)) #sleep random time
                 self.driver.get(strNewsUrl)
                 #儲存 html
-                strNewsName = re.match("^http://www.inside.com.tw/[\d]{4}/[\d]{2}/[\d]{2}/(.*)$", strNewsUrl).group(1)
+                strNewsName = re.match("^https://www.inside.com.tw/[\d]{4}/[\d]{2}/[\d]{2}/(.*)$", strNewsUrl).group(1)
                 #限縮 news.html 檔名
                 strNewsName = self.limitStrLessThen128Char(strStr=strNewsName)
                 strNewsHtmlFilePath = strNewsHtmlFolderPath + u"\\%s_news.html"%strNewsName
