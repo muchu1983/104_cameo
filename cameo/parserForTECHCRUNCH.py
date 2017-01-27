@@ -69,6 +69,7 @@ class ParserForTECHCRUNCH:
             lstStrTopicPage1Url = root.css("div.topic-archive-links-list p.topic-alpha-column a::attr(href)").extract()
             for strTopicPage1Url in lstStrTopicPage1Url:
                 if strTopicPage1Url.startswith("https://techcrunch.com/topic/"):
+                    logging.info("find topic: %s"%strTopicPage1Url)
                     self.db.insertTopicIfNotExists(strTopicPage1Url=strTopicPage1Url)
                 
     #解析 topic.html
@@ -96,6 +97,7 @@ class ParserForTECHCRUNCH:
                 for strNewsUrl in lstStrNewsUrl: #news loop
                     #儲存 news url 及 news topic id 至 DB
                     if re.match("^https://techcrunch.com/[\d]{4}/[\d]{2}/[\d]{2}/.*$", strNewsUrl): #filter remove AD and other url
+                        logging.info("find news: %s"%strNewsUrl)
                         self.db.insertNewsUrlIfNotExists(strNewsUrl=strNewsUrl, strTopicPage1Url=strObtainedTopicUrl)
     
     #解析 news.html 產生 news.json (TODO 使用 crawlermaster 進行 parse)
