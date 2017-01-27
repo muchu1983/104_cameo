@@ -137,7 +137,8 @@ class ParserForBNEXT:
             #解析 news.html
             #檢查 news html 是否正常
             strPublishDate = root.css("div.article_info span.item::text").extract_first()
-            if strPublishDate is None:
+            strTitle = root.css("div.article_header h1.article_title::text").extract_first()
+            if strPublishDate is None or strTitle is None:
                 # rename news 檔名為 xxx_news.html.error
                 os.rename(strNewsHtmlFilePath, strNewsHtmlFilePath + u".error")
                 logging.warning("news format invalid,skip parse it: %s"%strNewsHtmlFilePath)
