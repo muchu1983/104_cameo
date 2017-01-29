@@ -99,6 +99,9 @@ class SpiderForINSIDE:
             #re 找出 tag 名稱
             strTagNamePartInUrl = re.match("^https://www.inside.com.tw/((category)|(tag))/(?P<tag_name>.*)$", strNotObtainedTagPage1Url).group("tag_name")
             strTagName = re.sub(u"/", u"__", strTagNamePartInUrl)
+            #tag名稱太長略過
+            if len(strTagName) > 60:
+                continue
             #tag 第0頁
             intPageNum = 0
             time.sleep(random.randint(2,5)) #sleep random time
