@@ -89,6 +89,9 @@ class SpiderForTECHORANGE:
         #取得 Db 中尚未下載的 Tag 名稱
         lstStrNotObtainedTagName = self.db.fetchallNotObtainedTagName()
         for strNotObtainedTagName in lstStrNotObtainedTagName:
+            #略過名稱太長的 tag
+            if len(strNotObtainedTagName) > 60:
+                continue
             strTagUrl = strTagWebsiteDomain + u"/" + strNotObtainedTagName
             #tag 第0頁
             intPageNum = 0
