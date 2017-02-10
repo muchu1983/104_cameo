@@ -13,6 +13,8 @@ import logging
 import re
 from cameo.utility import Utility
 from cameo.externaldb import ExternalDbOfCameo
+from cameo.externaldb import CameoMongoDb
+from cameo.externaldb import CameoMongoDbForMonitor
 #from cameo.localdb import LocalDbForJsonImporter #測試用本地端 db
 """
 mongoDB 維護工作
@@ -23,6 +25,20 @@ class MongoDbRepairman:
         self.utility = Utility()
         self.db = ExternalDbOfCameo().mongodb
         #self.db = LocalDbForJsonImporter().mongodb #測試用本地端 db
+    #copy ModelSyndicateCrunchbase
+    def copyModelSyndicateCrunchbase(self):
+        sourceDb = CameoMongoDbForMonitor().getClient().tier
+        targetDb = CameoMongoDb().getClient().tier
+        for docSyndicateCb in sourceDb.ModelSyndicateCrunchbase.find({}):
+            targetDb.ModelSyndicateCrunchbase.update_one(
+                {
+                    "_id":docSyndicateCb["_id"]
+                },
+                {
+                    "$set":docSyndicateCb
+                },
+                upsert=True
+            )
         
     def makeTagFieldOnModelFundProject(self):
         for docFundProject in self.db.ModelFundProject.find({}):
